@@ -1,0 +1,43 @@
+/*
+ * Joana Aplicativo Interno de Administração
+ * Arquivo de Configuração Tableless
+ */
+#layout {
+	position: absolute;
+	width: 1000px;
+	left: 50%;
+	margin-left: -500px;
+	background-image: url("../img/layouts/default/content-b.jpg");
+	z-index: 0;
+}
+#layout #banner {
+	position: relative;
+	display: table-row;
+	width: 1000px;
+	height: 150px;
+	left: 0;
+	top: 0;
+	z-index: 3;
+}
+#layout #menu {
+	position: absolute;
+	width: 200px;
+	top: 175px;
+	left: 750px;
+	z-index: 4;
+}
+#layout #content {
+	position: relative;
+	width: 663px;
+	top: 25px;
+	left: 50px;
+	padding: 10px 5px 10px 5px;
+	background-color: #ccc;
+	border: 1px #999 solid;
+	z-index: 5;
+}
+#layout #footer {
+	position: relative;
+	height: 150px;
+	z-index: 2;
+}

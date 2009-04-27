@@ -1,0 +1,9 @@
+<h2>Editar Grupo</h2>
+<?php echo $this->form ?>
+<?php if($this->inherits) : ?>
+<p class="note"><b>Herança:</b><br/>
+<?php foreach($this->inherits as $inherits) : ?>
+<?php echo $inherits ?><br/>
+<?php endforeach ?>
+</p>
+<?php endif ?>

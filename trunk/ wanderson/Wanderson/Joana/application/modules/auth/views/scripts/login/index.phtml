@@ -1,0 +1,7 @@
+<?php echo $this->form ?>
+<?php if($this->form->isErrors()) : ?>
+<p>
+	<?php $messages = $this->form->getErrorMessages() ?>
+	<?php echo $messages[0] ?>
+</p>
+<?php endif ?>

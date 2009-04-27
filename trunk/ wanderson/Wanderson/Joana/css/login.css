@@ -1,0 +1,77 @@
+/*
+ * Joana Aplicativo Interno de Administração
+ * Layout Padrão do Sistema
+ * Folha de Estilo em Cascata
+ */
+
+/*
+ * Tags Generalizadas
+ */
+
+* {
+	border: 0;
+	margin: 0;
+	padding: 0;
+	font-family: Verdana, "Bitstream Vera Sans", "DejaVu Sans";
+	font-size: 12px;
+	color: #000;
+}
+
+/*
+ * Tags Identificadas
+ */
+#login {
+	position: absolute;
+	width: 300px;
+	left: 50%;
+	margin-left: -150px;
+	top: 200px;
+	background-image: url("../img/layouts/login/login-b.jpg");
+}
+#login img {
+	display: block;
+}
+#login #form {
+	padding: 20px;
+}
+
+/*
+ * Classes
+ */
+.text {
+	width: 200px;
+	padding: 1px 2px 1px 2px;
+	border: 1px #999 solid;
+}
+.button {
+	padding: 1px 4px 1px 4px;
+	border: 1px #666 solid;
+	background-color: #ccc;
+}
+.button:hover {
+	background-color: #999;
+	cursor: pointer;
+}
+
+/*
+ * Tags Padrão HTML
+ */
+
+body {
+	background-color: #ccc;
+}
+p {
+	margin-top: 10px;
+	background-color: #ffc;
+	border: 1px #999 solid;
+	padding: 10px;
+	text-align: center;
+}
+ul {
+	list-style-type: none;
+	margin-bottom: 4px;
+	margin-top: 10px;
+	background-color: #ffc;
+	border: 1px #999 solid;
+	padding: 10px;
+}

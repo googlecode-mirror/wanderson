@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<language value="pt_BR">
+	<isEmpty>O valor não pode ser vazio.</isEmpty>
+	<notAlpha>O valor '%value%' não possui somente caracteres alfabéticos.</notAlpha>
+	<stringEmpty>O valor é vazio.</stringEmpty>
+	<stringLengthTooShort>O valor '%value%' possui menos que %min% caracteres.</stringLengthTooShort>
+	<stringLengthTooLong>O valor '%value%' possui mais que %max% caracteres.</stringLengthTooLong>
+	<notGreaterThan>O valor '%value%' não é maior que o valor %min% esperado.</notGreaterThan>
+	<notDigits>O valor '%value%' não contém somente números.</notDigits>
+	<notCurrency>O valor '%value%' não é um valor de moeda padrão #,##.</notCurrency>
+	<min>O valor mínimo é maior que o valor máximo.</min>
+	<isUnique>O valor '%value%' já está cadastrado no banco de dados.</isUnique>
+</language>

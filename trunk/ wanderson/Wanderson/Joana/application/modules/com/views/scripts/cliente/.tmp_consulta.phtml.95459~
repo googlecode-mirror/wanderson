@@ -1,0 +1,24 @@
+<table>
+	<tr>
+		<th>Nome</th>
+		<th>Email</th>
+		<th>Telefone</th>
+		<th>Atendente</th>
+	</tr>
+<?php if(count($this->clientes > 0)) : ?>
+<?php $class = '' ?>
+<?php foreach($this->clientes as $cliente) : ?>
+<?php $class = $class == '' ? 'linha' : '' ?>
+	<tr class="<?php echo $class ?>">
+		<td><?php echo $cliente->nome ?></td>
+		<td>Teste</td>
+		<td>Teste</td>
+		<td><?php echo $cliente->fkatendente ?></td>
+	</tr>
+<?php endforeach ?>
+<?php else : ?>
+	<tr>
+		<td colspan="4" align="center">Nenhum Cliente Encontrado</td>
+	</tr>
+<?php endif ?>
+</table>

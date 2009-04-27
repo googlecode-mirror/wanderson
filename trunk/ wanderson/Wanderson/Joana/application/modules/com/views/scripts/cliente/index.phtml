@@ -1,0 +1,24 @@
+<h2>Clientes</h2>
+<script type="text/javascript">
+	var interval;
+	function searchClientes() {
+		var nome     = $F('nome');
+		var email    = $F('email');
+		var telefone = $F('telefone');
+		var url      = '<?php echo $this->baseUrl ?>/com/cliente/fast';
+		var params   = 'nome=' + nome + '&email=' + email;
+		try {
+			var search = new Ajax.Updater('fast', url, {
+				method: 'get',
+				parameters: params,
+			});
+		}
+		catch(e) {}
+	}
+	function search() {
+		clearInterval(interval);
+		interval = setTimeout('searchClientes()', 500);
+	}
+</script>
+<?php echo $this->form ?>
+<div id="fast"></div>

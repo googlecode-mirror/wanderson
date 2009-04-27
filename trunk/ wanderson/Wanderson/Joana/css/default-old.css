@@ -1,0 +1,169 @@
+/*
+ * Joana Aplicativo Interno de Administração
+ * Layout Padrão do Sistema
+ * Folha de Estilo em Cascata
+ */
+
+/*
+ * Tags Generalizadas
+ */
+
+* {
+	border: 0;
+	margin: 0;
+	padding: 0;
+	font-family: Verdana, "Bitstream Vera Sans", "DejaVu Sans";
+	font-size: 12px;
+	color: #000;
+}
+
+/*
+ * Tags Identificadas
+ */
+#menu ul {
+	list-style-type: none;
+	margin-left: 10px;
+	margin-top: 10px;
+}
+#menu li ul {
+	margin-top: 0;
+}
+#menu a {
+	text-decoration: none;
+	color: #666;
+}
+#menu a:hover {
+	text-decoration: underline;
+	color: #999;
+}
+#content span {
+	font-weight: bold;
+}
+#content a {
+	text-decoration: underline;
+	color: #666;
+}
+#content a:hover {
+	text-decoration: none;
+	color: #999;
+}
+
+/*
+ * Tags Padrão HTML
+ */
+
+body {
+	background-color: #ccc;
+	background-image: url("../img/layouts/default/content-b.jpg");
+	background-position: center;
+	background-repeat: repeat-y;
+}
+h1 {
+	font-size: 16px;
+	border-bottom: 1px #999 dashed;
+	margin-bottom: 20px;
+}
+h2 {
+	font-size: 14px;
+	border-bottom: 1px #ddd dashed;
+	margin-bottom: 10px;
+}
+p {
+	text-align: justify;
+	margin-top: 10px;
+}
+select {
+	padding: 1px 2px 1px 2px;
+	border: 1px #bbb solid;
+	width: 200px;
+	background-color: #eee;
+}
+textarea {
+	padding: 1px 2px 1px 2px;
+	border: 1px #bbb solid;
+}
+.checkbox {
+	margin-top: 4px;
+	margin-right: 4px;
+	vertical-align: text-bottom;
+}
+
+/*
+ * Tags de Classes
+ */
+.note {
+	background-color: #ffc;
+	background-image: url('../img/tool/yellow/about.png');
+	background-repeat: no-repeat;
+	background-position: 10px 10px;
+	padding: 15px;
+	padding-top: 55px;
+	border: 1px #999 solid;
+}
+.text {
+	padding: 1px 2px 1px 2px;
+	border: 1px #bbb solid;
+	width: 194px;
+}
+.button {
+	padding: 1px 5px 1px 5px;
+	border: 1px #999 solid;
+	background-color: #bbb;
+}
+.button:hover {
+	cursor: pointer;
+	background-color: #aaa;
+}
+.button-disabled {
+	padding: 1px 5px 1px 5px;
+	border: 1px #bbb solid;
+	background-color: #ccc;
+	color: #ddd;
+}
+
+/*
+ * Decorators Zend Framework
+ */
+#menu dl dt {
+	margin-left: 10px;
+}
+#menu dl dd {
+	margin-left: 20px;
+	margin-bottom: 10px;
+}
+#menu dl dd ul {
+	list-style-type: none;
+	margin: 2px 0px 2px 10px;
+	padding: 5px;
+	background-color: #ffc;
+	border: 1px #999 solid;
+}
+/*
+ * Tabelas
+ */
+#content table {
+	width: 100%;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	border-collapse: collapse;
+	background-color: #bbb;
+}
+#content table td, #content table th {
+	padding: 2px 4px 2px 4px;
+	border: 1px #999 solid;
+}
+#content table th {
+	background-color: #888;
+	color: #ccc;
+	font-weight: normal;
+	text-align: left;
+	text-decoration: none;
+	padding-left: 2px;
+}
+#content table th a {
+	color: #ccc;
+	text-decoration: none;
+}
+#content table .linha {
+	background-color: #aaa;
+}

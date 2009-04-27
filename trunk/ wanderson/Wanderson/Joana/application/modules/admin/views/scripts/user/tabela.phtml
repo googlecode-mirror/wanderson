@@ -1,0 +1,24 @@
+<table>
+	<tr>
+		<th>Nome do Usuário</th>
+		<th width="200">Grupo do Usuário</th>
+		<th width="100">Habilitado</th>
+		<th width="20"></th>
+	</tr>
+<?php if(count($this->users) > 0) : ?>
+<?php $class = '' ?>
+<?php foreach($this->users as $user) : ?>
+<?php $class = $class == '' ? 'linha' : '' ?>
+	<tr class="<?php echo $class ?>">
+		<td><?php echo $user->username ?></td>
+		<td><?php echo $user->role->name ?></td>
+		<td><?php echo $user->allowed ? 'Sim' : 'Não' ?></td>
+		<td align="center"><a href="<?php echo $this->baseUrl ?>/admin/user/edit/id/<?php echo $user->id ?>">V</a></td>
+	</tr>
+<?php endforeach ?>
+<?php else : ?>
+	<tr>
+		<td colspan="4" align="center">Sem Cadastro</td>
+	</tr>
+<?php endif ?>
+</table>

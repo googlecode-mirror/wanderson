@@ -1,0 +1,26 @@
+<table>
+	<tr>
+		<th width="150">Nome do Grupo</th>
+		<th>Identificador</th>
+		<th width="150">Grupo Pai</th>
+		<th width="20"></th>
+		<th width="20"></th>
+	</tr>
+<?php if(count($this->roles) > 0) : ?>
+<?php $class = '' ?>
+<?php foreach($this->roles as $role) : ?>
+<?php $class = $class == '' ? 'linha' : '' ?>
+	<tr class="<?php echo $class ?>">
+		<td><?php echo $role->name ?></td>
+		<td><?php echo $role->value ?></td>
+		<td><?php echo $role->parent->name ?></td>
+		<td align="center"><a href="<?php echo $this->baseUrl ?>/admin/role/edit/id/<?php echo $role->id ?>">V</a></td>
+		<td align="center"><a href="<?php echo $this->baseUrl ?>/admin/role/delete/id/<?php echo $role->id ?>">X</a></td>
+	</tr>
+<?php endforeach ?>
+<?php else : ?>
+	<tr>
+		<td colspan="5" align="center">Sem Cadastro</td>
+	</tr>
+<?php endif ?>
+</table>
