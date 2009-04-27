@@ -3,8 +3,6 @@
 		public function __construct() {
 			parent::__construct();
 			
-			$id = new System_Form_Element_PrimaryKey('id');
-			
 			$nome = new Zend_Form_Element_Text('nome');
 			$nome
 			->setLabel('Nome')

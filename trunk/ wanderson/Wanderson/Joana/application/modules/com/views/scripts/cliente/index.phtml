@@ -6,10 +6,10 @@
 		var email    = $F('email');
 		var telefone = $F('telefone');
 		var url      = '<?php echo $this->baseUrl ?>/com/cliente/fast';
-		var params   = 'nome=' + nome + '&email=' + email;
+		var params   = 'nome=' + nome + '&email=' + email + '&telefone=' + telefone;
 		try {
 			var search = new Ajax.Updater('fast', url, {
-				method: 'get',
+				method: 'post',
 				parameters: params,
 			});
 		}
@@ -17,8 +17,9 @@
 	}
 	function search() {
 		clearInterval(interval);
-		interval = setTimeout('searchClientes()', 500);
+		interval = setTimeout('searchClientes()', 800);
 	}
+	search();
 </script>
 <?php echo $this->form ?>
 <div id="fast"></div>

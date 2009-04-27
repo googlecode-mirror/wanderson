@@ -4,39 +4,33 @@
 			$form = new System_Form_FastCliente();
 			$form->nome->setAttrib('onkeyup', 'javascript:search();');
 			$form->email->setAttrib('onkeyup', 'javascript:search();');
+			$form->telefone->setAttrib('onkeyup', 'javascript:search();');
 			$this->view->form = $form;
 		}
 		public function fastAction() {
 			$this->view->layout()->disableLayout();
+			$form = new System_Form_FastCliente();
+			$data = $this->getRequest()->getPost();
+			$data = $form->populate($data)->getValues();
+			
 			$select = new System_Db_Select_FastCliente();
-			$f      = new Zend_Filter();
-			$f
-				->addFilter(new Zend_Filter_StripTags())
-				->addFilter(new Zend_Filter_StringTrim());
+			$select
+				->where('nome ILIKE ?', "%{$data['nome']}%")
+				->where('email ILIKE ?', "%{$data['email']}%")
+				->where('telefone ILIKE ?', "%{$data['telefone']}%");
+			$rowset = $select->query()->fetchAll();
+			$result = array();
 			
-			$nome   = $f->filter($this->getRequest()->getParam('nome'));
-			$nome   = $select->getAdapter()->quoteInto('nome ILIKE ?', '%'.$nome.'%');
+			foreach($rowset as $row)
+				$result[] = $row['id'];
 			
-			$email  = $f->filter($this->getRequest()->getParam('email'));
-			$email  = $select->getAdapter()->quoteInto('email ILIKE ?', '%'.$email.'%');
+			$table = new Com_Cliente();
+			$clientes = $table->find($result);
 			
-			$fone   = $f->filter($this->getRequest()->getParam('telefone'));
-			$fone   = $select->getAdapter()->quoteInto('telefone ILIKE ?', '%'.$fone.'%');
+			$view = new System_View_FastCliente();
+			$view->clientes = $clientes;
+			$consulta = $view->render('consulta.phtml');
 			
-			$select->where($nome)->where($email)->where($fone);
-//				->orWhere('email IS NULL')->orWhere('telefone IS NULL');
-			
-			$result = $select->getAdapter()->query($select)->fetchAll();
-			
-			$identity = new Zend_Db_Select($select->getAdapter());
-			foreach($result as $row)
-				$identity->orWhere('id = '.$row['id']);
-			
-			$table  = new Com_Cliente();
-			$view   = new System_View();
-			$result = $table->fetchAll($where);
-			$view->clientes = $result;
-			
-			$this->view->consulta = $view->render('consulta.phtml');
+			$this->view->consulta = $consulta;
 		}
 	}

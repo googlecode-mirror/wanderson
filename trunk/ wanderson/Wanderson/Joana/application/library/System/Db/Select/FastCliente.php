@@ -3,13 +3,11 @@
 		public function __construct() {
 			$adapter = Zend_Db_Table::getDefaultAdapter();
 			parent::__construct($adapter);
-			$where   = array();
-			$where[] = 'id = 1';
 			$this
-				->from(array('cliente' => 'com_cliente'),array('cliente.id'))
-				->joinLeft(array('email' => 'com_email'), 'cliente.id = email.fkcliente', array())
-				->joinLeft(array('telefone' => 'com_telefone'), 'cliente.id = telefone.fkcliente', array())
 				->distinct()
+				->from(array('cliente' => 'com_cliente'), 'id')
+				->joinLeft(array('telefone' => 'com_telefone'), 'cliente.id = telefone.fkcliente', array())
+				->joinLeft(array('email' => 'com_email'), 'cliente.id = email.fkcliente', array())
 				->limit(10);
 		}
 	}

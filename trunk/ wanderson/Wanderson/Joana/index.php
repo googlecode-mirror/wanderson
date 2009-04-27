@@ -7,7 +7,7 @@
 	/* Configuração do Path */
 	$root = dirname(__FILE__);
 	$path = array();
-	$path[] = dirname($root).'/library/';    // Zend Framework Library
+	$path[] = dirname($root).'../../library/';    // Zend Framework Library
 	$path[] = $root.'/application/library/'; // System Library
 	$path[] = $root.'/application/models/';  // Models Directory
 	set_include_path(implode(PATH_SEPARATOR, $path));
