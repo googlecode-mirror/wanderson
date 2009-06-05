@@ -8,6 +8,12 @@ public abstract class Device {
 	protected String name;
 	
 	/*
+	 * Abstract Methods
+	 */
+	
+	abstract public Device send(Packet packet);
+	
+	/*
 	 * Constructors
 	 */
 	
