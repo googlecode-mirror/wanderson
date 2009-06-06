@@ -1,6 +1,7 @@
 package cs.unisinos.prog1.net;
 
 import cs.unisinos.prog1.net.abstracts.*;
+import cs.unisinos.prog1.net.exceptions.*;
 
 public class Host extends Device {
 	
@@ -20,12 +21,18 @@ public class Host extends Device {
 	 * Methods
 	 */
 	
-	public Host send(Packet packet) {
-		return this;
+	public boolean send(Packet packet) throws NetException {
+		if(packet == null)
+			throw new DeviceException(NetException.DEVICE_ERROR);
+		boolean died = false;
+		if(died = packet.reached(this))
+			this.setContent(packet.drop().getContent());
+		if(!packet.isDropped())
+			died = this.getConnection().send(packet.countDown());
+		return died;
 	}
 	
-	public Host send(String destiny, String content) {
-		this.send(new Message(destiny, content));
-		return this;
+	public boolean send(String destiny, String content) throws NetException {
+		return this.send(new Message(destiny, content));
 	}
 }

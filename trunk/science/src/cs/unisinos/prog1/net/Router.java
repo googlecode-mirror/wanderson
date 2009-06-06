@@ -24,8 +24,16 @@ public class Router extends Device {
 	 * Methods
 	 */
 	
-	public Router send(Packet packet) {
-		return this;
+	public boolean send(Packet packet) throws NetException {
+		int i = 0;
+		boolean found = false;
+		while(i < this.getNumberOfPorts() && !found && !packet.isDropped()) {
+			if(this.getPort(i) != null) {
+				this.getPort(i).send(packet);
+			}
+			i++;
+		}
+		return found;
 	}
 	
 	private Router cleanPorts(int value) {

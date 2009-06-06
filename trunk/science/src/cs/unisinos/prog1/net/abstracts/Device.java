@@ -6,12 +6,13 @@ import cs.unisinos.prog1.net.exceptions.NetException;
 public abstract class Device {
 	protected Enlace enlace;
 	protected String name;
+	protected String content;
 	
 	/*
 	 * Abstract Methods
 	 */
 	
-	abstract public Device send(Packet packet);
+	abstract public boolean send(Packet packet) throws NetException;
 	
 	/*
 	 * Constructors
@@ -20,7 +21,8 @@ public abstract class Device {
 	public Device(String name, Enlace enlace) {
 		this
 			.setName(name)
-			.setEnlace(enlace);
+			.setEnlace(enlace)
+			.setContent("");
 	}
 	
 	public Device(String name) {
@@ -50,6 +52,11 @@ public abstract class Device {
 		return this;
 	}
 	
+	public Device setContent(String content) {
+		this.content = content;
+		return this;
+	}
+	
 	/*
 	 * Getters
 	 */
@@ -67,5 +74,9 @@ public abstract class Device {
 		if(enlace == null)
 			throw new DeviceException(NetException.DEVICE_ERROR);
 		return enlace.getConnection(this);
+	}
+	
+	public String getContent() {
+		return this.content;
 	}
 }
