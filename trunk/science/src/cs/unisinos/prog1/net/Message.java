@@ -8,7 +8,7 @@ public class Message extends Packet {
 	 * Constructors
 	 */
 	
-	public Message(String content) {
-		super(content, 64);
+	public Message(String destiny, String content) {
+		super(destiny, content, 64);
 	}
 }

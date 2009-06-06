@@ -24,8 +24,8 @@ public class Host extends Device {
 		return this;
 	}
 	
-	public Host send(String content) {
-		this.send(new Message(content));
+	public Host send(String destiny, String content) {
+		this.send(new Message(destiny, content));
 		return this;
 	}
 }
