@@ -28,6 +28,9 @@ public abstract class Enlace {
 	 */
 	
 	public Enlace connect(Device device) throws NetException {
+		if(device == null)
+			throw new EnlaceException(NetException.ENLACE_ERROR);
+		device.setEnlace(this);
 		if(this.getConnection1() == null)
 			this.setConnection1(device);
 		else if(this.getConnection2() == null)

@@ -44,8 +44,6 @@ public abstract class Device {
 	}
 	
 	public Device setConnection(Enlace enlace, Device device) throws NetException {
-		this
-			.setEnlace(enlace);
 		enlace
 			.connect(this)
 			.connect(device);

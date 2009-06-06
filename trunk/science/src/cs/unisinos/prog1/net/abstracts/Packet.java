@@ -1,6 +1,6 @@
 package cs.unisinos.prog1.net.abstracts;
 
-import cs.unisinos.prog1.net.Host;
+import cs.unisinos.prog1.net.classes.Host;
 import cs.unisinos.prog1.net.exceptions.*;
 
 public abstract class Packet {
