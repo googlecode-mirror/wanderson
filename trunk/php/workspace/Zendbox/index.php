@@ -5,8 +5,8 @@
 	 * @author Wanderson Henrique Camargo Rosa
 	 */
 	
-	error_reporting(E_ALL|E_STRICT);
-	ini_set('display_errors', true);
+	error_reporting(0);
+	ini_set('display_errors', false);
 	
 	$root   = dirname(__FILE__);
 	$path   = array();
@@ -23,10 +23,30 @@
 	try {
 		$loader = Zend_Loader_Autoloader::getInstance();
 		
+		$config = new Zend_Config_Xml($root.'/application/configs/application.xml');
+		
+		if($config->system->errors->php) {
+			error_reporting(E_ALL|E_STRICT);
+			ini_set('display_errors', true);
+		}
+		
+		$loader
+			->registerNamespace('System_')
+			->registerNamespace('_')
+			->suppressNotFoundWarnings($config->system->errors->warnings);
+		
+		$layout = Zend_Layout::startMvc();
+		$layout
+			->setLayoutPath($root.'/application/layouts')
+			->setLayout('layout');
+		
 		$front = Zend_Controller_Front::getInstance();
 		$front
 			->addModuleDirectory($root.'/application/modules')
-			->throwExceptions(true);
+			->throwExceptions($config->system->errors->exceptions);
+		
+		Zend_Registry::set('config', $config);
+		Zend_Registry::set('root', $root);
 		
 		$front->dispatch();
 	}

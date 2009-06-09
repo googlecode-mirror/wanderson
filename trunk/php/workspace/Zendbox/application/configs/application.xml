@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<application>
+	<system>
+		<errors>
+			<php>1</php>
+			<exceptions>1</exceptions>
+			<warnings>1</warnings>
+		</errors>
+		<title>Zendbox</title>
+	</system>
+</application>
