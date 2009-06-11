@@ -12,10 +12,16 @@ public class Number implements Content {
 	protected Integer content;
 	
 	/**
+	 * Infinite Constant
+	 */
+	public static Integer INFINITE = -1;
+	
+	/**
 	 * Complete Constructor
 	 * @param content Integer Content
+	 * @throws GraphException Negative Value
 	 */
-	public Number(Integer content) {
+	public Number(Integer content) throws GraphException {
 		this
 			.setContent(content);
 	}
@@ -24,8 +30,11 @@ public class Number implements Content {
 	 * Configures Integer Content
 	 * @param content Integer Content
 	 * @return Self Object
+	 * @throws GraphException Negative Value
 	 */
-	public Number setContent(Integer content) {
+	public Number setContent(Integer content) throws GraphException {
+		if(content.intValue() < 0 && content.intValue() != INFINITE)
+			throw new GraphException(GraphException.CONTENT_ERROR);
 		this.content = content;
 		return this;
 	}

@@ -39,7 +39,7 @@ public class Graph {
 	 * TODO Change this Javadoc
 	 */
 	public Graph clearVertices() throws GraphException {
-		if(this.getVertices() == null) {
+		if(this.getVertices() != null) {
 			for(Vertice vertice: this.getVertices())
 				vertice.clearEdges();
 		}
@@ -78,6 +78,7 @@ public class Graph {
 		int index = 0;
 		while(!found && index < counter) {
 			found = content.compareTo(this.getVertices().get(index).getContent()) == 0;
+			index++;
 		}
 		if(found)
 			throw new GraphException(GraphException.GRAPH_ERROR);
@@ -126,6 +127,43 @@ public class Graph {
 			throw new GraphException(GraphException.GRAPH_ERROR);
 		vertice.clearEdges();
 		this.getVertices().remove(vertice);
+		return vertice;
+	}
+	
+	/**
+	 * Link Left and Right Vertices
+	 * @param left  Left Vertice
+	 * @param right Right Vertice
+	 * @param edge  Edge Content
+	 * @param link  Edge Link Type
+	 * @return Self Object
+	 * @throws GraphException Link Error
+	 */
+	public Graph linkVertice(Vertice left, Vertice right, Content edge, int link) throws GraphException {
+		if(!this.isVertice(left) || !this.isVertice(right))
+			throw new GraphException(GraphException.GRAPH_ERROR);
+		left.addEdge(right, edge, link);
+		return this;
+	}
+	
+	/**
+	 * Find a Vertice into the Graph
+	 * @param content Vertice Content
+	 * @return Found Vertice
+	 * @throws GraphException Vertice Content not Found
+	 */
+	public Vertice getVertice(Content content) throws GraphException {
+		Vertice vertice = null;
+		boolean found = false;
+		int counter = this.getNumberOfVertices();
+		int index = 0;
+		while(!found && index < counter) {
+			vertice = this.getVertices().get(index);
+			found = vertice.getContent().compareTo(content) == 0;
+			index++;
+		}
+		if(!found)
+			throw new GraphException(GraphException.GRAPH_ERROR);
 		return vertice;
 	}
 	
