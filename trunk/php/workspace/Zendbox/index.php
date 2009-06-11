@@ -40,11 +40,17 @@
 			->setLayoutPath($root.'/application/layouts')
 			->setLayout('layout');
 		
+		$adapter  = $config->database->adapter;
+		$params   = $config->database->params->toArray();
+		$database = Zend_Db::factory($adapter, $params);
+		Zend_Db_Table::setDefaultAdapter($database);
+		
 		$front = Zend_Controller_Front::getInstance();
 		$front
 			->addModuleDirectory($root.'/application/modules')
 			->throwExceptions($config->system->errors->exceptions);
 		
+		Zend_Registry::set('database', $database);
 		Zend_Registry::set('config', $config);
 		Zend_Registry::set('root', $root);
 		
