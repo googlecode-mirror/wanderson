@@ -67,14 +67,15 @@ public class Edge {
 		this
 			.setLeft(left)
 			.setRight(right)
-			.setContent(content);
+			.setContent(content)
+			.setLinkType(link);
 	}
 	
 	/**
 	 * Visit a Vertice through an Edge Link Type
 	 * @param leave Leave Vertice
 	 * @return Arrive Vertice
-	 * @throws GraphException Arrive Vertice doesn't Exist
+	 * @throws GraphException Unable to Access Arrive Vertice
 	 */
 	public Vertice visitFrom(Vertice leave) throws GraphException {
 		Vertice arrive = null;
