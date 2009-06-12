@@ -14,7 +14,7 @@ public class Number implements Content {
 	/**
 	 * Infinite Constant
 	 */
-	public static Integer INFINITE = -1;
+	public static Integer INFINITE = Integer.MAX_VALUE;
 	
 	/**
 	 * Complete Constructor
