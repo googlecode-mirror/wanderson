@@ -3,7 +3,7 @@
 	<system>
 		<errors>
 			<php>1</php>
-			<exceptions>1</exceptions>
+			<exceptions>0</exceptions>
 			<warnings>1</warnings>
 		</errors>
 		<title>Zendbox</title>
