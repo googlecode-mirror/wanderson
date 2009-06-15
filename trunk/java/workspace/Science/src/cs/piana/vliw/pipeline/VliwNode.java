@@ -3,7 +3,7 @@ package cs.piana.vliw.pipeline;
 import cs.piana.memory.*;
 
 /**
- * Piana Vliw Node
+ * Piana VLIW Node
  * @author Wanderson Henrique Camargo Rosa
  *
  */
