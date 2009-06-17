@@ -48,10 +48,10 @@ public class VliwTree {
 	public VliwTree addDependent(VliwNode parent, VliwNode dependent) {
 		if(parent == null)
 			return this;
-		VliwNode current = parent;
+		VliwNode current = parent.getDependent();
 		while(current != null) {
 			parent = current;
-			current = parent.getDependent();
+			current = current.getDependent();
 		}
 		parent.setDependent(dependent);
 		return this;

@@ -3,6 +3,7 @@ package cs.main;
 import cs.piana.*;
 import cs.piana.memory.*;
 import cs.piana.parser.*;
+import cs.piana.vliw.pipeline.*;
 
 /**
  * Computer Science Main Class
@@ -18,8 +19,10 @@ public class Main {
 		
 		try {
 			Memory memory = Parser.parse("asm/code.asm");
+			Vliw vliw = new Vliw();
+			VliwTree tree = vliw.createTree(memory);
 			
-			
+			System.out.println();
 		}
 		catch(PianaException e) {
 			System.out.println();

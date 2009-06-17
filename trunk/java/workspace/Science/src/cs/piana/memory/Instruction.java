@@ -32,6 +32,11 @@ public class Instruction extends Block {
 	private String in2;
 	
 	/**
+	 * Instruction Name
+	 */
+	private String name;
+	
+	/**
 	 * Complete Constructor
 	 * @param out Out Register
 	 * @param in1 First Attribute
@@ -122,6 +127,17 @@ public class Instruction extends Block {
 		return this;
 	}
 	
+	/**
+	 * Configure Instruction Name
+	 * @param name Instruction Name
+	 * @return Self Object
+	 * TODO Create best class
+	 */
+	public Instruction setName(String name) {
+		this.name = name;
+		return this;
+	}
+	
 	/*
 	 * Getters
 	 */
@@ -156,5 +172,13 @@ public class Instruction extends Block {
 	 */
 	public String getIn2() {
 		return this.in2;
+	}
+	
+	/**
+	 * Return Instruction Name
+	 * @return Instruction Name
+	 */
+	public String getName() {
+		return this.name;
 	}
 }

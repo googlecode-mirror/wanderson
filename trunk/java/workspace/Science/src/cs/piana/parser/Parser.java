@@ -55,6 +55,8 @@ public class Parser {
 				else
 					throw new ParserException(ParserException.PARSER_ERROR);
 				
+				block.setName(name);
+				
 				memory.addBlock(block);
 			}
 		}
