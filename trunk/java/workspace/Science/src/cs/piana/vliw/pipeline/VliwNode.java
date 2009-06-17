@@ -25,6 +25,15 @@ public class VliwNode {
 	private Instruction inst;
 	
 	/**
+	 * Complete Constructor
+	 * @param inst Instruction
+	 */
+	public VliwNode(Instruction inst) {
+		this
+			.setInstruction(inst);
+	}
+	
+	/**
 	 * Configure Next Node
 	 * @param next Next Node
 	 * @return Self Object

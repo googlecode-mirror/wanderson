@@ -18,6 +18,13 @@ public class VliwTree {
 	private VliwNode last;
 	
 	/**
+	 * Complete Constructor
+	 */
+	public VliwTree() {
+		this.first = this.last = null;
+	}
+	
+	/**
 	 * VliwTree Node Increment
 	 * @param node VliwNode
 	 * @return Self Object
