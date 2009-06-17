@@ -24,11 +24,6 @@ public class VliwNode {
 	 */
 	private Instruction inst;
 	
-	public VliwNode(Instruction inst) {
-		this
-			.set
-	}
-	
 	/**
 	 * Configure Next Node
 	 * @param next Next Node
@@ -49,7 +44,15 @@ public class VliwNode {
 		return this;
 	}
 	
-	public VliwNode getAdd
+	/**
+	 * Configure Instruction
+	 * @param inst Instruction
+	 * @return Self Object
+	 */
+	public VliwNode setInstruction(Instruction inst) {
+		this.inst = inst;
+		return this;
+	}
 	
 	/**
 	 * Return Next Node
@@ -65,5 +68,13 @@ public class VliwNode {
 	 */
 	public VliwNode getDependent() {
 		return this.dependent;
+	}
+	
+	/**
+	 * Return Instruction
+	 * @return Instruction
+	 */
+	public Instruction getInstruction() {
+		return this.inst;
 	}
 }
