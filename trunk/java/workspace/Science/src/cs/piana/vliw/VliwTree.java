@@ -27,6 +27,14 @@ public class VliwTree {
 	}
 	
 	/**
+	 * Tree Empty Check
+	 * @return Check Flag
+	 */
+	public boolean isEmpty() {
+		return this.first == null;
+	}
+	
+	/**
 	 * VliwTree Node Increment
 	 * @param node VliwNode
 	 * @return Self Object
@@ -141,7 +149,7 @@ public class VliwTree {
 				}
 			}
 		}
-		return current.getInstruction();
+		return current == null ? null : current.getInstruction();
 	}
 	
 	/**

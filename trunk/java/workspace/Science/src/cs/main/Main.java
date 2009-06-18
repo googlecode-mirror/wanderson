@@ -21,14 +21,7 @@ public class Main {
 		try {
 			Memory memory = Parser.parse("asm/code.asm");
 			String pipes[] = {"ADD","ADD","MUL"};
-			Vliw vliw = new Vliw(pipes);
-			VliwTree tree = vliw.createTree(memory);
-			Instruction instruction = tree.removeInstruction("ADD");
-			tree.removeInstruction("ADD");
-			tree.removeInstruction("MUL");
-			tree.removeInstruction("ADD");
-			tree.removeInstruction("ADD");
-			tree.removeInstruction("MUL");
+			Vliw vliw = new Vliw(pipes, memory);
 			
 			System.out.println();
 		}

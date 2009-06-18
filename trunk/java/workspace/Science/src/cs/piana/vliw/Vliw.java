@@ -17,12 +17,12 @@ public class Vliw {
 	/**
 	 * Pipeline Names
 	 */
-	private String pipelines[];
+	private String pipes[];
 	
 	/**
 	 * Instructions List
 	 */
-	private ArrayList<Object> pipes;
+	private ArrayList<ArrayList<Instruction>> pipelines;
 	
 	/*
 	 * Constructor
@@ -30,18 +30,38 @@ public class Vliw {
 	
 	/**
 	 * Complete Constructor
-	 * @param pipelines Pipeline Names
+	 * @param pipes Pipeline Names
+	 * @param memory Piana Memory
 	 */
-	public Vliw(String pipelines[]) {
+	public Vliw(String pipes[], Memory memory) {
 		this
-			.setPipelines(pipelines);
+			.setPipes(pipes);
 		
-		int count = pipelines.length;
-		pipes = new ArrayList<Object>();
+		int count = pipes.length;
+		this.pipelines = new ArrayList<ArrayList<Instruction>>();
 		for(int i = 0; i < count; i++)
-			pipes.add(new ArrayList<Instruction>());
+			pipelines.add(i, new ArrayList<Instruction>());
 		
+		VliwTree tree = this.createTree(memory);
 		
+		Instruction temp = null;
+		int j = 0;
+		while(!tree.isEmpty()) {
+			for(int i = 0; i < count; i++) {
+				if(j > 0) {
+					if(!pipelines.get(i).get(j-1).isDead())
+						temp = pipelines.get(i).get(j-1);
+					else
+						temp = tree.removeInstruction(pipes[i]);
+				}
+				else
+					temp = tree.removeInstruction(pipes[i]);
+				if(temp != null)
+					temp.countDown();
+				pipelines.get(i).add(j, temp);
+			}
+			j = j + 1;
+		}
 	}
 	
 	/*
@@ -84,11 +104,11 @@ public class Vliw {
 	
 	/**
 	 * Configure Pipelines
-	 * @param pipelines Pipeline Names
+	 * @param pipes Pipeline Names
 	 * @return Self Object
 	 */
-	public Vliw setPipelines(String pipelines[]) {
-		this.pipelines = pipelines;
+	public Vliw setPipes(String pipes[]) {
+		this.pipes = pipes;
 		return this;
 	}
 	
@@ -100,7 +120,7 @@ public class Vliw {
 	 * Return Pipelines
 	 * @return Pipeline Names
 	 */
-	public String[] getPipelines() {
-		return this.pipelines;
+	public String[] getPipes() {
+		return this.pipes;
 	}
 }
