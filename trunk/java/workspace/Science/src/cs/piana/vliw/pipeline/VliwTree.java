@@ -82,7 +82,8 @@ public class VliwTree {
 		VliwNode current = this.getFirst();
 		while(!found && current != null) {
 			found = current.getInstruction().getOut().compareTo(out) == 0;
-			current = current.getNext();
+			if(!found)
+				current = current.getNext();
 		}
 		return found ? current : null;
 	}
