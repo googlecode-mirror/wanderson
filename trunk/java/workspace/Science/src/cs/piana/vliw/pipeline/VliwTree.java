@@ -58,34 +58,40 @@ public class VliwTree {
 	}
 	
 	/**
-	 * Drop Parent Node Swapping with Dependent Node
-	 * @param out Output Register Name
-	 * @return Parent Node or Null
-	 */
-	public VliwNode dropParent(String out) {
-		VliwNode parent  = null;
-		VliwNode current = this.getNode(out); 
-		if(current != null) {
-			parent = current;
-			current = current.getDependent();
-		}
-		return parent;
-	}
-	
-	/**
 	 * Get Node with an Output Register Name
 	 * @param out Output Register Name
 	 * @return Node found or null
 	 */
 	public VliwNode getNode(String out) {
-		boolean found = false;
-		VliwNode current = this.getFirst();
-		while(!found && current != null) {
-			found = current.getInstruction().getOut().compareTo(out) == 0;
-			if(!found)
-				current = current.getNext();
+		
+		VliwNode curH = this.getFirst(); // Horizontal Current
+		VliwNode curV = null;            // Vertical Current
+		VliwNode curF = null;            // Found Current
+		
+		int vertical  = 0;
+		int foundV    = 0; // Height Found
+		
+		while(curH != null) {
+			vertical = 0;
+			curV = curH.getDependent();
+			while(curV != null) {
+				vertical = vertical + 1;
+				if(curV.getInstruction().getOut().compareTo(out) == 0) {
+					if(foundV < vertical) {
+						foundV = vertical;
+						curF   = curV;
+					}
+				}
+				curV = curV.getDependent();
+			}
+			if(foundV == 0) {
+				if(curH.getInstruction().getOut().compareTo(out) == 0)
+					curF = curH;
+			}
+			curH = curH.getNext();
 		}
-		return found ? current : null;
+		
+		return curF;
 	}
 	
 	/**

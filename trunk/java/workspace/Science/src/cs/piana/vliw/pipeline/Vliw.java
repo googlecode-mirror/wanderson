@@ -1,5 +1,6 @@
 package cs.piana.vliw.pipeline;
 
+import java.util.*;
 import cs.piana.memory.*;
 
 /**
@@ -9,10 +10,43 @@ import cs.piana.memory.*;
  */
 public class Vliw {
 	
+	/*
+	 * Class Attributes
+	 */
+	
+	/**
+	 * Pipeline Names
+	 */
+	private String pipelines[];
+	
+	/**
+	 * Instructions List
+	 */
+	private ArrayList<Object> pipes;
+	
+	/*
+	 * Constructor
+	 */
+	
 	/**
 	 * Complete Constructor
+	 * @param pipelines Pipeline Names
 	 */
-	public Vliw(){}
+	public Vliw(String pipelines[]) {
+		this
+			.setPipelines(pipelines);
+		
+		int count = pipelines.length;
+		pipes = new ArrayList<Object>();
+		for(int i = 0; i < count; i++)
+			pipes.add(new ArrayList<Instruction>());
+		
+		
+	}
+	
+	/*
+	 * Methods
+	 */
 	
 	/**
 	 * Construct a Vliw Dependency Tree
@@ -42,5 +76,31 @@ public class Vliw {
 				tree.addDependent(temp2, node);
 		}
 		return tree;
+	}
+	
+	/*
+	 * Setters
+	 */
+	
+	/**
+	 * Configure Pipelines
+	 * @param pipelines Pipeline Names
+	 * @return Self Object
+	 */
+	public Vliw setPipelines(String pipelines[]) {
+		this.pipelines = pipelines;
+		return this;
+	}
+	
+	/*
+	 * Getters
+	 */
+	
+	/**
+	 * Return Pipelines
+	 * @return Pipeline Names
+	 */
+	public String[] getPipelines() {
+		return this.pipelines;
 	}
 }
