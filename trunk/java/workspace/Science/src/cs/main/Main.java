@@ -3,6 +3,8 @@ package cs.main;
 import cs.piana.*;
 import cs.piana.memory.*;
 import cs.piana.parser.*;
+import cs.piana.vliw.Vliw;
+import cs.piana.vliw.VliwTree;
 import cs.piana.vliw.pipeline.*;
 
 /**
@@ -19,7 +21,8 @@ public class Main {
 		
 		try {
 			Memory memory = Parser.parse("asm/code.asm");
-			Vliw vliw = new Vliw();
+			String pipes[] = {"ADD","ADD","MUL"};
+			Vliw vliw = new Vliw(pipes);
 			VliwTree tree = vliw.createTree(memory);
 			
 			System.out.println();
