@@ -1,5 +1,6 @@
 package cs.piana.vliw;
 
+import cs.piana.memory.*;
 
 /**
  * Piana VLIW Tree
@@ -93,6 +94,54 @@ public class VliwTree {
 		}
 		
 		return curF;
+	}
+	
+	/**
+	 * Tree Instruction Remove
+	 * @param type Instruction Type
+	 * @return Required Instruction or Null
+	 */
+	public Instruction removeInstruction(String type) {
+		VliwNode node = this.getFirst();
+		VliwNode current = null;
+		while(node != null) { 
+			if(node.getInstruction().getName().compareTo(type) == 0)
+				current = node;
+			node = node.getNext();
+		}
+		if(current != null) {
+			
+			VliwNode dependent = current.getDependent();
+			VliwNode parent    = null;
+			node = this.getFirst();
+			
+			if(current != node) {
+				// If it isn't the first node
+				parent = node;
+				while(parent.getNext() != current)
+					parent = parent.getNext();
+				if(dependent != null) {
+					parent.setNext(dependent);
+					dependent.setNext(current.getNext());
+				}
+				else {
+					parent.setNext(current.getNext());
+				}
+			}
+			else {
+				// If it is the first node
+				if(dependent != null) {
+					dependent.setNext(current.getNext());
+					this.first = dependent;
+				}
+				else {
+					this.first = current.getNext();
+					if(this.first == null)
+						this.last = null;
+				}
+			}
+		}
+		return current.getInstruction();
 	}
 	
 	/**

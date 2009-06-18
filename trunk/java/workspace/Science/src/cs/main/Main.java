@@ -5,7 +5,6 @@ import cs.piana.memory.*;
 import cs.piana.parser.*;
 import cs.piana.vliw.Vliw;
 import cs.piana.vliw.VliwTree;
-import cs.piana.vliw.pipeline.*;
 
 /**
  * Computer Science Main Class
@@ -24,6 +23,12 @@ public class Main {
 			String pipes[] = {"ADD","ADD","MUL"};
 			Vliw vliw = new Vliw(pipes);
 			VliwTree tree = vliw.createTree(memory);
+			Instruction instruction = tree.removeInstruction("ADD");
+			tree.removeInstruction("ADD");
+			tree.removeInstruction("MUL");
+			tree.removeInstruction("ADD");
+			tree.removeInstruction("ADD");
+			tree.removeInstruction("MUL");
 			
 			System.out.println();
 		}
