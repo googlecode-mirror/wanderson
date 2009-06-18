@@ -25,12 +25,18 @@ public class VliwNode {
 	private Instruction inst;
 	
 	/**
+	 * Used in Iteration
+	 */
+	private boolean used;
+	
+	/**
 	 * Complete Constructor
 	 * @param inst Instruction
 	 */
 	public VliwNode(Instruction inst) {
 		this
-			.setInstruction(inst);
+			.setInstruction(inst)
+			.free();
 	}
 	
 	/**
@@ -85,5 +91,31 @@ public class VliwNode {
 	 */
 	public Instruction getInstruction() {
 		return this.inst;
+	}
+	
+	/**
+	 * Check if Node is Used in Iteration
+	 * @return Used Flag
+	 */
+	public boolean isUsed() {
+		return this.used;
+	}
+	
+	/**
+	 * Use this Node in Iteration
+	 * @return Self Object
+	 */
+	public VliwNode use() {
+		this.used = true;
+		return this;
+	}
+	
+	/**
+	 * Free this Node in Iteration
+	 * @return Self Object
+	 */
+	public VliwNode free() {
+		this.used = false;
+		return this;
 	}
 }

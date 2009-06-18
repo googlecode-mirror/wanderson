@@ -46,20 +46,25 @@ public class Vliw {
 		
 		Instruction temp = null;
 		int j = 0;
-		while(!tree.isEmpty()) {
+		boolean clear = true;
+		while(!tree.isEmpty() || clear) {
+			clear = true;
 			for(int i = 0; i < count; i++) {
-				if(j > 0) {
-					if(!pipelines.get(i).get(j-1).isDead())
-						temp = pipelines.get(i).get(j-1);
-					else
-						temp = tree.removeInstruction(pipes[i]);
+				temp = tree.getInstruction(pipes[i]);
+				
+				if(clear)
+					clear = temp == null;
+				
+				if(temp == null) {
+					temp = new Instruction("","","");
+					temp.kill();
 				}
-				else
-					temp = tree.removeInstruction(pipes[i]);
-				if(temp != null)
-					temp.countDown();
+				
 				pipelines.get(i).add(j, temp);
+				
+				
 			}
+			tree.removeUsedAndDead().freeAll();
 			j = j + 1;
 		}
 	}

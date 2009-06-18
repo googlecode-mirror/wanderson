@@ -105,51 +105,76 @@ public class VliwTree {
 	}
 	
 	/**
-	 * Tree Instruction Remove
+	 * Tree Instruction Get
+	 * Flag TRUE:  Remove Node from Tree
+	 * Flag FALSE: Mark Node as 'is Used'
 	 * @param type Instruction Type
 	 * @return Required Instruction or Null
 	 */
-	public Instruction removeInstruction(String type) {
+	public Instruction getInstruction(String type) {
 		VliwNode node = this.getFirst();
 		VliwNode current = null;
 		while(node != null) { 
 			if(node.getInstruction().getName().compareTo(type) == 0)
-				current = node;
+				if(!node.isUsed())
+					current = node;
 			node = node.getNext();
 		}
+		Instruction instruction = null;
 		if(current != null) {
-			
-			VliwNode dependent = current.getDependent();
-			VliwNode parent    = null;
-			node = this.getFirst();
-			
-			if(current != node) {
-				// If it isn't the first node
-				parent = node;
-				while(parent.getNext() != current)
-					parent = parent.getNext();
-				if(dependent != null) {
-					parent.setNext(dependent);
-					dependent.setNext(current.getNext());
-				}
-				else {
-					parent.setNext(current.getNext());
-				}
-			}
-			else {
-				// If it is the first node
-				if(dependent != null) {
-					dependent.setNext(current.getNext());
-					this.first = dependent;
-				}
-				else {
-					this.first = current.getNext();
-					if(this.first == null)
-						this.last = null;
-				}
-			}
+			instruction = current.use().getInstruction().countDown();
 		}
-		return current == null ? null : current.getInstruction();
+		return instruction;
+	}
+	
+	/**
+	 * Free all Nodes
+	 * @return Self Object
+	 */
+	public VliwTree freeAll() {
+		VliwNode current = this.getFirst();
+		while(current != null) {
+			current.free();
+			current = current.getNext();
+		}
+		return this;
+	}
+	
+	/**
+	 * Remove Used Nodes in Iteration
+	 * @return Self Object
+	 */
+	public VliwTree removeUsedAndDead() {
+		VliwNode parent = null;
+		VliwNode current = this.getFirst();
+		VliwNode dependent = null;
+		while(current != null) {
+			dependent = current.getDependent();
+			if(current.isUsed() && current.getInstruction().isDead()) {
+				if(current == this.getFirst()) {
+					if(dependent == null) {
+						this.first = this.first.getNext();
+					}
+					else {
+						this.first = dependent;
+						dependent.setNext(current.getNext());
+					}
+				}
+				else {
+					if(dependent == null) {
+						parent.setNext(current.getNext());
+					}
+					else {
+						parent.setNext(dependent);
+						dependent.setNext(current.getNext());
+					}
+				}
+				
+			}
+			parent  = current;
+			current = current.getNext();
+		}
+		return this;
 	}
 	
 	/**
