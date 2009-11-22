@@ -1,6 +1,0 @@
-CREATE TABLE identity (
-  id SERIAL PRIMARY KEY,
-  username VARCHAR(20) UNIQUE NOT NULL,
-  passwd   CHAR(32) NOT NULL,
-  allowed  BOOLEAN NOT NULL DEFAULT TRUE
-)
