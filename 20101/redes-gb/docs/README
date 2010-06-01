@@ -1,0 +1,57 @@
+Simulador de Conexão TCP
+Trabalho Grau B
+Redes de Computadores I
+
+Este aplicativo visa implementação do simulador de conexões TCP exigido pela
+disciplina de Redes de Computadores I, primeiro semestre de 2010, que pode ser
+acessado em http://professor.unisinos.br/mraeder/.
+
+O aplicativo deverá ser capaz de enviar a classe fornecida, que representa um
+pacote TCP, para uma outra máquina na rede, através de sockets. Logo, há uma
+necessidade de desenvolvimento de dois programas: o servidor que será
+responsável pelo recebimento e confirmação dos objetos, colocando-os em um
+buffer para tratamento de chegada e visualização dos pacotes, e um cliente capaz
+de enviar estes pacotes para o servidor, possuindo também um buffer e
+trabalhando com o sistema de janelas deslizantes Go-Back-N.
+
+== Servidor ==
+
+O servidor deve possuir um buffer de recebimento de pacotes para armazenar os
+objetos enviados pelo cliente. Após receber o tamanho da janela informado pelo
+cliente, receber todos os pacotes do tamanho da janela, verificando cada pacote
+por busca de erros, armazenando o número do último pacote recebido com sucesso.
+
+O servidor deverá verificar no primeiro pacote se é um pedido de conexão e o
+tamanho da janela de inicialização. Também devemos criar uma divisão para
+tratamento dos bits de controle. O servidor deverá executar o checksum dos
+pacotes recebidos para confirmação do ack.
+
+Portanto, o servidor pode ser um programa sem interação humana que sempre
+confirma a informação recebida, deixando que a capacidade de forçar erros seja
+implementada no cliente.
+
+É interessante que o servidor possua um visualizador dos acontecimentos durante
+a transferência, fornecendo informações para a saída padrão e arquivos
+configuráveis.
+
+== Cliente ==
+
+O cliente envia os pacotes TCP configurados para o servidor. O cliente possui
+a informação que será enviada em buffer e a janela de transmissão. O primeiro
+pacote que deve ser enviado será o pedido de conexão, informando o tamanho da
+janela que foi aberta. Após, é enviado o restante dos pacotes da janela e é
+esperado o pacote ack para confirmação do recebimento, que deverá ser lido e a
+janela será deslizada para a posição informada na confirmação.
+
+Este envio é efetuado até que todo os pacotes de informação sejam enviados e
+confirmados pelo servidor. O cliente também deverá possuir um timeout de conexão
+que deve orientar a janela caso o ack não seja recebido em um determinado
+momento, causando reenvio dos pacotes.
+
+A perda de pacotes deverá ser implementada no cliente, que não envia um
+determinado pacote para o servidor, que verificará o erro e não enviará o pacote
+ack de confirmação de recebimento, forçando o cliente a enviar os pacotes
+novamente. O cliente também deverá ser capaz de forçar erros, trocando a
+informação antes de enviar os pacotes. A perda de pacotes ack também pode ser
+implementada no cliente, ignorando o ack recebido para que os elementos da
+janela sejam reenviados.
