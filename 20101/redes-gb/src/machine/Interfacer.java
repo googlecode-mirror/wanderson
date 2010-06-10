@@ -1,6 +1,6 @@
 package machine;
 
-import java.util.concurrent.*;
+import java.util.LinkedList;
 
 /**
  * Classe Intermediadora
@@ -24,7 +24,7 @@ public abstract class Interfacer implements Runnable
     /**
      * Fila de Processamento
      */
-    protected ConcurrentLinkedQueue<Pack> buffer;
+    protected LinkedList<Pack> buffer;
 
     /**
      * Construtor da Classe
@@ -33,7 +33,7 @@ public abstract class Interfacer implements Runnable
     public Interfacer(Machine machine)
     {
         this.machine = machine;
-        this.buffer  = new ConcurrentLinkedQueue<Pack>();
+        this.buffer  = new LinkedList<Pack>();
         this.thread  = new Thread(this);
     }
 
