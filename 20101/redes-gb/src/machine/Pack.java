@@ -22,6 +22,11 @@ public class Pack implements Serializable
     protected boolean ack = false;
 
     /**
+     * Checagem de Pedido de Conexão
+     */
+    protected boolean sin = false;
+
+    /**
      * Número de Ack
      */
     protected int nAck;
@@ -67,6 +72,17 @@ public class Pack implements Serializable
     public Pack setAck(boolean flag)
     {
         this.ack = flag;
+        return this;
+    }
+
+    /**
+     * Configura a Verificação de Início de Conexão
+     * @param flag Identificador de Resultado
+     * @return Próprio Objeto
+     */
+    public Pack setSin(boolean flag)
+    {
+        this.sin = flag;
         return this;
     }
 
@@ -117,5 +133,14 @@ public class Pack implements Serializable
     public boolean isAck()
     {
         return this.ack;
+    }
+
+    /**
+     * Informa um Início de Conexão
+     * @return Informação Solicitada
+     */
+    public boolean isSin()
+    {
+        return this.sin;
     }
 }
