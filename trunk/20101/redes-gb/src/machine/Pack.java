@@ -27,6 +27,11 @@ public class Pack implements Serializable
     protected boolean sin = false;
 
     /**
+     * Tamanho da Janela de Conexão
+     */
+    protected int sizeWindow = 1;
+
+    /**
      * Número de Ack
      */
     protected int nAck;
@@ -87,6 +92,20 @@ public class Pack implements Serializable
     }
 
     /**
+     * Configura o Tamanho da Janela
+     * @param size Configuração do Tamanho da Janela
+     * @return Próprio Objeto
+     */
+    public Pack setSizeWindow(int size)
+    {
+        if (size <= 0) {
+            size = 1;
+        }
+        this.sizeWindow = size;
+        return this;
+    }
+
+    /**
      * Configura o Número de Confirmação para Próximo Passo
      * @param number Número de Resposta
      * @return Próprio Objeto
@@ -124,6 +143,15 @@ public class Pack implements Serializable
     public int getNumberSeq()
     {
         return this.nSeq;
+    }
+
+    /**
+     * Informa o Tamanho da Janela da Conexão
+     * @return Tamanho da Janela
+     */
+    public int getSizeWindow()
+    {
+        return this.sizeWindow;
     }
 
     /**
