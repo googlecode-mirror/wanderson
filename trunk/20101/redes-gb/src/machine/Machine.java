@@ -18,6 +18,11 @@ public class Machine {
 	protected ConStatus conStatus;
 
 	/**
+	 * Tamanho da janela
+	 */
+	protected int windowSize;
+
+	/**
 	 * Envio de Informações
 	 */
 	protected Sender sender;
@@ -42,7 +47,7 @@ public class Machine {
 	 */
 	public Machine start() {
 		this.running = true;
-		this.conStatus = ConStatus.CONNECTING;
+		this.setConStatus(ConStatus.CONNECTING);
 		this.sender.start();
 		this.receiver.start();
 		return this;
@@ -82,12 +87,22 @@ public class Machine {
 	}
 
 	/**
-	 * Informa o Estado da Conexão
+	 * Retorna o Estado da Conexão
 	 * 
 	 * @return Estado da Conexão
 	 */
 	public ConStatus conStatus() {
 		return this.conStatus;
+	}
+
+	/**
+	 * Define o Estado da Conexão
+	 * 
+	 * @param status
+	 *            Estado da Conexão
+	 */
+	public void setConStatus(ConStatus status) {
+		this.conStatus = status;
 	}
 
 	/**
@@ -109,6 +124,25 @@ public class Machine {
 	 */
 	public Pack retrieve() {
 		return this.receiver.unbuffer();
+	}
+
+	/**
+	 * Retorna o tamanho da Janela de Envio ou Recebimento
+	 * 
+	 * @return Tamanho da Janela
+	 */
+	public int getWindowSize() {
+		return windowSize;
+	}
+
+	/**
+	 * Define o tamanho da Janela de Envio ou Recebimento
+	 * 
+	 * @param windowSize
+	 *            Tamanho da Janela
+	 */
+	public void setWindowSize(int windowSize) {
+		this.windowSize = windowSize;
 	}
 
 	/**
