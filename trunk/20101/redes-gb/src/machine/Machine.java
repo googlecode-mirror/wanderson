@@ -15,7 +15,7 @@ public class Machine {
 	/**
 	 * Estado da Conexão
 	 */
-	protected ConStatus conStatus;
+	protected ConStatus connStatus;
 
 	/**
 	 * Tamanho da janela
@@ -92,7 +92,7 @@ public class Machine {
 	 * @return Estado da Conexão
 	 */
 	public ConStatus conStatus() {
-		return this.conStatus;
+		return this.connStatus;
 	}
 
 	/**
@@ -102,7 +102,7 @@ public class Machine {
 	 *            Estado da Conexão
 	 */
 	public void setConStatus(ConStatus status) {
-		this.conStatus = status;
+		this.connStatus = status;
 	}
 
 	/**
