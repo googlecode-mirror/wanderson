@@ -1,110 +1,125 @@
 package machine;
 
 /**
- * Classe Máquina
- * Simulação de um Computador para Envio de Dados Através da Rede
+ * Classe Máquina Simulação de um Computador para Envio de Dados Através da Rede
  * 
  * @author Wanderson Henrique Camargo Rosa
- *
+ * 
  */
-public class Machine
-{
-    /**
-     * Estado de Execução
-     */
-    protected boolean running;
+public class Machine {
+	/**
+	 * Estado de Execução
+	 */
+	protected boolean running;
 
-    /**
-     * Envio de Informações
-     */
-    protected Sender sender;
+	/**
+	 * Estado da Conexão
+	 */
+	protected ConStatus conStatus;
 
-    /**
-     * Recebimento de Informações
-     */
-    protected Receiver receiver;
+	/**
+	 * Envio de Informações
+	 */
+	protected Sender sender;
 
-    /**
-     * Construtor da Classe
-     */
-    public Machine()
-    {
-        this.sender   = new Sender(this);
-        this.receiver = new Receiver(this);
-    }
+	/**
+	 * Recebimento de Informações
+	 */
+	protected Receiver receiver;
 
-    /**
-     * Inicialização da Máquina
-     * @return Próprio Objeto
-     */
-    public Machine start()
-    {
-        this.running = true;
-        this.sender.start();
-        this.receiver.start();
-        return this;
-    }
+	/**
+	 * Construtor da Classe
+	 */
+	public Machine() {
+		this.sender = new Sender(this);
+		this.receiver = new Receiver(this);
+	}
 
-    /**
-     * Finalização da Máquina
-     * @return Próprio Objeto
-     */
-    public Machine stop()
-    {
-        this.running = false;
-        this.sender.stop();
-        this.receiver.stop();
-        return this;
-    }
+	/**
+	 * Inicialização da Máquina
+	 * 
+	 * @return Próprio Objeto
+	 */
+	public Machine start() {
+		this.running = true;
+		this.conStatus = ConStatus.CONNECTING;
+		this.sender.start();
+		this.receiver.start();
+		return this;
+	}
 
-    /**
-     * Configuração do Endereço para Envio
-     * @param address Endereço da Máquina Alvo
-     * @return Próprio Objeto
-     */
-    public Machine setAddress(String address)
-    {
-        this.sender.setAddress(address);
-        return this;
-    }
+	/**
+	 * Finalização da Máquina
+	 * 
+	 * @return Próprio Objeto
+	 */
+	public Machine stop() {
+		this.running = false;
+		this.sender.stop();
+		this.receiver.stop();
+		return this;
+	}
 
-    /**
-     * Informa o Estado da Conexão
-     * @return Estado da Conexão
-     */
-    public boolean isRunning()
-    {
-        return this.running;
-    }
+	/**
+	 * Configuração do Endereço para Envio
+	 * 
+	 * @param address
+	 *            Endereço da Máquina Alvo
+	 * @return Próprio Objeto
+	 */
+	public Machine setAddress(String address) {
+		this.sender.setAddress(address);
+		return this;
+	}
 
-    /**
-     * Envia Informações Enpacotadas para Máquina Destinatária
-     * @param element Elemento para Envio
-     * @return Próprio Objeto
-     */
-    public Machine send(Pack element)
-    {
-        this.sender.buffer(element);
-        return this;
-    }
+	/**
+	 * Informa o Estado da Máquina
+	 * 
+	 * @return Estado da Máquina
+	 */
+	public boolean isRunning() {
+		return this.running;
+	}
 
-    /**
-     * Retira Informações do Conjunto de Respostas
-     * @return Pacotes Enviados
-     */
-    public Pack retrieve()
-    {
-        return this.receiver.unbuffer();
-    }
+	/**
+	 * Informa o Estado da Conexão
+	 * 
+	 * @return Estado da Conexão
+	 */
+	public ConStatus conStatus() {
+		return this.conStatus;
+	}
 
-    /**
-     * Manipulador de Erros
-     * @param e Erro Informado
-     * @return Próprio Objeto
-     */
-    public Machine handler(Throwable e)
-    {
-        e.printStackTrace();
-        return this;
-    }
+	/**
+	 * Envia Informações Enpacotadas para Máquina Destinatária
+	 * 
+	 * @param element
+	 *            Elemento para Envio
+	 * @return Próprio Objeto
+	 */
+	public Machine send(Pack element) {
+		this.sender.buffer(element);
+		return this;
+	}
+
+	/**
+	 * Retira Informações do Conjunto de Respostas
+	 * 
+	 * @return Pacotes Enviados
+	 */
+	public Pack retrieve() {
+		return this.receiver.unbuffer();
+	}
+
+	/**
+	 * Manipulador de Erros
+	 * 
+	 * @param e
+	 *            Erro Informado
+	 * @return Próprio Objeto
+	 */
+	public Machine handler(Throwable e) {
+		e.printStackTrace();
+		return this;
+	}
 }

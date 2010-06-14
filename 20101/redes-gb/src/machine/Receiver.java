@@ -65,17 +65,31 @@ public class Receiver extends Interfacer {
 				element = (Pack) input.readObject();
 				System.out.println("Received: " + element);
 				socket.close();
-				if (!element.isAck()) {
+				if (this.machine.conStatus() == ConStatus.CONNECTING) {
+					// IF SYN: Responde SYN+ACK
+					// IF SYN+ACK: Responde ACK, Seta status para CONNECTED
+					// IF ACK: Seta status para CONNECTED
+				} else if (this.machine.conStatus() == ConStatus.CONNECTED) {
+					// IF PACOTE: Processa Lógica e se for o caso responde ACK
+					// IF ACK: Processa Lógica
+					// IF FYN: Seta status para DISCONNECTING, Responde FYN+ACK
+					//         (OBS: Máquina que enviou FYN já está em DISCONNECTING)
+				} else if (this.machine.conStatus() == ConStatus.DISCONNECTING) {
+					// IF FYN+ACK: Envia ACK, Reinicia a máquina, Status CONNECTING
+					// IF ACK: Reinicia a máquina, Status CONNECTING
 
-					this.buffer.add(element);
-					int sequence = element.getNumberSeq();
-					element = new Pack(element.getContent().toUpperCase());
-					element.setAck(true).setNumberAck(sequence + 1);
-					this.machine.send(element);
-					System.out.println("Answer: " + element);
-				} else {
-					System.out.println("Answered: " + element);
 				}
+				// if (!element.isAck()) {
+				//
+				// this.buffer.add(element);
+				// int sequence = element.getNumberSeq();
+				// element = new Pack(element.getContent().toUpperCase());
+				// element.setAck(true).setNumberAck(sequence + 1);
+				// this.machine.send(element);
+				// System.out.println("Answer: " + element);
+				// } else {
+				// System.out.println("Answered: " + element);
+				// }
 			}
 		} catch (Exception e) {
 			this.machine.handler(e);
