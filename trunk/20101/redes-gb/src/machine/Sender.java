@@ -3,6 +3,8 @@ package machine;
 import java.io.ObjectOutputStream;
 import java.net.*;
 
+import mraeder.PackageTCP;
+
 /**
  * Classe para Envio de Informação
  * Envia Pacotes para Outra Máquina na Rede
@@ -42,7 +44,7 @@ public class Sender extends Interfacer
      * @param element Elemento para Adição
      * @return Próprio Objeto
      */
-    public Sender buffer(Pack element)
+    public Sender buffer(PackageTCP element)
     {
         this.buffer.add(element);
         return this;
@@ -53,7 +55,7 @@ public class Sender extends Interfacer
      */
     public void run()
     {
-        Pack element;
+        PackageTCP element;
         Socket socket;
         ObjectOutputStream output;
         while (this.machine.isRunning()) {

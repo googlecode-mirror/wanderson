@@ -2,6 +2,8 @@ package machine;
 
 import java.util.LinkedList;
 
+import mraeder.PackageTCP;
+
 /**
  * Classe Intermediadora
  * Simulação de Interface de Rede
@@ -24,7 +26,7 @@ public abstract class Interfacer implements Runnable
     /**
      * Fila de Processamento
      */
-    protected LinkedList<Pack> buffer;
+    protected LinkedList<PackageTCP> buffer;
 
     /**
      * Construtor da Classe
@@ -33,7 +35,7 @@ public abstract class Interfacer implements Runnable
     public Interfacer(Machine machine)
     {
         this.machine = machine;
-        this.buffer  = new LinkedList<Pack>();
+        this.buffer  = new LinkedList<PackageTCP>();
         this.thread  = new Thread(this);
     }
 

@@ -1,5 +1,7 @@
 package machine;
 
+import mraeder.PackageTCP;
+
 /**
  * Classe Máquina Simulação de um Computador para Envio de Dados Através da Rede
  * 
@@ -112,7 +114,7 @@ public class Machine {
 	 *            Elemento para Envio
 	 * @return Próprio Objeto
 	 */
-	public Machine send(Pack element) {
+	public Machine send(PackageTCP element) {
 		this.sender.buffer(element);
 		return this;
 	}
@@ -122,7 +124,7 @@ public class Machine {
 	 * 
 	 * @return Pacotes Enviados
 	 */
-	public Pack retrieve() {
+	public PackageTCP retrieve() {
 		return this.receiver.unbuffer();
 	}
 
