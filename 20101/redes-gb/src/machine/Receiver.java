@@ -4,6 +4,8 @@ import java.io.*;
 import java.net.*;
 import java.util.NoSuchElementException;
 
+import mraeder.PackageTCP;
+
 /**
  * Classe de Recebimento Recebe Informações de Outra Máquina Local
  * 
@@ -31,7 +33,7 @@ public class Receiver extends Interfacer {
 	 * 
 	 * @return Elemento Enviado
 	 */
-	public Pack unbuffer() {
+	public PackageTCP unbuffer() {
 		return this.buffer.poll();
 	}
 
@@ -42,9 +44,9 @@ public class Receiver extends Interfacer {
 	 *            Pacote a validar
 	 * @return
 	 */
-	public boolean isAcceptable(Pack pkg) {
+	public boolean isAcceptable(PackageTCP pkg) {
 		try {
-			return pkg.getNumberSeq() == (this.buffer.getLast().getNumberSeq() + 1);
+			return pkg.getNumSequencia() == (this.buffer.getLast().getNumSequencia() + 1);
 		} catch (NoSuchElementException e) {
 			return true;
 		}
@@ -55,14 +57,14 @@ public class Receiver extends Interfacer {
 	 */
 	public void run() {
 		Socket socket;
-		Pack element;
+		PackageTCP element;
 		ObjectInputStream input;
 		try {
 			this.server = new ServerSocket(1000);
 			while (this.machine.isRunning()) {
 				socket = server.accept();
 				input = new ObjectInputStream(socket.getInputStream());
-				element = (Pack) input.readObject();
+				element = (PackageTCP) input.readObject();
 				System.out.println("Received: " + element);
 				socket.close();
 				if (this.machine.conStatus() == ConStatus.CONNECTING) {
@@ -70,22 +72,22 @@ public class Receiver extends Interfacer {
 					 * IF SYN+ACK: Responde ACK, Seta status para CONNECTED
 					 * Ocorre no Cliente A
 					 */
-					if (element.isSin() && element.isAck()) {
+					if (element.isSyn() && element.isAck()) {
 						// TODO: Envia ACK em resposta ao SYN+ACK
 						this.machine.setConStatus(ConStatus.CONNECTED);
 					}
 					/*
 					 * IF SYN: Responde SYN+ACK Ocorre no Cliente B
 					 */
-					else if (element.isSin() && !element.isAck()) {
+					else if (element.isSyn() && !element.isAck()) {
 						// TODO: Envia SYN+ACK em resposta ao SYN
 					}
 					/*
 					 * IF ACK: Seta tamanho da janela, Seta status para CONNECTED
 					 * Ocorre no Cliente B
 					 */
-					else if (element.isAck() && !element.isSin()) {
-						this.machine.setWindowSize(element.getSizeWindow());
+					else if (element.isAck() && !element.isSyn()) {
+						this.machine.setWindowSize(element.getTamanhoJanela());
 						this.machine.setConStatus(ConStatus.CONNECTED);
 					}
 					/*
