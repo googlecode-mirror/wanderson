@@ -24,11 +24,6 @@ public class Sender extends Interfacer {
 	protected int[] lastSendedWindow = new int[2];
 
 	/**
-	 * Tamanho da Janela de Envio, por padrão: 1
-	 */
-	protected int sendWindowSize = 1;
-
-	/**
 	 * Último ACK recebido
 	 */
 	protected int lastAckReceived;
@@ -88,10 +83,10 @@ public class Sender extends Interfacer {
 	 *             é diferente do tamanho da Janela de Envio
 	 */
 	public void setLastSendedWindow(int first, int last) throws Exception {
-		if (last - first + 1 != this.getSendWindowSize()) {
+		if (last - first + 1 != this.getSenderWindowSize()) {
 			throw new Exception(last - first + 1
 					+ " is an invalid send window interval, valid: "
-					+ this.getSendWindowSize());
+					+ this.getSenderWindowSize());
 		}
 		this.lastSendedWindow[0] = first;
 		this.lastSendedWindow[1] = last;
@@ -102,8 +97,8 @@ public class Sender extends Interfacer {
 	 * 
 	 * @return Tamanho da Janela de Envio
 	 */
-	public int getSendWindowSize() {
-		return this.sendWindowSize;
+	public int getSenderWindowSize() {
+		return this.windowSize;
 	}
 
 	/**
@@ -112,8 +107,8 @@ public class Sender extends Interfacer {
 	 * @param sendWindowSize
 	 *            Tamanho da Janela de Envio
 	 */
-	public void setSendWindowSize(int sendWindowSize) {
-		this.sendWindowSize = sendWindowSize;
+	public void setSenderWindowSize(int sendWindowSize) {
+		this.windowSize = sendWindowSize;
 	}
 
 	/**

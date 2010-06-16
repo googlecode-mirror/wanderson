@@ -130,4 +130,13 @@ public class PackageTCP extends PacoteTCP {
 		return this.getFin() == 1;
 	}
 
+	/**
+	 * Verifica se o pacote está correto conforme o <a href="http://www.tcpipguide.com/free/t_TCPChecksumCalculationandtheTCPPseudoHeader.htm"
+	 * >checksum</a> do cabeçalho
+	 * 
+	 * @return Retorna 'true' se o pacote estiver com erro
+	 */
+	public boolean iscorrupted() {
+		return true;
+	}
 }
