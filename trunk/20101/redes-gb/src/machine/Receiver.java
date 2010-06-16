@@ -87,6 +87,9 @@ public class Receiver extends Interfacer {
 				element = (PackageTCP) input.readObject();
 				System.out.println("Received: " + element);
 				socket.close();
+				/*
+				 * Tratamento de pacotes, máquina CONNECTING
+				 */
 				if (this.machine.conStatus() == ConStatus.CONNECTING) {
 					/*
 					 * IF SYN+ACK: Responde ACK, Seta status para CONNECTED
@@ -117,7 +120,11 @@ public class Receiver extends Interfacer {
 						// TODO: Mostrar mensagem de pacote descartado por ser
 						// inválido?
 					}
-				} else if (this.machine.conStatus() == ConStatus.CONNECTED) {
+				}
+				/*
+				 * Tratamento de pacotes, máquina CONNECTED
+				 */
+				else if (this.machine.conStatus() == ConStatus.CONNECTED) {
 					/*
 					 * IF FYN: Seta status para DISCONNECTING, Responde FYN+ACK
 					 * (OBS: Máquina que enviou FYN já está em DISCONNECTING)
@@ -141,15 +148,18 @@ public class Receiver extends Interfacer {
 					 * Ocorre no Cliente B
 					 */
 					else if (!element.isAck()) {
-						if (!element.iscorrupted()) {
-							if (this.isAcceptable(element)) {
-								// TODO: Pacote na ordem correta, aceitar enviar
-								// ACK
+						// TODO: Captura os 'Janela' pacotes, timeout de 'Janela'*5ms
+						for (1 == 1) {
+							if (!element.iscorrupted()) {
+								if (this.isAcceptable(element)) {
+									// TODO: Pacote na ordem correta, aceitar enviar
+									// ACK
+								} else {
+									// TODO: Pacote na ordem incorreta, ignorar
+								}
 							} else {
-								// TODO: Pacote na ordem incorreta, ignorar
+								// TODO: Pacote com defeito, ignorar
 							}
-						} else {
-							// TODO: Pacote com defeito, ignorar
 						}
 					}
 					/*
@@ -159,7 +169,11 @@ public class Receiver extends Interfacer {
 						// TODO: Mostrar mensagem de pacote descartado por ser
 						// inválido?
 					}
-				} else if (this.machine.conStatus() == ConStatus.DISCONNECTING) {
+				}
+				/*
+				 * Tratamento de pacotes, máquina DISCONNECTING
+				 */
+				else if (this.machine.conStatus() == ConStatus.DISCONNECTING) {
 					/*
 					 * IF FYN+ACK: Envia ACK, Reinicia a máquina, Status
 					 * CONNECTING (Já está em DISCONNECTING de quando enviou o
