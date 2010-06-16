@@ -20,11 +20,6 @@ public class Machine {
 	protected ConStatus connStatus;
 
 	/**
-	 * Tamanho da janela
-	 */
-	protected int windowSize;
-
-	/**
 	 * Envio de Informações
 	 */
 	protected Sender sender;
@@ -126,25 +121,6 @@ public class Machine {
 	 */
 	public PackageTCP retrieve() {
 		return this.receiver.unbuffer();
-	}
-
-	/**
-	 * Retorna o tamanho da Janela de Envio ou Recebimento
-	 * 
-	 * @return Tamanho da Janela
-	 */
-	public int getWindowSize() {
-		return windowSize;
-	}
-
-	/**
-	 * Define o tamanho da Janela de Envio ou Recebimento
-	 * 
-	 * @param windowSize
-	 *            Tamanho da Janela
-	 */
-	public void setWindowSize(int windowSize) {
-		this.windowSize = windowSize;
 	}
 
 	/**
