@@ -96,29 +96,58 @@ public class Receiver extends Interfacer {
 					 * Ocorre no Cliente A
 					 */
 					if (element.isSyn() && element.isAck()) {
-						// TODO: Envia ACK em resposta ao SYN+ACK
+						// Envia ACK em resposta ao SYN+ACK (Wanderson,
+						// conferir)
+						this.machine.terminal.msgOut("Receiver",
+								"Recebido SYN+ACK.");
+						PackageTCP resposta = new PackageTCP();
+						resposta.setAck(1);
+						this.machine.send(resposta);
+						this.machine.terminal.msgOut("Receiver",
+								"Respondido ACK.");
 						this.machine.setConStatus(ConStatus.CONNECTED);
+						this.machine.terminal.msgOut("Receiver", "Conectado");
 					}
 					/*
 					 * IF SYN: Responde SYN+ACK Ocorre no Cliente B
 					 */
 					else if (element.isSyn() && !element.isAck()) {
-						// TODO: Envia SYN+ACK em resposta ao SYN
+						// Envia SYN+ACK em resposta ao SYN (Wanderson,
+						// conferir)
+						this.machine.terminal.msgOut("Receiver", "Conectando.");
+						this.machine.terminal.msgOut("Receiver",
+								"Recebido SYN.");
+						PackageTCP resposta = new PackageTCP();
+						resposta.setAck(1);
+						resposta.setSyn(1);
+						this.machine.send(resposta);
+						this.machine.terminal.msgOut("Receiver",
+								"Respondido SYN+ACK.");
 					}
 					/*
 					 * IF ACK: Seta tamanho da janela, Seta status para
 					 * CONNECTED Ocorre no Cliente B
 					 */
 					else if (element.isAck() && !element.isSyn()) {
+						// Define Tamanho da Janela (Wanderson,
+						// conferir)
+						this.machine.terminal.msgOut("Receiver",
+								"Recebido ACK.");
 						this.setReceiverWindowSize(element.getTamanhoJanela());
+						this.machine.terminal.msgOut("Receiver",
+								"Tamanho da Janela definida para "
+										+ this.getReceiverWindowSize() + ".");
 						this.machine.setConStatus(ConStatus.CONNECTED);
+						this.machine.terminal.msgOut("Receiver", "Conectado");
 					}
 					/*
 					 * EXCESSÕES
 					 */
 					else {
-						// TODO: Mostrar mensagem de pacote descartado por ser
+						// Mostrar mensagem de pacote descartado por ser
 						// inválido?
+						this.machine.terminal.msgOut("Receiver",
+								"Mensagem inválida, descartada.");
 					}
 				}
 				/*
@@ -131,8 +160,19 @@ public class Receiver extends Interfacer {
 					 * Ocorre no Cliente B
 					 */
 					if (element.isFin()) {
+						// Envia FYN+ACK em resposta ao FYN (Wanderson,
+						// conferir)
 						this.machine.setConStatus(ConStatus.DISCONNECTING);
-						// TODO: Envia FYN+ACK em resposta ao FYN
+						this.machine.terminal.msgOut("Receiver",
+								"Desconectando.");
+						this.machine.terminal.msgOut("Receiver",
+								"Recebido FIN.");
+						PackageTCP resposta = new PackageTCP();
+						resposta.setFin(1);
+						resposta.setAck(1);
+						this.machine.send(resposta);
+						this.machine.terminal.msgOut("Receiver",
+								"Respondido FIN+ACK.");
 					}
 					/*
 					 * IF ACK: Processa Lógica, Confirmação Ocorre no Cliente A
@@ -148,26 +188,16 @@ public class Receiver extends Interfacer {
 					 * Ocorre no Cliente B
 					 */
 					else if (!element.isAck()) {
-						// TODO: Captura os 'Janela' pacotes, timeout de 'Janela'*5ms
-						for (1 == 1) {
-							if (!element.iscorrupted()) {
-								if (this.isAcceptable(element)) {
-									// TODO: Pacote na ordem correta, aceitar enviar
-									// ACK
-								} else {
-									// TODO: Pacote na ordem incorreta, ignorar
-								}
-							} else {
-								// TODO: Pacote com defeito, ignorar
-							}
-						}
+						// TODO: Recebimento de pacote, tratamento de janela
 					}
 					/*
 					 * EXCESSÕES
 					 */
 					else {
-						// TODO: Mostrar mensagem de pacote descartado por ser
+						// Mostrar mensagem de pacote descartado por ser
 						// inválido?
+						this.machine.terminal.msgOut("Receiver",
+								"Mensagem inválida, descartada.");
 					}
 				}
 				/*
@@ -180,23 +210,41 @@ public class Receiver extends Interfacer {
 					 * FYN) Ocorre no Cliente A
 					 */
 					if (element.isFin() && element.isAck()) {
-						// TODO: Reinicia a máquina, "Desconeta"
+						// Reinicia a máquina, "Desconeta" (Wanderson,
+						// conferir)
+						this.machine.terminal.msgOut("Receiver",
+								"Recebido FIN+ACK.");
+						PackageTCP resposta = new PackageTCP();
+						resposta.setAck(1);
+						this.machine.send(resposta);
+						this.machine.terminal.msgOut("Receiver",
+								"Respondido ACK.");
 						this.machine.setConStatus(ConStatus.CONNECTING);
+						this.machine.terminal
+								.msgOut("Receiver", "Desconectado");
+
 					}
 					/*
 					 * IF ACK: Reinicia a máquina, Status CONNECTINGOcorre no
 					 * Cliente B
 					 */
 					else if (element.isAck() && !element.isFin()) {
-						// TODO: Reinicia a máquina, "Desconeta"
+						// Reinicia a máquina, "Desconeta" (Wanderson,
+						// conferir)
+						this.machine.terminal.msgOut("Receiver",
+								"Recebido ACK.");
 						this.machine.setConStatus(ConStatus.DISCONNECTING);
+						this.machine.terminal
+								.msgOut("Receiver", "Desconectado");
 					}
 					/*
 					 * EXCESSÕES
 					 */
 					else {
-						// TODO: Mostrar mensagem de pacote descartado por ser
+						// Mostrar mensagem de pacote descartado por ser
 						// inválido?
+						this.machine.terminal.msgOut("Receiver",
+								"Mensagem inválida, descartada.");
 					}
 				}
 				// if (!element.isAck()) {

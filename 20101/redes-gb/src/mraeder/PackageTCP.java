@@ -136,7 +136,7 @@ public class PackageTCP extends PacoteTCP {
 	 * 
 	 * @return Retorna 'true' se o pacote estiver com erro
 	 */
-	public boolean iscorrupted() {
+	public boolean isCorrupted() {
 		return true;
 	}
 }

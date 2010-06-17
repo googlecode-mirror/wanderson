@@ -30,11 +30,17 @@ public class Machine {
 	protected Receiver receiver;
 
 	/**
+	 * Terminal de Comunicação
+	 */
+	protected Terminal terminal;
+
+	/**
 	 * Construtor da Classe
 	 */
 	public Machine() {
 		this.sender = new Sender(this);
 		this.receiver = new Receiver(this);
+		this.terminal = new Terminal(this);
 	}
 
 	/**
