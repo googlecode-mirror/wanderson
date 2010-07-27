@@ -8,7 +8,6 @@
  * @package    Application
  * @subpackage Controller
  * @see        http://code.google.com/p/wanderson/
- *
  */
 class AdminController extends Zend_Controller_Action
 {
@@ -31,6 +30,24 @@ class AdminController extends Zend_Controller_Action
     public function indexAction()
     {
         
+    }
+
+    /**
+     * 
+     * Ação para Atualização do Sistema
+     * Recebe um Arquivo Compactado com as Modificações do Projeto
+     * @return void
+     */
+    public function updateAction()
+    {
+        $form = new Application_Form_Update();
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost();
+            if ($form->isValid($data)) {
+                $data = $form->getValues();
+            }
+        }
+        $this->view->form = $form;
     }
 
 }

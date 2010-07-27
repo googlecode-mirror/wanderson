@@ -28,4 +28,15 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $view->headMeta()
             ->appendHttpEquiv('Content-Type','text/html; charset=UTF-8');
     }
+
+    /**
+     * 
+     * Inicialização das Variáveis de Registro
+     * @return void
+     */
+    protected function _initRegistries()
+    {
+        $temporary = realpath(APPLICATION_PATH . '/../temp/');
+        Zend_Registry::set('APPLICATION_TEMP', $temporary);
+    }
 }
