@@ -20,10 +20,12 @@ class Application_Form_Update extends Zend_Dojo_Form
         $this->loadDefaultDecorators();
         $this->setName('form-update')->setMethod(self::METHOD_POST);
 
+        $filter  = new Zend_Filter_Decompress('Zip');
+        $filter->setTarget(Zend_Registry::get('APPLICATION_TEMP'));
         $arquivo = new Zend_Form_Element_File('arquivo');
         $arquivo->setLabel('Arquivo de Atualização')->setRequired(true)
             ->setDestination(Zend_Registry::get('APPLICATION_TEMP'))
-            ->setMaxFileSize(1024 * 500)
+            ->setMaxFileSize(1024 * 500)->addFilter($filter)
             ->addValidator(new Zend_Validate_File_Count(1))
             ->addValidator(new Zend_Validate_File_Extension('zip'))
             ->setDescription('Arquivo compactado no formato *.zip');
