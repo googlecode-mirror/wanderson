@@ -18,7 +18,8 @@ class Application_Form_Update extends Zend_Dojo_Form
     public function init()
     {
         $this->loadDefaultDecorators();
-        $this->setName('form-update')->setMethod(self::METHOD_POST);
+        $this->setName('form-update')->setMethod(self::METHOD_POST)
+            ->setAction($this->getView()->url());
 
         $filter  = new Zend_Filter_Decompress('Zip');
         $filter->setTarget(Zend_Registry::get('APPLICATION_TEMP'));
