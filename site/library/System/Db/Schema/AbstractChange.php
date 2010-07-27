@@ -33,7 +33,7 @@ abstract class System_Db_Schema_AbstractChange
      * 
      * Método Abstrato
      * Implementação de Alterações do Banco de Dados
-     * @return void
+     * @return mixed
      */
     abstract public function up();
 
@@ -41,6 +41,7 @@ abstract class System_Db_Schema_AbstractChange
      * 
      * Método Abstrato
      * Remoção de Alterações do Banco de Dados
+     * @return mixed
      */
     abstract public function down();
 }
