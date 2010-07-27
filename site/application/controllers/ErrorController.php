@@ -1,41 +1,60 @@
 <?php
 
+/**
+ * 
+ * Controladora de Erros
+ * Recebe os Erros do Sistema Possibilitando Cadastro de Mensagens
+ * @author     Wanderson Henrique Camargo Rosa
+ * @package    Application
+ * @subpackage Controller
+ * @see        http://code.google.com/p/wanderson/
+ */
 class ErrorController extends Zend_Controller_Action
 {
 
+    /**
+     * 
+     * Ação de Captura de Erros
+     * @return void
+     */
     public function errorAction()
     {
         $errors = $this->_getParam('error_handler');
-        
+        if ($errors === null) {
+            throw new Zend_Controller_Action_Exception('Invalid Access');
+        }
+
         switch ($errors->type) {
+
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ROUTE:
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER:
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION:
-        
-                // 404 error -- controller or action not found
                 $this->getResponse()->setHttpResponseCode(404);
-                $this->view->message = 'Page not found';
+                $this->view->message = 'Página Não Encontrada';
                 break;
+
             default:
-                // application error
                 $this->getResponse()->setHttpResponseCode(500);
-                $this->view->message = 'Application error';
+                $this->view->message = 'Erro da Aplicação';
                 break;
         }
-        
-        // Log exception, if logger available
+
         if ($log = $this->getLog()) {
-            $log->crit($this->view->message, $errors->exception);
+            $log->crit($errors->exception->getMessage());
         }
-        
-        // conditionally display exceptions
+
         if ($this->getInvokeArg('displayExceptions') == true) {
             $this->view->exception = $errors->exception;
         }
-        
-        $this->view->request   = $errors->request;
+
+        $this->view->request = $errors->request;
     }
 
+    /**
+     * 
+     * Captura de Gravador de Informações
+     * @return boolean|Zend_Log Objeto Responsável
+     */
     public function getLog()
     {
         $bootstrap = $this->getInvokeArg('bootstrap');
@@ -46,6 +65,4 @@ class ErrorController extends Zend_Controller_Action
         return $log;
     }
 
-
 }
-
