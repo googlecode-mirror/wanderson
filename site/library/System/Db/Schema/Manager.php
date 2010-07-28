@@ -1,7 +1,6 @@
 <?php
 
 /**
- * 
  * Classe para Gerenciamento de Migrations
  * Utiliza um Arquivo de Configuração para Controle do Versionamento
  * @author     Wanderson Henrique Camargo Rosa
@@ -13,54 +12,52 @@
 class System_Db_Schema_Manager
 {
     /**
-     * 
      * Resultado de Modificações com Sucesso
      * @var string
      */
     const RESULT_OK = 'RESULT_OK';
 
     /**
-     * 
      * Resultado das Modificações sem Alterações
      * @var string
      */
     const RESULT_AT_CURRENT_VERSION = 'RESULT_AT_CURRENT_VERSION';
 
     /**
-     * 
      * Modificações Não Encontradas
      * @var string
      */
     const RESULT_NO_MIGRATIONS_FOUND = 'RESULT_NO_MIGRATIONS_FOUND';
 
     /**
-     * 
      * Diretório de Migrations
      * @var string
      */
     protected $_dir;
 
     /**
-     * 
      * Adaptador do Banco de Dados
      * @var Zend_Db_Adapter_Abstract
      */
     protected $_db;
 
     /**
-     * 
      * Configuração do Gerenciador
      * @var Zend_Config_Xml
      */
     protected $_config;
 
     /**
-     * 
      * Caminho do Arquivo de Configuração do Gerenciador
      * @var string
      */
     protected $_configPath = './temp/manager.xml';
 
+    /**
+     * Construtor da Classe
+     * @param string $dir Caminho do Diretório de Migrations
+     * @param Zend_Db_Adapter_Abstract $db Adaptador do Banco de Dados
+     */
     public function __construct($dir, Zend_Db_Adapter_Abstract $db)
     {
         $this->setDir($dir);
@@ -68,7 +65,6 @@ class System_Db_Schema_Manager
     }
 
     /**
-     * 
      * Configuração do Diretório de Migrations
      * @param string $dir Diretório para Configuração
      * @return System_Db_Schema_Manager Próprio Objeto
@@ -93,7 +89,6 @@ class System_Db_Schema_Manager
     }
 
     /**
-     * 
      * Informa o Número Atual do Versionamento
      * @return int Número do Último Versionamento
      */
@@ -103,7 +98,6 @@ class System_Db_Schema_Manager
     }
 
     /**
-     * 
      * Consulta de Configuração do Gerenciador
      * @return Zend_Config_Xml Objeto de Configuração do Gerenciador
      */
@@ -127,7 +121,7 @@ class System_Db_Schema_Manager
      * @param int $stop Número de Parada do Versionamento
      * @return array Informações Pertinentes aos Arquivos Selecionados
      */
-    protected function _getMigrationFiles($current, $top)
+    protected function _getMigrationFiles($current, $stop)
     {
         $direction = 'up';
         $from      = (int) $current;
@@ -166,7 +160,6 @@ class System_Db_Schema_Manager
     }
 
     /**
-     * 
      * Atualização do Número de Versionamento
      * @param int $version Número para Atualização
      * @return System_Db_Schema_Manager Próprio Objeto
@@ -183,7 +176,6 @@ class System_Db_Schema_Manager
     }
 
     /**
-     * 
      * Atualizações Entre Versões
      * Efetua Modificações no Banco de Dados para a Versão Solicitada
      * @param int $version Número da Versão Alvo
@@ -222,7 +214,6 @@ class System_Db_Schema_Manager
     }
 
     /**
-     * 
      * Processamento de Arquivo de Migration
      * @param array $migration Dados do Arquivo de Migration
      * @param string $direction Direção de Migration: up|down
