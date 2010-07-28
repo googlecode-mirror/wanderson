@@ -1,7 +1,6 @@
 <?php
 
 /**
- * 
  * Objeto de Exceção do Pacote
  * @author     Wanderson Henrique Camargo Rosa
  * @package    System
