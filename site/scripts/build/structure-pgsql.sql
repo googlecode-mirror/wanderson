@@ -1,3 +1,9 @@
+-- migration drop-people 1 line
+DROP TABLE IF EXISTS "site".people;
+
+-- migration drop-schema 1 line
+DROP SCHEMA IF EXISTS site;
+
 -- migration schema 1 line
 CREATE SCHEMA site;
 
