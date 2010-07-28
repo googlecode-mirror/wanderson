@@ -1,13 +1,14 @@
 <?php
 
 /**
- * Esquema Base para Banco de Dados
+ * Tabela de Pessoas
+ * Armazenamento de Usuários do Sistema
  * @author     Wanderson Henrique Camargo Rosa
  * @package    System
  * @subpackage Db
  * @see        http://code.google.com/p/wanderson/
  */
-class Schema extends System_Db_Schema_AbstractChange
+class People extends System_Db_Schema_AbstractChange
 {
     /**
      * Arquivo para Leitura
@@ -18,14 +19,16 @@ class Schema extends System_Db_Schema_AbstractChange
     public function up()
     {
         $filename  = $this->_filename;
-        $structure = $this->read($filename, 'schema');
+        $structure = $this->read($filename, 'people');
+        $this->_db->query($structure);
+        $structure = $this->read($filename, 'people-insert');
         $this->_db->query($structure);
     }
 
     public function down()
     {
         $filename  = $this->_filename;
-        $structure = $this->read($filename, 'schema-drop');
+        $structure = $this->read($filename, 'people-drop');
         $this->_db->query($structure);
     }
 }
