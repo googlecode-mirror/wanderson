@@ -1,0 +1,24 @@
+<table>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Nome do Usuário</th>
+            <th>Ativo</th>
+        </tr>
+    </thead>
+    <tbody>
+<?php if (count($this->result) > 0) : ?>
+<?php foreach ($this->result as $element) : ?>
+        <tr>
+            <td><?php echo $element->id ?></td>
+            <td><?php echo $element->username ?></td>
+            <td><?php echo $element->active ? 'Sim' : 'Não' ?></td>
+        </tr>
+<?php endforeach ?>
+<?php else : ?>
+        <tr>
+            <td colspan="3">Lista Vazia</td>
+        </tr>
+<?php endif ?>
+    </tbody>
+</table>
