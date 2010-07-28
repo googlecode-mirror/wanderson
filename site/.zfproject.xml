@@ -21,7 +21,11 @@
         <formFile formName="Update"/>
       </formsDirectory>
       <layoutsDirectory enabled="false"/>
-      <modelsDirectory/>
+      <modelsDirectory>
+        <dbTableDirectory>
+          <dbTableFile dbTableName="People"/>
+        </dbTableDirectory>
+      </modelsDirectory>
       <modulesDirectory enabled="false"/>
       <viewsDirectory>
         <viewScriptsDirectory>
