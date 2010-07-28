@@ -1,7 +1,6 @@
 <?php
 
 /**
- * 
  * Controladora Principal do Sistema
  * Tratamento de Acesso Sem Módulo de Reescrita do Apache
  * @author     Wanderson Henrique Camargo Rosa
@@ -13,7 +12,6 @@ class IndexController extends Zend_Controller_Action
 {
 
     /**
-     * 
      * Ação Principal do Sistema
      * @return void
      */

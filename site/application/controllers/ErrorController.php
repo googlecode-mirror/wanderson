@@ -1,7 +1,6 @@
 <?php
 
 /**
- * 
  * Controladora de Erros
  * Recebe os Erros do Sistema Possibilitando Cadastro de Mensagens
  * @author     Wanderson Henrique Camargo Rosa
@@ -13,7 +12,6 @@ class ErrorController extends Zend_Controller_Action
 {
 
     /**
-     * 
      * Ação de Captura de Erros
      * @return void
      */
@@ -51,7 +49,6 @@ class ErrorController extends Zend_Controller_Action
     }
 
     /**
-     * 
      * Captura de Gravador de Informações
      * @return boolean|Zend_Log Objeto Responsável
      */

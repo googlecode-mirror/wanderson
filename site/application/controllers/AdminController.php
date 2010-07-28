@@ -1,7 +1,6 @@
 <?php
 
 /**
- * 
  * Controladora Administrativa
  * Administração do Sistema Sobre Usuários e Elementos Restritos
  * @author     Wanderson Henrique Camargo Rosa
@@ -13,7 +12,6 @@ class AdminController extends Zend_Controller_Action
 {
 
     /**
-     * 
      * Inicialização da Controladora
      * @return void
      */
@@ -23,7 +21,6 @@ class AdminController extends Zend_Controller_Action
     }
 
     /**
-     * 
      * Ação Principal da Controladora
      * @return void
      */
@@ -33,7 +30,6 @@ class AdminController extends Zend_Controller_Action
     }
 
     /**
-     * 
      * Ação para Atualização do Sistema
      * Recebe um Arquivo Compactado com as Modificações do Projeto
      * @return void
@@ -48,6 +44,20 @@ class AdminController extends Zend_Controller_Action
             }
         }
         $this->view->form = $form;
+    }
+
+    /**
+     * Ação de Controle de Usuários
+     * Gerencia Usuários Cadastrados no Sistema
+     * @return void
+     */
+    public function userAction()
+    {
+        $table  = new Application_Model_DbTable_People();
+        $order  = $this->_getParam('order', 'username');
+        $select = $table->select()->order($order);
+        $result = $table->fetchAll($select);
+        $this->view->result = $result;
     }
 
 }
