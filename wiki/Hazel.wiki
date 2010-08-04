@@ -1,0 +1,6 @@
+#summary Hazel Zend Framework Extended Library
+#labels Phase-Requirements
+
+= Hazel =
+
+Esta página visa documentar a biblioteca Hazel (Hazel Zend Framework Extended Library), que busca especializar as classes de desenvolvimento do Zend Framework. _Esta documentação está incompleta e carece de informações_.
