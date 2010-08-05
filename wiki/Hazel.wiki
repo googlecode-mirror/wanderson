@@ -45,6 +45,11 @@ aplicativos do Zend Framework:
 {{{
 <?php
 
+/**
+ * Tabela de Usuários
+ * @author Wanderson Henrique Camargo Rosa
+ * @see    APPLICATION_PATH /model/DbTable/Usuario.php
+ */
 class Application_Model_DbTable_Usuario extends Zend_Db_Table_Usuario
 {
     protected $_name = 'usuario';
@@ -57,6 +62,11 @@ tabela:
 {{{
 <?php
 
+/**
+ * Formulário de Usuário
+ * @author Wanderson Henrique Camargo Rosa
+ * @see    APPLICATION_PATH /forms/Usuario.php
+ */
 class Application_Form_Usuario extends Zend_Dojo_Form
 {
     public function init()
@@ -97,3 +107,29 @@ class Application_Form_Usuario extends Zend_Dojo_Form
     }
 }
 }}}
+
+Para estes dados, podemos construir o controle de usuários da seguinte forma:
+
+{{{
+
+/**
+ * Controle de Usuários
+ * @author Wanderson Henrique Camargo Rosa
+ * @see    APPLICATION_PATH /controllers/UsuarioController.php
+ */
+class UsuarioController extends Hazel_Controller_DatabaseCrudAbstract
+{
+}
+}}}
+
+Quando a classe é extendida, métodos representantes do padrão CRUD são criados
+no controle para manipulação dos dados. Lembramos que o nome do formulário e da
+tabela devem seguir o padrão do nome da controladora para que sejam
+automaticamente carregados. Se precisamos de um controle de {{{Musica}}},
+devemos criar a classe de controle {{{MusicaController}}}, o formulário
+{{{Application_Form_Musica}}} e a representante de tabela
+{{{Application_Model_DbTable_Musica}}}. Não há problemas quando estas classes
+são criadas em módulos: a classe do Hazel pesquisa corretamente os locais. Se
+temos o módulo {{{Servico}}} e o controle de {{{Servico_RelatorioController}}},
+necessitamos criar o formulário {{{Servico_Form_Relatorio}}} e a representante
+da tabela {{{Servico_Model_DbTable_Relatorio}}}.
