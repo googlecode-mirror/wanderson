@@ -3,13 +3,27 @@
 
 = Hazel =
 
-Esta página visa documentar a biblioteca Hazel (Hazel Zend Framework Extended Library), que busca especializar as classes de desenvolvimento do Zend Framework. _Esta documentação está incompleta e carece de informações_.
+Esta página visa documentar a biblioteca Hazel (Hazel Zend Framework Extended
+Library), que busca especializar as classes de desenvolvimento do Zend
+Framework. _Esta documentação está incompleta e carece de informações_.
 
 == Hazel_Controller ==
 
-O pacote de controle do Hazel trabalha com especializações para manipulação de objetos provenientes do banco de dados. Se existe uma entidade no banco de dados que pode ser trabalhada através do padrão CRUD, utilizando um formulário e uma tabela somente, a classe {{{Hazel_Controller_DatabaseCrudAbstract}}} pode ser extendida. Esta classe possui as ações padrão para edição e toda a programação necessária para edição simples das informações.
+O pacote de controle do Hazel trabalha com especializações para manipulação de
+objetos provenientes do banco de dados. Se existe uma entidade no banco de dados
+que pode ser trabalhada através do padrão CRUD, utilizando um formulário e uma
+tabela somente, a classe {{{Hazel_Controller_DatabaseCrudAbstract}}} pode ser
+extendida. Esta classe possui as ações padrão para edição e toda a programação
+necessária para edição simples das informações.
 
-A idéia principal da classe é que toda a programação seja encapsulada nas controladoras e caso seja necessário a modificação de alguns métodos, estes consigam ser sobrescritos, afetando ao mínimo o fluxo de processamento; ou sejam adicionados métodos nas classes de formulário e tabela, dando flexibilidade à programação. Para exemplificar, temos a seguinte tabela de usuários de um sistema, criada em banco de dados PostgreSQL:
+A idéia principal da classe é que toda a programação seja encapsulada nas
+controladoras e caso seja necessário a modificação de alguns métodos, estes
+consigam ser sobrescritos, afetando ao mínimo o fluxo de processamento; ou sejam
+adicionados métodos nas classes de formulário e tabela, dando flexibilidade à
+programação.
+
+Para exemplificar, temos a seguinte tabela de usuários de um sistema, criada em
+banco de dados PostgreSQL:
 
 {{{
 -- migration usuario-up 10 lines
@@ -25,7 +39,8 @@ CREATE TABLE usuario
 );
 }}}
 
-Podemos criar uma classe representante desta tabela utilizando o padrão de aplicativos do Zend Framework:
+Podemos criar uma classe representante desta tabela utilizando o padrão de
+aplicativos do Zend Framework:
 
 {{{
 <?php
@@ -36,7 +51,8 @@ class Application_Model_DbTable_Usuario extends Zend_Db_Table_Usuario
 }
 }}}
 
-Também vamos criar um formulário para edição destes dados para uma tupla da tabela:
+Também vamos criar um formulário para edição destes dados para uma tupla da
+tabela:
 
 {{{
 <?php
@@ -45,7 +61,39 @@ class Application_Form_Usuario extends Zend_Dojo_Form
 {
     public function init()
     {
-        
+        $idusuario = new Zend_Form_Element_Hidden('idusuario');
+        $idusuario->loadDefaultDecorators();
+        $idusuario->removeDecorator('Label')->setRequired(true)
+            ->addFilter(new Zend_Filter_Int())
+            ->addFilter(new Zend_Filter_Null());
+
+        $display = new Zend_Dojo_Form_Element_TextBox('display');
+        $display->setLabel('Nome Completo')->setRequired(true)
+            ->setAllowEmpty(true)->addFilter(new Zend_Filter_Null())
+            ->addValidator(new Zend_Validate_StringLength(1,40))
+            ->addValidator(new Zend_Validate_Alnum(true));
+
+        $nome = new Zend_Dojo_Form_Element_TextBox('nome');
+        $nome->setLabel('Usuário')->setRequired(true)->setAllowEmpty(false)
+            ->addValidator(new Zend_Validate_NotEmpty())
+            ->addValidator(new Zend_Validate_StringLength(1,20))
+            ->addValidator(new Zend_Validate_Alpha(false))
+            ->addFilter(new Zend_Filter_StringToLower());
+
+        $senha = new Zend_Dojo_Form_Element_PasswordTextBox('senha');
+        $senha->setLabel('Senha')->setRequired(false)->setAllowEmpty(true);
+
+        $ativado = new Zend_Dojo_Form_Element_CheckBox('ativado');
+        $ativado->setLabel('Ativado')->addFilter(new Zend_Filter_Boolean());
+
+        $submit = new Zend_Dojo_Form_Element_SubmitButton('submit');
+        $submit->setLabel('Gravar')->setIgnore(true);
+
+        $elements = array($idusuario, $display, $nome, $senha, $ativado,
+            $submit);
+
+        $this->addElements($elements)->setName('usuario')
+            ->setMethod(self::METHOD_POST);
     }
 }
 }}}
