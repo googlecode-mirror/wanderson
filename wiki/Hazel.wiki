@@ -4,3 +4,9 @@
 = Hazel =
 
 Esta página visa documentar a biblioteca Hazel (Hazel Zend Framework Extended Library), que busca especializar as classes de desenvolvimento do Zend Framework. _Esta documentação está incompleta e carece de informações_.
+
+= Hazel_Controller =
+
+O pacote de controle do Hazel trabalha com especializações para manipulação de objetos provenientes do banco de dados. Se existe uma entidade no banco de dados que pode ser trabalhada através do padrão CRUD, utilizando um formulário e uma tabela somente, a classe {{{Hazel_Controller_DatabaseCrudAbstract}}} pode ser extendida. Esta classe possui as ações padrão para edição e toda a programação necessária para edição simples das informações.
+
+A idéia principal da classe é que toda a programação seja encapsulada nas controladoras e caso seja necessário a modificação de alguns métodos, estes consigam ser sobrescritos, afetando ao mínimo o fluxo de processamento; ou sejam adicionados métodos nas classes de formulário e tabela, dando flexibilidade à programação.
