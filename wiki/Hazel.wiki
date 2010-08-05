@@ -133,3 +133,45 @@ são criadas em módulos: a classe do Hazel pesquisa corretamente os locais. Se
 temos o módulo {{{Servico}}} e o controle de {{{Servico_RelatorioController}}},
 necessitamos criar o formulário {{{Servico_Form_Relatorio}}} e a representante
 da tabela {{{Servico_Model_DbTable_Relatorio}}}.
+
+Ainda utilizando o exemplo de controle de {{{Usuario}}}, devemos criar as
+visualizações, que não são executadas automaticamente para que seja possível a
+renderização especializada, como o {{{Zend_View_Helper_PaginationControl}}}.
+
+Um modelo de visualização de dados em tabela pode ser construído para a ação
+{{{retrieve}}} do controle de {{{Usuario}}} da seguinte maneira:
+
+{{{
+<!-- @see APPLICATION_PATH /scripts/datagrid.phtml -->
+<?php $address = array('action' => 'retrieve') ?>
+<?php foreach ($this->primaries as $primary) : ?>
+<?php $address[$primary] = null ?>
+<?php endforeach ?>
+<table>
+    <tr>
+<?php foreach ($this->columns as $column => $label) : ?>
+        <th><a href="<?php echo $this->url(array_merge($address, array('order' => $column))) ?>"><?php echo $label?></a></th>
+<?php endforeach ?>
+        <th colspan="2"><a href="<?php echo $this->url(array_merge($address, array('action' => 'create', 'order' => null, 'page' => null))) ?>">Adicionar</a></th>
+    </tr>
+<?php if (count($this->result) > 0) : ?>
+<?php foreach ($this->result as $element) : ?>
+    <tr>
+<?php foreach ($this->columns as $column => $label) : ?>
+        <td><?php echo $element->$column ?></td>
+<?php endforeach ?>
+<?php $search = array('order' => null, 'page' => null) ?>
+<?php foreach ($this->primaries as $primary) : ?>
+<?php $search[$primary] = $element->$primary ?>
+<?php endforeach ?>
+        <td><a href="<?php echo $this->url(array_merge($search, array('action' => 'update'))) ?>">Visualizar</a></td>
+        <td><a href="<?php echo $this->url(array_merge($search, array('action' => 'delete'))) ?>">Deletar</a></td>
+    </tr>
+<?php endforeach ?>
+<?php else : ?>
+    <tr>
+        <td colspan="<?php echo count($this->columns) + 2 ?>">Lista Vazia</td>
+    </tr>
+<?php endif ?>
+</table>
+}}}
