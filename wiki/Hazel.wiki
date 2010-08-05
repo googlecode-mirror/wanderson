@@ -142,7 +142,7 @@ Um modelo de visualização de dados em tabela pode ser construído para a açã
 {{{retrieve}}} do controle de {{{Usuario}}} da seguinte maneira:
 
 {{{
-<!-- @see APPLICATION_PATH /scripts/datagrid.phtml -->
+<!-- @see APPLICATION_PATH /views/scripts/datagrid.phtml -->
 <?php $address = array('action' => 'retrieve') ?>
 <?php foreach ($this->primaries as $primary) : ?>
 <?php $address[$primary] = null ?>
@@ -175,3 +175,27 @@ Um modelo de visualização de dados em tabela pode ser construído para a açã
 <?php endif ?>
 </table>
 }}}
+
+Este padrão de elementos em tabela é renderizado no arquivo {{{retrieve}}} da
+camada de visualização utilizando método específico:
+
+{{{
+<!-- @see APPLICATION_PATH /views/scripts/usuario/retrieve.phtml -->
+<?php echo $this->render('datagrid.phtml'); ?>
+}}}
+
+Os outros arquivos de visualização recebem o seguinte conteúdo de programação:
+
+{{{
+<!-- @see APPLICATION_PATH /views/scripts/usuario/create.phtml -->
+<?php echo $this->form ?>
+}}}
+
+{{{
+<!-- @see APPLICATION_PATH /views/scripts/usuario/update.phtml -->
+<?php echo $this->form ?>
+}}}
+
+Não há encapsulamento destas execuções pois geralmente são necessários dados
+adicionais referente ao conteúdo, sobre como um usuário deve ser adicionado ou
+saída de dados que auxiliam o utilizador do sistema a trabalhar.
