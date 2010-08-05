@@ -9,6 +9,8 @@ Framework. _Esta documentação está incompleta e carece de informações_.
 
 == Hazel_Controller ==
 
+Pacote http://code.google.com/p/wanderson/source/browse/trunk/Hazel/Controller/
+
 O pacote de controle do Hazel trabalha com especializações para manipulação de
 objetos provenientes do banco de dados. Se existe uma entidade no banco de dados
 que pode ser trabalhada através do padrão CRUD, utilizando um formulário e uma
