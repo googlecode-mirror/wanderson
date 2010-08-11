@@ -59,7 +59,7 @@ class Application_Model_DbTable_Usuario extends Zend_Db_Table_Usuario
 }}}
 
 Também vamos criar um formulário para edição destes dados para uma tupla da
-tabela:
+tabela. Note que é importante a adição de um filtro de elementos nulos à chave primária representante neste formulário: ele é utilizado tanto para inserção ou atualização dos dados, pois se a chave primária é zerada pelo filtro de inteiros, então o filtro de elementos nulos irá retornar nulo e o elemento será salvo no banco; caso contrário ele é atualizado. Se este filtro de valores nulos não fosse inserido neste caso, um elemento de chave primária de valor zero será criado, o que não queremos que aconteça. Vejamos o exemplo abaixo:
 
 {{{
 <?php
