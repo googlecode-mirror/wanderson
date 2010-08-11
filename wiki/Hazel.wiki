@@ -136,6 +136,33 @@ temos o módulo {{{Servico}}} e o controle de {{{Servico_RelatorioController}}},
 necessitamos criar o formulário {{{Servico_Form_Relatorio}}} e a representante
 da tabela {{{Servico_Model_DbTable_Relatorio}}}.
 
+Se há necessidade de carregamento de um formulário ou tabela de nomes diferentes, podemos configurar o atributo da classe na controladora, informando qual classe representante deve ser utilizada.
+
+{{{
+<?php
+
+/**
+ * Controle de Usuários Modificado
+ * Podemos Informar Outra Classe de Tabela ou Formulário
+ * @author Wanderson Henrique Camargo Rosa
+ * @see    APPLICATION_PATH /controllers/UsuarioController.php
+ */
+class UsuarioController extends Hazel_Controller_DatabaseCrudAbstract
+{
+    /**
+     * Nome da Classe de Tabela
+     * @var string
+     */
+    protected $_dbtable = 'Application_Model_DbTable_Pessoas';
+
+    /**
+     * Nome do Formulário
+     * @var string
+     */
+    protected $_form = 'Application_Form_Login';
+}
+}}}
+
 Ainda utilizando o exemplo de controle de {{{Usuario}}}, devemos criar as
 visualizações, que não são executadas automaticamente para que seja possível a
 renderização especializada, como o {{{Zend_View_Helper_PaginationControl}}}.
@@ -201,3 +228,22 @@ Os outros arquivos de visualização recebem o seguinte conteúdo de programaç�
 Não há encapsulamento destas execuções pois geralmente são necessários dados
 adicionais referente ao conteúdo, sobre como um usuário deve ser adicionado ou
 saída de dados que auxiliam o utilizador do sistema a trabalhar.
+
+As colunas para exibição nos dados tabulares podem ser modificadas configurando as colunas no controle. As informações são passadas através de _arrays_ associativos onde a chave fornece o nome da coluna para renderização da tabela e o valor trabalha como tituleira da coluna, preenchendo o cabeçalho.
+
+{{{
+
+/**
+ * Controle de Usuários
+ * @author Wanderson Henrique Camargo Rosa
+ * @see    APPLICATION_PATH /controllers/UsuarioController.php
+ */
+class UsuarioController extends Hazel_Controller_DatabaseCrudAbstract
+{
+    /**
+     * Colunas para Exibição
+     * @var array
+     */
+    protected $_columns = array('display' => 'Nome', 'nome' => 'Usuário');
+}
+}}}
