@@ -234,7 +234,8 @@ As colunas para exibição nos dados tabulares podem ser modificadas configurand
 {{{
 
 /**
- * Controle de Usuários
+ * Controle de Usuários Modificado
+ * Modificação de Colunas Exibidas na Listagem
  * @author Wanderson Henrique Camargo Rosa
  * @see    APPLICATION_PATH /controllers/UsuarioController.php
  */
