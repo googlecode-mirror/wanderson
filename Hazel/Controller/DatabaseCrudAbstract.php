@@ -126,7 +126,7 @@ abstract class Hazel_Controller_DatabaseCrudAbstract
         if (count($package) > 1) {
             array_push($stack, array_shift($package));
         } elseif ($namespace = $bootstrap->getAppNamespace()) {
-            array_push($stack, $namespace);
+            array_push($stack, preg_replace('/[_]*$/', '', $namespace));
         }
         $entity  = str_replace('Controller', null, array_pop($package));
         array_push($stack, $name, $entity);
