@@ -265,7 +265,7 @@ abstract class Hazel_Controller_DatabaseCrudAbstract
                     if ($this->getDisplayExceptions()) {
                         throw $e;
                     }
-                    $form->addError($e->getCode());
+                    $form->addError($e->getMessage());
                 }
             }
         }
@@ -311,7 +311,7 @@ abstract class Hazel_Controller_DatabaseCrudAbstract
                     if ($this->getDisplayExceptions()) {
                         throw $e;
                     }
-                    $form->addError($e->getCode());
+                    $form->addError($e->getMessage());
                 }
             }
         }
