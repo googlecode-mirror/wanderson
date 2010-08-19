@@ -97,7 +97,7 @@ void display(void)
     }
     glEnd();
 
-    // Pizza
+    // Arco Preenchido
     glBegin(GL_TRIANGLE_FAN);
     {
         int points = 100;
