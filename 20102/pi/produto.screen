@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Panel" x="416" y="187" width="249" height="342" measuredWidth="249" measuredHeight="342"/>
+  <widgets xsi:type="model:Panel" x="416" y="439" width="249" height="63" measuredWidth="249" measuredHeight="63"/>
+  <widgets xsi:type="model:Panel" x="416" y="187" width="249" height="73" measuredWidth="249" measuredHeight="73"/>
+  <widgets xsi:type="model:Image" x="446" y="277"/>
+  <widgets xsi:type="model:Icon" x="426" y="200" measuredWidth="48" measuredHeight="48" icon="rss (xlarge)"/>
+  <widgets xsi:type="model:Label" x="480" y="200" text="Massa de Pastel" measuredWidth="152" measuredHeight="31">
+    <font size="14"/>
+  </widgets>
+  <widgets xsi:type="model:Label" x="480" y="224" text="Pastelina" measuredWidth="55" measuredHeight="21">
+    <font size="8" italic="true"/>
+  </widgets>
+  <widgets xsi:type="model:Label" x="430" y="455" text="R$        1,50 Un" measuredWidth="152" measuredHeight="31">
+    <font size="14"/>
+  </widgets>
+  <widgets xsi:type="model:WidgetGroup" x="592" y="227" measuredWidth="63" measuredHeight="16">
+    <widgets xsi:type="model:Icon" measuredWidth="16" measuredHeight="16" icon="favorites (small)"/>
+    <widgets xsi:type="model:Icon" x="15" measuredWidth="16" measuredHeight="16" icon="favorites (small)"/>
+    <widgets xsi:type="model:Icon" x="30" measuredWidth="16" measuredHeight="16" icon="favorites (small)"/>
+    <widgets xsi:type="model:Icon" x="47" measuredWidth="16" measuredHeight="16" icon="favorites (small)"/>
+  </widgets>
+  <widgets xsi:type="model:Icon" x="607" y="447" measuredWidth="48" measuredHeight="48" icon="shopping-cart (xlarge)"/>
+  <widgets xsi:type="model:Label" x="430" y="283" text="Descrição" measuredWidth="67" measuredHeight="60" textAlignment="Center" icon="info (large)" iconPosition="top">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" x="512" y="283" text="Especific" measuredWidth="60" measuredHeight="60" textAlignment="Center" icon="options (large)" iconPosition="top">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" x="592" y="283" text="Especial" measuredWidth="57" measuredHeight="60" textAlignment="Center" icon="help (large)" iconPosition="top">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" x="430" y="355" text="Opiniões" measuredWidth="60" measuredHeight="60" textAlignment="Center" icon="comments (large)" iconPosition="top">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" x="512" y="355" text="Sugestões" measuredWidth="70" measuredHeight="60" textAlignment="Center" icon="print-preview (large)" iconPosition="top">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" x="592" y="355" text="Favoritos" measuredWidth="63" measuredHeight="60" textAlignment="Center" icon="heart (large)" iconPosition="top">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" x="512" y="508" text="Menu" measuredWidth="52" measuredHeight="21" textAlignment="Center" icon="filled-arrow-up (small)">
+    <font size="8"/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font/>
+</model:Screen>
