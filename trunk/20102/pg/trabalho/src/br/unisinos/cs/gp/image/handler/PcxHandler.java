@@ -11,7 +11,6 @@ import br.unisinos.cs.gp.stream.LittleEndianInputStream;
  * para melhor reaproveitamento do código e padronização do projeto
  * 
  * @author Wanderson Henrique Camargo Rosa
- *
  */
 public class PcxHandler implements ImageHandler
 {
@@ -24,6 +23,7 @@ public class PcxHandler implements ImageHandler
              * Abertura Padrão de Arquivo --------------------------------------
              * O formato PCX utiliza armazenamento Little Endian
              */
+
             FileInputStream fin = new FileInputStream(file);
             LittleEndianInputStream in = new LittleEndianInputStream(fin);
 
@@ -180,6 +180,7 @@ public class PcxHandler implements ImageHandler
             /*
              * Construção do Objeto --------------------------------------------
              */
+
             BufferedImage image = new BufferedImage(imageWidth, imageHeight,
                 BufferedImage.TYPE_INT_ARGB);
             for (int y = 0; y < imageHeight; y++) {
