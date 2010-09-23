@@ -145,7 +145,7 @@ public class PcxHandler implements ImageHandler
                  * mapeado conforme paleta de cores do final do arquivo
                  */
                 byte triples[] = new byte[768];
-                if (in.read() != 0x0C || in.read(triples) == -1) {
+                if (in.read() != 0x0C || in.read(triples) != 768) {
                     /*
                      * Existe um erro com o identificador da paleta (número
                      * inteiro 12) ou não existe 768 bits necessários para
