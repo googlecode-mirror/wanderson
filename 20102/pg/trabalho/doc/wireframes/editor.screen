@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Window" x="640" y="104" width="640" height="385" text="Parallax Editor" measuredWidth="640" measuredHeight="385"/>
+  <widgets xsi:type="model:Menu" x="640" y="123" width="640" text="&amp;File,&amp;Layers,F&amp;ilters,&amp;Help" measuredWidth="640" measuredHeight="30"/>
+  <widgets xsi:type="model:Panel" x="640" y="150" width="640" height="51" measuredWidth="640" measuredHeight="51"/>
+  <widgets xsi:type="model:Panel" x="640" y="200" width="128" height="289" measuredWidth="128" measuredHeight="289"/>
+  <widgets xsi:type="model:Icon" x="656" y="159" measuredWidth="32" measuredHeight="32" icon="open (large)"/>
+  <widgets xsi:type="model:Icon" x="696" y="159" measuredWidth="32" measuredHeight="32" icon="save (large)"/>
+  <widgets xsi:type="model:Icon" x="736" y="159" measuredWidth="32" measuredHeight="32" icon="add (large)"/>
+  <widgets xsi:type="model:Icon" x="776" y="160" measuredWidth="32" measuredHeight="32" icon="delete (large)"/>
+  <widgets xsi:type="model:WidgetGroup" x="656" y="216" measuredWidth="102" measuredHeight="45">
+    <widgets xsi:type="model:Panel" width="80" height="45" measuredWidth="80" measuredHeight="45"/>
+    <widgets xsi:type="model:Icon" x="86" measuredWidth="16" measuredHeight="16" icon="filled-arrow-up (small)"/>
+    <widgets xsi:type="model:Icon" x="86" y="29" measuredWidth="16" measuredHeight="16" icon="filled-arrow-down (small)"/>
+    <widgets xsi:type="model:Icon" x="86" y="15" measuredWidth="16" measuredHeight="16" icon="circled-check (small)"/>
+  </widgets>
+  <widgets xsi:type="model:WidgetGroup" x="656" y="276" measuredWidth="102" measuredHeight="45">
+    <widgets xsi:type="model:Panel" width="80" height="45" measuredWidth="80" measuredHeight="45"/>
+    <widgets xsi:type="model:Icon" x="86" measuredWidth="16" measuredHeight="16" icon="filled-arrow-up (small)"/>
+    <widgets xsi:type="model:Icon" x="86" y="29" measuredWidth="16" measuredHeight="16" icon="filled-arrow-down (small)"/>
+    <widgets xsi:type="model:Icon" x="86" y="15" measuredWidth="16" measuredHeight="16" icon="circled-mul (small)"/>
+  </widgets>
+  <widgets xsi:type="model:WidgetGroup" x="656" y="338" measuredWidth="102" measuredHeight="45">
+    <widgets xsi:type="model:Panel" width="80" height="45" measuredWidth="80" measuredHeight="45"/>
+    <widgets xsi:type="model:Icon" x="86" measuredWidth="16" measuredHeight="16" icon="filled-arrow-up (small)"/>
+    <widgets xsi:type="model:Icon" x="86" y="29" measuredWidth="16" measuredHeight="16" icon="filled-arrow-down (small)"/>
+    <widgets xsi:type="model:Icon" x="86" y="15" measuredWidth="16" measuredHeight="16" icon="circled-check (small)"/>
+  </widgets>
+  <widgets xsi:type="model:Note" x="1202" y="452" text="ViewPort" measuredWidth="68" measuredHeight="27">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Note" x="672" y="452" text="Thumbnails" measuredWidth="86" measuredHeight="27">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Note" x="1213" y="165" text="Toolbar" measuredWidth="57" measuredHeight="27">
+    <font/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font/>
+</model:Screen>
