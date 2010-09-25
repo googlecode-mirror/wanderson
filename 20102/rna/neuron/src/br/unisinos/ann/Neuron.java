@@ -1,85 +1,46 @@
 package br.unisinos.ann;
 
-/**
- * Classe Neurônio
- * Abstração de Classe para Especialização de
- *  Funções de Transferência e Ativação
- * Redes Neurais Artificiais
- * @author Wanderson Henrique Camargo Rosa
- */
-public abstract class Neuron
+public class Neuron
 {
-    /**
-     * Pesos do Neurônio
-     */
-    protected double weights[];
+    public double weights[];
 
-    /**
-     * Peso do Bias
-     */
-    protected double bias;
-
-    /**
-     * Construtor da Classe
-     * @param signals Quantidade de Sinais de Entrada
-     */
-    public Neuron(int signals)
+    public Neuron(int numberOfInputs)
     {
-        /*
-         * Construção dos Pesos Iniciais Randômicos
-         */
-        this.weights = new double[signals];
-        this.bias    = Math.random();
-        for (int i = 0; i < this.weights.length; i++) {
-            this.weights[i] = Math.random();
-        }
+        this.setNumberOfInputs(numberOfInputs);
     }
 
-    /**
-     * Ativação do Neurônio
-     * Execução da Transferência de Impulsos entre Neurônios
-     * @param signals Sinais de Entrada
-     * @param bias Entrada Fixa
-     * @return Valor Computado Conforme Funções de Ativação e Transferência
-     * @throws AnnException Quantidade de Sinais Difere do Número de Pesos
-     */
-    public double activate(double signals[], double bias) throws AnnException
+    protected Neuron setNumberOfInputs(int value)
     {
-        /*
-         * Quantidade de Sinais de Entrada Difere do Construtor
-         */
-        if (signals.length != this.weights.length) {
-            throw new AnnException("Invalid Number of Signals");
+        weights = new double[value];
+        for (int i = 0; i < value; i++) {
+            weights[i] = Math.random();
         }
-
-        /*
-         * Somatório dos Pesos Aplicados aos Sinais de Entrada
-         */
-        double output = 0;
-        for (int i = 0; i < this.weights.length; i++) {
-            output += signals[i] * this.weights[i];
-        }
-        output += this.bias * bias;
-
-        /*
-         * Processamento da Função de Ativação e Transferência
-         */
-        output = this.activation(output);
-        output = this.transference(output);
-        return output;
+        return this;
     }
 
-    /**
-     * Função de Ativação Interna ao Neurônio
-     * @param input Entrada da Função
-     * @return Resultado do Processamento
-     */
-    public abstract double activation(double input);
+    public double activate(NeuronFunction function, double inputs[])
+        throws AnnException
+    {
+        if (inputs.length != weights.length) {
+            throw new AnnException("Invalid Input Size");
+        }
 
-    /**
-     * Função de Transferência Interna ao Neurônio
-     * @param input Entrada da Função
-     * @return Resultado do Processamento
-     */
-    public abstract double transference(double input);
+        double sum = 0;
+        for (int i = 0; i < inputs.length; i++) {
+            sum = sum + inputs[i] * weights[i];
+        }
+
+        return function.transfer(sum);
+    }
+
+    public static void main(String args[]) throws Exception
+    {
+        Neuron neuron = new Neuron(2);
+        double inputs[] = new double[2];
+        inputs[0] = 0.5;
+        inputs[1] = 0.8;
+        double result = neuron.activate(NeuronFunction.THRESHOLD, inputs);
+        System.out.println(result);
+    }
+
 }
