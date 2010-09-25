@@ -51,13 +51,17 @@ public enum NeuronFunction
         return result;
     }
 
+    public String toString()
+    {
+        return name;
+    }
+
     /**
      * Função Rampa
      * @param input Valor de Entrada
      * @return Saída Esperada
      */
-    @SuppressWarnings("unused")
-    private double threshold(Double input)
+    public double threshold(Double input)
     {
         return input >= 0 ? 1 : 0;
     }
@@ -67,8 +71,7 @@ public enum NeuronFunction
      * @param input Valor de Entrada
      * @return Saída Esperada
      */
-    @SuppressWarnings("unused")
-    private double sigmoid(Double input)
+    public double sigmoid(Double input)
     {
         return 1/(1 + Math.pow(Math.E,(-1 * input)));
     }
@@ -78,8 +81,7 @@ public enum NeuronFunction
      * @param input Valor de Entrada
      * @return Saída Esperada
      */
-    @SuppressWarnings("unused")
-    private double hyperbolic(Double input)
+    public double hyperbolic(Double input)
     {
         return Math.tanh(input);
     }
