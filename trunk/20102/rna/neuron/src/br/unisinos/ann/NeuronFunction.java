@@ -25,13 +25,12 @@ public enum NeuronFunction
             args[0] = input;
             result = (Double) method.invoke(this, args);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new AnnException("Invalid Transfer Function");
         }
         return result;
     }
 
-    public double threshold(double input)
+    public double threshold(Double input)
     {
         return input >= 0 ? 1 : 0;
     }
