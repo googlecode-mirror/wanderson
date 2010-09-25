@@ -36,6 +36,15 @@ public class Neuron
     }
 
     /**
+     * Informa os Pesos Configurados no Neurônio
+     * @return Valor dos Pesos do Neurônio
+     */
+    public double[] getWeights()
+    {
+        return weights;
+    }
+
+    /**
      * Ativação do Neurônio
      * @param function Função Escolhida
      * @param inputs Valores de Entrada
