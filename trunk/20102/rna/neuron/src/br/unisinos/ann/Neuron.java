@@ -1,14 +1,31 @@
 package br.unisinos.ann;
 
+/**
+ * Neurônio Artificial
+ * 
+ * @author Wanderson Henrique Camargo Rosa
+ */
 public class Neuron
 {
+    /**
+     * Pesos Sinápticos
+     */
     public double weights[];
 
+    /**
+     * Construtor da Classe
+     * @param numberOfInputs Número de Entradas para o Neurônio
+     */
     public Neuron(int numberOfInputs)
     {
         this.setNumberOfInputs(numberOfInputs);
     }
 
+    /**
+     * Configura o Número de Entradas do Neurônio Reinicializando os Pesos
+     * @param value Quantidade de Entradas para o Objeto
+     * @return Próprio Objeto
+     */
     protected Neuron setNumberOfInputs(int value)
     {
         weights = new double[value];
@@ -18,6 +35,14 @@ public class Neuron
         return this;
     }
 
+    /**
+     * Ativação do Neurônio
+     * @param function Função Escolhida
+     * @param inputs Valores de Entrada
+     * @return Saída Esperada
+     * @throws AnnException Tamanho de Entrada Difere do Número de Pesos
+     * @throws AnnException Função de Transferência Inválida
+     */
     public double activate(NeuronFunction function, double inputs[])
         throws AnnException
     {
@@ -33,6 +58,11 @@ public class Neuron
         return function.transfer(sum);
     }
 
+    /**
+     * Método Principal de Execução
+     * @param args Argumentos de Entrada
+     * @throws Exception Erros Variados
+     */
     public static void main(String args[]) throws Exception
     {
         Neuron neuron = new Neuron(2);
