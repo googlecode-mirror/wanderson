@@ -30,7 +30,7 @@ public class Neuron
     {
         weights = new double[value];
         for (int i = 0; i < value; i++) {
-            weights[i] = Math.random();
+            weights[i] = Math.random() * (Math.random() >= 0.5 ? 1 : -1);
         }
         return this;
     }
