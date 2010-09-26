@@ -184,6 +184,10 @@ public class NeuronViewer extends JFrame implements Runnable
         return this;
     }
 
+    /**
+     * Atualização do Componente de Visualização dos Pesos
+     * @return Próprio Objeto
+     */
     private NeuronViewer updateWeightViewer()
     {
         double w[] = neuron.getWeights();
