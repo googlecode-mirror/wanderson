@@ -68,9 +68,7 @@ public class NeuronViewer extends JFrame implements Runnable
         function.addItem(NeuronFunction.SIGMOID);
         function.addItem(NeuronFunction.HYPERBOLIC);
         output = new JTextField();
-        output.setFocusable(false);
         weights = new JTextArea();
-        weights.setFocusable(false);
         size = new JTextField();
         size.setText("3");
 
@@ -83,7 +81,7 @@ public class NeuronViewer extends JFrame implements Runnable
         status.setBorder(BorderFactory.createLoweredBevelBorder());
         status.setLayout(new BoxLayout(status, BoxLayout.X_AXIS));
         status.setPreferredSize(new Dimension(0, 25));
-        message = new JLabel("Ready");
+        message = new JLabel();
         status.add(message);
         this.add(status, BorderLayout.PAGE_END);
 
@@ -123,7 +121,7 @@ public class NeuronViewer extends JFrame implements Runnable
         weightLabel.setLabelFor(weights);
         weightLabel.setBounds(10, 91, 295, 20);
         right.add(weightLabel);
-        weights.setBounds(10, 111, 300, 225);
+        weights.setBounds(10, 111, 295, 225);
         weights.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         right.add(weights);
         JButton activate = new JButton("Activate");
@@ -181,7 +179,18 @@ public class NeuronViewer extends JFrame implements Runnable
             return this;
         }
         output.setText("" + result);
+        this.updateWeightViewer();
         message.setText("Done");
+        return this;
+    }
+
+    private NeuronViewer updateWeightViewer()
+    {
+        double w[] = neuron.getWeights();
+        weights.setText("");
+        for (int i = 0; i < w.length; i++) {
+            weights.setText(weights.getText() + i + ": " + w[i] + "\n");
+        }
         return this;
     }
 
@@ -200,11 +209,8 @@ public class NeuronViewer extends JFrame implements Runnable
             message.setText(e.getMessage());
             return this;
         }
-        double w[] = neuron.getWeights();
-        weights.setText("");
-        for (int i = 0; i < w.length; i++) {
-            weights.setText(weights.getText() + i + ": " + w[i] + "\n");
-        }
+        this.updateWeightViewer();
+        message.setText("Ready");
         return this;
     }
 
