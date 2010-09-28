@@ -1,0 +1,6 @@
+record
+    nome: string,
+    idade: integer,
+    sexo: char,
+    notas: array[1..5] of real;
+end

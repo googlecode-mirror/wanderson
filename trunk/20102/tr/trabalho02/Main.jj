@@ -1,0 +1,69 @@
+PARSER_BEGIN(Main)
+
+public class Main
+{
+    public static void main(String args[]) throws ParseException
+    {
+        Main parser = new Main(System.in);
+        parser.input();
+    }
+}
+
+PARSER_END(Main)
+
+SKIP :
+{
+    " " | "\n" | "\t" | "\r"
+}
+
+TOKEN :
+{
+    <END: "end">
+  | <RECORD: "record">
+  | <ID: (["a"-"z","A"-"Z"])+ >
+  | <DELIMITER: ";">
+  | <TYPEOF: ":">
+  | <LIST: ",">
+}
+
+void input() :
+{}
+{
+    S()<EOF>
+}
+
+void S() :
+{}
+{
+    <RECORD> Fieldlist() <END>
+}
+
+void Fieldlist() :
+{}
+{
+    Field() Recursion()
+}
+
+void Recursion() :
+{}
+{
+    <DELIMITER> Field() Recursion()
+}
+
+void Field() :
+{}
+{
+    Idlist() <TYPEOF> <ID>
+}
+
+void Idlist() :
+{}
+{
+    <ID> Factoring()
+}
+
+void Factoring() :
+{}
+{
+    <LIST> Idlist()
+}
