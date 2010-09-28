@@ -65,6 +65,9 @@ public class NeuronTest implements Runnable
             System.out.println("-----------");
             System.out.println();
 
+            function = NeuronFunction.LINEAR;
+            this.test(function, values);
+
             function = NeuronFunction.THRESHOLD;
             this.test(function, values);
 
@@ -99,6 +102,9 @@ public class NeuronTest implements Runnable
             System.out.println("Input Set 3");
             System.out.println("-----------");
             System.out.println();
+
+            function = NeuronFunction.LINEAR;
+            this.triangle(function, triangle);
 
             function = NeuronFunction.THRESHOLD;
             this.triangle(function, triangle);
