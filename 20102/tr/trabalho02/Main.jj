@@ -48,6 +48,7 @@ void Recursion() :
 {}
 {
     <DELIMITER> Field() Recursion()
+  | {}
 }
 
 void Field() :
@@ -65,5 +66,5 @@ void Idlist() :
 void Factoring() :
 {}
 {
-    <LIST> Idlist()
+    <LIST> Idlist() | {}
 }
