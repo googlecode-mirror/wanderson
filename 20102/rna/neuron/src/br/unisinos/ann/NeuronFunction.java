@@ -12,7 +12,8 @@ import java.lang.reflect.Method;
  */
 public enum NeuronFunction
 {
-    THRESHOLD ("threshold"), SIGMOID ("sigmoid"), HYPERBOLIC ("hyperbolic");
+    THRESHOLD ("threshold"), SIGMOID ("sigmoid"), HYPERBOLIC ("hyperbolic"),
+        LINEAR ("linear");
 
     /**
      * Nome da Função
@@ -84,5 +85,15 @@ public enum NeuronFunction
     public double hyperbolic(Double input)
     {
         return Math.tanh(input);
+    }
+
+    /**
+     * Função Linear
+     * @param input Valor de Entrada
+     * @return Saída Linear
+     */
+    public double linear(Double input)
+    {
+        return input;
     }
 }

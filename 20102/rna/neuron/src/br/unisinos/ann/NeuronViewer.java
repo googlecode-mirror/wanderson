@@ -64,6 +64,7 @@ public class NeuronViewer extends JFrame implements Runnable
 
         inputs = new JTextArea();
         function = new JComboBox();
+        function.addItem(NeuronFunction.LINEAR);
         function.addItem(NeuronFunction.THRESHOLD);
         function.addItem(NeuronFunction.SIGMOID);
         function.addItem(NeuronFunction.HYPERBOLIC);
