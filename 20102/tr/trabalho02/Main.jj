@@ -1,17 +1,34 @@
+/*
+ * Tradução de Pascal Record para C Struct
+ * @author Wanderson Henrique Camargo Rosa
+ * @author Roberto Raguze Flores
+ *
+ * 1) Eliminação de Recursão à Esquerda
+ * 2) Fatoração à Esquerda
+ * 
+ *         <S> ::= record <Fieldlist> end
+ * <Fieldlist> ::= <Field> <Recursion>
+ * <Recursion> ::= ; <Field> <Recursion> | <EMPTY>
+ *     <Field> ::= <Idlist> : <ID>
+ *    <Idlist> ::= <ID> <Factoring>
+ * <Factoring> ::= , <Idlist> | <EMPTY>
+ *
+ */
+
 PARSER_BEGIN(Main)
+
+import java.util.*;
 
 public class Main
 {
+    public static ArrayList<String> elements = new ArrayList<String>();
+
     public static void main(String args[]) throws ParseException
     {
         Main parser = new Main(System.in);
         parser.input();
     }
 
-    public static void println(String input)
-    {
-        System.out.println(input);
-    }
 }
 
 PARSER_END(Main)
@@ -34,42 +51,70 @@ TOKEN :
 void input() :
 {}
 {
-    S()<EOF>
+    S()
+    <EOF>
 }
 
 void S() :
 {}
 {
-    <RECORD> Fieldlist() <END>
+    <RECORD> {
+        System.out.println("struct {");
+    }
+    Fieldlist()
+    <END> {
+        System.out.println("}");
+    }
 }
 
 void Fieldlist() :
 {}
 {
-    Field() Recursion()
+    Field()
+    Recursion()
 }
 
 void Recursion() :
 {}
 {
-    <DELIMITER> Field() Recursion()
+    <DELIMITER>
+    Field()
+    Recursion()
   | {}
 }
 
 void Field() :
-{}
 {
-    Idlist() <TYPEOF> <ID> {Main.println("Typeof:" + token.image);}
+    elements = new ArrayList<String>();
+}
+{
+    Idlist()
+    <TYPEOF>
+    <ID> {
+        System.out.print("    " + token.image + " ");
+        for(int i = 0; i < elements.size(); i++) {
+            if (i != 0) {
+                System.out.print(", ");
+            }
+            System.out.print(elements.get(i));
+        }
+        System.out.println(";");
+    }
 }
 
 void Idlist() :
 {}
 {
-    <ID> {Main.println("Name:" + token.image);} Factoring()
+    <ID> {
+        elements.add(token.image);
+    }
+    Factoring()
 }
 
 void Factoring() :
 {}
 {
-    <LIST> Idlist() | {}
+    <LIST>
+    Idlist()
+  | {}
 }
