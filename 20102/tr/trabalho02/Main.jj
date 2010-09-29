@@ -7,6 +7,11 @@ public class Main
         Main parser = new Main(System.in);
         parser.input();
     }
+
+    public static void println(String input)
+    {
+        System.out.println(input);
+    }
 }
 
 PARSER_END(Main)
@@ -54,13 +59,13 @@ void Recursion() :
 void Field() :
 {}
 {
-    Idlist() <TYPEOF> <ID>
+    Idlist() <TYPEOF> <ID> {Main.println("Typeof:" + token.image);}
 }
 
 void Idlist() :
 {}
 {
-    <ID> Factoring()
+    <ID> {Main.println("Name:" + token.image);} Factoring()
 }
 
 void Factoring() :
