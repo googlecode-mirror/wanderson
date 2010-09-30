@@ -38,6 +38,8 @@ public class ParallaxEditor extends JFrame
      */
     private ParallaxEditorToolbar toolbar;
 
+    private ParallaxEditorThumbnailer thumbnailer;
+
     /**
      * Construtor da Classe
      */
@@ -45,10 +47,11 @@ public class ParallaxEditor extends JFrame
     {
         super("Parallax Editor");
 
-        viewPort = new ViewPort(this);
-        status   = new ParallaxEditorStatus();
-        menu     = new ParallaxEditorMenu(this);
-        toolbar  = new ParallaxEditorToolbar(this);
+        viewPort    = new ViewPort(this);
+        status      = new ParallaxEditorStatus();
+        menu        = new ParallaxEditorMenu(this);
+        toolbar     = new ParallaxEditorToolbar(this);
+        thumbnailer = new ParallaxEditorThumbnailer(this);
 
         this.setJMenuBar(menu);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -58,6 +61,7 @@ public class ParallaxEditor extends JFrame
         this.add(viewPort, BorderLayout.CENTER);
         this.add(status, BorderLayout.PAGE_END);
         this.add(toolbar, BorderLayout.PAGE_START);
+        this.add(thumbnailer, BorderLayout.LINE_START);
     }
 
     /**
@@ -69,6 +73,11 @@ public class ParallaxEditor extends JFrame
         return viewPort;
     }
 
+    public ParallaxEditorThumbnailer getThumbnailer()
+    {
+        return thumbnailer;
+    }
+
     /**
      * Método Principal de Execução para Testes
      * @param args Argumentos de Entrada
@@ -77,10 +86,14 @@ public class ParallaxEditor extends JFrame
     public static void main(String args[]) throws Exception
     {
         ParallaxEditor editor = new ParallaxEditor();
-        BufferedImage image = ImageIO.read(new File("data/bird_256.png"));
+        BufferedImage image = ImageIO.read(new File("data/zelda.png"));
         Layer layer = new Layer(image.getWidth(), image.getHeight());
         layer.setData(image.getData());
         editor.getViewPort().getLayerSet().add(layer);
+        ParallaxEditorThumb thumb = new ParallaxEditorThumb(editor.getThumbnailer());
+        thumb.setImage(layer);
+        editor.getThumbnailer().add(thumb);
+
         editor.setVisible(true);
     }
 }
