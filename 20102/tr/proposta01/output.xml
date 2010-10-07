@@ -33,13 +33,13 @@
                 <element type="constant">1</element>
             </assignment>
             <looping>
-                <operation type="leq">
+                <operation type="le">
                     <element type="variable">x</element>
                     <element type="attribute">input</element>
                 </operation>
                 <body>
                     <assignment id="answer" type="variable">
-                        <arithmetic type="add">
+                        <arithmetic type="mul">
                             <element type="variable">answer</element>
                             <element type="variable">x</element>
                         </arithmetic>
