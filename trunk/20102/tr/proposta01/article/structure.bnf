@@ -1,0 +1,94 @@
+<class name="NAME">
+    ...
+</class>
+
+<attribute type="TYPE" visibility="VISIBILITY">NAME</attribute>
+
+<constructor visibility="VISIBILITY">
+    <parameter ...></parameter>
+    <body>...</body>
+</constructor>
+
+<parameter type="TYPE">NAME</parameter>
+
+<body type="BODYTYPE">
+    ...
+</body>
+
+<element type="ELEMTYPE">NAME</element>
+
+<operation type="OPTYPE">
+    <element ...></element>
+    <element ...></element>
+</operation>
+
+<conditional>
+    <operation ...>
+        ...
+    </operation>
+    <body type="true">
+        ...
+    </body>
+    <body type="false">
+        ...
+    </body>
+</conditional>
+
+<assignment id="NAME" type="ELEMTYPE">
+    <element ...></element>
+</assignment>
+
+<method id="NAME" type="METTYPE" visibility="VISIBILITY" return="TYPE">
+    <parameter ...></parameter>
+    <body type="raw">
+        ...
+    </body>
+</method>
+
+<parameter type="TYPE" vector="VECTOR">NAME</parameter>
+
+<variable type="TYPE">NAME</variable>
+
+<looping>
+    <operation ...>
+        ...
+    </operation>
+    <body ...>
+        ...
+    </body>
+</looping>
+
+<arithmetic type="ARITHMTYPE">
+    <element ...>
+    <element ...>
+</arithmetic>
+
+<create instance="NAME">
+    <parameter ...></parameter>
+</create>
+
+<call id="NAME" from="NAME">
+    
+</call>
+
+<return>
+    <element ...></element>
+</return>
+
+NAME ::= [a-zA-Z]+[a-zA-Z]*
+
+TYPE ::= int|char|boolean|double|float|[a-zA-Z]+[a-zA-Z]*
+
+VISIBILITY ::= private|protected|public
+
+BODYTYPE ::= raw|true|false
+
+METTYPE ::= static|null
+
+VECTOR ::= vector|null
+
+OPTYPE ::= gt|ge|eq|le|lt|ne
+
+ELEMTYPE ::= attribute|variable|parameter|constant
+
+ARITHMTYPE ::= add|sub|mul|div
