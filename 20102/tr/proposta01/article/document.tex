@@ -4,6 +4,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[brazil]{babel}
 \usepackage{sbc-template}
+\usepackage{listings}
 
 \title{Proposta de Implementação de Tradutor Java para Linguagem Intermediária
 em XML}
@@ -15,7 +16,7 @@ Rio dos Sinos (UNISINOS)\email{\{roberto.raguze,wandersonwhcr\}@gmail.com}}
 
 \maketitle{}
 
-\section{Motivação}
+\section{Introdução}
 
 Conforme solicitação do Prof Gustavo Lermen, através da disciplina de Tradutores
 do curso de Ciência da Computação desta instituição, segundo semestre de 2010,
@@ -24,19 +25,66 @@ desenvolvimento vistas em aula. Também é requerido um artigo que descreva este
 tradutor. Portanto, este documento descreve de forma sucinta o trabalho
 supracitado.
 
-\section{Introdução}
+\section{Contexto}
 
 Atualmente, o desenvolvimento de programas de forma coletiva pode ser
 administrado através de \emph{softwares} para versionamento de código fonte, que
 visam registrar cada modificação do programador, adicionando informações como
 autor ou comentários sobre aqueles novos dados inseridos.
 
+Porém o cadastro das modificações é orientado a linhas e as informações quando
+alteradas, refletem completamente em todas as informações contidas nela. Se, ao
+construir um sistema capaz de versionar elementos sintaticamente, podemos ter um
+trabalho mais especializado, alterando somente informações sobre pedaços do
+código.
+
+Isto pode ser adquirido se a linguagem de programação a ser versionada for
+transformada em uma linguagem intermediária através de tradutores. Estes seriam
+responsáveis pela divisão sintática dos elementos e uma nova estrutura de
+armazenamento poderá ser criada.
+
+Para fins de teste, somente uma linguagem de programação será inserida como
+linguagem de origem e esta irá ser traduzida para a linguagem intermediária.
+Nada impede que futuramente outras linguagens também sejam utilizadas.
+
 \section{Linguagem de Origem}
+
+A linguagem de origem a ser transformada em linguagem intermediária será um
+subconjunto do Java. Para facilitar a demonstração, somente condicionais
+\emph{if} e laços de repetição \emph{while} serão utilizados, pois qualquer
+linguagem imperativa pode ser transformada nestas estruturas.
+
+Estes elementos também serão traduzidos: classes, atributos de classe,
+construtores de objetos, métodos, parâmetros de entrada e saída. Outras
+características como blocos de comando, operações lógicas e aritméticas,
+atribuição, chamada de métodos e retorno de dados serão adicionados ao trabalho.
 
 \section{Linguagem Alvo}
 
+A linguagem de saída possui formato humano, com marcação de texto extendida
+(XML). Todas as estruturas da linguagem de origem serão transformadas em
+metadados, conforme a seguinte estrutura:
+
+\begin{footnotesize}
+    \lstinputlisting[basicstyle=\ttfamily]{structure.bnf}
+\end{footnotesize}
+
 \section{Exemplos de Entrada e Saída}
 
+\subsection{Classe \emph{Factorial} como Entrada}
+
+\begin{footnotesize}
+    \lstinputlisting[basicstyle=\ttfamily,language=Java]{Factorial.java}
+\end{footnotesize}
+
+\subsection{Linguagem Intermediária para Saída}
+
+\begin{footnotesize}
+    \lstinputlisting[basicstyle=\ttfamily,language=XML]{output.xml}
+\end{footnotesize}
+
 \section{Metodologia Esperada}
+
+O trabalho será implementado utilizando a ferramenta ANTLR.
 
 \end{document}
