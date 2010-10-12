@@ -7,7 +7,8 @@
 
 \title{Protótipo de \emph{Interface} Humano Computador para Supermercados
 Utilizando Técnicas de Lojas Virtuais e Computação Ubíqua}
-\author{Wanderson Henrique Camargo Rosa \and Roberto Raguze Flores}
+\author{Wanderson Henrique Camargo Rosa\inst{1} \and Roberto Raguze
+Flores\inst{1}}
 \address{Centro de Ciências Exatas e Tecnológicas\\Universidade do Vale do Rio
 dos Sinos (UNISINOS)\email{\{wandersonwhcr \and roberto.raguze\}@gmail.com}}
 
@@ -68,7 +69,7 @@ evitando filas em caixas de pagamento.
 
 \subsection{Acesso aos Dados}
 
-% Como é a captura
+% Como é a Captura
 
 O cliente, ao entrar na loja, terá duas opções de acesso ao sistema: utilizando
 um leitor óptico fornecido ou instalando um aplicativo em seu próprio celular,
@@ -90,7 +91,8 @@ Para acesso facilitado às informações do produto no dispositivo, cada objeto
 deverá receber um código de barra de duas dimensões \cite{alapetite2010}. Estes
 códigos contém um endereço no sistema interno para acesso à descrição, onde o
 cliente poderá inclusive selecionar a quantidade desejável de objetos e
-adicioná-los ao carrinho de compras virtual e real, conforme seja necessário.
+adicioná-los ao carrinho de compras virtual e real \cite{dix2000}, conforme seja
+necessário.
 
 % Ações Possíveis
 
@@ -108,19 +110,85 @@ vê-lo, unindo o melhor dos dois ambientes.
 
 \subsection{Idealização}
 
+% Aplicação Focada
+
 Com esta análise de informações, há uma proposta de criação de uma
 \emph{interface} para supermercados que utilize técnicas de lojas virtuais,
 tornando a compra mais fácil e controlada, através de dispositivos móveis.
+
+% Público Alvo
 
 Temos então como público alvo todas as pessoas que utilizam o ambiente do
 supermercado e que já estão acostumadas aos padrões comuns. O sistema deve ser
 capaz de facilitar as compras, dando comodidade e segurança ao cliente.
 
+% Necessidades
+
 Não podemos esquecer que nem todas as pessoas estão acostumadas com tecnologias
 diferenciadas. Portanto, quanto mais a \emph{interface} estiver adaptável ao
 usuário, melhor será o retorno e satisfação do cliente.
 
-\section{Protótipo}
+\section{Sistema e Ambiente}
+
+% Necessidades Básicas
+
+O sistema é acessível através de uma rede sem fio disponível e pode ser
+visualizado em dispositivos móveis previamente descritos. Qualquer usuário deve
+estar apto para utilização. Buscando rapidez de aprendizado, o sistema possui
+algumas caracteristicas descritas abaixo.
+
+\subsection{Inicialização do Sistema}
+
+% Tutorial
+
+Para treinar o usuário sobre a utilização do sistema, ele poderá ser convidado a
+selecionar algum produto em uma lista de compras comuns. Um passo-a-passo poderá
+ser feito através do sistema, seguindo cada instrução no estilo \emph{tutorial}.
+
+\subsection{Dicas para Usuário}
+
+% Tooltips para Usuários
+
+O sistema pode capturar uma sequência de entradas frequentes do usuário e
+fornecer dicas de como estas tarefas podem ser otimizadas, através de teclas de
+atalhos ou botões que podem ser adicionados à tela inicial do sistema.
+
+Também deve ser fornecido em locais estratégicos (lancherias internas,
+atendimento ao consumidos, videos em exibição contínua sobre a utilização do
+sistema.
+
+\subsection{Localização}
+
+% Localização e Dicas Conforme Corredor
+
+Ao movimentar-se dentro do supermercado, o cliente pode ser informado sobre
+promoções ou produtos em destaque no corredor atual. Isto pode ser adicionado
+aos dispositivos que possuem posicionamento GPS e conforme efetue seu
+deslocamento, ele não é informado por produtos que procura, mas sim com dicas de
+elementos e promoções inexperadas \cite{canny2006}.
+
+\subsection{Pesquisa}
+
+% Pesquisa de Produtos
+
+Um produto pode ser pesquisado pelas suas características no sistema. Além de
+fornecer dados do produto como descrição, especificações opiniões sobre o
+produto e sugestões, ele também é capaz de exibir os locais onde os produtos
+podem ser retirados, através de mapas e localização GPS.
+
+% Favoritos e Histórico
+
+Produtos podem ser gerenciados através de favoritos, para rápido acesso e
+comparação de preços. Também é necessário manter um histórico das pesquisas,
+pois a reentrada dos dados pode ser uma tarefa dificultada, tendo em vista que
+dispositivos móveis nem sempre possuem teclados completos.
+
+\subsection{Controle de Produtos}
+
+O usuário poderá visualizar e gerenciar os produtos do carrinho através do
+sistema. Também poderá ser incluído um valor máximo especulado pelo usuário para
+controle de gastos. Assim, o cliente terá controle total e pode visualizar o
+preço de cada produto que será pago a qualquer momento.
 
 \section{Conclusão}
 
