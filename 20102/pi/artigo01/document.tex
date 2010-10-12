@@ -4,6 +4,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[brazil]{babel}
 \usepackage{sbc-template}
+\usepackage{graphicx}
 
 \title{Protótipo de \emph{Interface} Humano Computador para Supermercados
 Utilizando Técnicas de Lojas Virtuais e Computação Ubíqua}
@@ -17,6 +18,7 @@ dos Sinos (UNISINOS)\email{\{wandersonwhcr \and roberto.raguze\}@gmail.com}}
 \maketitle{}
 
 \section{Introdução}
+\label{sec:introducao}
 
 % Contextualização Geral
 
@@ -45,6 +47,7 @@ desenvolver uma \emph{interface} para uma loja comum, trazendo as facilidades
 virtuais para o mundo real, através de ambientes de realidade aumentada.
 
 \section{Interação Humano Computador}
+\label{sec:ihc}
 
 % Realidade
 
@@ -129,6 +132,7 @@ diferenciadas. Portanto, quanto mais a \emph{interface} estiver adaptável ao
 usuário, melhor será o retorno e satisfação do cliente.
 
 \section{Sistema e Ambiente}
+\label{sec:sistema}
 
 % Necessidades Básicas
 
@@ -190,7 +194,31 @@ sistema. Também poderá ser incluído um valor máximo especulado pelo usuário
 controle de gastos. Assim, o cliente terá controle total e pode visualizar o
 preço de cada produto que será pago a qualquer momento.
 
+\section{Prototipação}
+\label{sec:prototipacao}
+
+A tela após a captura do código de barras do produto pode ser exemplificada
+conforme Figura \ref{fig:produto}. Podemos verificar que o nome do produto atual
+está na parte superior em maior tamanho de fonte, para primeira verificação se a
+captura foi concluída com sucesso.
+
+\begin{figure}[ht]
+    \centering{}
+    \includegraphics[scale=0.4]{images/produto.png}
+    \label{fig:produto}
+    \caption{Tela Principal do Produto}
+\end{figure}
+
+Cada ação disponível para o produto está visível na área central, exibidos com
+ícones que fornecem uma identificação rápida conforme método que executam,
+característica de engenharia semiótica.
+
+O preço do produto também é visível de forma destacável. Para mais opções, há um
+atalho ao menu principal do sistema na base, com uma flecha apontando para cima,
+indicando que ele será deslizante.
+
 \section{Conclusão}
+\label{sec:conclusao}
 
 \bibliographystyle{sbc}
 \bibliography{sbc-template}
