@@ -5,6 +5,9 @@
 \usepackage[brazil]{babel}
 \usepackage{sbc-template}
 \usepackage{graphicx}
+\usepackage{listings}
+
+\renewcommand*\lstlistingname{Algoritmo}
 
 \title{Protótipo de \emph{Interface} Humano Computador para Supermercados
 Utilizando Técnicas de Lojas Virtuais e Computação Ubíqua}
@@ -209,8 +212,8 @@ captura foi concluída com sucesso.
 \begin{figure}[ht]
     \centering{}
     \includegraphics[scale=0.4]{images/produto.png}
-    \label{fig:produto}
     \caption{Tela Principal do Produto}
+    \label{fig:produto}
 \end{figure}
 
 Cada ação disponível para o produto está visível na área central, exibidos com
@@ -220,6 +223,26 @@ característica de engenharia semiótica.
 O preço do produto também é visível de forma destacável. Para mais opções, há um
 atalho ao menu principal do sistema na base, com uma flecha apontando para cima,
 indicando que ele será deslizante.
+
+\subsection{GOMS}
+
+Para utilização de GOMS, devemos definir os usuários do sistema, conforme
+Algoritmo \ref{goms:usuario}. A pesquisa de produtos no sistema pode seguir a
+lógica descrita pelo Algoritmo \ref{goms:pesquisa}. O usuário possui três
+elementos para busca: nome do produto, marca ou categoria. Por fim, para ação de
+compra, o usuário pode seguir o Algoritmo \ref{goms:compra}.
+
+\begin{footnotesize}
+    \lstinputlisting[basicstyle=\ttfamily,caption={Usuario},label=goms:usuario,captionpos=b]{resources/usuario.goms}
+\end{footnotesize}
+
+\begin{footnotesize}
+    \lstinputlisting[basicstyle=\ttfamily,caption={Pesquisa},label=goms:pesquisa,captionpos=b]{resources/pesquisa.goms}
+\end{footnotesize}
+
+\begin{footnotesize}
+    \lstinputlisting[basicstyle=\ttfamily,caption={Compra},label=goms:compra,captionpos=b]{resources/compra.goms}
+\end{footnotesize}
 
 \section{Conclusão}
 \label{sec:conclusao}

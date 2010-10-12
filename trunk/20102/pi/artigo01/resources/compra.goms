@@ -1,0 +1,48 @@
+FU1; 2. Comprar Produto
+FU1; 2.1a: Se (produto esta na lista de favoritos)
+       entao (adicionar ao carrinho)
+FU1; 2.1b: Se (produto nao esta na lista de favoritos)
+       entao (pesquisar produto) {
+        1: adicionar ao carrinho.
+       }
+
+//apos o ultimo produto ser adicionado ao carrinho
+FU1; 2.2a: Se (usuario e cadastrado e nao esta logado)
+       entao (autenticar usuario) {
+        1: digitar nome e senha de usuario
+        2: selecionar opcao de autenticacao
+       }
+FU1; 2.2b: Se (usuario nao e cadastrado)
+       entao (cadastrar cliente)
+FU1; 2.2c: Se (dados da compra estao corretos)
+       entao (finalizar compra) {
+        1: confirmar produtos.
+        2: selecionar opcao de pagamento.
+        3: emitir confirmacao de pagamento.
+        4: emitir nota fiscal.
+       }
+FU1; 2.2b: Se (dados da compra estao incorretos)
+       entao (voltar)
+
+FU1; 3. Cadastro de Cliente
+FU1; 3.1a: Se (usuario ja e cadastrado e nao esta logado)
+           entao (autenticar usuario) {
+        1: digitar nome e senha de usuario
+        2: selecionar opcao de autenticacao
+       }
+FU1; 3.1b: Se (usuario ja e cadastrado e esta logado)
+       entao (modificar cadastro do cliente) {
+        1: digitar dados
+        2: Se (algum dado incorreto ou nao preenchido)
+           entao ({
+            1: digitar dados
+        })
+       }
+FU1; 3.1c: Se (usuario nao e cadastrado)
+       entao (cadastrar cliente) {
+        1: digitar dados
+        2: Se (algum dado incorreto ou nao preenchido)
+           entao ({
+            1: digitar dados
+        })
+       }
