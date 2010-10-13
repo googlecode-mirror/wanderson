@@ -20,11 +20,6 @@ public class ViewPort extends JPanel implements MouseMotionListener
     private static final long serialVersionUID = -5933819053292295976L;
 
     /**
-     * Ponteiro ao Editor Parallax
-     */
-    private ParallaxEditor editor;
-
-    /**
      * Conjunto de Camadas Utilizadas
      */
     private ArrayList<Layer> layerSet;
@@ -36,24 +31,13 @@ public class ViewPort extends JPanel implements MouseMotionListener
 
     /**
      * Construtor da Classe
-     * @param editor Editor Parallax
      */
-    public ViewPort(ParallaxEditor editor)
+    public ViewPort()
     {
-        this.editor = editor;
         this.layerSet = new ArrayList<Layer>();
 
         this.setBackground(Color.BLACK);
         this.addMouseMotionListener(this);
-    }
-
-    /**
-     * Encapsulamento de Acesso ao Editor Parallax
-     * @return Ponteiro para o Editor
-     */
-    public ParallaxEditor getEditor()
-    {
-        return this.editor;
     }
 
     /**

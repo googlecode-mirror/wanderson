@@ -17,11 +17,6 @@ public class ParallaxEditorMenu extends JMenuBar
     private static final long serialVersionUID = 3037194320383355872L;
 
     /**
-     * Ponteiro para o Editor Parallax
-     */
-    private ParallaxEditor editor;
-
-    /**
      * Elemento de Abertura de Projetos
      */
     private JMenuItem fileOpen;
@@ -63,11 +58,9 @@ public class ParallaxEditorMenu extends JMenuBar
 
     /**
      * Construtor da Classe
-     * @param editor Editor Parallax em Utilização
      */
-    public ParallaxEditorMenu(ParallaxEditor editor)
+    public ParallaxEditorMenu()
     {
-        this.editor = editor;
 
         fileOpen   = new JMenuItem("Open");
         fileImport = new JMenuItem("Import");
@@ -101,14 +94,5 @@ public class ParallaxEditorMenu extends JMenuBar
         JMenu help = new JMenu("Help");
         help.add(helpAbout);
         this.add(help);
-    }
-
-    /**
-     * Encapsulamento do Editor Parallax Utilizado
-     * @return Ponteiro para o Editor
-     */
-    public ParallaxEditor getEditor()
-    {
-        return editor;
     }
 }

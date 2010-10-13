@@ -55,10 +55,10 @@ public class ParallaxEditor extends JFrame
     {
         super("Parallax Editor");
 
-        viewPort    = new ViewPort(this);
+        viewPort    = new ViewPort();
         status      = new ParallaxEditorStatus();
-        menu        = new ParallaxEditorMenu(this);
-        toolbar     = new ParallaxEditorToolbar(this);
+        menu        = new ParallaxEditorMenu();
+        toolbar     = new ParallaxEditorToolbar();
         thumbnailer = new ParallaxEditorThumbnailer(this);
 
         this.setJMenuBar(menu);

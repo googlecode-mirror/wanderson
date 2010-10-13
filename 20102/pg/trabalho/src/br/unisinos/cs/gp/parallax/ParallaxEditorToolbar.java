@@ -19,11 +19,6 @@ public class ParallaxEditorToolbar extends JToolBar
     private static final long serialVersionUID = 8885156170212969419L;
 
     /**
-     * Ponteiro para o Editor Parallax
-     */
-    private ParallaxEditor editor;
-
-    /**
      * Abertura de Projeto
      */
     private JButton buttonOpen;
@@ -45,14 +40,13 @@ public class ParallaxEditorToolbar extends JToolBar
 
     /**
      * Construtor da Classe
-     * @param editor Editor Parallax Relacionado
      */
-    public ParallaxEditorToolbar(ParallaxEditor editor)
+    public ParallaxEditorToolbar()
     {
-        URL image;
-        this.editor = editor;
         this.setFloatable(false);
         this.setBorder(BorderFactory.createRaisedBevelBorder());
+
+        URL image;
 
         image = this.getClass().getResource("resource/48px_open.png");
         buttonOpen = new JButton(new ImageIcon(image));
@@ -71,14 +65,5 @@ public class ParallaxEditorToolbar extends JToolBar
         image = this.getClass().getResource("resource/48px_remove.png");
         buttonRemove = new JButton(new ImageIcon(image));
         this.add(buttonRemove);
-    }
-
-    /**
-     * Encapsulamento do Editor Parallax Utilizado
-     * @return Ponteiro para o Editor
-     */
-    public ParallaxEditor getEditor()
-    {
-        return editor;
     }
 }
