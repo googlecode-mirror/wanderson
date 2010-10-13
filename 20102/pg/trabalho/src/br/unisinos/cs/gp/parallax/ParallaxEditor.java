@@ -59,7 +59,7 @@ public class ParallaxEditor extends JFrame
         status      = new ParallaxEditorStatus();
         menu        = new ParallaxEditorMenu();
         toolbar     = new ParallaxEditorToolbar();
-        thumbnailer = new ParallaxEditorThumbnailer(this);
+        thumbnailer = new ParallaxEditorThumbnailer();
 
         this.setJMenuBar(menu);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
