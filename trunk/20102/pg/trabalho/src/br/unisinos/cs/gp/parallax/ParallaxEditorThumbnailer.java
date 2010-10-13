@@ -24,4 +24,17 @@ public class ParallaxEditorThumbnailer extends JPanel
         this.setPreferredSize(new Dimension(150,0));
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     }
+
+    /**
+     * Adiciona uma Miniatura ao Visualizador
+     * @param Camada da Visualização
+     * @return Próprio Objeto
+     */
+    public ParallaxEditorThumbnailer addLayer(Layer layer)
+    {
+        ParallaxEditorThumb thumb = new ParallaxEditorThumb(this);
+        thumb.setImage(layer);
+        this.add(thumb);
+        return this;
+    }
 }

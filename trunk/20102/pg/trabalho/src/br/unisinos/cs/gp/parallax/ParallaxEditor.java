@@ -1,10 +1,13 @@
 package br.unisinos.cs.gp.parallax;
 
 import java.io.File;
+
 import javax.swing.JFrame;
 import java.awt.BorderLayout;
-import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
 import java.awt.image.BufferedImage;
+import br.unisinos.cs.gp.image.ImageLoader;
+import br.unisinos.cs.gp.image.handler.ImageHandlerException;
 
 /**
  * Tela Principal do Editor
@@ -105,21 +108,53 @@ public class ParallaxEditor extends JFrame
     }
 
     /**
+     * Abrir Arquivo no Editor
+     * @return Próprio Objeto
+     */
+    public ParallaxEditor openImage()
+    {
+        ParallaxEditorImageChooser chooser = new ParallaxEditorImageChooser();
+        int option = chooser.showOpenDialog(this);
+        if (option == JFileChooser.APPROVE_OPTION) {
+            File archive = chooser.getSelectedFile();
+            try {
+                /*
+                 * Carrega Imagem de Arquivo -----------------------------------
+                 */
+                BufferedImage image = ImageLoader.factory(
+                    archive.getAbsolutePath(), chooser.getType());
+
+                /*
+                 * Adiciona Visualização na ViewPort ---------------------------
+                 */
+                Layer layer = new Layer(image.getWidth(), image.getHeight());
+                layer.setData(image.getData());
+                this.getViewPort().getLayerSet().add(layer);
+                this.getViewPort().repaint();
+
+                /*
+                 * Criar Miniaturas --------------------------------------------
+                 */
+                this.getThumbnailer().addLayer(layer);
+                this.getThumbnailer().repaint();
+
+                this.status.setMessage("Complete");
+
+            } catch (ImageHandlerException e) {
+                this.status.setMessage(e.getMessage());
+            }
+        }
+        return this;
+    }
+
+    /**
      * Método Principal de Execução para Testes
      * @param args Argumentos de Entrada
      * @throws Exception Erros Encontrados
      */
     public static void main(String args[]) throws Exception
     {
-        ParallaxEditor editor = new ParallaxEditor();
-        BufferedImage image = ImageIO.read(new File("data/zelda.png"));
-        Layer layer = new Layer(image.getWidth(), image.getHeight());
-        layer.setData(image.getData());
-        editor.getViewPort().getLayerSet().add(layer);
-        ParallaxEditorThumb thumb = new ParallaxEditorThumb(editor.getThumbnailer());
-        thumb.setImage(layer);
-        editor.getThumbnailer().add(thumb);
-
+        ParallaxEditor editor = ParallaxEditor.getInstance();
         editor.setVisible(true);
     }
 }
