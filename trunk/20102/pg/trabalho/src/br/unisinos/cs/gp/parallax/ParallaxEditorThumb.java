@@ -82,8 +82,9 @@ public class ParallaxEditorThumb extends JPanel
         {
             public void mouseClicked(MouseEvent event)
             {
-                int index = thumbnailer.getEditor().getViewPort().getLayerSet().indexOf(image);
-                thumbnailer.getEditor().getViewPort().setCurrentIndex(index);
+                ParallaxEditor editor = ParallaxEditor.getInstance();
+                int index = editor.getViewPort().getLayerSet().indexOf(image);
+                editor.getViewPort().setCurrentIndex(index);
             }
         }
     }
