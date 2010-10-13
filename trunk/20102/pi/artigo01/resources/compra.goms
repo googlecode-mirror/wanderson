@@ -23,26 +23,3 @@ FU1; 2.2c: Se (dados da compra estao corretos)
        }
 FU1; 2.2b: Se (dados da compra estao incorretos)
        entao (voltar)
-
-FU1; 3. Cadastro de Cliente
-FU1; 3.1a: Se (usuario ja e cadastrado e nao esta logado)
-           entao (autenticar usuario) {
-        1: digitar nome e senha de usuario
-        2: selecionar opcao de autenticacao
-       }
-FU1; 3.1b: Se (usuario ja e cadastrado e esta logado)
-       entao (modificar cadastro do cliente) {
-        1: digitar dados
-        2: Se (algum dado incorreto ou nao preenchido)
-           entao ({
-            1: digitar dados
-        })
-       }
-FU1; 3.1c: Se (usuario nao e cadastrado)
-       entao (cadastrar cliente) {
-        1: digitar dados
-        2: Se (algum dado incorreto ou nao preenchido)
-           entao ({
-            1: digitar dados
-        })
-       }
