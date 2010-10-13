@@ -4,16 +4,31 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 
+/**
+ * Caixa de Escolha de Arquivos de Imagem
+ * 
+ * @author Wanderson Henrique Camargo Rosa
+ */
 public class ParallaxEditorImageChooser extends JFileChooser
 {
+    /**
+     * Número de Serialização
+     */
     private static final long serialVersionUID = 8860528925772969473L;
 
+    /**
+     * Construtor da Classe
+     */
     public ParallaxEditorImageChooser()
     {
         this.addChoosableFileFilter(new ParallaxEditorFilterPng());
         this.addChoosableFileFilter(new ParallaxEditorFilterPcx());
     }
 
+    /**
+     * Informativo da Classe de Manipulação de Imagem
+     * @return Caminho completo da Classe Manipuladora
+     */
     public String getType()
     {
         String description = this.getFileFilter().getDescription();
@@ -26,6 +41,10 @@ public class ParallaxEditorImageChooser extends JFileChooser
         return null;
     }
 
+    /**
+     * Classe Aninhada para Filtro de Arquivos PNG
+     * @author Wanderson Henrique Camargo Rosa
+     */
     class ParallaxEditorFilterPng extends FileFilter
     {
         public boolean accept(File archive)
@@ -40,6 +59,11 @@ public class ParallaxEditorImageChooser extends JFileChooser
         }
     }
 
+    /**
+     * Classe Aninhada para Filtro de Arquivos PCX
+     * 
+     * @author Wanderson Henrique Camargo Rosa
+     */
     class ParallaxEditorFilterPcx extends FileFilter
     {
         public boolean accept(File archive) {
