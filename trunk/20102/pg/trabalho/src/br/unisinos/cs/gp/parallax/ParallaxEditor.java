@@ -19,7 +19,12 @@ public class ParallaxEditor extends JFrame
     private static final long serialVersionUID = -3188022712272854278L;
 
     /**
-     * Visualiazação
+     * Instância Privada para Padrão de Projeto Singleton
+     */
+    private static ParallaxEditor instance;
+
+    /**
+     * Visualização
      */
     private ViewPort viewPort;
 
@@ -38,12 +43,15 @@ public class ParallaxEditor extends JFrame
      */
     private ParallaxEditorToolbar toolbar;
 
+    /**
+     * Painel de Miniaturas
+     */
     private ParallaxEditorThumbnailer thumbnailer;
 
     /**
      * Construtor da Classe
      */
-    public ParallaxEditor()
+    private ParallaxEditor()
     {
         super("Parallax Editor");
 
@@ -65,6 +73,20 @@ public class ParallaxEditor extends JFrame
     }
 
     /**
+     * Padrão de Projeto Singleton
+     * Garante uma única instância do objeto na memória
+     * Centraliza configurações do editor conforme necessidade em outras classes
+     * @return A única instância do editor na memória
+     */
+    public static ParallaxEditor getInstance()
+    {
+        if (ParallaxEditor.instance == null) {
+            ParallaxEditor.instance = new ParallaxEditor();
+        }
+        return ParallaxEditor.instance;
+    }
+
+    /**
      * Encapsulamento de Acesso da Visualização
      * @return Visualização Solicitada
      */
@@ -73,6 +95,10 @@ public class ParallaxEditor extends JFrame
         return viewPort;
     }
 
+    /**
+     * Encapsulamento de Acesso às Miniaturas
+     * @return Painel de Miniaturas
+     */
     public ParallaxEditorThumbnailer getThumbnailer()
     {
         return thumbnailer;
