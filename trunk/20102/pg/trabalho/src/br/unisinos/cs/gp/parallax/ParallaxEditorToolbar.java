@@ -5,6 +5,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 import javax.swing.BorderFactory;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * Barra de Ferramentas do Editor Parallax
@@ -50,6 +52,7 @@ public class ParallaxEditorToolbar extends JToolBar
 
         image = this.getClass().getResource("resource/48px_open.png");
         buttonOpen = new JButton(new ImageIcon(image));
+        buttonOpen.addMouseListener(new OpenAction());
         this.add(buttonOpen);
 
         image = this.getClass().getResource("resource/48px_save.png");
@@ -65,5 +68,19 @@ public class ParallaxEditorToolbar extends JToolBar
         image = this.getClass().getResource("resource/48px_remove.png");
         buttonRemove = new JButton(new ImageIcon(image));
         this.add(buttonRemove);
+    }
+
+    /**
+     * Ação de Abertura de Arquivos
+     * 
+     * @author Wanderson Henrique Camargo Rosa
+     */
+    public class OpenAction extends MouseAdapter
+    {
+        public void mouseClicked(MouseEvent e)
+        {
+            ParallaxEditor editor = ParallaxEditor.getInstance();
+            editor.openImage();
+        }
     }
 }
