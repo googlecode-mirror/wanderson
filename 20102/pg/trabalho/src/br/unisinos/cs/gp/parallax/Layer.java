@@ -16,12 +16,12 @@ public class Layer extends BufferedImage
     /**
      * Abscissa do Plano
      */
-    private int x;
+    private double x;
 
     /**
      * Ordenada do Plano
      */
-    private int y;
+    private double y;
 
     /**
      * Velocidade de Deslocamento
@@ -77,7 +77,7 @@ public class Layer extends BufferedImage
      */
     public int getX()
     {
-        return x;
+        return (int) x;
     }
 
     /**
@@ -86,7 +86,7 @@ public class Layer extends BufferedImage
      */
     public int getY()
     {
-        return y;
+        return (int) y;
     }
 
     /**

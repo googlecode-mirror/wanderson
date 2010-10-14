@@ -140,10 +140,25 @@ public class ParallaxEditor extends JFrame
 
                 this.status.setMessage("Complete");
 
+                if (this.getViewPort().getLayerSet().size() > 0) {
+                    layer = this.getViewPort().getLayerSet()
+                        .get(this.getViewPort().getCurrentIndex());
+                    this.getThumbnailer().updateSpeed(layer.getSpeed());
+                }
+
             } catch (ImageHandlerException e) {
                 this.status.setMessage(e.getMessage());
             }
         }
+        return this;
+    }
+
+    public ParallaxEditor play()
+    {
+        ParallaxPlayer player = new ParallaxPlayer(this.getViewPort());
+        player.setVisible(true);
+        player.setDefaultCloseOperation(ParallaxPlayer.HIDE_ON_CLOSE);
+        System.out.println("teste2");
         return this;
     }
 

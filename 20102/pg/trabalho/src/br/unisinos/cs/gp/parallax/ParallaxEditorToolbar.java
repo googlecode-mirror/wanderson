@@ -40,6 +40,8 @@ public class ParallaxEditorToolbar extends JToolBar
      */
     private JButton buttonRemove;
 
+    private JButton buttonPlay;
+
     /**
      * Construtor da Classe
      */
@@ -68,6 +70,13 @@ public class ParallaxEditorToolbar extends JToolBar
         image = this.getClass().getResource("resource/48px_remove.png");
         buttonRemove = new JButton(new ImageIcon(image));
         this.add(buttonRemove);
+
+        this.addSeparator();
+
+        image = this.getClass().getResource("resource/48px_play.png");
+        buttonPlay = new JButton(new ImageIcon(image));
+        buttonPlay.addMouseListener(new PlayAction());
+        this.add(buttonPlay);
     }
 
     /**
@@ -81,6 +90,14 @@ public class ParallaxEditorToolbar extends JToolBar
         {
             ParallaxEditor editor = ParallaxEditor.getInstance();
             editor.openImage();
+        }
+    }
+
+    public class PlayAction extends MouseAdapter
+    {
+        public void mouseClicked(MouseEvent e)
+        {
+            ParallaxEditor.getInstance().play();
         }
     }
 }

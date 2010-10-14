@@ -22,7 +22,7 @@ public class ParallaxEditorThumb extends JPanel
 
     private ImagePanel imagePanel;
 
-    private BufferedImage image;
+    private Layer image;
 
     private JButton buttonUp;
     private JButton buttonDown;
@@ -55,7 +55,7 @@ public class ParallaxEditorThumb extends JPanel
         this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
     }
 
-    public ParallaxEditorThumb setImage(BufferedImage image)
+    public ParallaxEditorThumb setImage(Layer image)
     {
         this.image = image;
         imagePanel.repaint();
@@ -85,6 +85,7 @@ public class ParallaxEditorThumb extends JPanel
                 ParallaxEditor editor = ParallaxEditor.getInstance();
                 int index = editor.getViewPort().getLayerSet().indexOf(image);
                 editor.getViewPort().setCurrentIndex(index);
+                thumbnailer.updateSpeed(image.getSpeed());
             }
         }
     }
