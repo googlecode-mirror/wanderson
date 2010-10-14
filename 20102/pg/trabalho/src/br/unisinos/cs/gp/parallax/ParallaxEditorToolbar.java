@@ -54,7 +54,6 @@ public class ParallaxEditorToolbar extends JToolBar
 
         image = this.getClass().getResource("resource/48px_open.png");
         buttonOpen = new JButton(new ImageIcon(image));
-        buttonOpen.addMouseListener(new OpenAction());
         this.add(buttonOpen);
 
         image = this.getClass().getResource("resource/48px_save.png");
@@ -65,6 +64,7 @@ public class ParallaxEditorToolbar extends JToolBar
 
         image = this.getClass().getResource("resource/48px_add.png");
         buttonAdd = new JButton(new ImageIcon(image));
+        buttonAdd.addMouseListener(new AddAction());
         this.add(buttonAdd);
 
         image = this.getClass().getResource("resource/48px_remove.png");
@@ -84,7 +84,7 @@ public class ParallaxEditorToolbar extends JToolBar
      * 
      * @author Wanderson Henrique Camargo Rosa
      */
-    public class OpenAction extends MouseAdapter
+    public class AddAction extends MouseAdapter
     {
         public void mouseClicked(MouseEvent e)
         {
