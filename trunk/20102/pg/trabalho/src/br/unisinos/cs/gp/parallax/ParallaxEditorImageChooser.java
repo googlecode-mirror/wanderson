@@ -23,6 +23,7 @@ public class ParallaxEditorImageChooser extends JFileChooser
     {
         this.addChoosableFileFilter(new ParallaxEditorFilterPng());
         this.addChoosableFileFilter(new ParallaxEditorFilterPcx());
+        this.addChoosableFileFilter(new ParallaxEditorFilterSgi());
     }
 
     /**
@@ -37,6 +38,9 @@ public class ParallaxEditorImageChooser extends JFileChooser
         }
         if (description.equals("PCX Image")) {
             return "br.unisinos.cs.gp.image.handler.PcxHandler";
+        }
+        if (description.equals("SGI Image")) {
+            return "br.unisinos.cs.gp.image.handler.SgiHandler";
         }
         return null;
     }
@@ -73,6 +77,19 @@ public class ParallaxEditorImageChooser extends JFileChooser
 
         public String getDescription() {
             return "PCX Image";
+        }
+    }
+
+    class ParallaxEditorFilterSgi extends FileFilter
+    {
+        public boolean accept(File archive) {
+            return archive.isDirectory()
+                || archive.getName().toLowerCase().endsWith("sgi");
+        }
+
+        public String getDescription()
+        {
+            return "SGI Image";
         }
     }
 }
