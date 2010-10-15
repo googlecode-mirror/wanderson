@@ -1,6 +1,11 @@
 package br.unisinos.cs.gp.parallax;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import javax.swing.JFrame;
 import java.awt.BorderLayout;
@@ -165,6 +170,49 @@ public class ParallaxEditor extends JFrame
         }
         player.setVisible(true);
         player.setDefaultCloseOperation(ParallaxPlayer.DISPOSE_ON_CLOSE);
+        return this;
+    }
+
+    public ParallaxEditor save()
+    {
+        FileOutputStream fos = null;
+        ObjectOutputStream oos = null;
+        try {
+            fos = new FileOutputStream(new File("teste.plx"));
+            oos = new ObjectOutputStream(fos);
+            oos.writeObject(this.getViewPort());
+            oos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            this.status.setMessage("Save Exception");
+        }
+        this.status.setMessage("Saved");
+        return this;
+    }
+
+    public ParallaxEditor open()
+    {
+        FileInputStream fis = null;
+        ObjectInputStream ois = null;
+        try {
+            fis = new FileInputStream(new File("teste.plx"));
+            ois = new ObjectInputStream(fis);
+            Object o = ois.readObject();
+//            this.viewPort = (ViewPort) ois.readObject();
+            ois.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            this.status.setMessage("Open Exception");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        this.status.setMessage("Opened");
+        return this;
+    }
+
+    public ParallaxEditor quit()
+    {
+        System.exit(0);
         return this;
     }
 

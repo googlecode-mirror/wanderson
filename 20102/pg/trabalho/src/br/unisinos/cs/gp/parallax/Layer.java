@@ -1,6 +1,7 @@
 package br.unisinos.cs.gp.parallax;
 
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 
 /**
  * Camada de Visualização
@@ -11,8 +12,13 @@ import java.awt.image.BufferedImage;
  * 
  * @author Wanderson Henrique Camargo Rosa
  */
-public class Layer extends BufferedImage
+public class Layer extends BufferedImage implements Serializable
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -3163162818022096805L;
+
     /**
      * Abscissa do Plano
      */
