@@ -128,7 +128,11 @@ public class ParallaxEditor extends JFrame
                  * Adiciona Visualização na ViewPort ---------------------------
                  */
                 Layer layer = new Layer(image.getWidth(), image.getHeight());
-                layer.setData(image.getData());
+                for (int j = 0; j < image.getHeight(); j++) {
+                    for (int i = 0; i < image.getWidth(); i++) {
+                        layer.setRGB(i, j, image.getRGB(i, j));
+                    }
+                }
                 this.getViewPort().getLayerSet().add(layer);
                 this.getViewPort().repaint();
 
@@ -155,10 +159,12 @@ public class ParallaxEditor extends JFrame
 
     public ParallaxEditor play()
     {
-        ParallaxPlayer player = new ParallaxPlayer(this.getViewPort());
+        ParallaxPlayer player = new ParallaxPlayer();
+        for (Layer layer : this.getViewPort().getLayerSet()) {
+            player.addLayer(layer.clone());
+        }
         player.setVisible(true);
-        player.setDefaultCloseOperation(ParallaxPlayer.HIDE_ON_CLOSE);
-        System.out.println("teste2");
+        player.setDefaultCloseOperation(ParallaxPlayer.DISPOSE_ON_CLOSE);
         return this;
     }
 

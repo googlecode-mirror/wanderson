@@ -43,7 +43,7 @@ public class Layer extends BufferedImage
      * @param x Novo valor aplicável
      * @return Próprio Objeto
      */
-    public Layer setX(int x)
+    public Layer setX(double x)
     {
         this.x = x;
         return this;
@@ -54,7 +54,7 @@ public class Layer extends BufferedImage
      * @param y Novo valor aplicável
      * @return Próprio Objeto
      */
-    public Layer setY(int y)
+    public Layer setY(double y)
     {
         this.y = y;
         return this;
@@ -96,5 +96,15 @@ public class Layer extends BufferedImage
     public double getSpeed()
     {
         return speed;
+    }
+
+    public Layer clone()
+    {
+        Layer layer = new Layer(this.getWidth(), this.getHeight());
+        layer.setData(this.getData());
+        layer.setX(this.x);
+        layer.setY(this.y);
+        layer.setSpeed(this.speed);
+        return layer;
     }
 }
