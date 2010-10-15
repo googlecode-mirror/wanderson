@@ -1,8 +1,11 @@
 package br.unisinos.cs.gp.parallax;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.event.MenuEvent;
 
 /**
  * Menu Principal da Janela do Editor Parallax
@@ -61,22 +64,21 @@ public class ParallaxEditorMenu extends JMenuBar
      */
     public ParallaxEditorMenu()
     {
-
-        fileOpen   = new JMenuItem("Open");
-        fileImport = new JMenuItem("Import");
-        fileClose  = new JMenuItem("Close");
+        fileOpen   = new JMenuItem("Open");  fileOpen.setEnabled(false);
+        fileClose  = new JMenuItem("Close"); fileClose.setEnabled(false);
         fileQuit   = new JMenuItem("Quit");
+        fileQuit.addMouseListener(new QuitAction());
 
         JMenu file = new JMenu("File");
         file.add(fileOpen);
-        file.add(fileImport);
         file.add(fileClose);
         file.addSeparator();
         file.add(fileQuit);
         this.add(file);
 
         layerAdd = new JMenuItem("Add");
-        layerRemove = new JMenuItem("Remove");
+        layerAdd.addMouseListener(new AddAction());
+        layerRemove = new JMenuItem("Remove");  layerRemove.setEnabled(false);
 
         JMenu layer = new JMenu("Layer");
         layer.add(layerAdd);
@@ -88,11 +90,22 @@ public class ParallaxEditorMenu extends JMenuBar
         JMenu filter = new JMenu("Filter");
         filter.add(filterOpen);
         this.add(filter);
+        filter.setEnabled(false);
+    }
 
-        helpAbout = new JMenuItem("About");
+    class AddAction extends MouseAdapter
+    {
+        public void mouseClicked(MouseEvent e)
+        {
+            ParallaxEditor.getInstance().openImage();
+        }
+    }
 
-        JMenu help = new JMenu("Help");
-        help.add(helpAbout);
-        this.add(help);
+    class QuitAction extends MouseAdapter
+    {
+        public void mouseClicked(MouseEvent e)
+        {
+            ParallaxEditor.getInstance().quit();
+        }
     }
 }

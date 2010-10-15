@@ -3,14 +3,14 @@ package br.unisinos.cs.gp.parallax;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -20,7 +20,7 @@ import javax.swing.JTextField;
  * 
  * @author Wanderson Henrique Camargo Rosa
  */
-public class ParallaxEditorThumbnailer extends JPanel implements ActionListener
+public class ParallaxEditorThumbnailer extends JPanel implements ActionListener, MouseListener
 {
     /**
      * Número de Serialização
@@ -46,13 +46,16 @@ public class ParallaxEditorThumbnailer extends JPanel implements ActionListener
         JPanel properties = new JPanel();
         properties.setBackground(Color.WHITE);
         properties.setPreferredSize(new Dimension(150,150));
-        properties.setLayout(new GridLayout(2,1));
+        properties.setLayout(new GridLayout(3,1));
         this.add(properties, BorderLayout.PAGE_END);
         speed = new JTextField();
         JLabel label = new JLabel("Speed");
+        JButton apply = new JButton("Apply Speed");
+        apply.addMouseListener(this);
         label.setLabelFor(speed);
         properties.add(label);
         properties.add(speed);
+        properties.add(apply);
         speed.setEnabled(false);
         speed.addActionListener(this);
     }
@@ -83,5 +86,35 @@ public class ParallaxEditorThumbnailer extends JPanel implements ActionListener
         int index = ParallaxEditor.getInstance().getViewPort().getCurrentIndex();
         double speed = Double.parseDouble(this.speed.getText());
         ParallaxEditor.getInstance().getViewPort().getLayerSet().get(index).setSpeed(speed);
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent arg0) {
+        this.actionPerformed(null);
+        
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent arg0) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void mouseExited(MouseEvent arg0) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void mousePressed(MouseEvent arg0) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent arg0) {
+        // TODO Auto-generated method stub
+        
     }
 }

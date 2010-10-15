@@ -6,13 +6,14 @@ import javax.swing.JPanel;
 import java.util.ArrayList;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.io.Serializable;
 
 /**
  * Visualização das Camadas
  * 
  * @author Wanderson Henrique Camargo Rosa
  */
-public class ViewPort extends JPanel implements MouseMotionListener
+public class ViewPort extends JPanel implements MouseMotionListener, Serializable
 {
     /**
      * Número de Serialização
