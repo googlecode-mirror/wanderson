@@ -30,7 +30,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
          * Objeto de Tratamento de Rotas do Sistema
          */
         $this->bootstrap('FrontController');
+        /* @var $front Zend_Controller_Front */
         $front = $this->getResource('FrontController');
+        /* @var $router Zend_Controller_Router_Abstract */
         $router = $front->getRouter();
 
         /*
@@ -40,5 +42,35 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             array('controller' => 'index', 'action' => 'sobre')
         );
         $router->addRoute('sobre', $route);
+    }
+
+    /**
+     * Auxiliares da Camada de Visualização
+     * 
+     * Configura os métodos auxiliares da camada de visualização para
+     * renderização automática de elementos como título ou metadados
+     * 
+     * @return void
+     */
+    public function _initViewHelpers()
+    {
+        /* @var $layout Zend_Layout */
+        $layout = $this->bootstrap('Layout')->getResource('Layout');
+        $view = $layout->getView();
+
+        /* @var $doctype Zend_View_Helper_Doctype */
+        $doctype = $view->doctype();
+        $doctype->doctype(Zend_View_Helper_Doctype::XHTML1_STRICT);
+
+        /* @var $headTitle Zend_View_Helper_HeadTitle */
+        $headTitle = $view->headTitle();
+        $headTitle->setIndent(4)->setSeparator(' > ')
+            ->headTitle('Wanderson Camargo');
+
+        /* @var $headMeta Zend_View_Helper_HeadMeta */
+        $headMeta = $view->headMeta();
+        $headMeta->setIndent(4)
+            ->appendHttpEquiv('Content-type', 'text/html;charset=UTF-8')
+            ->appendHttpEquiv('Content-Language', 'pt-BR');
     }
 }
