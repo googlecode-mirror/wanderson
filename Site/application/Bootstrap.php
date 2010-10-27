@@ -72,5 +72,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $headMeta->setIndent(4)
             ->appendHttpEquiv('Content-type', 'text/html;charset=UTF-8')
             ->appendHttpEquiv('Content-Language', 'pt-BR');
+
+        /* @var $dojo Zend_Dojo_View_Helper_Dojo */
+        Zend_Dojo::enableView($view);
+        $dojo = $view->dojo();
+        $dojo->enable()->setCdnVersion('1.5')
+            ->addStyleSheetModule('dijit.themes.claro');
     }
 }
