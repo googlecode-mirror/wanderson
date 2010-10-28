@@ -9,7 +9,17 @@ void gpDisplay(void);
 void gpReshape(int,int);
 void gpKeyboard(unsigned char,int,int);
 
-double position_z = 2;
+double eye_x = 0;
+double eye_y = 0;
+double eye_z = 2;
+
+double ref_x = 0;
+double ref_y = 0;
+double ref_z = 0;
+
+double ups_x = 0;
+double ups_y = 1;
+double ups_z = 0;
 
 int main(int argc, char *argv[])
 {
@@ -45,7 +55,7 @@ void gpDisplay(void)
     glClear(GL_COLOR_BUFFER_BIT);
     glColor3f(1.0, 1.0, 1.0);
     glLoadIdentity();
-    gluLookAt(0.0, 0.0, position_z, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+    gluLookAt(eye_x, eye_y, eye_z, ref_x, ref_y, ref_z, ups_x, ups_y, ups_z);
     glutWireCube(1);
     glFlush();
 }
@@ -61,12 +71,12 @@ void gpReshape(int width, int height)
 
 void gpKeyboard(unsigned char key, int x, int y)
 {
-    switch(key) {
+    switch (key) {
         case 'w':
-            position_z = position_z - 0.1;
+            eye_z = eye_z + 0.1;
             break;
         case 's':
-            position_z = position_z + 0.1;
+            eye_z = eye_z - 0.1;
             break;
     }
     gpDisplay();
