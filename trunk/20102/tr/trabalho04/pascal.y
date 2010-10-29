@@ -16,6 +16,8 @@ declare:
 
 %%
 
+extern FILE *yyin;
+
 int main(int argc, char *argv[])
 {
     do {
