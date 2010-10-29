@@ -9,3 +9,7 @@ ID [a-zA-Z0-9][a-zA-Z0-9_]*
 %%
 
 {ID} { return IDENTIFIER; }
+
+\n
+\t
+. 
