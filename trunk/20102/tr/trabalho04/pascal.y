@@ -2,6 +2,7 @@
 #include "hashmap.h"
 %}
 
+%error-verbose
 %union
 {
     struct hashmap *hashp;
