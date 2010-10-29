@@ -13,7 +13,7 @@
 %%
 
 declare:
-    IDENTIFIER ':' IDENTIFIER { $1->declare = 1 }
+    IDENTIFIER ':' IDENTIFIER { $1->declare = 1; };
 
 %%
 
