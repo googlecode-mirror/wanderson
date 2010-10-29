@@ -8,12 +8,13 @@
     struct hashmap *hashp;
 }
 
-%token <hashp> IDENTIFIER
+%token <hashp> T_IDENTIFIER
+%token T_TYPEOF
 
 %%
 
 declare:
-    IDENTIFIER ':' IDENTIFIER { $1->declare = 1; };
+    T_IDENTIFIER T_TYPEOF T_IDENTIFIER { $1->declare = 1; };
 
 %%
 
