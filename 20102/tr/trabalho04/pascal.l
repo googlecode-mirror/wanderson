@@ -1,5 +1,6 @@
+%option noyywrap
+
 %{
-#include "hashmap.h"
 #include "pascal.tab.h"
 %}
 
