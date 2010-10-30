@@ -1,29 +1,44 @@
 %{
-#include "hashmap.h"
+#include "mapper.h"
 %}
 
 %error-verbose
 %union
 {
-    struct hashmap *hashp;
+    const char *identifier;
 }
 
-%token <hashp> T_IDENTIFIER
+%token <identifier> T_IDENTIFIER
+%token T_NUMBER
 %token T_TYPEOF
+%token T_END
+%token T_WRITE
+%token T_READ
+%token T_OB
+%token T_CB
 
 %%
 
 declare:
-    T_IDENTIFIER T_TYPEOF T_IDENTIFIER { $1->declare = 1; };
+    T_IDENTIFIER { get($1)->declare = yylineno } T_TYPEOF T_IDENTIFIER declare
+  | T_IDENTIFIER { get($1)->write = yylineno } T_WRITE input
+  | T_READ T_OB T_IDENTIFIER { get($3)->read = yylineno } T_CB declare
+  | T_IDENTIFIER declare
+  | T_END
+  ;
+
+input:
+    T_IDENTIFIER { get($1)->read = yylineno } declare
+  | T_NUMBER declare
+  ;
 
 %%
-
-extern FILE *yyin;
 
 int main(int argc, char *argv[])
 {
     do {
         yyparse();
     } while (!feof(yyin));
+    output();
     return 0;
 }

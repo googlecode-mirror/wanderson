@@ -4,6 +4,9 @@
 
 #define MAX_SYMBOLS 20
 
+extern int yylineno;
+extern FILE *yyin;
+
 struct symbol
 {
     char *name;
@@ -12,17 +15,17 @@ struct symbol
     int write;
 };
 
-symbol mapper[MAX_SYMBOLS];
+struct symbol mapper[MAX_SYMBOLS];
 
 void yyerror(const char *message)
 {
-    fprintf(stderr,"%s\n",message);
+    fprintf(stderr,"line %d: %s\n",yylineno, message);
 }
 
-symbol *get(const char *name)
+struct symbol *get(const char *name)
 {
-    symbol *pointer;
-    for (pointer = mapper; pointer <= &mapper[MAX_SYMBOLS]; pointer++) {
+    struct symbol *pointer;
+    for (pointer = mapper; pointer < &mapper[MAX_SYMBOLS]; pointer++) {
         if (pointer->name && !strcmp(name, pointer->name)) {
             return pointer;
         }
@@ -33,4 +36,15 @@ symbol *get(const char *name)
     }
     yyerror("Mapper Overflow");
     exit(EXIT_FAILURE);
+}
+
+void output()
+{
+    printf("v\td\tw\tr\n");
+    struct symbol *pointer;
+    for (pointer = mapper; pointer < &mapper[MAX_SYMBOLS]; pointer++) {
+        if (pointer->name) {
+            printf("%s\t%d\t%d\t%d\n", pointer->name, pointer->declare, pointer->write, pointer->read);
+        }
+    }
 }
