@@ -75,7 +75,9 @@ public class Editor extends JFrame implements Runnable
         this.setSize(845, 532);
 
         this.canvas = new Canvas();
-        this.canvas.addMouseListener(new MousePointer());
+        MousePointer mp = new MousePointer();
+        this.canvas.addMouseListener(mp);
+        this.canvas.addMouseMotionListener(mp);
         this.add(this.canvas);
 
         this.pointers = new JTextArea();
@@ -133,7 +135,9 @@ public class Editor extends JFrame implements Runnable
         status.setPreferredSize(new Dimension(0, 25));
         status.add(this.message);
 
-        this.coordinates = new JLabel("Coordinate");
+        this.coordinates = new JLabel();
+        this.setCoordinate(new Point(0,0));
+        status.add(this.coordinates);
 
         this.add(left, BorderLayout.WEST);
         this.add(status, BorderLayout.SOUTH);
@@ -186,7 +190,7 @@ public class Editor extends JFrame implements Runnable
      */
     public Editor setCoordinate(Point p)
     {
-        this.coordinates.setText(p.toString());
+        this.coordinates.setText(" - Coordinate: " + p.toString());
         return this;
     }
 
