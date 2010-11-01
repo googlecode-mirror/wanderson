@@ -28,8 +28,8 @@ public class Canvas extends JPanel
      */
     public Canvas()
     {
-        this.setForeground(Color.WHITE);
         this.setSize(640, 480);
+        this.setForeground(Color.WHITE);
         Dimension size = this.getSize();
         int width  = (int) size.getWidth();
         int height = (int) size.getHeight();
@@ -75,7 +75,12 @@ public class Canvas extends JPanel
     public Canvas put(int x, int y)
     {
         Color color = this.getForeground();
-        this.getImage().setRGB(x, y, color.getRGB());
+        BufferedImage image = this.getImage();
+        int width = image.getWidth();
+        int height = image.getHeight();
+        if (x >= 0 && x < width && y >= 0 && y < height) {
+            image.setRGB(x, y, color.getRGB());
+        }
         return this;
     }
 
@@ -301,9 +306,11 @@ public class Canvas extends JPanel
     {
         Stack<Point> stack = new Stack<Point>();
         int color = this.getForeground().getRGB();
+        int current = image.getRGB(x, y);
         BufferedImage image = this.getImage();
         int width = image.getWidth();
         int height = image.getHeight();
+        boolean inner;
 
         Point p;
         p = new Point(x, y);
@@ -311,7 +318,8 @@ public class Canvas extends JPanel
         while (!stack.isEmpty()) {
             this.update();
             p = stack.pop();
-            if (image.getRGB(p.x, p.y) != color) {
+            inner = p.x >= 0 && p.y >= 0 && p.x < width && p.y < height;
+            if (inner && image.getRGB(p.x, p.y) == current) {
                 image.setRGB(p.x, p.y, color);
                 if (p.x > 0) {
                     stack.push(new Point(p.x - 1, p.y));
