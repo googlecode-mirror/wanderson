@@ -1,0 +1,12 @@
+program teste;
+var
+a,b:integer;
+b:integer;
+z:real;
+begin
+    b := 12;
+    a := b;
+    z := 3.1415;
+    writeln(a);
+    writeln(z);
+end.
