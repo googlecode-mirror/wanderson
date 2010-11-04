@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
+#include <GL/glut.h>
 #include "GPGame.h"
 
 using namespace std;
