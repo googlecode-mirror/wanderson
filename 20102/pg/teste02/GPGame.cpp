@@ -1,4 +1,5 @@
 #include <GL/glut.h>
+#include "GPCamera.h"
 #include "GPGame.h"
 
 GPGame* GPGame::instance = NULL;
@@ -17,11 +18,15 @@ GPGame::GPGame()
     glutCreateWindow(NAME);
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
+
+    camera = new GPCamera();
 }
 
 void GPGame::display(void)
 {
+    GPGame* game = GPGame::getInstance();
     glClear(GL_COLOR_BUFFER_BIT);
+    game->getCamera()->place();
     glFlush();
 }
 
@@ -45,4 +50,9 @@ GPGame* GPGame::getInstance()
 void GPGame::run(void)
 {
     glutMainLoop();
+}
+
+GPCamera* GPGame::getCamera(void)
+{
+    return camera;
 }
