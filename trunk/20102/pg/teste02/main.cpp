@@ -1,15 +1,11 @@
-#include <iostream>
 #include <cstdlib>
-#include <string>
-#include <GL/glut.h>
 #include "GPGame.h"
 
 using namespace std;
 
 int main(int argc, char **argv)
 {
-    glutInit(&argc, argv);
     GPGame* game = GPGame::getInstance();
-    game->run();
+    game->run(&argc, argv);
     return EXIT_SUCCESS;
 }

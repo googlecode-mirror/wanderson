@@ -10,6 +10,12 @@ const char* GPGame::NAME = "Graphis Processing";
 
 GPGame::GPGame()
 {
+    camera = new GPCamera();
+}
+
+GPGame* GPGame::init(int* argc, char** argv)
+{
+    glutInit(argc, argv);
     glutInitDisplayMode(GLUT_SINGLE);
     glutInitWindowSize(WIDTH,HEIGHT);
     int x = (glutGet(GLUT_SCREEN_WIDTH) - WIDTH)/2;
@@ -18,8 +24,7 @@ GPGame::GPGame()
     glutCreateWindow(NAME);
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
-
-    camera = new GPCamera();
+    return this;
 }
 
 void GPGame::display(void)
@@ -47,8 +52,9 @@ GPGame* GPGame::getInstance()
     return instance;
 }
 
-void GPGame::run(void)
+void GPGame::run(int* argc, char** argv)
 {
+    this->init(argc, argv);
     glutMainLoop();
 }
 
