@@ -12,11 +12,12 @@ class GPGame
     static const char* NAME;
     GPCamera* camera;
     GPGame();
+    GPGame* init(int*,char**);
     public:
     static void display(void);
     static void reshape(int,int);
     static GPGame* getInstance(void);
-    void run(void);
+    void run(int*,char**);
     GPCamera* getCamera(void);
 };
 
