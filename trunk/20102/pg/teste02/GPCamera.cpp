@@ -1,36 +1,52 @@
 #include <GL/glut.h>
+#include <math.h>
 #include "GPCamera.h"
+
+double GPCamera::PI = 3.14159265;
 
 GPCamera::GPCamera(void)
 {
-    this->setRotationX(0)->setPositionX(0)->setPositionY(2)->setPositionZ(0);
+    this->setRotationX(0)->setPositionX(0)->setPositionY(0)->setPositionZ(0);
 }
 
 GPCamera* GPCamera::setRotationX(int rot_x)
 {
     this->rot_x = rot_x;
+    double rad  = rot_x / (2 * PI);
+    this->csin  = sin(rad);
+    this->ccos  = cos(rad);
     return this;
 }
 
-GPCamera* GPCamera::setPositionX(int pos_x)
+double GPCamera::getSin(void)
+{
+    return this->csin;
+}
+
+double GPCamera::getCos(void)
+{
+    return this->ccos;
+}
+
+GPCamera* GPCamera::setPositionX(double pos_x)
 {
     this->pos_x = pos_x;
     return this;
 }
 
-GPCamera* GPCamera::setPositionY(int pos_y)
+GPCamera* GPCamera::setPositionY(double pos_y)
 {
     this->pos_y = pos_y;
     return this;
 }
 
-GPCamera* GPCamera::setPositionZ(int pos_z)
+GPCamera* GPCamera::setPositionZ(double pos_z)
 {
     this->pos_z = pos_z;
     return this;
 }
 
-GPCamera* GPCamera::setStep(int step)
+GPCamera* GPCamera::setStep(double step)
 {
     this->step = step;
     return this;
@@ -41,33 +57,31 @@ int GPCamera::getRotationX(void)
     return this->rot_x;
 }
 
-int GPCamera::getPositionX(void)
+double GPCamera::getPositionX(void)
 {
     return this->pos_x;
 }
 
-int GPCamera::getPositionY(void)
+double GPCamera::getPositionY(void)
 {
     return this->pos_y;
 }
 
-int GPCamera::getPositionZ(void)
+double GPCamera::getPositionZ(void)
 {
     return this->pos_z;
 }
 
-int GPCamera::getStep(void)
+double GPCamera::getStep(void)
 {
     return this->step;
 }
 
 GPCamera* GPCamera::place(void)
 {
-    int rot_x = this->getRotationX();
-    int pos_x = this->getPositionX();
-    int pos_y = this->getPositionY();
-    int pos_z = this->getPositionZ();
-    glRotated(rot_x, 1, 0, 0);
-    glTranslated(pos_x, pos_y, pos_z);
+    double x = this->getCos();
+    double z = this->getSin();
+
+    gluLookAt(0,0,0,x,0,z,0,1,0);
     return this;
 }

@@ -40,7 +40,7 @@ void GPGame::reshape(int width, int height)
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(120, width / (height * 1.0), 1, 100);
+    gluPerspective(120, width / (height * 1.0), 0, 100);
     glMatrixMode(GL_MODELVIEW);
 }
 
