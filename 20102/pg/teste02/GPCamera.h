@@ -4,22 +4,27 @@
 class GPCamera
 {
     int rot_x;
-    int pos_x;
-    int pos_y;
-    int pos_z;
-    int step;
+    double csin;
+    double ccos;
+    double pos_x;
+    double pos_y;
+    double pos_z;
+    double step;
+    double getSin(void);
+    double getCos(void);
     public:
+    static double PI;
     GPCamera(void);
     GPCamera* setRotationX(int);
-    GPCamera* setPositionX(int);
-    GPCamera* setPositionY(int);
-    GPCamera* setPositionZ(int);
-    GPCamera* setStep(int);
+    GPCamera* setPositionX(double);
+    GPCamera* setPositionY(double);
+    GPCamera* setPositionZ(double);
+    GPCamera* setStep(double);
     int getRotationX(void);
-    int getPositionX(void);
-    int getPositionY(void);
-    int getPositionZ(void);
-    int getStep(void);
+    double getPositionX(void);
+    double getPositionY(void);
+    double getPositionZ(void);
+    double getStep(void);
     GPCamera* place(void);
 };
 
