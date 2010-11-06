@@ -9,7 +9,7 @@ int GPGame::WIDTH  = 640;
 int GPGame::HEIGHT = 480;
 const char* GPGame::NAME = "Graphis Processing";
 
-GPGame::GPGame()
+GPGame::GPGame(void)
 {
     camera = new GPCamera();
 }
@@ -23,6 +23,7 @@ GPGame* GPGame::init(int* argc, char** argv)
     int y = (glutGet(GLUT_SCREEN_HEIGHT) - HEIGHT)/2;
     glutInitWindowPosition(x,y);
     glutCreateWindow(NAME);
+    glutIdleFunc(display);
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
     glutKeyboardFunc(keyboard);
@@ -35,10 +36,7 @@ void GPGame::display(void)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
     game->getCamera()->place();
-    glPushMatrix();
-    glTranslated(2,0,0);
-    glutWireCube(1);
-    glPopMatrix();
+    game->draw();
     glutSwapBuffers();
 }
 
@@ -62,10 +60,9 @@ void GPGame::keyboard(unsigned char key, int x, int y)
             game->getCamera()->toLeft(1);
             break;
     }
-    game->display();
 }
 
-GPGame* GPGame::getInstance()
+GPGame* GPGame::getInstance(void)
 {
     if (instance == NULL) {
         instance = new GPGame();
@@ -77,6 +74,14 @@ void GPGame::run(int* argc, char** argv)
 {
     this->init(argc, argv);
     glutMainLoop();
+}
+
+GPGame* GPGame::draw(void)
+{
+    glPushMatrix();
+    glTranslated(2,0,0);
+    glutWireCube(1);
+    glPopMatrix();
 }
 
 GPCamera* GPGame::getCamera(void)

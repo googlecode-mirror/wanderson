@@ -20,6 +20,7 @@ class GPGame
     static GPGame* getInstance(void);
     void run(int*,char**);
     GPCamera* getCamera(void);
+    GPGame* draw(void);
 };
 
 #endif
