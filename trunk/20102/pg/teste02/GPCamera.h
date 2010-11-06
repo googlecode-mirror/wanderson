@@ -26,6 +26,8 @@ class GPCamera
     double getPositionZ(void);
     double getStep(void);
     GPCamera* place(void);
+    GPCamera* toRight(int);
+    GPCamera* toLeft(int);
 };
 
 #endif

@@ -1,4 +1,5 @@
 #include <GL/glut.h>
+#include <iostream>
 #include "GPCamera.h"
 #include "GPGame.h"
 
@@ -16,7 +17,7 @@ GPGame::GPGame()
 GPGame* GPGame::init(int* argc, char** argv)
 {
     glutInit(argc, argv);
-    glutInitDisplayMode(GLUT_SINGLE);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH);
     glutInitWindowSize(WIDTH,HEIGHT);
     int x = (glutGet(GLUT_SCREEN_WIDTH) - WIDTH)/2;
     int y = (glutGet(GLUT_SCREEN_HEIGHT) - HEIGHT)/2;
@@ -24,15 +25,21 @@ GPGame* GPGame::init(int* argc, char** argv)
     glutCreateWindow(NAME);
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
+    glutKeyboardFunc(keyboard);
     return this;
 }
 
 void GPGame::display(void)
 {
     GPGame* game = GPGame::getInstance();
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
     game->getCamera()->place();
-    glFlush();
+    glPushMatrix();
+    glTranslated(2,0,0);
+    glutWireCube(1);
+    glPopMatrix();
+    glutSwapBuffers();
 }
 
 void GPGame::reshape(int width, int height)
@@ -42,6 +49,20 @@ void GPGame::reshape(int width, int height)
     glLoadIdentity();
     gluPerspective(120, width / (height * 1.0), 0, 100);
     glMatrixMode(GL_MODELVIEW);
+}
+
+void GPGame::keyboard(unsigned char key, int x, int y)
+{
+    GPGame* game = GPGame::getInstance();
+    switch (key) {
+        case 'd':
+            game->getCamera()->toRight(1);
+            break;
+        case 'a':
+            game->getCamera()->toLeft(1);
+            break;
+    }
+    game->display();
 }
 
 GPGame* GPGame::getInstance()
