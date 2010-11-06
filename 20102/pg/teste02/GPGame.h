@@ -16,6 +16,7 @@ class GPGame
     public:
     static void display(void);
     static void reshape(int,int);
+    static void keyboard(unsigned char,int,int);
     static GPGame* getInstance(void);
     void run(int*,char**);
     GPCamera* getCamera(void);

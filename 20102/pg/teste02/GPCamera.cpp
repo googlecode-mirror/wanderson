@@ -1,5 +1,6 @@
 #include <GL/glut.h>
 #include <math.h>
+#include <iostream>
 #include "GPCamera.h"
 
 double GPCamera::PI = 3.14159265;
@@ -11,8 +12,11 @@ GPCamera::GPCamera(void)
 
 GPCamera* GPCamera::setRotationX(int rot_x)
 {
+    if (rot_x < 0) rot_x = 359;
+    if (rot_x >= 360) rot_x = 0;
+    std::cout << rot_x << std::endl;
     this->rot_x = rot_x;
-    double rad  = rot_x / (2 * PI);
+    double rad  = rot_x * PI / 180;
     this->csin  = sin(rad);
     this->ccos  = cos(rad);
     return this;
@@ -83,5 +87,19 @@ GPCamera* GPCamera::place(void)
     double z = this->getSin();
 
     gluLookAt(0,0,0,x,0,z,0,1,0);
+    return this;
+}
+
+GPCamera* GPCamera::toRight(int size)
+{
+    int angle = this->getRotationX();
+    this->setRotationX(angle + size);
+    return this;
+}
+
+GPCamera* GPCamera::toLeft(int size)
+{
+    int angle = this->getRotationX();
+    this->setRotationX(angle - size);
     return this;
 }
