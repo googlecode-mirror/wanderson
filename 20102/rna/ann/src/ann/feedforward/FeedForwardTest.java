@@ -1,5 +1,8 @@
 package ann.feedforward;
 
+import ann.feedforward.backpropagation.*;
+import java.text.*;
+
 public class FeedForwardTest implements Runnable
 {
     public void run()
@@ -7,29 +10,48 @@ public class FeedForwardTest implements Runnable
         FeedForwardNetwork network = new FeedForwardNetwork();
 
         network
-            .addLayer(new FeedForwardLayer(3))
             .addLayer(new FeedForwardLayer(2))
-            .addLayer(new FeedForwardLayer(3));
-
+            .addLayer(new FeedForwardLayer(3))
+            .addLayer(new FeedForwardLayer(1));
         network.reset();
-        System.out.println(this.format(network.getOutputLayer().getFire()));
 
-        double result[];
+        System.out.println("Neural Network");
+        for (FeedForwardLayer layer : network.getLayers()) {
+            System.out.println(layer);
+        }
 
-        double pattern1[] = {1,2,3};
-        result = network.computeOutputs(pattern1);
-        System.out.println(this.format(result));
+        double learn = 0.7;
+        double momentum = 0.9;
+        double pattern[][] = {{0,0},{0,1},{1,0},{1,1}};
+        double ideal[][]   = {{0},{1},{1},{0}};
 
-        result = network.computeOutputs(pattern1);
-        System.out.println(this.format(result));
+        BackPropagation bp
+            = new BackPropagation(network, pattern, ideal, learn, momentum);
+        int epoch = 1;
+        do {
+            bp.iterate();
+//            System.out.printf("Epoch #%4d: Error %.16f\n", epoch, bp.getError());
+            epoch = epoch + 1;
+        } while (bp.getError() > 0.001);
+
+        System.out.println("Results");
+        double actual[];
+        for (int i = 0; i < pattern.length; i++) {
+            actual = network.computeOutputs(pattern[i]);
+            System.out.printf("%s : %s\n", this.format(pattern[i]), this.format(actual));
+        }
+        for (FeedForwardLayer layer : network.getLayers()) {
+            System.out.println(layer);
+        }
     }
 
     public String format(double vector[])
     {
+        DecimalFormat format = new DecimalFormat("0.0000000000000000");
         StringBuilder builder = new StringBuilder();
         builder.append("[");
         for (int i = 0; i < vector.length; i++) {
-            builder.append(vector[i]);
+            builder.append(format.format(vector[i]));
             if (i != vector.length - 1) {
                 builder.append(",");
             }
