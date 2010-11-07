@@ -99,6 +99,15 @@ public class FeedForwardNetwork
     }
 
     /**
+     * Informa o Deque de Camadas da Rede
+     * @return Todas as Camadas da Rede Neural Artificial
+     */
+    public ArrayDeque<FeedForwardLayer> getLayers()
+    {
+        return this.layers;
+    }
+
+    /**
      * Reinicialização das Camadas
      * @return Próprio Objeto para Encadeamento
      */
