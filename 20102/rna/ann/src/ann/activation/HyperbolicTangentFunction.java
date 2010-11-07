@@ -7,6 +7,8 @@ package ann.activation;
  */
 public class HyperbolicTangentFunction implements Activation
 {
+    private static final long serialVersionUID = -5096120600192442479L;
+
     public double activate(double value)
     {
         return (Math.exp(value * 2.0) - 1.0) / (Math.exp(value * 2.0) + 1.0);

@@ -1,5 +1,6 @@
 package ann.feedforward;
 
+import java.io.*;
 import ann.activation.*;
 import ann.matrix.*;
 
@@ -8,8 +9,13 @@ import ann.matrix.*;
  *
  * @author Wanderson Henrique Camargo Rosa
  */
-public class FeedForwardLayer
+public class FeedForwardLayer implements Serializable
 {
+    /**
+     * Número de Serialização
+     */
+    private static final long serialVersionUID = 2696641593013081111L;
+
     /**
      * Último Resultado Gerado pela Camada
      */

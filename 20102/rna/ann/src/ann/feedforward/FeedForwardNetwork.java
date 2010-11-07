@@ -1,6 +1,7 @@
 package ann.feedforward;
 
 import ann.util.*;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -8,8 +9,13 @@ import java.util.*;
  * 
  * @author Wanderson Henrique Camargo Rosa
  */
-public class FeedForwardNetwork
+public class FeedForwardNetwork implements Serializable
 {
+    /**
+     * Número de Serialização
+     */
+    private static final long serialVersionUID = 532111653155897821L;
+
     /**
      * Conjunto de Camadas
      */
