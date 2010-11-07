@@ -270,4 +270,17 @@ public class FeedForwardLayer
     {
         return this.function;
     }
+
+    /**
+     * Informa os Pesos da Camada
+     * @return Texto Representante dos Pesos da Rede
+     */
+    public String toString()
+    {
+        if (this.hasWeights()) {
+            return this.getWeights().toString();
+        } else {
+            return "[]";
+        }
+    }
 }
