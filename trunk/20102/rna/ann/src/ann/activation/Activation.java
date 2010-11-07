@@ -1,11 +1,13 @@
 package ann.activation;
 
+import java.io.*;
+
 /**
  * Interface de Funções de Ativação
  * 
  * @author Wanderson Henrique Camargo Rosa
  */
-public interface Activation
+public interface Activation extends Serializable
 {
     /**
      * Função de Ativação para Redes Neurais

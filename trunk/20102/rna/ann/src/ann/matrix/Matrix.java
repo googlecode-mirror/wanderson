@@ -1,5 +1,6 @@
 package ann.matrix;
 
+import java.io.*;
 import java.text.*;
 
 /**
@@ -11,8 +12,13 @@ import java.text.*;
  * 
  * @author Wanderson Henrique Camargo Rosa
  */
-public class Matrix implements Cloneable
+public class Matrix implements Cloneable, Serializable
 {
+    /**
+     * Número de Serialização
+     */
+    private static final long serialVersionUID = 758964985243133468L;
+
     /**
      * Valores Internos da Matriz
      */

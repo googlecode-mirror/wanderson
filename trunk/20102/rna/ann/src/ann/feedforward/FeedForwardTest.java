@@ -1,7 +1,8 @@
 package ann.feedforward;
 
-import ann.feedforward.backpropagation.*;
+import java.io.*;
 import java.text.*;
+import ann.feedforward.backpropagation.*;
 
 public class FeedForwardTest implements Runnable
 {
@@ -30,7 +31,7 @@ public class FeedForwardTest implements Runnable
         int epoch = 1;
         do {
             bp.iterate();
-//            System.out.printf("Epoch #%4d: Error %.16f\n", epoch, bp.getError());
+            System.out.printf("Epoch #%4d: Error %.16f\n", epoch, bp.getError());
             epoch = epoch + 1;
         } while (bp.getError() > 0.001);
 
@@ -43,6 +44,17 @@ public class FeedForwardTest implements Runnable
         for (FeedForwardLayer layer : network.getLayers()) {
             System.out.println(layer);
         }
+
+        System.out.println("Serialize");
+        try {
+            FileOutputStream fos   = new FileOutputStream("ann.serialize");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(network);
+            oos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("Done.");
     }
 
     public String format(double vector[])
