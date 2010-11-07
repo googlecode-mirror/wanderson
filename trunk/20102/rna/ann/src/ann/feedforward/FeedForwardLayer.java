@@ -176,7 +176,7 @@ public class FeedForwardLayer
      * Informa a Matriz de Pesos da Camada
      * @return Matriz de Pesos
      */
-    public Matrix getWeight()
+    public Matrix getWeights()
     {
         return this.weights;
     }
@@ -241,8 +241,8 @@ public class FeedForwardLayer
      */
     public FeedForwardLayer reset()
     {
-        if (this.getWeight() != null) {
-            this.getWeight().randomize(-1, 1);
+        if (this.getWeights() != null) {
+            this.getWeights().randomize(-1, 1);
         }
         return this;
     }
