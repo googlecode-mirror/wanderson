@@ -1,5 +1,7 @@
 package ann.matrix;
 
+import java.text.*;
+
 /**
  * Matriz
  * 
@@ -465,5 +467,29 @@ public class Matrix implements Cloneable
             }
         }
         return this;
+    }
+
+    /**
+     * Informa Todos os Valores Configurados
+     * @return Texto Representante dos Valores
+     */
+    public String toString()
+    {
+        int rows = this.getRows();
+        int cols = this.getCols();
+        DecimalFormat formatter = new DecimalFormat("0.0000000000000000");
+        StringBuilder builder = new StringBuilder();
+        builder.append("[");
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                builder.append("(" + i + "," + j + ",");
+                builder.append(formatter.format(this.get(i, j)));
+                builder.append(")");
+                if (!(i + 1 == rows && j + 1 == cols)) {
+                    builder.append(",");
+                }
+            }
+        }
+        return builder.toString();
     }
 }
