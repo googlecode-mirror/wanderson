@@ -8,8 +8,9 @@
 #define GAME_H_
 
 #include <GL/glut.h>
-#include <math.h>
 #include "Camera.h"
+#include "Cube.h"
+#include "Floor.h"
 
 class Game
 {
