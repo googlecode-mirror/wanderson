@@ -11,6 +11,7 @@
 #include "Camera.h"
 #include "Cube.h"
 #include "Floor.h"
+#include "ObjectList.h"
 
 class Game
 {
@@ -20,6 +21,7 @@ private:
     static int HEIGHT;
     static const char* NAME;
     Camera* camera;
+    ObjectList* objects;
     Game();
 public:
     static Game* getInstance(void);
@@ -27,6 +29,7 @@ public:
     static void reshape(int,int);
     static void keyboard(unsigned char,int,int);
     Camera* getCamera(void);
+    ObjectList* getObjects(void);
     Game* run(int*,char**);
     Game* draw(void);
 };

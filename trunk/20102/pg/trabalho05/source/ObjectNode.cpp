@@ -14,18 +14,19 @@ ObjectNode::ObjectNode(Object* element, ObjectNode* next, ObjectNode* previous)
 
 ObjectNode::ObjectNode(Object* element, ObjectNode* next)
 {
-    this->ObjectNode(element, next, NULL);
+    this->setElement(element)->setNext(next)->setPrevious(NULL);
 }
 
 ObjectNode::ObjectNode(Object* element)
 {
-    this->ObjectNode(element, NULL, NULL);
+    this->setElement(element)->setNext(NULL)->setPrevious(NULL);
 }
 
 ObjectNode::~ObjectNode(void)
 {
     delete this->element;
-    delete this->node;
+    delete this->next;
+    delete this->previous;
 }
 
 ObjectNode* ObjectNode::setElement(Object* element)
