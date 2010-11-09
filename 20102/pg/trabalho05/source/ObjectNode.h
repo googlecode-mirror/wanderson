@@ -13,8 +13,8 @@ class ObjectNode
 {
 private:
     Object* element;
-    Object* next;
-    Object* previous;
+    ObjectNode* next;
+    ObjectNode* previous;
 public:
     ObjectNode(Object*);
     ObjectNode(Object*, ObjectNode*);

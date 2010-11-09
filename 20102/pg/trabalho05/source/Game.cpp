@@ -15,7 +15,8 @@ const char* Game::NAME = "Graphics Processing";
 
 Game::Game(void)
 {
-    this->camera = new Camera();
+    this->camera  = new Camera();
+    this->objects = new ObjectList();
 }
 
 Game* Game::getInstance(void)
@@ -78,6 +79,11 @@ Camera* Game::getCamera(void)
     return this->camera;
 }
 
+ObjectList* Game::getObjects()
+{
+    return this->objects;
+}
+
 Game* Game::run(int* argc, char** argv)
 {
     glutInit(argc,argv);
@@ -90,14 +96,24 @@ Game* Game::run(int* argc, char** argv)
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
     glutKeyboardFunc(keyboard);
+
+    Floor* floor = new Floor();
+    floor->setPositionY(-1);
+    this->getObjects()->add(floor);
+
+    Cube* cube = new Cube();
+    cube->setPositionX(5);
+    this->getObjects()->add(cube);
+
     glutMainLoop();
     return this;
 }
 
 Game* Game::draw(void)
 {
-    Floor* floor = new Floor();
-    floor->setPositionY(-1)->draw();
-    Cube* cube = new Cube();
-    cube->setPositionX(5)->draw();
+    int size = this->objects->size();
+    int i;
+    for (i = 0; i < size; i++) {
+        this->objects->get(i)->draw();
+    }
 }

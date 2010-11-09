@@ -51,8 +51,8 @@ Object* ObjectList::remove(int index)
     int counter = 0;
     while (current != NULL && counter < index) {
         counter = counter + 1;
-        before  = node;
-        current = node->getNext();
+        before  = current;
+        current = current->getNext();
     }
     if (current != NULL) {
         if (current == this->first && current == this->last) {

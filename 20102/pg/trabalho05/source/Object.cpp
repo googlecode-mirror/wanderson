@@ -1,7 +1,7 @@
 /*
  * Object.cpp
  * Objetos do Jogo
- *  @author: Wanderson Henrique Camargo Rosa
+ * @author: Wanderson Henrique Camargo Rosa
  */
 
 #include "Object.h"
