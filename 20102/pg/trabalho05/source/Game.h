@@ -9,8 +9,6 @@
 
 #include <GL/glut.h>
 #include "Camera.h"
-#include "Cube.h"
-#include "Floor.h"
 #include "ObjectList.h"
 
 class Game

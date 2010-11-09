@@ -1,5 +1,7 @@
 #include <cstdlib>
 #include "source/Game.h"
+#include "source/Cube.h"
+#include "source/Floor.h"
 
 int main(int argc, char **argv)
 {

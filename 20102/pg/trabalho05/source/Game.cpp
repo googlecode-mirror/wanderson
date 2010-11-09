@@ -103,8 +103,8 @@ Game* Game::run(int* argc, char** argv)
 Game* Game::draw(void)
 {
     int i;
-    int size = this->objects->size();
+    int size = this->getObjects()->size();
     for (i = 0; i < size; i++) {
-        this->objects->get(i)->draw();
+        this->getObjects()->get(i)->draw();
     }
 }
