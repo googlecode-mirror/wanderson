@@ -96,23 +96,14 @@ Game* Game::run(int* argc, char** argv)
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
     glutKeyboardFunc(keyboard);
-
-    Floor* floor = new Floor();
-    floor->setPositionY(-1);
-    this->getObjects()->add(floor);
-
-    Cube* cube = new Cube();
-    cube->setPositionX(5);
-    this->getObjects()->add(cube);
-
     glutMainLoop();
     return this;
 }
 
 Game* Game::draw(void)
 {
-    int size = this->objects->size();
     int i;
+    int size = this->objects->size();
     for (i = 0; i < size; i++) {
         this->objects->get(i)->draw();
     }
