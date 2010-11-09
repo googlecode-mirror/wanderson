@@ -2,7 +2,7 @@
 # @author Wanderson Henrique Camargo Rosa
 
 all:
-	g++ -o trabalho05 -lglut -lGLU main.cpp source/Game.cpp source/Camera.cpp
+	g++ -o trabalho05 -lglut -lGLU main.cpp source/Game.cpp source/Camera.cpp source/Object.cpp source/Cube.cpp source/Floor.cpp
 
 clean:
 	rm -rf trabalho05

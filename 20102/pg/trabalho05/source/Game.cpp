@@ -96,60 +96,8 @@ Game* Game::run(int* argc, char** argv)
 
 Game* Game::draw(void)
 {
-    glPushMatrix();
-    glScaled(5,1,5);
-    glTranslated(0,-1,0);
-
-    glPushMatrix();
-    glTranslated(0,0,-1);
-    glColor3d(0,0,255);
-    glBegin(GL_QUADS);
-        glVertex3d(1,0,0);
-        glVertex3d(0,0,0);
-        glVertex3d(0,0,1);
-        glVertex3d(1,0,1);
-    glEnd();
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslated(0,0,0);
-    glColor3d(0,255,0);
-    glBegin(GL_QUADS);
-        glVertex3d(1,0,0);
-        glVertex3d(0,0,0);
-        glVertex3d(0,0,1);
-        glVertex3d(1,0,1);
-    glEnd();
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslated(-1,0,0);
-    glColor3d(255,255,0);
-    glBegin(GL_QUADS);
-        glVertex3d(1,0,0);
-        glVertex3d(0,0,0);
-        glVertex3d(0,0,1);
-        glVertex3d(1,0,1);
-    glEnd();
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslated(-1,0,-1);
-    glColor3d(255,0,0);
-    glBegin(GL_QUADS);
-        glVertex3d(1,0,0);
-        glVertex3d(0,0,0);
-        glVertex3d(0,0,1);
-        glVertex3d(1,0,1);
-    glEnd();
-    glPopMatrix();
-
-    glPopMatrix();
-
-    glPushMatrix();
-    glScaled(0.5,0.5,0.5);
-    glTranslated(5,0,0);
-    glColor3d(255,255,255);
-    glutSolidCube(1);
-    glPopMatrix();
+    Floor* floor = new Floor();
+    floor->setPositionY(-1)->draw();
+    Cube* cube = new Cube();
+    cube->setPositionX(5)->draw();
 }
