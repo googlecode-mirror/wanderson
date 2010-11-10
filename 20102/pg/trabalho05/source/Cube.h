@@ -14,6 +14,7 @@ class Cube : public Object
 {
 public:
     Cube* draw(void);
+    Cube* face(void);
 };
 
 #endif
