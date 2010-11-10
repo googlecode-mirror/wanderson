@@ -12,7 +12,6 @@ Cube* Cube::draw(void)
     double z = this->getPositionZ();
     glPushMatrix();
     glColor3d(255,255,255);
-    glScaled(0.5,0.5,0.5);
     glTranslated(x,y,z);
     glutSolidCube(1);
     glPopMatrix();
