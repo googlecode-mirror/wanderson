@@ -96,6 +96,8 @@ Game* Game::run(int* argc, char** argv)
     glutReshapeFunc(reshape);
     glutKeyboardFunc(keyboard);
     glClearColor(0,0,0,1);
+    glPolygonMode(GL_FRONT, GL_FILL);
+    glPolygonMode(GL_BACK, GL_LINE);
     glutMainLoop();
     return this;
 }
