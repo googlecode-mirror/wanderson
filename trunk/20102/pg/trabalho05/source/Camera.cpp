@@ -10,8 +10,7 @@ double Camera::PI = 3.14159265;
 
 Camera::Camera(void)
 {
-    this->setAngle(0)->setPositionX(0)->setPositionY(0)->setPositionZ(0)
-        ->updateRadian();
+    this->setAngle(0)->setPositionX(0)->setPositionY(0)->setPositionZ(0);
 }
 
 Camera* Camera::setAngle(int angle)
@@ -86,11 +85,12 @@ double Camera::getPositionZ(void)
 Camera* Camera::place(void)
 {
     double position_x = this->getPositionX();
+    double position_y = this->getPositionY();
     double position_z = this->getPositionZ();
     double camera_cos = this->getCameraCos();
     double camera_sin = this->getCameraSin();
 
-    gluLookAt(position_x,0,position_z,position_x + camera_cos,0,position_z + camera_sin,0,1,0);
+    gluLookAt(position_x,position_y,position_z,position_x + camera_cos,position_y,position_z + camera_sin,0,1,0);
 }
 
 Camera* Camera::rotate(int angle)

@@ -30,7 +30,6 @@ Game* Game::getInstance(void)
 void Game::display(void)
 {
     Game* game = Game::getInstance();
-    glClearColor(0,0,0,0);
     glClear(GL_COLOR_BUFFER_BIT);
     glLoadIdentity();
     game->getCamera()->place();
@@ -96,6 +95,7 @@ Game* Game::run(int* argc, char** argv)
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
     glutKeyboardFunc(keyboard);
+    glClearColor(0,0,0,1);
     glutMainLoop();
     return this;
 }
