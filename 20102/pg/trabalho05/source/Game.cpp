@@ -30,7 +30,7 @@ Game* Game::getInstance(void)
 void Game::display(void)
 {
     Game* game = Game::getInstance();
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
     game->getCamera()->place();
     game->draw();
@@ -44,7 +44,7 @@ void Game::reshape(int width, int height)
     glGetIntegerv(GL_MATRIX_MODE, &mode);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(60, width / (height * 1.0), 0, 25);
+    gluPerspective(60, width / (height * 1.0), 0.1, 25);
     glMatrixMode(mode);
 }
 
@@ -86,7 +86,7 @@ ObjectList* Game::getObjects()
 Game* Game::run(int* argc, char** argv)
 {
     glutInit(argc,argv);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
     glutInitWindowSize(WIDTH, HEIGHT);
     int position_x = (glutGet(GLUT_SCREEN_WIDTH) - WIDTH) / 2;
     int position_y = (glutGet(GLUT_SCREEN_HEIGHT) - HEIGHT) / 2;
@@ -98,6 +98,7 @@ Game* Game::run(int* argc, char** argv)
     glClearColor(0,0,0,1);
     glPolygonMode(GL_FRONT, GL_FILL);
     glPolygonMode(GL_BACK, GL_LINE);
+    glEnable(GL_DEPTH_TEST);
     glutMainLoop();
     return this;
 }

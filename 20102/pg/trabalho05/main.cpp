@@ -14,7 +14,7 @@ int main(int argc, char **argv)
     cube->setPositionX(3)->setPositionY(1)->setPositionZ(-0.5);
     game->getObjects()->add(cube);
 
-    game->getCamera()->setPositionY(1);
+    game->getCamera()->setPositionY(2);
 
     game->run(&argc,argv);
     return EXIT_SUCCESS;
