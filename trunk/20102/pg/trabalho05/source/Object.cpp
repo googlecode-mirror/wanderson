@@ -34,6 +34,12 @@ Object* Object::setPositionZ(double position)
     return this;
 }
 
+Object* Object::setBoundingBox(BoundingBox* box)
+{
+    this->box = box;
+    return this;
+}
+
 double Object::getPositionX(void)
 {
     return this->position_x;
@@ -47,4 +53,14 @@ double Object::getPositionY(void)
 double Object::getPositionZ(void)
 {
     return this->position_z;
+}
+
+BoundingBox* Object::getBoundingBox(void)
+{
+    return this->box;
+}
+
+bool Object::collides(Object* object)
+{
+    return this->getBoundingBox()->collides(object->getBoundingBox());
 }
