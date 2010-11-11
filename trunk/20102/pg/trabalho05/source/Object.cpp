@@ -11,11 +11,6 @@ Object::Object()
     this->setPositionX(0)->setPositionY(0)->setPositionZ(0);
 }
 
-Object::~Object(void)
-{
-
-}
-
 Object* Object::setPositionX(double position)
 {
     this->position_x = position;
@@ -62,5 +57,10 @@ BoundingBox* Object::getBoundingBox(void)
 
 bool Object::collides(Object* object)
 {
-    return this->getBoundingBox()->collides(object->getBoundingBox());
+    bool result = false;
+    BoundingBox* box = this->getBoundingBox();
+    if (box != NULL) {
+        result = box->collides(object->getBoundingBox());
+    }
+    return result;
 }

@@ -8,6 +8,7 @@
 #define OBJECT_H_
 
 #include "BoundingBox.h"
+#include <cstdlib>
 
 class BoundingBox;
 
