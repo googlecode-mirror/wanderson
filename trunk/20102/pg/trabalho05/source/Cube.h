@@ -13,6 +13,7 @@
 class Cube : public Object
 {
 public:
+    Cube* init(void);
     Cube* draw(void);
     Cube* face(void);
 };

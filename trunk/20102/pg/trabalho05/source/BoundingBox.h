@@ -32,12 +32,12 @@ private:
     double box_max_z;
 
     BoundingBox* setObject(Object*);
-    BoundingBox* setMinPoint(double,double,double);
-    BoundingBox* setMaxPoint(double,double,double);
     bool belongs(char,double);
 
 public:
     BoundingBox(Object*);
+    BoundingBox* setMinPoint(double,double,double);
+    BoundingBox* setMaxPoint(double,double,double);
 
     BoundingBox* setNext(BoundingBox*);
     BoundingBox* setChildren(BoundingBox*);

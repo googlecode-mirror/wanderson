@@ -6,6 +6,14 @@
 
 #include "Floor.h"
 
+Floor* Floor::init(void)
+{
+    BoundingBox* box = new BoundingBox(this);
+    box->setMinPoint(-5,0,-5)->setMaxPoint(5,0,5);
+    this->setBoundingBox(box);
+    return this;
+}
+
 Floor* Floor::draw(void)
 {
     double x = this->getPositionX();

@@ -15,6 +15,7 @@ class Floor : public Object
 private:
     Floor* piece(void);
 public:
+    Floor* init(void);
     Floor* draw(void);
 };
 
