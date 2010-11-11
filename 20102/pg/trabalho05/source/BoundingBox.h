@@ -8,13 +8,16 @@
 #define BOUNDINGBOX_H_
 
 #include "Object.h"
+#include <cstdlib>
+
+class Object;
 
 class BoundingBox
 {
 private:
-    static const char X_AXIS;
-    static const char Y_AXIS;
-    static const char Z_AXIS;
+    static const char X_AXIS = 'x';
+    static const char Y_AXIS = 'y';
+    static const char Z_AXIS = 'z';
 
     Object* element;
     BoundingBox* next;
@@ -29,9 +32,9 @@ private:
     double box_max_z;
 
     BoundingBox* setObject(Object*);
-    BoundingBox* setMinPoint(double x, double y, double z);
-    BoundingBox* setMaxPoint(double x, double y, double z);
-    bool belongs(char axis, double value);
+    BoundingBox* setMinPoint(double,double,double);
+    BoundingBox* setMaxPoint(double,double,double);
+    bool belongs(char,double);
 
 public:
     BoundingBox(Object*);

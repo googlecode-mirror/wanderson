@@ -7,12 +7,17 @@
 #ifndef OBJECT_H_
 #define OBJECT_H_
 
+#include "BoundingBox.h"
+
+class BoundingBox;
+
 class Object
 {
 private:
     double position_x;
     double position_y;
     double position_z;
+    BoundingBox* box;
 public:
     Object(void);
     virtual ~Object(void);
@@ -20,10 +25,14 @@ public:
     Object* setPositionX(double);
     Object* setPositionY(double);
     Object* setPositionZ(double);
+    Object* setBoundingBox(BoundingBox*);
 
     double getPositionX(void);
     double getPositionY(void);
     double getPositionZ(void);
+    BoundingBox* getBoundingBox(void);
+
+    bool collides(Object*);
 
     virtual Object* draw(void)=0;
 };
