@@ -8,6 +8,7 @@
 #define FLOOR_H_
 
 #include "Object.h"
+#include "BoundingBox.h"
 #include <GL/glut.h>
 
 class Floor : public Object
@@ -15,7 +16,7 @@ class Floor : public Object
 private:
     Floor* piece(void);
 public:
-    Floor* init(void);
+    Floor(void);
     Floor* draw(void);
 };
 
