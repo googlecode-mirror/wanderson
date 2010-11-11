@@ -35,26 +35,6 @@ BoundingBox* BoundingBox::setMaxPoint(double x, double y, double z)
     return this;
 }
 
-bool BoundingBox::belongs(char axis, double value)
-{
-    double min,max;
-    switch (axis) {
-    case X_AXIS:
-        min = this->getMinX();
-        max = this->getMaxX();
-        break;
-    case Y_AXIS:
-        min = this->getMinY();
-        max = this->getMaxY();
-        break;
-    case Z_AXIS:
-        min = this->getMinZ();
-        max = this->getMaxZ();
-        break;
-    }
-    return value >= min && value <= max;
-}
-
 double BoundingBox::getMinX(void)
 {
     return this->box_min_x + this->getObject()->getPositionX();
@@ -116,10 +96,9 @@ bool BoundingBox::collides(BoundingBox* box)
 {
     bool result = box != NULL;
     if (result) {
-        result =
-            (this->belongs(X_AXIS, box->getMinX()) || this->belongs(X_AXIS, box->getMaxX())) &&
-            (this->belongs(Y_AXIS, box->getMinY()) || this->belongs(Y_AXIS, box->getMaxY())) &&
-            (this->belongs(Z_AXIS, box->getMinZ()) || this->belongs(Z_AXIS, box->getMaxZ()));
+        result = !(box->getMaxX() < this->getMinX() || box->getMinX() > this->getMaxX() ||
+                   box->getMaxY() < this->getMinY() || box->getMinY() > this->getMaxY() ||
+                   box->getMaxZ() < this->getMinZ() || box->getMinZ() > this->getMaxZ());
         if (result) {
             BoundingBox* current = this->getChildren();
             result = current == NULL;
