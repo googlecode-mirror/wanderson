@@ -6,9 +6,14 @@
 
 #include "Object.h"
 
-Object::Object()
+Object::Object(void)
 {
     this->setPositionX(0)->setPositionY(0)->setPositionZ(0);
+}
+
+Object::~Object(void)
+{
+
 }
 
 Object* Object::setPositionX(double position)
