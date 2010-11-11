@@ -5,6 +5,14 @@
 
 #include "Cube.h"
 
+Cube* Cube::init(void)
+{
+    BoundingBox* box = new BoundingBox(this);
+    box->setMinPoint(0,0,0)->setMaxPoint(1,1,1);
+    this->setBoundingBox(box);
+    return this;
+}
+
 Cube* Cube::draw(void)
 {
     double x = this->getPositionX();

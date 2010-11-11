@@ -9,7 +9,8 @@
 
 BoundingBox::BoundingBox(Object* element)
 {
-    this->setObject(element)->setNext(NULL)->setChildren(NULL);
+    this->setMinPoint(0,0,0)->setMaxPoint(0,0,0)
+        ->setObject(element)->setNext(NULL)->setChildren(NULL);
 }
 
 BoundingBox* BoundingBox::setObject(Object* element)

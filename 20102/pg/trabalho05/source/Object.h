@@ -35,6 +35,7 @@ public:
 
     bool collides(Object*);
 
+    virtual Object* init(void)=0;
     virtual Object* draw(void)=0;
 };
 
