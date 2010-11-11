@@ -117,12 +117,12 @@ bool BoundingBox::collides(BoundingBox* box)
     bool result = box != NULL;
     if (result) {
         result =
-            this->belongs(X_AXIS, box->getMinX()) || this->belongs(X_AXIS, box->getMaxX()) &&
-            this->belongs(Y_AXIS, box->getMinY()) || this->belongs(Y_AXIS, box->getMaxY()) &&
-            this->belongs(Z_AXIS, box->getMinZ()) || this->belongs(Z_AXIS, box->getMaxZ());
+            (this->belongs(X_AXIS, box->getMinX()) || this->belongs(X_AXIS, box->getMaxX())) &&
+            (this->belongs(Y_AXIS, box->getMinY()) || this->belongs(Y_AXIS, box->getMaxY())) &&
+            (this->belongs(Z_AXIS, box->getMinZ()) || this->belongs(Z_AXIS, box->getMaxZ()));
         if (result) {
-            result = false;
             BoundingBox* current = this->getChildren();
+            result = current == NULL;
             while (!result && current != NULL) {
                 result  = current->collides(box);
                 current = current->getNext();
