@@ -10,6 +10,7 @@
 #include <GL/glut.h>
 #include "Camera.h"
 #include "ObjectList.h"
+#include "Player.h"
 
 class Game
 {
@@ -20,6 +21,7 @@ private:
     static const char* NAME;
     Camera* camera;
     ObjectList* objects;
+    Player* player;
     Game();
 public:
     static Game* getInstance(void);
@@ -28,8 +30,10 @@ public:
     static void keyboard(unsigned char,int,int);
     Camera* getCamera(void);
     ObjectList* getObjects(void);
+    Player* getPlayer(void);
     Game* run(int*,char**);
     Game* draw(void);
+    Game* collider(void);
 };
 
 #endif

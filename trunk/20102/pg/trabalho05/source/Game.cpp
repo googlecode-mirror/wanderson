@@ -17,6 +17,7 @@ Game::Game(void)
 {
     this->camera  = new Camera();
     this->objects = new ObjectList();
+    this->player  = new Player();
 }
 
 Game* Game::getInstance(void)
@@ -33,6 +34,7 @@ void Game::display(void)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
     game->getCamera()->place();
+    game->collider();
     game->draw();
     glutSwapBuffers();
 }
@@ -78,9 +80,14 @@ Camera* Game::getCamera(void)
     return this->camera;
 }
 
-ObjectList* Game::getObjects()
+ObjectList* Game::getObjects(void)
 {
     return this->objects;
+}
+
+Player* Game::getPlayer(void)
+{
+    return this->player;
 }
 
 Game* Game::run(int* argc, char** argv)
@@ -110,4 +117,21 @@ Game* Game::draw(void)
     for (i = 0; i < size; i++) {
         this->getObjects()->get(i)->draw();
     }
+    this->getPlayer()->draw();
+    return this;
+}
+
+Game* Game::collider(void)
+{
+    int i,j;
+    Player* player = this->getPlayer();
+    ObjectList* list = this->getObjects();
+    int size = list->size();
+    for (int i = 0; i < size; i++) {
+        player->collides(list->get(i));
+        for (int j = i + 1; j < size; j++) {
+            list->get(i)->collides(list->get(j));
+        }
+    }
+    return this;
 }
