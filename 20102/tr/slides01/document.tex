@@ -9,12 +9,12 @@
 \let\Tiny=\tiny
 
 % Configurações Específicas ----------------------------------------------------
-\setbeamertemplate{navigation symbols}{} 
+\setbeamertemplate{navigation symbols}{}
 
 % Dados Pessoais ---------------------------------------------------------------
 \title{Happy}
 \subtitle{Parser Generator System for Haskell}
-\author[ROSA]{Wanderson Henrique Camargo Rosa}
+\author[ROSA]{Wanderson Henrique Camargo Rosa\and{}Roberto Raguze Flores}
 \institute[UNISINOS]{Centro de Ciências Exatas e Tecnológicas\\Universidade do
 Vale do Rio dos Sinos}
 \date{São Leopoldo, Novembro de 2010}
@@ -26,6 +26,168 @@ Vale do Rio dos Sinos}
 % Apresentação -----------------------------------------------------------------
 \begin{frame}
     \maketitle{}
+\end{frame}
+
+% Conteúdo ---------------------------------------------------------------------
+\begin{frame}
+    \tableofcontents{}
+\end{frame}
+
+% Seção: Introdução ------------------------------------------------------------
+\section{Introdução}
+
+\begin{frame}{Happy}{Parser Generator System for Haskell}
+    \begin{block}{Happy}
+        Sistema gerador de \textit{parsers} para Haskell que recebe um arquivo
+        contendo uma especificação BNF de uma gramática e produz um módulo em
+        Haskell contendo o \textit{parser} para a gramática\cite{marlow2009}.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Happy}{Características}
+    \begin{itemize}
+        \item Programação Funcional
+        \item Rápido
+        \begin{itemize}
+            \item Comparado com Ferramentas Similares
+            \item Glasgow Haskell Compiler (GHC)
+        \end{itemize}
+        \item \textit{Lazy Evaluation}
+        \item Estrutura de Arquivo Yacc
+    \end{itemize}
+\end{frame}
+
+% Seção: Exemplo ---------------------------------------------------------------
+\section{Exemplo}
+
+\begin{frame}[fragile]{Exemplo}{Cabeçalho}
+\begin{verbatim}
+{
+module Main where
+import Data.Char
+}
+
+%name calc
+%tokentype { Token }
+%error { parserError }
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{Exemplo}{\textit{Tokens} e Associatividade}
+\begin{verbatim}
+%token
+    let { TokenLet }
+    in  { TokenIn }
+    int { TokenInt $$ }
+    var { TokenVar $$ }
+    '=' { TokenEq }
+    '+' { TokenPlus }
+    '-' { TokenMinus }
+    '*' { TokenTimes }
+    '/' { TokenDiv }
+    '(' { TokenOB }
+    ')' { TokenCB }
+
+%right in
+%left '+' '-'
+%left '*' '/'
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{Exemplo}{Produções}
+\begin{verbatim}
+%%
+
+Exp
+    : let var '=' Exp in Exp { Let $2 $4 $6 }
+    | Exp '+' Exp { Plus $1 $3 }
+    | Exp '-' Exp { Minus $1 $3 }
+    | Exp '*' Exp { Times $1 $3 }
+    | Exp '/' Exp { Div $1 $3 }
+    | '(' Exp ')' { Brack $2 }
+    | int { Int $1 }
+    | var { Var $1 } 
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{Exemplo}{Tratamento de Erros e Estrutura de Dados}
+\begin{verbatim}
+{
+parserError :: [Token] -> a
+parserError _ = error "ParseError"
+
+data Exp
+    = Let String Exp Exp
+    | Plus Exp Exp
+    | Minus Exp Exp
+    | Times Exp Exp
+    | Div Exp Exp
+    | Int Int
+    | Var String
+    | Brack Exp
+    deriving Show
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{Exemplo}{Estrutura de Dados para \textit{Tokens}}
+\begin{verbatim}
+data Token
+    = TokenLet
+    | TokenIn
+    | TokenInt Int
+    | TokenVar String
+    | TokenEq
+    | TokenPlus
+    | TokenMinus
+    | TokenTimes
+    | TokenDiv
+    | TokenOB
+    | TokenCB
+    deriving Show
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{Exemplo}{Analisador Léxico Opcional}
+\begin{verbatim}
+lexer :: String -> [Token]
+lexer [] = []
+lexer(c:cs)
+    | isSpace c = lexer cs
+    | isAlpha c = lexVar (c:cs)
+    | isDigit c = lexNum (c:cs)
+
+lexer ('=':cs) = TokenEq : lexer cs
+lexer ('+':cs) = TokenPlus : lexer cs
+lexer ('-':cs) = TokenMinus : lexer cs
+lexer ('*':cs) = TokenTimes : lexer cs
+lexer ('/':cs) = TokenDiv : lexer cs
+lexer ('(':cs) = TokenOB : lexer cs
+lexer (')':cs) = TokenCB : lexer cs
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{Exemplo}{Analisador Léxico Opcional}
+\begin{verbatim}
+lexNum cs = TokenInt (read num) : lexer rest
+    where (num,rest) = span isDigit cs
+
+lexVar cs =
+    case span isAlpha cs of
+        ("let",rest) -> TokenLet : lexer rest
+        ("in",rest) -> TokenIn : lexer rest
+        (var,rest) -> TokenVar var : lexer rest
+
+main = getContents >>= print . calc . lexer
+}
+\end{verbatim}
+\end{frame}
+
+% Seção: Referências Bibliográficas --------------------------------------------
+\section{Referências}
+
+\begin{frame}{Referências}
+    \bibliography{document}
+    \bibliographystyle{plain}
 \end{frame}
 
 \end{document}
