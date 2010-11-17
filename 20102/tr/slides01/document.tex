@@ -54,6 +54,7 @@ Vale do Rio dos Sinos}
         \end{itemize}
         \item \textit{Lazy Evaluation}
         \item Estrutura de Arquivo Yacc
+        \item LALR(1) e GLR
     \end{itemize}
 \end{frame}
 
@@ -180,6 +181,56 @@ lexVar cs =
 main = getContents >>= print . calc . lexer
 }
 \end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{Exemplo}{Arquivo Fonte e Compilador ou Interpretador}
+\begin{verbatim}
+happy example.y -i -g -d -o"output.out"
+    -i info
+    -g Glasgow Haskell Compiler Directives
+    -d Debug
+    -o Output File
+
+ghc example.hs
+hugs example.hs
+
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{Exemplo}{Entrada e Saída Geradas}
+\begin{verbatim}
+1+1
+Plus (Int 1) (Int 1)
+
+1+2*3
+Plus (Int 1) (Times (Int 2) (Int 3))
+
+1*2+3
+Plus (Times (Int 1) (Int 2)) (Int 3)
+\end{verbatim}
+\end{frame}
+
+% Seção: Áreas de Aplicação ----------------------------------------------------
+\section{Áreas de Aplicação}
+
+\begin{frame}{Áreas de Aplicação}
+    \begin{itemize}
+        \item Glasgow Haskell Compiler\cite{marlow2009}
+        \item Documentação da Linguagem Haskell\cite{marlow2002}
+        \item Desenvolvimento de Linguagens Naturais\cite{frost2006}
+        \item Geradores de Programas\cite{erwig2005}
+    \end{itemize}
+\end{frame}
+
+% Seção: Curiosidades ----------------------------------------------------------
+\section{Curiosidades}
+
+\begin{frame}[fragile]{Curiosidades}
+    \begin{itemize}
+        \item Usar sempre que possível recursão à esquerda, diminuindo a pilha
+        do analisador sintático; e
+        \item Não possui sequenciadores estilo \verb|n+| ou \verb|n*|.
+    \end{itemize}
 \end{frame}
 
 % Seção: Referências Bibliográficas --------------------------------------------
