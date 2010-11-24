@@ -5,6 +5,14 @@ options {
 }
 
 tokens {
+	T_CREATE;
+	T_CALL;
+	T_LOOPING;
+	T_CONDITIONAL;
+	T_BODY;
+	T_STATEMENT;
+	T_ASSIGNMENT;
+	T_DECLARATION;
 	T_CONSTANT;
 	T_ATTRIBUTE;
 	T_VARIABLE;
@@ -13,7 +21,7 @@ tokens {
 	T_FROM;
 }
 
-/**
+/*
  * CLASS DEFINITION -----------------------------------------------------------
  */
 
@@ -25,7 +33,7 @@ classbody
 	: (attributedef|constructordef|methoddef)*
 	;
 
-/**
+/*
  * ATTRIBUTE DEFINITION -------------------------------------------------------
  */
 
@@ -33,7 +41,7 @@ attributedef
 	: visibility type declaration T_SEMICOLON
 	;
 
-/**
+/*
  * CONSTRUCTOR DEFINITION -----------------------------------------------------
  */
 
@@ -41,7 +49,7 @@ constructordef
 	: visibility T_IDENTIFIER T_OPB parameter T_CPB body
 	;
 
-/**
+/*
  * METHOD DEFINITION ----------------------------------------------------------
  */
 
@@ -65,21 +73,30 @@ parameter
 	|
 	;
 
-/**
+/*
  * CREATE ---------------------------------------------------------------------
  */
 
+/**
+ * @todo Produção para Criação de Instâncias de Vetores
+ * @todo Inclusão da Árvore de Argumentos
+ */
 create
 	: T_NEW T_IDENTIFIER T_OPB argument T_CPB
-	| T_NEW T_IDENTIFIER T_OVB T_NUMBER T_CVB
+		-> ^(T_CREATE ^(T_TYPE T_IDENTIFIER))
 	;
 
-/**
+/*
  * CALL -----------------------------------------------------------------------
  */
 
+/**
+ * @todo Produção para Chamada de Métodos de Outros Objetos
+ * @todo Inclusão da Árvore de Argumentos
+ */
 call
-	: (variable|T_THIS) T_ACCESS T_IDENTIFIER T_OPB argument T_CPB
+	: T_THIS T_ACCESS T_IDENTIFIER T_OPB argument T_CPB
+		-> ^(T_CALL ^(T_NAME T_IDENTIFIER) ^(T_FROM T_THIS))
 	;
 
 argument
@@ -89,61 +106,83 @@ argument
 
 returndef
 	: T_RETURN element
+		-> ^(T_RETURN element)
 	;
 
-/**
+/*
  * LOOPING --------------------------------------------------------------------
  */
 
 looping
 	: T_WHILE T_OPB operation T_CPB body
+		-> ^(T_LOOPING operation body)
 	;
 
-/**
+/*
  * CONDITIONAL ----------------------------------------------------------------
  */
 
 conditional
 	: T_IF T_OPB operation T_CPB body
+		-> ^(T_CONDITIONAL operation body)
 	;
 
-/**
+/*
  * STATEMENT ------------------------------------------------------------------
  */
 
 body
 	: T_OSB statement+ T_CSB
+		-> ^(T_BODY statement+)
 	;
 
 statement
 	: assignment T_SEMICOLON
+		-> ^(assignment)
 	| arithmetic T_SEMICOLON
+		-> ^(arithmetic)
 	| conditional
+		-> ^(conditional)
 	| looping
+		-> ^(looping)
 	| call T_SEMICOLON
+		-> ^(call)
 	| create T_SEMICOLON
+		-> ^(create)
 	| declaration T_SEMICOLON
+		-> ^(declaration)
 	| returndef T_SEMICOLON
+		-> ^(returndef)
 	;
 
-/**
+/*
  * ASSIGNMENT -----------------------------------------------------------------
  */
 
 assignment
-	: variable T_ASSIGN arithmetic
+	: variable  T_ASSIGN arithmetic
+		-> ^(T_ASSIGNMENT variable arithmetic)
 	| attribute T_ASSIGN arithmetic
-	| variable T_ASSIGN call
+		-> ^(T_ASSIGNMENT attribute arithmetic)
+	| variable  T_ASSIGN call
+		-> ^(T_ASSIGNMENT variable call)
 	| attribute T_ASSIGN call
-	| variable T_ASSIGN create
+		-> ^(T_ASSIGNMENT attribute call)
+	| variable  T_ASSIGN create
+		-> ^(T_ASSIGNMENT variable create)
 	| attribute T_ASSIGN create
-	;
-
-declaration
-	: T_IDENTIFIER T_IDENTIFIER (T_OVB T_CVB)?
+		-> ^(T_ASSIGNMENT attribute create)
 	;
 
 /**
+ * @todo Árvore de Sintaxe para Vetores
+ */
+declaration
+	: t=T_IDENTIFIER n=T_IDENTIFIER (T_OVB T_CVB)?
+		-> ^(T_DECLARATION ^(T_TYPE $t) ^(T_NAME $n))
+	;
+
+/*
  * OPERATION ------------------------------------------------------------------
  */
 
@@ -156,7 +195,7 @@ operation
 	| arithmetic T_GE^ arithmetic
 	;
 
-/**
+/*
  * ARITHMETIC -----------------------------------------------------------------
  */
 
@@ -168,7 +207,7 @@ term
 	: element ((T_MUL^|T_DIV^) element)*
 	;
 
-/**
+/*
  * ELEMENT --------------------------------------------------------------------
  */
 
@@ -193,7 +232,7 @@ variable
 		-> ^(T_VARIABLE T_IDENTIFIER)
 	;
 
-/**
+/*
  * Lexer ----------------------------------------------------------------------
  */
 
