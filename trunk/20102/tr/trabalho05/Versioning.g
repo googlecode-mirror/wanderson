@@ -1,5 +1,18 @@
 grammar Versioning;
 
+options {
+	output = AST;
+}
+
+tokens {
+	T_CONSTANT;
+	T_ATTRIBUTE;
+	T_VARIABLE;
+	T_NAME;
+	T_TYPE;
+	T_FROM;
+}
+
 /**
  * CLASS DEFINITION -----------------------------------------------------------
  */
@@ -135,12 +148,12 @@ declaration
  */
 
 operation
-	: arithmetic T_EQ arithmetic
-	| arithmetic T_NE arithmetic
-	| arithmetic T_LT arithmetic
-	| arithmetic T_GT arithmetic
-	| arithmetic T_LE arithmetic
-	| arithmetic T_GE arithmetic
+	: arithmetic T_EQ^ arithmetic
+	| arithmetic T_NE^ arithmetic
+	| arithmetic T_LT^ arithmetic
+	| arithmetic T_GT^ arithmetic
+	| arithmetic T_LE^ arithmetic
+	| arithmetic T_GE^ arithmetic
 	;
 
 /**
@@ -148,11 +161,11 @@ operation
  */
 
 arithmetic
-	: term ((T_ADD|T_SUB) term)*
+	: term ((T_ADD^|T_SUB^) term)*
 	;
 
 term
-	: element ((T_MUL|T_DIV) element)*
+	: element ((T_MUL^|T_DIV^) element)*
 	;
 
 /**
@@ -167,14 +180,17 @@ element
 
 constant
 	: T_NUMBER
+		-> ^(T_CONSTANT T_NUMBER)
 	;
 
 attribute
 	: T_THIS T_ACCESS T_IDENTIFIER
+		-> ^(T_ATTRIBUTE T_IDENTIFIER)
 	;
 
 variable
 	: T_IDENTIFIER
+		-> ^(T_VARIABLE T_IDENTIFIER)
 	;
 
 /**
