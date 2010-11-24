@@ -5,6 +5,13 @@ options {
 }
 
 tokens {
+	T_CLASSDEF;
+	T_CLASSBODY;
+	T_ATTRIBUTEDEF;
+	T_CONSTRUCTORDEF;
+	T_METHODDEF;
+	T_VISIBILITY;
+	T_PARAMETER;
 	T_ARGUMENT;
 	T_CREATE;
 	T_CALL;
@@ -27,11 +34,14 @@ tokens {
  */
 
 classdef
-	: visibility T_CLASS T_IDENTIFIER T_OSB classbody T_CSB
+	: visibility T_CLASS T_IDENTIFIER T_OSB classbody* T_CSB
+		-> ^(T_CLASSDEF ^(T_NAME T_IDENTIFIER) visibility ^(T_CLASSBODY classbody*))
 	;
 
 classbody
-	: (attributedef|constructordef|methoddef)*
+	: attributedef
+	| constructordef
+	| methoddef
 	;
 
 /*
@@ -40,6 +50,7 @@ classbody
 
 attributedef
 	: visibility type declaration T_SEMICOLON
+		-> ^(T_ATTRIBUTEDEF declaration visibility)
 	;
 
 /*
@@ -48,6 +59,7 @@ attributedef
 
 constructordef
 	: visibility T_IDENTIFIER T_OPB parameter T_CPB body
+		-> ^(T_CONSTRUCTORDEF ^(T_TYPE T_IDENTIFIER) visibility parameter body)
 	;
 
 /*
@@ -56,22 +68,28 @@ constructordef
 
 visibility
 	: T_PUBLIC
+		-> ^(T_VISIBILITY T_PUBLIC)
 	| T_PRIVATE
+		-> ^(T_VISIBILITY T_PRIVATE)
 	| T_PROTECTED
+		-> ^(T_VISIBILITY T_PROTECTED)
 	;
 
 type
-	: T_STATIC
-	|
+	: (T_STATIC)?
 	;
 
+/**
+ * @todo Incluir na Árvore de Sintaxe o Tipo do Método
+ */
 methoddef
-	: visibility type T_IDENTIFIER T_IDENTIFIER T_OPB parameter T_CPB body
+	: visibility type r=T_IDENTIFIER n=T_IDENTIFIER T_OPB parameter T_CPB body
+		-> ^(T_METHODDEF ^(T_TYPE $r) ^(T_NAME $n) visibility parameter body)
 	;
 
 parameter
-	: declaration (T_COMMA declaration)*
-	|
+	: (declaration (T_COMMA declaration)*)?
+		-> ^(T_PARAMETER declaration*)
 	;
 
 /*
@@ -80,7 +98,6 @@ parameter
 
 /**
  * @todo Produção para Criação de Instâncias de Vetores
- * @todo Inclusão da Árvore de Argumentos
  */
 create
 	: T_NEW T_IDENTIFIER T_OPB argument T_CPB
@@ -132,8 +149,8 @@ conditional
  */
 
 body
-	: T_OSB statement+ T_CSB
-		-> ^(T_BODY statement+)
+	: T_OSB statement* T_CSB
+		-> ^(T_BODY statement*)
 	;
 
 statement
@@ -275,6 +292,7 @@ T_PRIVATE: 'private';
 T_STATIC: 'static';
 T_CLASS: 'class';
 T_RETURN: 'return';
+T_NULL: 'null';
 
 T_NUMBER: T_DIGIT+;
 T_IDENTIFIER: T_CHAR (T_CHAR|T_DIGIT)*;
