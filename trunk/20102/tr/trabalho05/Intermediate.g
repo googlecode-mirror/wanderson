@@ -58,12 +58,12 @@ statement
 	;
 
 assignment
-	: ^(T_ASSIGNMENT variable arithmetic)
-	| ^(T_ASSIGNMENT attribute arithmetic)
-	| ^(T_ASSIGNMENT variable call)
-	| ^(T_ASSIGNMENT attribute call)
-	| ^(T_ASSIGNMENT variable create)
-	| ^(T_ASSIGNMENT attribute create)
+	: ^(T_ASSIGNMENT { System.out.println("<assignment>"); } variable arithmetic { System.out.println("</assignment>"); })
+	| ^(T_ASSIGNMENT { System.out.println("<assignment>"); } attribute arithmetic { System.out.println("</assignment>"); })
+	| ^(T_ASSIGNMENT { System.out.println("<assignment>"); } variable call { System.out.println("</assignment>"); })
+	| ^(T_ASSIGNMENT { System.out.println("<assignment>"); } attribute call { System.out.println("</assignment>"); })
+	| ^(T_ASSIGNMENT { System.out.println("<assignment>"); } variable create { System.out.println("</assignment>"); })
+	| ^(T_ASSIGNMENT { System.out.println("<assignment>"); } attribute create { System.out.println("</assignment>"); })
 	;
 
 arithmetic
@@ -105,12 +105,12 @@ attribute
 	;
 
 operation
-	: ^(T_EQ arithmetic arithmetic)
-	| ^(T_NE arithmetic arithmetic)
-	| ^(T_LT arithmetic arithmetic)
-	| ^(T_GT arithmetic arithmetic)
-	| ^(T_LE arithmetic arithmetic)
-	| ^(T_GE arithmetic arithmetic)
+	: ^(T_EQ { System.out.println("<operation type=\"eq\">"); } arithmetic arithmetic { System.out.println("</operation>"); })
+	| ^(T_NE { System.out.println("<operation type=\"ne\">"); } arithmetic arithmetic { System.out.println("</operation>"); })
+	| ^(T_LT { System.out.println("<operation type=\"lt\">"); } arithmetic arithmetic { System.out.println("</operation>"); })
+	| ^(T_GT { System.out.println("<operation type=\"gt\">"); } arithmetic arithmetic { System.out.println("</operation>"); })
+	| ^(T_LE { System.out.println("<operation type=\"le\">"); } arithmetic arithmetic { System.out.println("</operation>"); })
+	| ^(T_GE { System.out.println("<operation type=\"ge\">"); } arithmetic arithmetic { System.out.println("</operation>"); })
 	;
 
 argument
