@@ -5,6 +5,7 @@ options {
 }
 
 tokens {
+	T_ARGUMENT;
 	T_CREATE;
 	T_CALL;
 	T_LOOPING;
@@ -83,7 +84,7 @@ parameter
  */
 create
 	: T_NEW T_IDENTIFIER T_OPB argument T_CPB
-		-> ^(T_CREATE ^(T_TYPE T_IDENTIFIER))
+		-> ^(T_CREATE ^(T_TYPE T_IDENTIFIER) argument)
 	;
 
 /*
@@ -92,16 +93,15 @@ create
 
 /**
  * @todo Produção para Chamada de Métodos de Outros Objetos
- * @todo Inclusão da Árvore de Argumentos
  */
 call
 	: T_THIS T_ACCESS T_IDENTIFIER T_OPB argument T_CPB
-		-> ^(T_CALL ^(T_NAME T_IDENTIFIER) ^(T_FROM T_THIS))
+		-> ^(T_CALL ^(T_NAME T_IDENTIFIER) ^(T_FROM T_THIS) argument)
 	;
 
 argument
-	: element (T_COMMA element)*
-	|
+	: (element (T_COMMA element)*)?
+		-> ^(T_ARGUMENT element*)
 	;
 
 returndef
