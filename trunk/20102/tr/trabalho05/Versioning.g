@@ -145,8 +145,15 @@ looping
  */
 
 conditional
-	: T_IF T_OPB operation T_CPB body
-		-> ^(T_CONDITIONAL operation body)
+	: T_IF T_OPB operation T_CPB body elsedef
+		-> ^(T_CONDITIONAL operation body elsedef)
+	;
+
+elsedef
+	: T_ELSE body
+		-> body
+	|
+		-> ^(T_BODY)
 	;
 
 /*

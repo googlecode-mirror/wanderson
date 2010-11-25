@@ -90,7 +90,7 @@ arithmetic
 	;
 
 conditional
-	: ^(T_CONDITIONAL { System.out.println("<conditional>"); } operation body { System.out.println("</conditional>"); })
+	: ^(T_CONDITIONAL { System.out.println("<conditional>"); } operation body body { System.out.println("</conditional>"); })
 	;
 
 looping
