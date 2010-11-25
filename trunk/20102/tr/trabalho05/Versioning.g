@@ -5,6 +5,7 @@ options {
 }
 
 tokens {
+	T_ACCESSTYPE;
 	T_CLASSDEF;
 	T_CLASSBODY;
 	T_ATTRIBUTEDEF;
@@ -26,7 +27,9 @@ tokens {
 	T_VARIABLE;
 	T_NAME;
 	T_TYPE;
+	T_VECTOR;
 	T_FROM;
+	T_INSTANCE;
 }
 
 /*
@@ -49,8 +52,8 @@ classbody
  */
 
 attributedef
-	: visibility type declaration T_SEMICOLON
-		-> ^(T_ATTRIBUTEDEF declaration visibility)
+	: visibility accesstype declaration T_SEMICOLON
+		-> ^(T_ATTRIBUTEDEF accesstype visibility declaration)
 	;
 
 /*
@@ -75,16 +78,19 @@ visibility
 		-> ^(T_VISIBILITY T_PROTECTED)
 	;
 
-type
-	: (T_STATIC)?
+accesstype
+	: T_STATIC
+		-> ^(T_ACCESSTYPE T_STATIC)
+	|
+		-> ^(T_ACCESSTYPE T_INSTANCE)
 	;
 
 /**
  * @todo Incluir na Árvore de Sintaxe o Tipo do Método
  */
 methoddef
-	: visibility type r=T_IDENTIFIER n=T_IDENTIFIER T_OPB parameter T_CPB body
-		-> ^(T_METHODDEF ^(T_TYPE $r) ^(T_NAME $n) visibility parameter body)
+	: visibility accesstype r=T_IDENTIFIER n=T_IDENTIFIER T_OPB parameter T_CPB body
+		-> ^(T_METHODDEF accesstype ^(T_TYPE $r) ^(T_NAME $n) visibility parameter body)
 	;
 
 parameter
@@ -108,12 +114,11 @@ create
  * CALL -----------------------------------------------------------------------
  */
 
-/**
- * @todo Produção para Chamada de Métodos de Outros Objetos
- */
 call
 	: T_THIS T_ACCESS T_IDENTIFIER T_OPB argument T_CPB
 		-> ^(T_CALL ^(T_NAME T_IDENTIFIER) ^(T_FROM T_THIS) argument)
+	| f=T_IDENTIFIER T_ACCESS m=T_IDENTIFIER T_OPB argument T_CPB
+		-> ^(T_CALL ^(T_NAME $m) ^(T_FROM $f) argument)
 	;
 
 argument
@@ -189,14 +194,22 @@ assignment
 		-> ^(T_ASSIGNMENT variable create)
 	| attribute T_ASSIGN create
 		-> ^(T_ASSIGNMENT attribute create)
+	| declaration T_ASSIGN arithmetic
+		-> ^(T_ASSIGNMENT declaration arithmetic)
+	| declaration T_ASSIGN call
+		-> ^(T_ASSIGNMENT declaration call)
+	| declaration T_ASSIGN create
+		-> ^(T_ASSIGNMENT declaration create)
 	;
 
 /**
  * @todo Árvore de Sintaxe para Vetores
  */
 declaration
-	: t=T_IDENTIFIER n=T_IDENTIFIER (T_OVB T_CVB)?
+	: t=T_IDENTIFIER n=T_IDENTIFIER
 		-> ^(T_DECLARATION ^(T_TYPE $t) ^(T_NAME $n))
+	| t=T_IDENTIFIER n=T_IDENTIFIER T_OVB T_CVB
+		-> ^(T_DECLARATION ^(T_TYPE $t) ^(T_NAME $n) T_VECTOR)
 	;
 
 /*
@@ -241,7 +254,9 @@ constant
 
 attribute
 	: T_THIS T_ACCESS T_IDENTIFIER
-		-> ^(T_ATTRIBUTE T_IDENTIFIER)
+		-> ^(T_ATTRIBUTE ^(T_FROM T_THIS) ^(T_NAME T_IDENTIFIER))
+	| f=T_IDENTIFIER T_ACCESS n=T_IDENTIFIER
+		-> ^(T_ATTRIBUTE ^(T_FROM $f) ^(T_NAME $n))
 	;
 
 variable
