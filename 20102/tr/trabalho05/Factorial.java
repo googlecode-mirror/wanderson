@@ -9,10 +9,8 @@ public class Factorial
 
 	public int execute()
 	{
-		int answer;
-		answer = 1;
-		int x;
-		x = 1;
+		int answer = 1;
+		int x = 1;
 		while (x <= answer) {
 			answer = answer * x;
 			x = x + 1;
@@ -21,9 +19,7 @@ public class Factorial
 	}
 
 	public static void main(String args[]) {
-		Factorial f;
-		f = new Factorial(10);
-		int result;
-		result = f.execute();
+		Factorial f = new Factorial(10);
+		int result = f.execute();
 	}
 }
