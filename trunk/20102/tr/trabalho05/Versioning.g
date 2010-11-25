@@ -270,8 +270,13 @@ attribute
 		-> ^(T_ATTRIBUTE ^(T_FROM $f) ^(T_NAME $n))
 	;
 
+/**
+ * @todo Tipo de Variáveis Escalares ou Vetoriais
+ */
 variable
 	: T_IDENTIFIER
+		-> ^(T_VARIABLE T_IDENTIFIER)
+	| T_IDENTIFIER T_OVB constant T_CVB
 		-> ^(T_VARIABLE T_IDENTIFIER)
 	;
 
