@@ -104,6 +104,7 @@ call
 
 create
 	: ^(T_CREATE ^(T_TYPE T_IDENTIFIER) { System.out.println("<create instance=\"" + $T_IDENTIFIER.text + "\">"); } argument { System.out.println("</create>"); })
+	| ^(T_CREATE ^(T_TYPE T_IDENTIFIER) { System.out.println("<create instance=\"" + $T_IDENTIFIER.text + "\" vector=\"vector\">"); } ^(T_VECTOR constant) { System.out.println("</create>"); })
 	;
 
 returndef
