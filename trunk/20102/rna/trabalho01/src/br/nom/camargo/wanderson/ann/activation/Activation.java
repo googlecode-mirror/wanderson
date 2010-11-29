@@ -19,5 +19,5 @@ public interface Activation extends Serializable
      * @param value Valor de Entrada
      * @return Resultado de Saída
      */
-    public double derivate(double value);
+    public double derive(double value);
 }
