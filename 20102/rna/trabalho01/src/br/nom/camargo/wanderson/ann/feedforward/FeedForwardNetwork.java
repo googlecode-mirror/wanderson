@@ -2,6 +2,7 @@ package br.nom.camargo.wanderson.ann.feedforward;
 
 import java.io.*;
 import java.util.*;
+import br.nom.camargo.wanderson.ann.util.*;
 
 /**
  * Rede Neural de Alimentação para Frente
@@ -66,6 +67,15 @@ public class FeedForwardNetwork implements Serializable
     }
 
     /**
+     * Informa a Camada de Saída
+     * @return Camada Solicitada
+     */
+    public FeedForwardLayer getOutputLayer()
+    {
+        return this.layers.getLast();
+    }
+
+    /**
      * Computação de Padrão de Entrada
      * @param input Padrões de Entrada Apresentados
      * @return Resultado Esperado pela Rede
@@ -90,5 +100,25 @@ public class FeedForwardNetwork implements Serializable
             layer.reset(min, max);
         }
         return this;
+    }
+
+    /**
+     * Cálculo de Root Main Square
+     * @param input Valores de Entrada
+     * @param ideal Valores Esperados de Saída
+     * @return Valor do Erro Atual da Rede
+     * @throws FeedForwardException Tamanho
+     */
+    public double error(double input[][], double ideal[][])
+        throws FeedForwardException
+    {
+        ErrorCalculator calc = ErrorCalculator.getInstance();
+        calc.reset();
+        double output[];
+        for (int i = 0; i < input.length; i++) {
+            output = this.compute(input[i]); // Configures Fire State
+            calc.update(output, ideal[i]);
+        }
+        return calc.rms();
     }
 }
