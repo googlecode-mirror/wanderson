@@ -26,7 +26,7 @@ public class Sigmoid implements Activation
      * @param value Valor de Entrada
      * @return Resultado de Saída
      */
-    public double derivate(double value)
+    public double derive(double value)
     {
         return value * (1 - value);
     }

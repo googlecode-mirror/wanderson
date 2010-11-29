@@ -76,6 +76,15 @@ public class FeedForwardNetwork implements Serializable
     }
 
     /**
+     * Informa as Camadas de Saída
+     * @return Todas as Camadas da Rede
+     */
+    public FeedForwardLayer[] getLayers()
+    {
+        return (FeedForwardLayer[]) this.layers.toArray();
+    }
+
+    /**
      * Computação de Padrão de Entrada
      * @param input Padrões de Entrada Apresentados
      * @return Resultado Esperado pela Rede
