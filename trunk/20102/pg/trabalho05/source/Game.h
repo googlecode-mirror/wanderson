@@ -11,6 +11,7 @@
 #include "Camera.h"
 #include "ObjectList.h"
 #include "Player.h"
+#include "Scenario.h"
 
 class Game
 {
@@ -22,6 +23,7 @@ private:
     Camera* camera;
     ObjectList* objects;
     Player* player;
+    Scenario* scenario;
     Game();
 public:
     static Game* getInstance(void);
@@ -31,6 +33,7 @@ public:
     Camera* getCamera(void);
     ObjectList* getObjects(void);
     Player* getPlayer(void);
+    Scenario* getScenario(void);
     Game* run(int*,char**);
     Game* draw(void);
     Game* collider(void);

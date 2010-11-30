@@ -15,9 +15,10 @@ const char* Game::NAME = "Graphics Processing";
 
 Game::Game(void)
 {
-    this->camera  = new Camera();
-    this->objects = new ObjectList();
-    this->player  = new Player();
+    this->camera   = new Camera();
+    this->objects  = new ObjectList();
+    this->player   = new Player();
+    this->scenario = new Scenario();
 }
 
 Game* Game::getInstance(void)
@@ -88,6 +89,11 @@ ObjectList* Game::getObjects(void)
 Player* Game::getPlayer(void)
 {
     return this->player;
+}
+
+Scenario* Game::getScenario(void)
+{
+    return this->scenario;
 }
 
 Game* Game::run(int* argc, char** argv)
