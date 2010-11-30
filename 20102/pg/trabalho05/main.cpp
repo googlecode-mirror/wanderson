@@ -11,7 +11,11 @@ int main(int argc, char **argv)
     game->getObjects()->add(floor);
 
     Cube* cube = new Cube();
-    cube->setPositionX(3)->setPositionY(1)->setPositionZ(-0.5);
+    cube->setPositionX(3)->setPositionY(1)->setPositionZ(0);
+    game->getObjects()->add(cube);
+
+    cube = new Cube();
+    cube->setPositionX(7)->setPositionY(1)->setPositionZ(2);
     game->getObjects()->add(cube);
 
     game->getCamera()->setPositionY(2);

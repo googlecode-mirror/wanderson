@@ -137,9 +137,6 @@ Game* Game::collider(void)
     int size = list->size();
     for (int i = 0; i < size; i++) {
         player->collides(list->get(i));
-        for (int j = i + 1; j < size; j++) {
-            list->get(i)->collides(list->get(j));
-        }
     }
     return this;
 }
