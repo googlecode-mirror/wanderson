@@ -23,7 +23,8 @@ Player* Player::draw(void)
 
 bool Player::collides(Object* object)
 {
-    Camera* camera = Game::getInstance()->getCamera();
+    Game* game  = Game::getInstance();
+    Camera* camera = game->getCamera();
     bool result = Object::collides(object);
     if (result) {
         int modifier = camera->getLastDistance() > 0 ? 1 : -1;
@@ -31,10 +32,23 @@ bool Player::collides(Object* object)
         double csin = camera->getCameraSin() * modifier;
         object->setPositionX(object->getPositionX() + ccos);
         object->setPositionZ(object->getPositionZ() + csin);
-        if (object->collides(Game::getInstance()->getScenario())) {
+        // Scenario Collision
+        if (object->collides(game->getScenario())) {
             object->setPositionX(object->getPositionX() - ccos);
             object->setPositionZ(object->getPositionZ() - csin);
             camera->back();
+        }
+        // Objects Collision
+        int i;
+        Object* other;
+        int size = game->getObjects()->size();
+        for (i = 0; i < size; i++) {
+            other = game->getObjects()->get(i);
+            if (object != other && object->collides(other)) {
+                object->setPositionX(object->getPositionX() - ccos);
+                object->setPositionZ(object->getPositionZ() - csin);
+                camera->back();
+            }
         }
     }
     return false;
