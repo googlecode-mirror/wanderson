@@ -116,6 +116,8 @@ Game* Game::run(int* argc, char** argv)
     int position_y = (glutGet(GLUT_SCREEN_HEIGHT) - HEIGHT) / 2;
     glutInitWindowPosition(position_x, position_y);
     glutCreateWindow(NAME);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
     glutKeyboardFunc(keyboard);

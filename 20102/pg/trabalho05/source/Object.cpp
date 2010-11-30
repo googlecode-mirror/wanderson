@@ -9,7 +9,7 @@
 Object::Object(void)
 {
     this->setPositionX(0)->setPositionY(0)->setPositionZ(0)
-        ->setBoundingBox(NULL);
+        ->setBoundingBox(NULL)->setAlpha(1);
 }
 
 Object::~Object(void)
@@ -35,6 +35,12 @@ Object* Object::setPositionZ(double position)
     return this;
 }
 
+Object* Object::setAlpha(double alpha)
+{
+    this->alpha = alpha;
+    return this;
+}
+
 Object* Object::setBoundingBox(BoundingBox* box)
 {
     this->box = box;
@@ -54,6 +60,11 @@ double Object::getPositionY(void)
 double Object::getPositionZ(void)
 {
     return this->position_z;
+}
+
+double Object::getAlpha(void)
+{
+    return this->alpha;
 }
 
 BoundingBox* Object::getBoundingBox(void)

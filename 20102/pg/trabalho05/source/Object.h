@@ -18,6 +18,7 @@ private:
     double position_x;
     double position_y;
     double position_z;
+    double alpha;
     BoundingBox* box;
 public:
     Object(void);
@@ -26,11 +27,13 @@ public:
     Object* setPositionX(double);
     Object* setPositionY(double);
     Object* setPositionZ(double);
+    Object* setAlpha(double);
     Object* setBoundingBox(BoundingBox*);
 
     double getPositionX(void);
     double getPositionY(void);
     double getPositionZ(void);
+    double getAlpha(void);
     BoundingBox* getBoundingBox(void);
 
     bool collides(Object*);
