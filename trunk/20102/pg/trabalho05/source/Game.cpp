@@ -55,6 +55,7 @@ void Game::keyboard(unsigned char key, int x, int y)
 {
     Game* game = Game::getInstance();
     Camera* camera;
+    Laser* laser;
     switch (key) {
     case 'd':
         camera = game->getCamera();
@@ -71,6 +72,16 @@ void Game::keyboard(unsigned char key, int x, int y)
     case 's':
         camera = game->getCamera();
         camera->walk(-0.1);
+        break;
+    case 32: // space bar
+        camera = game->getCamera();
+        laser  = new Laser();
+        laser
+            ->setAngle(camera->getAngle())
+            ->setPositionX(camera->getPositionX())
+            ->setPositionY(camera->getPositionY())
+            ->setPositionZ(camera->getPositionZ());
+        game->getObjects()->add(laser);
         break;
     }
     glutPostRedisplay();
