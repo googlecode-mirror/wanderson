@@ -8,7 +8,7 @@
 #define PLAYER_H_
 
 #include "Object.h"
-#include "BoundingBox.h"
+#include "Scenario.h"
 
 class Player : public Object
 {
@@ -16,6 +16,7 @@ public:
     Player(void);
     Player* draw(void);
     bool collides(Object*);
+    bool collides(Scenario*);
 };
 
 #endif

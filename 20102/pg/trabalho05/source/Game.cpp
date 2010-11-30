@@ -132,8 +132,10 @@ Game* Game::collider(void)
 {
     int i,j;
     Player* player = this->getPlayer();
+    Scenario* scenario = this->getScenario();
     ObjectList* list = this->getObjects();
     int size = list->size();
+    player->collides(scenario);
     for (int i = 0; i < size; i++) {
         player->collides(list->get(i));
         for (int j = i + 1; j < size; j++) {

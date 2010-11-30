@@ -34,3 +34,8 @@ bool Player::collides(Object* object)
     }
     return false;
 }
+
+bool Player::collides(Scenario* scenario)
+{
+    return false;
+}

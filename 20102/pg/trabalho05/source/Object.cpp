@@ -63,8 +63,9 @@ BoundingBox* Object::getBoundingBox(void)
 bool Object::collides(Object* object)
 {
     bool result = false;
-    BoundingBox* box = this->getBoundingBox();
-    if (box != NULL) {
+    BoundingBox* box   = this->getBoundingBox();
+    BoundingBox* other = object->getBoundingBox();
+    if (box != NULL && other != NULL) {
         result = box->collides(object->getBoundingBox());
     }
     return result;
