@@ -21,28 +21,28 @@ Floor* Floor::draw(void)
 
     glPushMatrix();
     glTranslated(x,y,z);
-    glScaled(5,1,5);
+    glScaled(25,1,25);
 
     glPushMatrix();
-    glColor3d(0,255,0);
+    glColor3d(0,1,0);
     this->piece();
     glPopMatrix();
 
     glPushMatrix();
     glTranslated(0,0,-1);
-    glColor3d(0,0,255);
+    glColor3d(0,0,1);
     this->piece();
     glPopMatrix();
 
     glPushMatrix();
     glTranslated(-1,0,0);
-    glColor3d(255,255,0);
+    glColor3d(1,1,0);
     this->piece();
     glPopMatrix();
 
     glPushMatrix();
     glTranslated(-1,0,-1);
-    glColor3d(255,0,0);
+    glColor3d(1,0,0);
     this->piece();
     glPopMatrix();
 
