@@ -124,6 +124,7 @@ Game* Game::draw(void)
         this->getObjects()->get(i)->draw();
     }
     this->getPlayer()->draw();
+    this->getScenario()->draw();
     return this;
 }
 
