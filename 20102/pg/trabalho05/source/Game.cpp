@@ -46,7 +46,7 @@ void Game::reshape(int width, int height)
     glGetIntegerv(GL_MATRIX_MODE, &mode);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(60, width / (height * 1.0), 0.1, 25);
+    gluPerspective(60, width / (height * 1.0), 0.1, 71 /* ~sqrt(2*50*50) */);
     glMatrixMode(mode);
 }
 
