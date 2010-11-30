@@ -26,11 +26,15 @@ bool Player::collides(Object* object)
     Camera* camera = Game::getInstance()->getCamera();
     bool result = Object::collides(object);
     if (result) {
-        object->setPositionX(object->getPositionX() + camera->getCameraCos());
-        object->setPositionZ(object->getPositionZ() + camera->getCameraSin());
+        int modifier = camera->getLastDistance() > 0 ? 1 : -1;
+        double ccos = camera->getCameraCos() * modifier;
+        double csin = camera->getCameraSin() * modifier;
+        object->setPositionX(object->getPositionX() + ccos);
+        object->setPositionZ(object->getPositionZ() + csin);
         if (object->collides(Game::getInstance()->getScenario())) {
-            object->setPositionX(object->getPositionX() - camera->getCameraCos());
-            object->setPositionZ(object->getPositionZ() - camera->getCameraSin());
+            object->setPositionX(object->getPositionX() - ccos);
+            object->setPositionZ(object->getPositionZ() - csin);
+            camera->back();
         }
     }
     return false;

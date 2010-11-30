@@ -52,6 +52,12 @@ Camera* Camera::setPositionZ(double position)
     return this;
 }
 
+Camera* Camera::setLastDistance(double distance)
+{
+    this->last = distance;
+    return this;
+}
+
 int Camera::getAngle(void)
 {
     return this->angle;
@@ -82,6 +88,11 @@ double Camera::getPositionZ(void)
     return this->position_z;
 }
 
+double Camera::getLastDistance(void)
+{
+    return this->last;
+}
+
 Camera* Camera::place(void)
 {
     double position_x = this->getPositionX();
@@ -102,6 +113,8 @@ Camera* Camera::rotate(int angle)
 
 Camera* Camera::walk(double distance)
 {
+    this->setLastDistance(distance);
+
     double position_x = this->getPositionX();
     double position_z = this->getPositionZ();
 
@@ -118,8 +131,15 @@ Camera* Camera::walk(double distance)
         ->setPositionZ(this->getPositionZ());
 
     if (player->collides(Game::getInstance()->getScenario())) {
-        this->walk(-distance);
+        this->back();
     }
 
+    return this;
+}
+
+Camera* Camera::back(void)
+{
+    double distance = this->getLastDistance();
+    this->walk(distance * -1);
     return this;
 }
