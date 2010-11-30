@@ -8,7 +8,25 @@
 
 Scenario::Scenario(void)
 {
+    BoundingBox* left = new BoundingBox(this);
+    left->setMinPoint(-26,-1,-26)->setMaxPoint(26,11,-25);
 
+    BoundingBox* right = new BoundingBox(this);
+    right->setMinPoint(-26,-1,25)->setMaxPoint(26,11,26);
+    left->setNext(right);
+
+    BoundingBox* front = new BoundingBox(this);
+    front->setMinPoint(25,-1,-26)->setMaxPoint(26,11,26);
+    right->setNext(front);
+
+    BoundingBox* back = new BoundingBox(this);
+    back->setMinPoint(-26,-1,-26)->setMaxPoint(-25,11,26);
+    front->setNext(back);
+
+    BoundingBox* box = new BoundingBox(this);
+    box->setMinPoint(-26,-1,-26)->setMaxPoint(26,11,26);
+    box->setChildren(left);
+    this->setBoundingBox(box);
 }
 
 Scenario* Scenario::draw(void)

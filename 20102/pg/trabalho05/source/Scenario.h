@@ -7,6 +7,7 @@
 #define SCENARIO_H_
 
 #include "Object.h"
+#include "BoundingBox.h"
 #include <GL/glut.h>
 
 class Scenario : public Object

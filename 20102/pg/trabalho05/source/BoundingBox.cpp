@@ -100,10 +100,10 @@ bool BoundingBox::collides(BoundingBox* box)
                    box->getMaxY() < this->getMinY() || box->getMinY() > this->getMaxY() ||
                    box->getMaxZ() < this->getMinZ() || box->getMinZ() > this->getMaxZ());
         if (result) {
-            BoundingBox* current = this->getChildren();
+            BoundingBox* current = box->getChildren();
             result = current == NULL;
             while (!result && current != NULL) {
-                result  = current->collides(box);
+                result  = current->collides(this);
                 current = current->getNext();
             }
         }

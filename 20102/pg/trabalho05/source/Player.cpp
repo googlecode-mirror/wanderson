@@ -37,5 +37,6 @@ bool Player::collides(Object* object)
 
 bool Player::collides(Scenario* scenario)
 {
+    bool result = Object::collides(scenario);
     return false;
 }
