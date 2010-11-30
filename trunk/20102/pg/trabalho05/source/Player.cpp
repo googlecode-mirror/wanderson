@@ -29,8 +29,10 @@ bool Player::collides(Object* object)
         ->setPositionZ(camera->getPositionZ());
     bool result = Object::collides(object);
     if (result) {
-        object->setPositionX(object->getPositionX() + camera->getCameraCos());
-        object->setPositionZ(object->getPositionZ() + camera->getCameraSin());
+        if (!object->collides(Game::getInstance()->getScenario())) {
+            object->setPositionX(object->getPositionX() + camera->getCameraCos());
+            object->setPositionZ(object->getPositionZ() + camera->getCameraSin());
+        }
     }
     return false;
 }
