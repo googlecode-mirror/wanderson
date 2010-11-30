@@ -41,3 +41,8 @@ Laser* Laser::draw(void)
     glPopMatrix();
     return this;
 }
+
+bool Laser::collides(Object* object)
+{
+    return true; // Encapsulation
+}
