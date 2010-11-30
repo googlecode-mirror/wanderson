@@ -17,9 +17,11 @@ Cube* Cube::draw(void)
     double x = this->getPositionX();
     double y = this->getPositionY();
     double z = this->getPositionZ();
+    double a = this->getAlpha();
+
     glPushMatrix();
     glTranslated(x,y,z);
-    glColor3d(1,1,1);
+    glColor4d(1,1,1,a);
 
     glPushMatrix();
     glTranslated(0,0,1);
