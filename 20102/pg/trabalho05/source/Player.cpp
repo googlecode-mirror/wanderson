@@ -37,6 +37,10 @@ bool Player::collides(Object* object)
 
 bool Player::collides(Scenario* scenario)
 {
-    bool result = Object::collides(scenario);
-    return false;
+    Camera* camera = Game::getInstance()->getCamera();
+    this->setPositionX(camera->getPositionX())
+        ->setPositionY(camera->getPositionY() - 2)
+        ->setPositionZ(camera->getPositionZ());
+    bool result = Object::collides(scenario); // Encapsulation
+    return result;
 }
