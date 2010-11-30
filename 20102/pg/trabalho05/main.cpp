@@ -14,9 +14,9 @@ int main(int argc, char **argv)
     cube->setPositionX(3)->setPositionY(1)->setPositionZ(0);
     game->getObjects()->add(cube);
 
-    cube = new Cube();
-    cube->setPositionX(7)->setPositionY(1)->setPositionZ(2);
-    game->getObjects()->add(cube);
+//    cube = new Cube();
+//    cube->setPositionX(7)->setPositionY(1)->setPositionZ(2);
+//    game->getObjects()->add(cube);
 
     game->getCamera()->setPositionY(2);
 

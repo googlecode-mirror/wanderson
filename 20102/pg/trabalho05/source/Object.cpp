@@ -8,7 +8,8 @@
 
 Object::Object(void)
 {
-    this->setPositionX(0)->setPositionY(0)->setPositionZ(0);
+    this->setPositionX(0)->setPositionY(0)->setPositionZ(0)
+        ->setBoundingBox(NULL);
 }
 
 Object::~Object(void)

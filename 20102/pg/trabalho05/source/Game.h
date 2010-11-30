@@ -12,6 +12,7 @@
 #include "ObjectList.h"
 #include "Player.h"
 #include "Scenario.h"
+#include "Laser.h"
 
 class Camera;
 
