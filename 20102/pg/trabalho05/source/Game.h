@@ -13,6 +13,8 @@
 #include "Player.h"
 #include "Scenario.h"
 
+class Camera;
+
 class Game
 {
 private:
