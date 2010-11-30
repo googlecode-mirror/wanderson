@@ -65,12 +65,18 @@ void Game::keyboard(unsigned char key, int x, int y)
         camera->rotate(-2);
         break;
     case 'w':
-        camera = game->getCamera();
+        camera   = game->getCamera();
         camera->walk(0.1);
+        if (game->getPlayer()->collides(game->getScenario())) {
+            camera->walk(-0.1);
+        }
         break;
     case 's':
         camera = game->getCamera();
         camera->walk(-0.1);
+        if (game->getPlayer()->collides(game->getScenario())) {
+            camera->walk(0.1);
+        }
         break;
     }
     glutPostRedisplay();
@@ -135,7 +141,6 @@ Game* Game::collider(void)
     Scenario* scenario = this->getScenario();
     ObjectList* list = this->getObjects();
     int size = list->size();
-    player->collides(scenario);
     for (int i = 0; i < size; i++) {
         player->collides(list->get(i));
         for (int j = i + 1; j < size; j++) {
