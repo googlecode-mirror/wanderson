@@ -20,7 +20,9 @@ class Camera
     double position_x;
     double position_y;
     double position_z;
+    double last;
     Camera* updateRadian(void);
+    Camera* setLastDistance(double);
 public:
     static double PI;
     Camera(void);
@@ -34,9 +36,11 @@ public:
     double getPositionX(void);
     double getPositionY(void);
     double getPositionZ(void);
+    double getLastDistance(void);
     Camera* place(void);
     Camera* rotate(int);
     Camera* walk(double);
+    Camera* back();
 };
 
 #endif
