@@ -25,7 +25,7 @@ bool Player::collides(Object* object)
 {
     Game* game  = Game::getInstance();
     Camera* camera = game->getCamera();
-    bool result = Object::collides(object);
+    bool result = object->getAlpha() == 1 && Object::collides(object);
     if (result) {
         int modifier = camera->getLastDistance() > 0 ? 1 : -1;
         double ccos = camera->getCameraCos() * modifier;
@@ -44,7 +44,7 @@ bool Player::collides(Object* object)
         int size = game->getObjects()->size();
         for (i = 0; i < size; i++) {
             other = game->getObjects()->get(i);
-            if (object != other && object->collides(other)) {
+            if (object != other && object->collides(other) && other->getAlpha() == 1) {
                 object->setPositionX(object->getPositionX() - ccos);
                 object->setPositionZ(object->getPositionZ() - csin);
                 camera->back();
