@@ -19,6 +19,7 @@ public:
     Laser* draw(void);
     Laser* setAngle(int);
     int getAngle(void);
+    bool collides(Object*);
 };
 
 #endif
