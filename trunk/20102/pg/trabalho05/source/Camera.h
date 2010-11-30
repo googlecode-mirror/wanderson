@@ -9,6 +9,8 @@
 
 #include <GL/glut.h>
 #include <math.h>
+#include "Game.h"
+#include "Player.h"
 
 class Camera
 {

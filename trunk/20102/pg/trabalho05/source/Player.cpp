@@ -24,14 +24,13 @@ Player* Player::draw(void)
 bool Player::collides(Object* object)
 {
     Camera* camera = Game::getInstance()->getCamera();
-    this->setPositionX(camera->getPositionX())
-        ->setPositionY(camera->getPositionY() - 2)
-        ->setPositionZ(camera->getPositionZ());
     bool result = Object::collides(object);
     if (result) {
-        if (!object->collides(Game::getInstance()->getScenario())) {
-            object->setPositionX(object->getPositionX() + camera->getCameraCos());
-            object->setPositionZ(object->getPositionZ() + camera->getCameraSin());
+        object->setPositionX(object->getPositionX() + camera->getCameraCos());
+        object->setPositionZ(object->getPositionZ() + camera->getCameraSin());
+        if (object->collides(Game::getInstance()->getScenario())) {
+            object->setPositionX(object->getPositionX() - camera->getCameraCos());
+            object->setPositionZ(object->getPositionZ() - camera->getCameraSin());
         }
     }
     return false;
@@ -39,10 +38,6 @@ bool Player::collides(Object* object)
 
 bool Player::collides(Scenario* scenario)
 {
-    Camera* camera = Game::getInstance()->getCamera();
-    this->setPositionX(camera->getPositionX())
-        ->setPositionY(camera->getPositionY() - 2)
-        ->setPositionZ(camera->getPositionZ());
     bool result = Object::collides(scenario); // Encapsulation
     return result;
 }

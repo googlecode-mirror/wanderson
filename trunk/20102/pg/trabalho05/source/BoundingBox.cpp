@@ -96,9 +96,9 @@ bool BoundingBox::collides(BoundingBox* box)
 {
     bool result = box != NULL;
     if (result) {
-        result = !(box->getMaxX() < this->getMinX() || box->getMinX() > this->getMaxX() ||
-                   box->getMaxY() < this->getMinY() || box->getMinY() > this->getMaxY() ||
-                   box->getMaxZ() < this->getMinZ() || box->getMinZ() > this->getMaxZ());
+        result = !(box->getMaxX() <= this->getMinX() || box->getMinX() >= this->getMaxX() ||
+                   box->getMaxY() <= this->getMinY() || box->getMinY() >= this->getMaxY() ||
+                   box->getMaxZ() <= this->getMinZ() || box->getMinZ() >= this->getMaxZ());
         if (result) {
             BoundingBox* current = box->getChildren();
             result = current == NULL;

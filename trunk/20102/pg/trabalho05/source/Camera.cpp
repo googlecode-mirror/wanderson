@@ -110,5 +110,16 @@ Camera* Camera::walk(double distance)
 
     this->setPositionX(position_x + distance_x)
         ->setPositionZ(position_z + distance_z);
+
+    Player* player = Game::getInstance()->getPlayer();
+    player
+        ->setPositionX(this->getPositionX())
+        ->setPositionY(this->getPositionY() - 2)
+        ->setPositionZ(this->getPositionZ());
+
+    if (player->collides(Game::getInstance()->getScenario())) {
+        this->walk(-distance);
+    }
+
     return this;
 }
