@@ -5,6 +5,9 @@
  */
 
 #include "Laser.h"
+#include "Camera.h"
+#include "iostream"
+#include <math.h>
 
 Laser::Laser(void)
 {
@@ -36,7 +39,7 @@ Laser* Laser::draw(void)
     glRotated(angle,0,-1,0);
     glBegin(GL_LINE_LOOP);
         glVertex3d(0,0,0);
-        glVertex3d(10,0,0);
+        glVertex3d(71 /* ~sqrt(2*50*50) */,0,0);
     glEnd();
     glPopMatrix();
     return this;
@@ -44,5 +47,29 @@ Laser* Laser::draw(void)
 
 bool Laser::collides(Object* object)
 {
-    return true; // Encapsulation
+    bool result = false;
+    int angle = this->getAngle();
+    double radian = tan(angle * Camera::PI / 180); // coeficiente angular
+    double position_x = this->getPositionX();
+    double position_z = this->getPositionZ();
+    BoundingBox* box = object->getBoundingBox();
+    if (box == NULL) {
+        return false;
+    }
+
+    int x,z;
+
+    z = radian * (box->getMinX() - position_x) + position_z;
+    result = (result || ((z <= box->getMaxZ()) && (z >= box->getMinZ())));
+
+    z = radian * (box->getMaxX() - position_x) + position_z;
+    result = (result || ((z <= box->getMaxZ()) && (z >= box->getMinZ())));
+
+    x = position_x + (box->getMinZ() - position_z) / radian;
+    result = (result || ((x <= box->getMaxX()) && (x >= box->getMinX())));
+
+    x = position_x + (box->getMaxZ() - position_z) / radian;
+    result = (result || ((x <= box->getMaxX()) && (x >= box->getMinX())));
+
+    return result;
 }
