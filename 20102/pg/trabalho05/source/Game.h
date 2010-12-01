@@ -21,6 +21,8 @@
 #include "Player.h"
 #include "Scenario.h"
 #include "Laser.h"
+#include "Cube.h"
+#include <cstdlib>
 
 class Camera;
 
