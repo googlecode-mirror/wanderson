@@ -61,6 +61,9 @@ void Game::keyboard(unsigned char key, int x, int y)
     case 'q':
         exit(0);
         break;
+    case 't':
+        game->getCamera()->changeView();
+        break;
     case 32: // space bar
         camera = game->getCamera();
         Laser* laser  = new Laser();
