@@ -14,6 +14,7 @@
 
 class Camera
 {
+    static bool TOP;
     int angle;
     double camera_sin;
     double camera_cos;
@@ -30,6 +31,7 @@ public:
     Camera* setPositionX(double);
     Camera* setPositionY(double);
     Camera* setPositionZ(double);
+    Camera* changeView();
     int getAngle(void);
     double getCameraSin(void);
     double getCameraCos(void);
