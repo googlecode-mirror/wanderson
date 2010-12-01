@@ -64,12 +64,35 @@ void Game::keyboard(unsigned char key, int x, int y)
         game->getCamera()->changeView();
         break;
     case 'n':
+    {
+        srand(time(NULL));
         object = new Cube();
         object->setPositionX(rand() % 40 - 20);
         object->setPositionY(rand() % 10);
         object->setPositionZ(rand() % 40 - 20);
         game->getObjects()->add(object);
+    }
         break;
+    case 'r':
+    {
+        int i;
+        bool found;
+        do {
+            found = false;
+            int size = game->getObjects()->size();
+            for (i = 0; i < size && !found; i++) {
+                object = game->getObjects()->get(i);
+                found  = dynamic_cast<Laser*>(object) != 0;
+                if (!found) {
+                    found = object->getAlpha() < 1;
+                }
+            }
+            if (found) {
+                game->getObjects()->remove(i-1);
+            }
+        } while (found);
+        break;
+    }
     case 32: // space bar
         camera = game->getCamera();
         Laser* laser  = new Laser();

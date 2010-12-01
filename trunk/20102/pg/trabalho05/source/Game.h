@@ -23,6 +23,7 @@
 #include "Laser.h"
 #include "Cube.h"
 #include <cstdlib>
+#include <ctime>
 
 class Camera;
 
