@@ -8,9 +8,7 @@
 
 Floor::Floor(void)
 {
-    BoundingBox* box = new BoundingBox(this);
-    box->setMinPoint(-5,-1,-5)->setMaxPoint(5,0,5);
-    this->setBoundingBox(box);
+
 }
 
 Floor* Floor::draw(void)

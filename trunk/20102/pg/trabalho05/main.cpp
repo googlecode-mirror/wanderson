@@ -6,19 +6,13 @@
 int main(int argc, char **argv)
 {
     Game* game = Game::getInstance();
+    game->getCamera()->climb(2)->walk(-2);
 
     Floor* floor = new Floor();
     game->getObjects()->add(floor);
 
     Cube* cube = new Cube();
-    cube->setPositionX(3)->setPositionY(1)->setPositionZ(0)->setAlpha(0.5);
     game->getObjects()->add(cube);
-
-    cube = new Cube();
-    cube->setPositionX(7)->setPositionY(1)->setPositionZ(2);
-    game->getObjects()->add(cube);
-
-    game->getCamera()->setPositionY(2);
 
     game->run(&argc,argv);
     return EXIT_SUCCESS;
