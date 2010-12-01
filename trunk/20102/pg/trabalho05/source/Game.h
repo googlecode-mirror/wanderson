@@ -7,7 +7,15 @@
 #ifndef GAME_H_
 #define GAME_H_
 
+#ifdef _WIN32
+#include <windows.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <glut.h>
+#else
 #include <GL/glut.h>
+#endif
+
 #include "Camera.h"
 #include "ObjectList.h"
 #include "Player.h"
