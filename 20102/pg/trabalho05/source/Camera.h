@@ -40,6 +40,7 @@ public:
     Camera* place(void);
     Camera* rotate(int);
     Camera* walk(double);
+    Camera* climb(double);
     Camera* back();
 };
 

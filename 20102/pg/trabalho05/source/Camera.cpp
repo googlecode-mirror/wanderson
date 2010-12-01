@@ -137,6 +137,12 @@ Camera* Camera::walk(double distance)
     return this;
 }
 
+Camera* Camera::climb(double distance)
+{
+    this->setPositionY(this->getPositionY() + distance);
+    return this;
+}
+
 Camera* Camera::back(void)
 {
     double distance = this->getLastDistance();
