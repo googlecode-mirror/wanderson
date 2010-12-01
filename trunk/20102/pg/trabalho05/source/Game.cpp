@@ -6,7 +6,6 @@
  */
 
 #include "Game.h"
-#include <iostream>
 
 Game* Game::instance = NULL;
 
@@ -63,6 +62,13 @@ void Game::keyboard(unsigned char key, int x, int y)
         break;
     case 't':
         game->getCamera()->changeView();
+        break;
+    case 'n':
+        object = new Cube();
+        object->setPositionX(rand() % 40 - 20);
+        object->setPositionY(rand() % 10);
+        object->setPositionZ(rand() % 40 - 20);
+        game->getObjects()->add(object);
         break;
     case 32: // space bar
         camera = game->getCamera();
