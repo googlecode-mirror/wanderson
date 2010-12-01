@@ -6,6 +6,7 @@
  */
 
 #include "Game.h"
+#include <iostream>
 
 Game* Game::instance = NULL;
 
@@ -57,21 +58,8 @@ void Game::keyboard(unsigned char key, int x, int y)
     Camera* camera;
     Object* object;
     switch (key) {
-    case 'd':
-        camera = game->getCamera();
-        camera->rotate(2);
-        break;
-    case 'a':
-        camera = game->getCamera();
-        camera->rotate(-2);
-        break;
-    case 'w':
-        camera = game->getCamera();
-        camera->walk(0.1);
-        break;
-    case 's':
-        camera = game->getCamera();
-        camera->walk(-0.1);
+    case 'q':
+        exit(0);
         break;
     case 32: // space bar
         camera = game->getCamera();
@@ -91,6 +79,31 @@ void Game::keyboard(unsigned char key, int x, int y)
         }
         game->getObjects()->add(laser);
         break;
+    }
+    glutPostRedisplay();
+}
+
+void Game::special(int key, int x, int y)
+{
+    Game* game = Game::getInstance();
+    switch (key) {
+    case GLUT_KEY_RIGHT:
+        game->getCamera()->rotate(2);
+        break;
+    case GLUT_KEY_LEFT:
+        game->getCamera()->rotate(-2);
+        break;
+    case GLUT_KEY_UP:
+        game->getCamera()->walk(0.1);
+        break;
+    case GLUT_KEY_DOWN:
+        game->getCamera()->walk(-0.1);
+        break;
+    case GLUT_KEY_PAGE_UP:
+        game->getCamera()->climb(0.1);
+        break;
+    case GLUT_KEY_PAGE_DOWN:
+        game->getCamera()->climb(-0.1);
     }
     glutPostRedisplay();
 }
@@ -129,6 +142,7 @@ Game* Game::run(int* argc, char** argv)
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
     glutKeyboardFunc(keyboard);
+    glutSpecialFunc(special);
     glClearColor(0,0,0,1);
     glPolygonMode(GL_FRONT, GL_FILL);
     glPolygonMode(GL_BACK, GL_LINE);
