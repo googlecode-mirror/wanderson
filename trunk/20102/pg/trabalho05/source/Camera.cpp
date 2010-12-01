@@ -37,6 +37,7 @@ Camera* Camera::updateRadian(void)
     double radian = angle * PI / 180;
     this->camera_sin = sin(radian);
     this->camera_cos = cos(radian);
+    this->camera_tan = tan(radian);
     return this;
 }
 
@@ -72,6 +73,11 @@ int Camera::getAngle(void)
 double Camera::getCameraSin(void)
 {
     return this->camera_sin;
+}
+
+double Camera::getCameraTan(void)
+{
+    return this->camera_tan;
 }
 
 double Camera::getCameraCos(void)

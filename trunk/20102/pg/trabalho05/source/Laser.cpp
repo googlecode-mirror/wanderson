@@ -47,17 +47,20 @@ Laser* Laser::draw(void)
 
 bool Laser::collides(Object* object)
 {
-    bool result = false;
-    int angle = this->getAngle();
-    double radian = tan(angle * Camera::PI / 180); // coeficiente angular
-    double position_x = this->getPositionX();
-    double position_z = this->getPositionZ();
     BoundingBox* box = object->getBoundingBox();
     if (box == NULL) {
         return false;
     }
 
-    int x,z;
+    bool result = false;
+    double radian = Game::getInstance()->getCamera()->getCameraTan();
+    double position_x = this->getPositionX();
+    double position_y = this->getPositionY();
+    double position_z = this->getPositionZ();
+
+    int x,y,z;
+
+    int h = box->getMinY() <= position_y && box->getMaxY() >= position_y;
 
     z = radian * (box->getMinX() - position_x) + position_z;
     result = (result || ((z <= box->getMaxZ()) && (z >= box->getMinZ())));
@@ -71,5 +74,5 @@ bool Laser::collides(Object* object)
     x = position_x + (box->getMaxZ() - position_z) / radian;
     result = (result || ((x <= box->getMaxX()) && (x >= box->getMinX())));
 
-    return result;
+    return result && h;
 }

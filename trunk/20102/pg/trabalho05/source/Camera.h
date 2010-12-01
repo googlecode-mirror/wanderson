@@ -18,6 +18,7 @@ class Camera
     int angle;
     double camera_sin;
     double camera_cos;
+    double camera_tan;
     double position_x;
     double position_y;
     double position_z;
@@ -35,6 +36,7 @@ public:
     int getAngle(void);
     double getCameraSin(void);
     double getCameraCos(void);
+    double getCameraTan(void);
     double getPositionX(void);
     double getPositionY(void);
     double getPositionZ(void);
