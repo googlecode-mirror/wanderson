@@ -108,7 +108,7 @@ double Laser::distance(Object* object)
     temp = sqrt(pow(position_x - box->getMaxX(),2) + pow(position_y - box->getMaxY(),2) + pow(position_z - box->getMinZ(), 2));
     if (temp < distance) distance = temp;
 
-    temp = sqrt(pow(position_x - box->getMaxX(),2) + pow(position_y - box->getMaxY(),2) + pow(position_z - box->getaxZ(), 2));
+    temp = sqrt(pow(position_x - box->getMaxX(),2) + pow(position_y - box->getMaxY(),2) + pow(position_z - box->getMaxZ(), 2));
     if (temp < distance) distance = temp;
 
     return distance;
