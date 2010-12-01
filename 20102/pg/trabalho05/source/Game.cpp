@@ -65,7 +65,7 @@ void Game::keyboard(unsigned char key, int x, int y)
         break;
     case 'n':
     {
-        srand(time(NULL));
+//        srand(time(NULL));
         object = new Cube();
         object->setPositionX(rand() % 40 - 20);
         object->setPositionY(rand() % 10);
@@ -94,6 +94,7 @@ void Game::keyboard(unsigned char key, int x, int y)
         break;
     }
     case 32: // space bar
+    {
         camera = game->getCamera();
         Laser* laser  = new Laser();
         laser
@@ -103,14 +104,29 @@ void Game::keyboard(unsigned char key, int x, int y)
             ->setPositionZ(camera->getPositionZ());
         int i;
         int size = game->getObjects()->size();
+        double distance, temp;
+        Object* test = NULL;
         for (i = 0; i < size; i++) {
             object = game->getObjects()->get(i);
-            if (laser->collides(object)) {
-                object->setAlpha(0.5);
+            if (object->getAlpha() == 1 && laser->collides(object)) {
+                if (test == NULL) {
+                    test = object;
+                    distance = laser->distance(object);
+                } else {
+                    temp = laser->distance(object);
+                    if (temp < distance) {
+                        test = object;
+                        distance = temp;
+                    }
+                }
             }
+        }
+        if (test != NULL) {
+            test->setAlpha(0.5);
         }
         game->getObjects()->add(laser);
         break;
+    }
     }
     glutPostRedisplay();
 }
