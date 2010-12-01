@@ -20,6 +20,7 @@ public:
     Laser* setAngle(int);
     int getAngle(void);
     bool collides(Object*);
+    double distance(Object*);
 };
 
 #endif

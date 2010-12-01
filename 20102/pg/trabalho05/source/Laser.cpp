@@ -76,3 +76,40 @@ bool Laser::collides(Object* object)
 
     return result && h;
 }
+
+double Laser::distance(Object* object)
+{
+    BoundingBox* box = object->getBoundingBox();
+    if (box != NULL) {
+        return -1;
+    }
+    double distance,temp;
+    double position_x = this->getPositionX();
+    double position_y = this->getPositionY();
+    double position_z = this->getPositionZ();
+
+    distance = sqrt(pow(position_x - box->getMinX(),2) + pow(position_y - box->getMinY(),2) + pow(position_z - box->getMinZ(), 2));
+
+    temp = sqrt(pow(position_x - box->getMinX(),2) + pow(position_y - box->getMinY(),2) + pow(position_z - box->getMaxZ(), 2));
+    if (temp < distance) distance = temp;
+
+    temp = sqrt(pow(position_x - box->getMinX(),2) + pow(position_y - box->getMaxY(),2) + pow(position_z - box->getMinZ(), 2));
+    if (temp < distance) distance = temp;
+
+    temp = sqrt(pow(position_x - box->getMinX(),2) + pow(position_y - box->getMaxY(),2) + pow(position_z - box->getMaxZ(), 2));
+    if (temp < distance) distance = temp;
+
+    temp = sqrt(pow(position_x - box->getMaxX(),2) + pow(position_y - box->getMinY(),2) + pow(position_z - box->getMinZ(), 2));
+    if (temp < distance) distance = temp;
+
+    temp = sqrt(pow(position_x - box->getMaxX(),2) + pow(position_y - box->getMinY(),2) + pow(position_z - box->getMaxZ(), 2));
+    if (temp < distance) distance = temp;
+
+    temp = sqrt(pow(position_x - box->getMaxX(),2) + pow(position_y - box->getMaxY(),2) + pow(position_z - box->getMinZ(), 2));
+    if (temp < distance) distance = temp;
+
+    temp = sqrt(pow(position_x - box->getMaxX(),2) + pow(position_y - box->getMaxY(),2) + pow(position_z - box->getaxZ(), 2));
+    if (temp < distance) distance = temp;
+
+    return distance;
+}
