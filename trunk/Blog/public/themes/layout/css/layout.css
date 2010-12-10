@@ -1,0 +1,17 @@
+@CHARSET "UTF-8";
+.layout-top {
+    height: 80px;
+    background-image: url('../images/layout-top-bg.jpg');
+    border-bottom: 1px solid #000000;
+    margin-bottom: 2em;
+}
+.layout-top div {
+    width: 900px;
+    height: 80px;
+    background-image: url('../images/layout-top.jpg');
+}
+
+#header div {
+    font-size: 1.5em;
+    margin-bottom: 1em;
+}
