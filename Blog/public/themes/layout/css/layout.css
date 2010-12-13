@@ -10,6 +10,17 @@
     height: 80px;
     background-image: url('../images/layout-top.jpg');
 }
+.layout-bottom {
+    height: 30px;
+    background-image: url('../images/layout-bottom-bg.jpg');
+    border-top: 1px solid #000000;
+    margin-top: 2em;
+}
+.layout-bottom div {
+    width: 900px;
+    height: 30px;
+    background-image: url('../images/layout-bottom.jpg');
+}
 
 #header div {
     font-size: 1.5em;
