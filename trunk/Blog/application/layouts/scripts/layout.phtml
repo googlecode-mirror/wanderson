@@ -9,7 +9,8 @@
         ->appendStylesheet($this->baseUrl('/css/blueprint/screen.css'), 'screen, projection')
         ->appendStylesheet($this->baseUrl('/css/blueprint/fancy-type/screen.css'), 'screen, projection')
         ->appendStylesheet($this->baseUrl('/css/blueprint/print.css'), 'print')
-        ->appendStylesheet($this->baseUrl('/themes/layout/css/layout.css')) . PHP_EOL
+        ->appendStylesheet($this->baseUrl('/themes/layout/css/layout.css'))
+        ->appendStylesheet($this->baseUrl('/themes/layout/css/screen.css')) . PHP_EOL
 ?>
 <!-- Head End   -->
 </head>
@@ -33,7 +34,9 @@
                 Right
             </div>
         </div>
-        <div class="span-24 last">Footer</div>
+    </div>
+    <div class="layout-bottom">
+        <div>&nbsp;</div>
     </div>
 </body>
 </html>
