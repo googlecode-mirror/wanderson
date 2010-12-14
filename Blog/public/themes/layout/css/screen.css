@@ -1,0 +1,8 @@
+@CHARSET "UTF-8";
+#content hr {margin-top: 1.45em;}
+.article {text-align: justify;}
+.article h2 {margin-bottom: 0;}
+.article .abstract {font-style: italic;margin-top:1.5em;margin-bottom: 1.5em;}
+.box ul {padding: 0;margin: 0;list-style: none;}
+.box ul li li {margin-left: 1em;}
+.techs {background-color: transparent;border:1px solid #E5ECF9;text-align:center;}

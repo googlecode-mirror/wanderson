@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<!-- Head Begin -->
+<?php echo $this->headMeta()->setIndent(4) . PHP_EOL ?>
+<?php echo $this->headTitle()->setIndent(4) . PHP_EOL ?>
+<?php
+    echo $this->headLink()->setIndent(4)
+        ->appendStylesheet($this->baseUrl('/css/blueprint/screen.css'), 'screen, projection')
+        ->appendStylesheet($this->baseUrl('/css/blueprint/fancy-type/screen.css'), 'screen, projection')
+        ->appendStylesheet($this->baseUrl('/css/blueprint/print.css'), 'print')
+        ->appendStylesheet($this->baseUrl('/themes/admin/css/screen.css')) . PHP_EOL
+?>
+<!-- Head End   -->
+</head>
+<body>
+    <div id="header">&nbsp;</div>
+    <div class="container">
+        <div class="span-24 last">
+            <h1 class="alt">Módulo Administrativo</h1>
+        </div>
+        <div class="span-4 colborder">
+<!-- Menu Begin -->
+<div class="box">
+<?php echo $this->navigation() ?>
+</div>
+<!-- Menu End   -->
+        </div>
+        <div class="span-17 last">
+            <div class="span-17 last breadcrumbs">
+<!-- Breadcrumbs Begin -->
+<?php echo $this->navigation()->breadcrumbs() ?>
+<!-- Breadcrumbs End   -->
+            </div>
+<!-- Content Begin -->
+<?php echo $this->layout()->content ?>
+<!-- Content End   -->
+        </div>
+    </div>
+</body>
+</html>

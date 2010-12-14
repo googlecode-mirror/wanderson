@@ -11,7 +11,7 @@
  * @package Application
  * @subpackage Bootstrap
  */
-class Application_Bootstrap extends Zend_Application_Bootstrap_Bootstrap
+class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
     /**
      * Configuração Básica de Auxiliares da Camada de Visualiação

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<navigation>
+    <usuario>
+        <label>Usuário</label>
+        <title>Controladora de Usuários</title>
+        <module>admin</module>
+        <controller>user</controller>
+        <action>index</action>
+        <pages>
+            <retrieve>
+                <label>Listar</label>
+                <title>Listagem de Usuários</title>
+                <module>admin</module>
+                <controller>user</controller>
+                <action>retrieve</action>
+            </retrieve>
+            <create>
+                <label>Adicionar</label>
+                <title>Criar um Novo Usuário</title>
+                <module>admin</module>
+                <controller>user</controller>
+                <action>create</action>
+            </create>
+        </pages>
+    </usuario>
+</navigation>
