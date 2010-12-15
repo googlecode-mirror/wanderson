@@ -6,7 +6,7 @@ struct compromisso
 {
     char qualcompromisso[20];
     int dia, mes;
-}
+};
 
 class agenda
 {
@@ -17,28 +17,18 @@ public:
     agenda(int tam)
     {
         vetC = new struct compromisso[tam];
-        totcomp = 0;
+        totComp = 0;
     }
     void mostratodoscomp();
     void inserenovocomp(char qual[20], int d, int m);
-}
+};
 
-struct pessoa
+class novaagenda : public agenda
 {
-    char nome[42];
-}
-
-class novaagenda: public agenda
-{
-protected:
-    struct pessoa *lista;
-public:
-    novaagenda(int tam)
+    novaagenda(int)
     {
-        agenda::agenda(tam);
-        lista = new struct pessoa[tam];
     }
-}
+};
 
 int main()
 {
