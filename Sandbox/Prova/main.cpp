@@ -24,7 +24,7 @@ public:
          int x;
          cout << "Todos os Compromissos" << endl;
          for(x = 0; x < totComp; x++){
-            cout << vetC[x].qualcompromisso << " " << vetC[x].dia << vetC[x].mes << endl;
+            cout << vetC[x].qualcompromisso << " " << vetC[x].dia << " " <<vetC[x].mes << endl;
          }
     };
     void inserenovocomp(char qual[20], int d, int m);
