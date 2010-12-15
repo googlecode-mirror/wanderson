@@ -22,12 +22,10 @@ public:
     }
     void mostratodoscomp(){
          int x;
-         /*for(x = 0; x < vetC.lenght; x++){
-            cout << vetC[x].qualcompromisso<< " ";
-            cout << vetC[x] << " ";
-            cout << vetC[x].dia << " " <<  vetC[x].mes << " ";
+         cout << "Todos os Compromissos" << endl;
+         for(x = 0; x < totComp; x++){
+            cout << vetC[x].qualcompromisso << " " << vetC[x].dia << vetC[x].mes << endl;
          }
-         cout << endl;     */
     };
     void inserenovocomp(char qual[20], int d, int m);
 };
@@ -73,6 +71,7 @@ int main()
     novaagenda na(15);
     na.inserenovocomp("reuniao","Ana",27,10);
     na.inserenovocomp("exame","luiz",15,8);
+    na.mostratodoscomp();
     cout << "Número medio de compromissos por mes" << na.mediames() << endl;
     return 0;
 }
