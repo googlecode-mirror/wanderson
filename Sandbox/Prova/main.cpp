@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring>
 
 using namespace std;
 
@@ -51,11 +52,11 @@ public:
     {
         if (totComp < max) {
             struct compromisso c;
-            c.qualcompromisso = qual;
+            strncpy(c.qualcompromisso,qual,20);
             c.dia = d;
             c.mes = m;
             struct pessoa p;
-            p.nome = comquem;
+            strncpy(p.nome,comquem,10);
             vetC[totComp] = c;
             lista[totComp] = p;
             totComp = totComp + 1;
