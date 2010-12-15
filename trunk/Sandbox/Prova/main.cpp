@@ -25,8 +25,9 @@ public:
 
 class novaagenda : public agenda
 {
-    novaagenda(int)
-    {
+public:
+    novaagenda(int tam):agenda(tam){
+        lista = new struct pessoa[tam];
     }
 };
 
@@ -34,3 +35,4 @@ int main()
 {
     return 0;
 }
+
