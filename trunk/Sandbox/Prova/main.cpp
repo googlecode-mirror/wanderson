@@ -37,7 +37,21 @@ public:
     novaagenda(int tam) : agenda(tam)
     {
         lista = new struct pessoa[tam];
-        max = 0;
+        max = tam;
+    }
+    void inserenovocomp(char qual[20], char comquem[10], int d, int m)
+    {
+        if (totComp < max) {
+            struct compromisso c;
+            c.qualcompromisso = qual;
+            c.dia = d;
+            c.mes = m;
+            struct pessoa p;
+            p.nome = comquem;
+            vetC[totComp] = c;
+            lista[totComp] = p;
+            totComp = totComp + 1;
+        }
     }
 };
 
