@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<!-- Head Begin -->
+<?php echo $this->headMeta()->setIndent(4) . PHP_EOL ?>
+<?php echo $this->headTitle()->setIndent(4) . PHP_EOL ?>
+<?php
+    echo $this->headLink()->setIndent(4)
+        ->appendStylesheet($this->baseUrl('/css/blueprint/screen.css'), 'screen, projection')
+        ->appendStylesheet($this->baseUrl('/css/blueprint/fancy-type/screen.css'), 'screen, projection')
+        ->appendStylesheet($this->baseUrl('/css/blueprint/print.css'), 'print')
+        ->appendStylesheet($this->baseUrl('/themes/admin/css/screen.css')) . PHP_EOL
+?>
+<!-- Head End   -->
+</head>
+<body>
+    <div id="login">
+<!-- Form Begin -->
+<?php echo $this->form ?>
+<!-- Form End   -->
+    </div>
+</body>
+</html>

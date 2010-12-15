@@ -4,6 +4,15 @@ class Admin_Form_Password extends Zend_Form
 {
     public function init()
     {
+        $this->loadDefaultDecorators();
+        $this
+            ->setName('admin-password')
+            ->setMethod(self::METHOD_POST)
+            ->setAction($this->getView()->url())
+            ->setLegend('Senha')
+            ->addDecorator('Fieldset')
+            ->addDecorator('Errors');
+
         $newest = new Zend_Form_Element_Password('newest');
         $newest
             ->setLabel('Nova Senha')
