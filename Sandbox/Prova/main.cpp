@@ -62,10 +62,18 @@ public:
             totComp = totComp + 1;
         }
     }
+    float mediames()
+    {
+        return totComp / 12;
+    }
 };
 
 int main()
 {
+    novaagenda na(15);
+    na.inserenovocomp("reuniao","Ana",27,10);
+    na.inserenovocomp("exame","luiz",15,8);
+    cout << "Número medio de compromissos por mes" << na.mediames() << endl;
     return 0;
 }
 
