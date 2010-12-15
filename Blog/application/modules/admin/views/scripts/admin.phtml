@@ -29,7 +29,14 @@
         <div class="span-17 last">
             <div class="span-17 last breadcrumbs">
 <!-- Breadcrumbs Begin -->
-<?php echo $this->navigation()->breadcrumbs() ?>
+<?php
+    $page = $this->navigation()->findOneByActive(1);
+    if ($page !== null) {
+        $page->setVisible(1);
+        echo $this->navigation()->breadcrumbs();
+        $page->setVisible(0);
+    }
+?>
 <!-- Breadcrumbs End   -->
             </div>
 <!-- Content Begin -->

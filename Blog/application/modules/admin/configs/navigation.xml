@@ -21,6 +21,22 @@
                 <controller>user</controller>
                 <action>create</action>
             </create>
+            <update>
+                <label>Atualizar</label>
+                <title>Atualizar Dados de Usuário</title>
+                <module>admin</module>
+                <controller>user</controller>
+                <action>update</action>
+                <visible>0</visible>
+            </update>
+            <password>
+                <label>Senha</label>
+                <title>Atualizar Senha do Usuário</title>
+                <module>admin</module>
+                <controller>user</controller>
+                <action>password</action>
+                <visible>0</visible>
+            </password>
         </pages>
     </usuario>
 </navigation>
