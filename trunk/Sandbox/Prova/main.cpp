@@ -23,11 +23,21 @@ public:
     void inserenovocomp(char qual[20], int d, int m);
 };
 
+struct pessoa
+{
+    char nome[10];
+};
+
 class novaagenda : public agenda
 {
+protected:
+    int max;
+    struct pessoa *lista;
 public:
-    novaagenda(int tam):agenda(tam){
+    novaagenda(int tam) : agenda(tam)
+    {
         lista = new struct pessoa[tam];
+        max = 0;
     }
 };
 
