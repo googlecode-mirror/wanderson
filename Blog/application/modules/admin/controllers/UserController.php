@@ -106,4 +106,37 @@ class Admin_UserController extends Zend_Controller_Action
         $element->delete();
         $this->_helper->redirector('retrieve');
     }
+
+    /**
+     * Atualização da Senha do Usuário
+     * 
+     * @return void
+     */
+    public function passwordAction()
+    {
+        $iduser = (int) $this->_getParam('iduser', 0);
+        $table = new Admin_Model_DbTable_User();
+        $element = $table->find($iduser)->current();
+        if ($element === null) {
+            throw new Zend_Exception('Invalid Element');
+        }
+        $form = new Admin_Form_Password();
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost();
+            if ($form->isValid($data)) {
+                $repeat = $form->getValue('repeat');
+                $element->password = $repeat;
+                try {
+                    $element->save();
+                    $this->_helper->redirector('retrieve');
+                } catch (Zend_Db_Exception $e) {
+                    $form->addError($e->getMessage());
+                }
+            }
+        } else {
+            $form->populate($element->toArray());
+        }
+        $this->view->form = $form;
+        $this->view->element = $element;
+    }
 }

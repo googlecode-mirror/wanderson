@@ -21,10 +21,6 @@ class Admin_Form_User extends Zend_Form
             ->addValidator(new Zend_Validate_StringLength(1,20))
             ->addFilter(new Zend_Filter_StringToLower());
 
-        $password = new Zend_Form_Element_Password('password');
-        $password
-            ->setLabel('Senha');
-
         $displayname = new Zend_Form_Element_Text('displayname');
         $displayname
             ->setLabel('Nome Completo')
@@ -42,7 +38,7 @@ class Admin_Form_User extends Zend_Form
             ->setLabel('Salvar')
             ->setIgnore(true);
 
-        $elements = array($username, $password, $displayname, $active, $submit);
+        $elements = array($username, $displayname, $active, $submit);
         $this->addElements($elements);
     }
 }
