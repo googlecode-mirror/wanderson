@@ -1,6 +1,8 @@
 @CHARSET "UTF-8";
 fieldset {background-color:#FAFAFA;}
 #header {margin-bottom:2em;background-color:#efefef;border-bottom:1px solid #CCCCCC;}
+#login {margin:0 auto;width:300px;margin-top:50px;}
+#login input[type=text],#login input[type=password] {width:80%;}
 .grid img {vertical-align:middle;}
 .grid tr td:last-child {text-align:right}
 .grid tr th:last-child {text-align:right}
