@@ -19,7 +19,15 @@ public:
         vetC = new struct compromisso[tam];
         totComp = 0;
     }
-    void mostratodoscomp();
+    void mostratodoscomp(){
+         int x;
+         /*for(x = 0; x < vetC.lenght; x++){
+            cout << vetC[x].qualcompromisso<< " ";
+            cout << vetC[x] << " ";
+            cout << vetC[x].dia << " " <<  vetC[x].mes << " ";
+         }
+         cout << endl;     */
+    };
     void inserenovocomp(char qual[20], int d, int m);
 };
 
