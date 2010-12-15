@@ -64,7 +64,7 @@ public:
     }
     float mediames()
     {
-        return totComp / 12;
+        return totComp / 12.0;
     }
 };
 
