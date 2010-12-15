@@ -60,6 +60,14 @@ public:
             totComp = totComp + 1;
         }
     }
+    void mostratodoscomp()
+    {
+         int x;
+         cout << "Todos os Compromissos" << endl;
+         for(x = 0; x < totComp; x++){
+            cout << vetC[x].qualcompromisso << " " << lista[x].nome  <<  " " << vetC[x].dia << " " <<vetC[x].mes << endl;
+         }
+    }
     float mediames()
     {
         return totComp / 12.0;
