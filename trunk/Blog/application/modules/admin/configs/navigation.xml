@@ -39,4 +39,11 @@
             </password>
         </pages>
     </usuario>
+    <logout>
+        <label>Sair</label>
+        <title>Sair do Sistema</title>
+        <module>admin</module>
+        <controller>auth</controller>
+        <action>logout</action>
+    </logout>
 </navigation>
