@@ -1,0 +1,17 @@
+#summary Conjunto de classes para formatação de referências bibliográficas estilo BibTeX
+
+= Introdução =
+
+Esta página visa documentar a utilização do pacote de formatação de referẽncias bibliográficas do Hazel. Será apresentado o problema decorrente da formatação de bibliografias em artigos, um estudo de caso de padrão para referências e como podemos construir um conjunto de classes capaz de separar dados de cadastro e formatação.
+
+= Descrição =
+
+Ao desenvolvermos artigos para Blog, nem sempre estamos preparados ou utilizamos referências bibliográficas para estudos mais aprofundados. Com a iniciativa de documentação brasileira de Zend Framework, foi necessária a construção de um conjunto de classes que separassem o cadastro de referências bibliográficas, formatação e normas técnicas e saída para HTML.
+
+== Banco de Dados de Referências ==
+
+Podemos criar um banco de dados para referências bibliográficas que armazene as informações de documentos variados em que nosso trabalho foi idealizado. O problema é que nem sempre os documentos possuem as mesmas características, gerando problemas em tempo de construção de tabela capaz de armazenar estas informações. A técnica utilizada foi de armazenamento dos dados em uma única coluna de tabela.
+
+Porém temos outro problema. Devemos criar um algoritmo capaz de efetuar a leitura de um texto padronizado que será armazenado nesta coluna da tabela. Algo parecido já existe na programação, chamado BibTeX, um motor de formatação de referências bibliográficas. Este motor separa os dados de documentos e a lógica de formatação, dando a capacidade de troca desta em tempo de execução.
+
+Logo, podemos criar um tradutor que receba este conteúdo representante da referência e transforme num objeto de documento. Este documento deve possuir um gerenciador que será responsável pela formatação em normas técnicas e, completando a necessidade do nosso problema, saída em HTML.
