@@ -15,3 +15,24 @@ Podemos criar um banco de dados para referências bibliográficas que armazene a
 Porém temos outro problema. Devemos criar um algoritmo capaz de efetuar a leitura de um texto padronizado que será armazenado nesta coluna da tabela. Algo parecido já existe na programação, chamado BibTeX, um motor de formatação de referências bibliográficas. Este motor separa os dados de documentos e a lógica de formatação, dando a capacidade de troca desta em tempo de execução.
 
 Logo, podemos criar um tradutor que receba este conteúdo representante da referência e transforme num objeto de documento. Este documento deve possuir um gerenciador que será responsável pela formatação em normas técnicas e, completando a necessidade do nosso problema, saída em HTML.
+
+== Estrutura de Bibliografia ==
+
+Conforme descrito anteriormente, o formato de descrição de bibliografia é muito semelhante ao BibTeX, porém com algumas restrições para facilitar a programação. Futuramente outras capacidades utilizadas pelo BibTeX poderão ser implementadas. Um livro pode ser descrito da seguinte maneira:
+
+{{{
+@book{aho1988,
+    author    = "Alfred V. Aho and Ravi Sethi and Jeffrey D. Ullman",
+    title     = "Compilers: Principles, Techniques and Tools",
+    publisher = "Addison-Wesley",
+    year      = "1988"
+}
+}}}
+
+Este conteúdo poderá ser salvo em banco de dados e previamente traduzido para uma classe bibliográfica. O tipo de documento é descrito como {{{@book}}} e devemos criar um corpo para armazenar as informações, envolvido entre chaves. A primeira informação do corpo é o identificador do documento {{{aho1988}}} e considerado único em todo o banco de dados. Todas as informações posteriores são dados sobre o livro, separados entre vírgulas. Para níveis avançados, as expressões regulares de captura de documento e parâmetros internos estão descritas abaixo:
+
+{{{
+PATTERN_DOCUMENT = '/^\s*@([a-z][a-zA-Z]*)\s*\{([a-zA-Z0-9]+),([^}]*)\}\s*$/';
+PATTERN_ELEMENT = '/^\s*([a-z][a-zA-Z]*)\s*=\s*"([^"]*)"\s*$/';
+}}}
+}}}
