@@ -10,6 +10,18 @@
 class Hazel_Bibliography_Manager
 {
     /**
+     * Expressão Regular para Captura de Documento
+     * 
+     * @var string
+     */
+    const PATTERN_DOCUMENT = '/^\s*@([a-z][a-zA-Z]*)\s*\{([a-zA-Z0-9]+),([^}]*)\}\s*$/';
+
+    /**
+     * Expressão Regular para Captura de Elementos de Documento
+     */
+    const PATTERN_ELEMENT = '/^\s*([a-z][a-zA-Z]*)\s*=\s*"([^"]*)"\s*$/';
+
+    /**
      * Formatador do Gerenciamento
      * 
      * @var Hazel_Bibliography_FormatterAbstract
@@ -101,10 +113,23 @@ class Hazel_Bibliography_Manager
      * @param Hazel_Bibliography_DocumentAbstract $document
      * @return Hazel_Bibliography_Manager Próprio Objeto
      */
-    public function addFormatter($name, Hazel_Bibliography_DocumentAbstract $document)
+    public function addDocument(Hazel_Bibliography_DocumentAbstract $document)
     {
-        $name = (string) $name;
+        $name = $document->getName();
         $this->documents[$name] = $document;
+        return $this;
+    }
+
+    /**
+     * Tradutor de Documentos Descritos BibTeX-like
+     * 
+     * @param string $content Conteúdo de Descrição
+     * @return Hazel_Bibliography_Manager Próprio Objeto
+     */
+    public function parseDocument($content)
+    {
+        $document = self::factory($content);
+        $this->addDocument($document);
         return $this;
     }
 
@@ -114,7 +139,7 @@ class Hazel_Bibliography_Manager
      * @param string $name Nome Identificador do Documento
      * @return Hazel_Bibliography_DocumentAbstract|null Documento no Gerenciamento
      */
-    public function getFormatter($name)
+    public function getDocument($name)
     {
         $name = (string) $name;
         $document = null;
@@ -130,7 +155,7 @@ class Hazel_Bibliography_Manager
      * @param string $name
      * @return Hazel_Bibliography_Manager Próprio Objeto
      */
-    public function removeFormatter($name)
+    public function removeDocument($name)
     {
         $name = (string) $name;
         unset($this->documents[$name]);
@@ -175,5 +200,48 @@ class Hazel_Bibliography_Manager
     public function __toString()
     {
         return $this->render();
+    }
+
+    /**
+     * Construtor de Documentos BibTeX-like
+     * 
+     * @param string $content Conteúdo para Análise Sintática
+     * @return Hazel_Bibliography_DocumentAbstract Documento Resultante
+     * @throws Hazel_Bibliography_Exception Formato Inválido de Conteúdo
+     */
+    public static function factory($content)
+    {
+        if (!preg_match(self::PATTERN_DOCUMENT, $content, $match)) {
+            throw new Hazel_Bibliography_Exception('Invalid Bibliography Format');
+        }
+
+        $type = ucfirst($match[1]);
+        $name = $match[2];
+
+        $class = "Hazel_Bibliography_Document_$type";
+        if (!class_exists($class)) {
+            throw new Hazel_Bibliography_Exception("Invalid Bibliography Type: '$type'");
+        }
+
+        $document = new $class();
+        $document->setName($name);
+        $elements = explode(',', $match[3]);
+        foreach ($elements as $element) {
+
+            if (!preg_match(self::PATTERN_ELEMENT, $element, $match)) {
+                throw new Hazel_Bibliography_Exception("Invalid Bibliography Element Format: '$element'");
+            }
+            $method = 'set' . ucfirst($match[1]);
+            $value  = $match[2];
+
+            if ($match[1] == 'name' || !method_exists($document, $method)) {
+                throw new Hazel_Bibliography_Exception("Invalid Bibliography Element: '{$match[1]}'");
+            }
+
+            $document->$method($value);
+
+        }
+
+        return $document;
     }
 }
