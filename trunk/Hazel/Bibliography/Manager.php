@@ -17,11 +17,38 @@ class Hazel_Bibliography_Manager
     protected $_formatter;
 
     /**
+     * Decorador da Bibliografia
+     * 
+     * @var Hazel_Bibliography_DecoratorAbstract
+     */
+    protected $_decorator;
+
+    /**
      * Documentos do Gerenciamento
      * 
      * @var array
      */
     protected $_documents = array();
+
+    /**
+     * Construtor da Classe
+     * 
+     * @param array $options Configurações
+     */
+    public function __construct(array $options = array())
+    {
+        if (isset($options['formatter'])) {
+            $this->setFormatter($options['formatter']);
+        } else {
+            $this->setFormatter(new Hazel_Bibliography_Formatter_Default());
+        }
+
+        if (isset($options['decorator'])) {
+            $this->setDecorator($options['decorator']);
+        } else {
+            $this->setDecorator(new Hazel_Bibliography_Decorator_List());
+        }
+    }
 
     /**
      * Configuração do Formatador do Gerenciamento
@@ -43,6 +70,28 @@ class Hazel_Bibliography_Manager
     public function getFormatter()
     {
         return $this->_formatter;
+    }
+
+    /**
+     * Configuração do Decorador
+     * 
+     * @param Hazel_Bibliography_DecoratorAbstract $decorator
+     * @return Hazel_Bibliography_Manager Próprio Objeto
+     */
+    public function setDecorator(Hazel_Bibliography_DecoratorAbstract $decorator)
+    {
+        $this->_decorator = $decorator;
+        return $this;
+    }
+
+    /**
+     * Informação do Decorador
+     * 
+     * @return Hazel_Bibliography_DecoratorAbstract Decorador da Bibliografia
+     */
+    public function getDecorator()
+    {
+        return $this->_decorator;
     }
 
     /**
@@ -112,9 +161,10 @@ class Hazel_Bibliography_Manager
         foreach ($documents as $document) {
             $content[] = $formatter->format($document);
         }
-        $content = implode(' ', $content);
 
-        return $content;
+        $result = $this->getDecorator()->render($content);
+
+        return $result;
     }
 
     /**
