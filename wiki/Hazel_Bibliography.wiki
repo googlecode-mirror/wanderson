@@ -114,5 +114,6 @@ Existem alguns problemas que devem ser considerados durante a utilização deste
 
  * A estrutura do documento salvo em banco de dados e utilizada pelo tradutor do gerenciador de documentos é uma sublinguagem do BibTeX original e deve seguir fielmente o padrão de captura descrito anterior. Caso o conteúdo não esteja nas normas, será atirada uma exceção com mensagem descrevendo o problema.
  * Atualmente só existe o tipo de documento {{{Book}}}. Devemos implementar outros tipo e inclusive criar os métodos que exigem a configuração de parâmetros necessários. Esta exigência é implementada no subpacote {{{Document}}} e não no {{{Formatter}}}, como anteriormente idealizado.
+ * Valores descritos entre aspas duplas não devem possuir estas aspas escapadas, dado que o padrão de captura não suporta este conteúdo. Verificar o escape e captura.
 
 Conseguimos com esta estrutura separar a lógica de armazenamento e cadastro de referências bibliográficas com {{{Document}}}, formatação conforme normas técnicas com {{{Formatter}}} e saída HTML com {{{Decorator}}}. Podemos implementar novas funcionalidades, como outros tipos de documentos, formatadores IEEE ou ABNT e decoradores em listas de descrição DL.
