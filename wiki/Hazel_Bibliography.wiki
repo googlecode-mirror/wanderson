@@ -35,4 +35,9 @@ Este conteúdo poderá ser salvo em banco de dados e previamente traduzido para 
 PATTERN_DOCUMENT = '/^\s*@([a-z][a-zA-Z]*)\s*\{([a-zA-Z0-9]+),([^}]*)\}\s*$/';
 PATTERN_ELEMENT = '/^\s*([a-z][a-zA-Z]*)\s*=\s*"([^"]*)"\s*$/';
 }}}
-}}}
+
+== Objeto de Bibliografia ==
+
+Cada tipo de documento deverá receber um objeto representante no pacote de bibliografia para encapsulamento de informações e testes de preenchimento. Logo, podemos verificar se determinadas informações foram corretamente preenchidas. Todas as classes de bibliografia devem extender a classe {{{Hazel_Bibliography_DocumentAbstract}}}. As classes podem ser encontradas no subpacote {{{Document}}} deste pacote e são nomeadas conforme padrão de formatação de nomes do Zend Framework.
+
+Os tipos de documentos devem ter como último nome da classe o nome identificador de tipo com a primeira letra em capital. Desta forma, o tipo de documento {{{@book}}} deverá ter como classe representante {{{Hazel_Bibliography_Document_Book}}} ou o tipo de documento {{{@article}}} deverá ter como classe representante {{{Hazel_Bibliography_Document_Article}}}. Isto é necessário para criação de um tradutor capaz de encontrar facilmente a classe representante do conteúdo salvo no banco de dados, através do Padrão de Projeto _Factory_.
