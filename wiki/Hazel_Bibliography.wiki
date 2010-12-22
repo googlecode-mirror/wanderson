@@ -70,3 +70,32 @@ echo $formatter->format($document);
 }}}
 
 O próprio formatador será responsável pela escolha do método adequado em tempo de execução.
+
+== Gerenciamento de Documentos ==
+
+Um texto que recebe referências bibliográficas nem sempre possui somente uma fonte para consulta. Devemos então criar um gerenciador capaz de receber todos os documentos relacionados, o formatador de documentos e saber como deverá ser feita a saída HTML. Para isto foi criada a classe {{{Hazel_Bibliography_Manager}}} responsável por estas características e pela tradução do formato BibTeX para objetos do pacote, através do método estático {{{factory($content)}}}.
+
+Para finalização, ainda precisamos de uma classe responsável pela saída HTML. O Padrão de Projeto _Decorator_ é utilizado neste caso, onde uma classe especializada deve ser extendida da classe {{{Hazel_Bibliography_DecoratorAbstract}}}, que exige o método de instância {{{render($content)}}}. O argumento {{{$content}}} é um conjunto de elementos formatados, portando {{{array}}} de variáveis do tipo {{{string}}}. O método é a última camada da renderização do gerenciador de documentos.
+
+== Utilização do Conjunto de Pacotes ==
+
+Um documento pode ser adicionado diretamente no formato BibTeX através do método de instância {{{parseDocument($content)}}}. Por padrão, em tempo de construção do gerenciador são adicionados o formatador {{{Hazel_Bibliography_Formatter_Default}}} e o decorador {{{Hazel_Bibliography_Decorator_List}}}.
+
+{{{
+$book    = $table->findDocument('aho1988');  // Consulta Qualquer do BibTeX no Banco
+$article = $table->findDocument('rosa2010'); // Consulta Qualquer do BibTeX no Banco
+
+$manager = new Hazel_Bibliography_Manager();
+$manager->parseDocument($book)
+        ->parseDocument($article);
+echo $manager->render();
+}}}
+
+Podemos criar novos objetos de formatação e decoração extendendo as classes específicas. Eles podem ser adicionados ao gerenciador através do encapsulamento.
+
+{{{
+$formatter = new Hazel_Bibliography_Formatter_Default();
+$decorator = new Hazel_Bibliography_Decorator_List();
+$manager->setFormatter($formatter)
+        ->setDecorator($decorator);
+}}}
