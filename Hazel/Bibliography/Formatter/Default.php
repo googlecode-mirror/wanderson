@@ -19,7 +19,7 @@ class Hazel_Bibliography_Formatter_Default
      */
     protected function _formatAuthor($content)
     {
-        $authors = explode('and', $content);
+        $authors = explode(' and ', $content);
         foreach ($authors as $key => $author) {
             $exploded  = explode(' ', $author);
             $lastname  = strtoupper(array_pop($exploded));
@@ -43,10 +43,10 @@ class Hazel_Bibliography_Formatter_Default
      */
     public function formatBook(Hazel_Bibliography_DocumentAbstract $document)
     {
-        $author    = $this->_formatAuthor($element->getAuthor());
-        $title     = $element->getTitle();
-        $publisher = $element->getPublisher();
-        $year      = $element->getYear();
+        $author    = $this->_formatAuthor($document->getAuthor());
+        $title     = $document->getTitle();
+        $publisher = $document->getPublisher();
+        $year      = $document->getYear();
         return "$author ($year). $title. $publisher.";
     }
 }
