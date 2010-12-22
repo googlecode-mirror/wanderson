@@ -1,4 +1,5 @@
 #summary Conjunto de classes para formatação de referências bibliográficas estilo BibTeX
+#labels Phase-Design,Featured
 
 = Introdução =
 
@@ -22,7 +23,7 @@ Conforme descrito anteriormente, o formato de descrição de bibliografia é mui
 
 {{{
 @book{aho1988,
-    author    = "Alfred V. Aho and Ravi Sethi",
+    author    = "Alfred V. Aho and Ravi Sethi and Jeffrey D. Ullman",
     title     = "Compilers: Principles, Techniques and Tools",
     publisher = "Addison-Wesley",
     year      = "1988"
