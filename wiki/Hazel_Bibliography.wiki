@@ -41,3 +41,32 @@ PATTERN_ELEMENT = '/^\s*([a-z][a-zA-Z]*)\s*=\s*"([^"]*)"\s*$/';
 Cada tipo de documento deverá receber um objeto representante no pacote de bibliografia para encapsulamento de informações e testes de preenchimento. Logo, podemos verificar se determinadas informações foram corretamente preenchidas. Todas as classes de bibliografia devem extender a classe {{{Hazel_Bibliography_DocumentAbstract}}}. As classes podem ser encontradas no subpacote {{{Document}}} deste pacote e são nomeadas conforme padrão de formatação de nomes do Zend Framework.
 
 Os tipos de documentos devem ter como último nome da classe o nome identificador de tipo com a primeira letra em capital. Desta forma, o tipo de documento {{{@book}}} deverá ter como classe representante {{{Hazel_Bibliography_Document_Book}}} ou o tipo de documento {{{@article}}} deverá ter como classe representante {{{Hazel_Bibliography_Document_Article}}}. Isto é necessário para criação de um tradutor capaz de encontrar facilmente a classe representante do conteúdo salvo no banco de dados, através do Padrão de Projeto _Factory_.
+
+== Classe de Livros ==
+
+A classe de bibliografia para o tipo livros é a primeira representante de tipos de documentos. Como todas as classes que serão desenvolvidas, ela extende da classe {{{Hazel_Bibliography_DocumentAbstract}}}. Os livros aqui descritos possuem quatro atributos: {{{author}}}, {{{title}}}, {{{publisher}}} e {{{year}}}, que deverão ser criados na classe representante e encapsulamentos com {{{get}}} e {{{set}}} devem ser criados. O código-fonte pode ser encontrado em [http://code.google.com/p/wanderson/source/browse/trunk/Hazel/Bibliography/Document/Book.php Book.php].
+
+== Formatação de Referências ==
+
+A lógica de formatação de referências está separada da classe representante da estrutura da referência. Isto fornece uma abstração de programação, podendo ser modificada a formatação padrão e até inclusas novos tipos de normas para renderização. O pacote bibliográfico possui uma classe de formatação chamada {{{Hazel_Bibliography_FormatterAbstract}}} responsável pela formatação de documentos. Todas as classes de formatação devem ser extendidas desta classe para manter o encapsulamento e armazenadas no subpacote {{{Formatter}}}
+
+Para formatar um tipo de documento, devemos criar na classe extendida um método que tenha como prefixo {{{format}}} e o nome do tipo do documento capitalizado, com somente um argumento que será o documento a ser formatado. Logo, para criarmos um formatador e a regra de formatação de livros, a assinatura do método deverá ser {{{formatBook($document)}}}. Abaixo temos a estrutura de classe básica para um formatador _default_ que possui regras de formatação de livros e artigos.
+
+{{{
+class Hazel_Bibliography_Formatter_Default
+    extends Hazel_Bibliography_FormatterAbstract
+{
+    public function formatBook($document) { /* method */ }
+    public function formatArticle($document) { /* method */ }
+}
+}}}
+
+Portanto, todas as regras de formatação são armazenadas na mesma classe de regras. A classe abstrata extendida possui tratamento de erros caso exista uma chamada de método não  desenvolvido, gerando uma exceção específica do pacote {{{Hazel_Bibliography_Exception}}}. Para formatação de um documento conforme normas _default_, devemos trabalhar da seguinte maneira:
+
+{{{
+$document  = new Hazel_Bibliography_Document_Book();
+$formatter = new Hazel_Bibliography_Document_Default();
+echo $formatter->format($document);
+}}}
+
+O próprio formatador será responsável pela escolha do método adequado em tempo de execução.
