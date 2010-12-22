@@ -22,7 +22,7 @@ Conforme descrito anteriormente, o formato de descrição de bibliografia é mui
 
 {{{
 @book{aho1988,
-    author    = "Alfred V. Aho and Ravi Sethi and Jeffrey D. Ullman",
+    author    = "Alfred V. Aho and Ravi Sethi",
     title     = "Compilers: Principles, Techniques and Tools",
     publisher = "Addison-Wesley",
     year      = "1988"
@@ -79,7 +79,7 @@ Para finalização, ainda precisamos de uma classe responsável pela saída HTML
 
 == Utilização do Conjunto de Pacotes ==
 
-Um documento pode ser adicionado diretamente no formato BibTeX através do método de instância {{{parseDocument($content)}}}. Por padrão, em tempo de construção do gerenciador são adicionados o formatador {{{Hazel_Bibliography_Formatter_Default}}} e o decorador {{{Hazel_Bibliography_Decorator_List}}}.
+Um documento pode ser adicionado diretamente no formato BibTeX através do método de instância {{{parseDocument($content)}}}. Por padrão, em tempo de construção do gerenciador são adicionados o formatador {{{Hazel_Bibliography_Formatter_Default}}} e o decorador {{{Hazel_Bibliography_Decorator_List}}}. *Nota:* Como o projeto atualmente conta somente com o tipo de documento {{{@book}}} e o exemplo abaixo somente possui saída para o livro {{{aho1988}}}. Portanto, há necessidade de inclusão de tipo de documento {{{@article}}} e atualização do exemplo.
 
 {{{
 $book    = $table->findDocument('aho1988');  // Consulta Qualquer do BibTeX no Banco
@@ -88,6 +88,13 @@ $article = $table->findDocument('rosa2010'); // Consulta Qualquer do BibTeX no B
 $manager = new Hazel_Bibliography_Manager();
 $manager->parseDocument($book)
         ->parseDocument($article);
+/*
+ * Outputs:
+ * <ul>
+ *     <li>AHO, A. V.;SETHI, R.;ULLMAN, J. D. (1988).
+ *         Compilers: Principles, Techniques and Tools. Addison-Wesley.</li>
+ * </ul>
+ */
 echo $manager->render();
 }}}
 
