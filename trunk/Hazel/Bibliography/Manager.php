@@ -19,7 +19,7 @@ class Hazel_Bibliography_Manager
     /**
      * Expressão Regular para Captura de Elementos de Documento
      */
-    const PATTERN_ELEMENT = '/^\s*([a-z][a-zA-Z]*)\s*=\s*"([^"]*)"\s*$/';
+    const PATTERN_ELEMENT = '/\s*([a-z][a-zA-Z]*)\s*=\s*"([^"]*)"\s*/';
 
     /**
      * Formatador do Gerenciamento
@@ -225,16 +225,14 @@ class Hazel_Bibliography_Manager
 
         $document = new $class();
         $document->setName($name);
-        $elements = explode(',', $match[3]);
-        foreach ($elements as $element) {
+        $counter = preg_match_all(self::PATTERN_ELEMENT, $match[3], $match);
 
-            if (!preg_match(self::PATTERN_ELEMENT, $element, $match)) {
-                throw new Hazel_Bibliography_Exception("Invalid Bibliography Element Format: '$element'");
-            }
-            $method = 'set' . ucfirst($match[1]);
-            $value  = $match[2];
+        for ($i = 0; $i < $counter; $i++) {
 
-            if ($match[1] == 'name' || !method_exists($document, $method)) {
+            $method = 'set' . ucfirst($match[1][$i]);
+            $value  = $match[2][$i];
+
+            if ($match[1][$i] == 'name' || !method_exists($document, $method)) {
                 throw new Hazel_Bibliography_Exception("Invalid Bibliography Element: '{$match[1]}'");
             }
 
