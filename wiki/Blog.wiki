@@ -11,3 +11,22 @@ Para que isto seja possível, precisamos de um modelo de aplicativo em que os le
 Um Blog poderá ser construído utilizando ZF e, enquanto este está sendo desenvolvido, deverá ser utilizado para documentar a programação e tutoriais de técnicas avançadas utilizadas. Isto pode ser considerado um paradoxo pois, o aplicativo gerado somente pode ser desenvolvido concorrentemente à documentação, porém não possuímos um aplicativo completo para receber a documentação. Logo, uma primeira parte do Blog deverá ser construída até que seja possível o desenvolvimento textual.
 
 Existem ferramentas prontas para criação de Blogs. Este projeto não visa competir com estas, mas irá utilizar muitas das suas características. Funcionalidades como _indexing_ facilitado aos sites de busca, controle de categorias e registros bibliográficos devem ser incluídos.
+
+== Características ==
+
+O Blog deverá ser capaz:
+
+ * Possuir no mínimo dois módulos
+  * Externo para visualização da documentação pelo leitor
+  * Interno para edição dos documentos gerados
+ * Controle de documentos por categoria e por etiquetas
+ * Facilitar _indexing_ de sites de busca fornecendo metainformações do documento
+ * Administrar autores que terão acesso ao módulo interno
+ * Controlar referências bibliográficas dos documentos e formatação
+
+Serão tratadas como necessidades primárias para foco do projeto:
+
+ * Módulo externo deve ser padronizado segundo as normas da W3C
+  * Facilidade para que leitores diversos consigam visualizar o conteúdo apresentado
+ * Módulo interno pode não respeitar as padronizações da W3C
+  * Facilidade em tempo de programação que trabalha com técnicas adicionais não padronizadas, como atributos de _tags_ para _Dojo Toolkit_ no estilo marcação
