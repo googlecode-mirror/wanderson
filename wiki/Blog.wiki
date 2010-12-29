@@ -1,0 +1,13 @@
+#summary Anotações para controle de desenvolvimento de Blog com Zend Framework
+#labels Phase-Requirements
+
+= Idealização =
+
+Devido a uma necessidade de conteúdo sobre desenvolvimento em PHP utilizando Zend Framework, venho por meio deste documento registrar uma idealização de um Blog que contenha documentação especializada em criação de aplicativos e estruturas utilizando a ferramenta. 
+Para que isto seja possível, precisamos de um modelo de aplicativo em que os leitores estejam bem ambientados, e este deverá ser desenvolvido utilizando a biblioteca Zend Framework.
+
+== Escolha de Modelo ==
+
+Um Blog poderá ser construído utilizando ZF e, enquanto este está sendo desenvolvido, deverá ser utilizado para documentar a programação e tutoriais de técnicas avançadas utilizadas. Isto pode ser considerado um paradoxo pois, o aplicativo gerado somente pode ser desenvolvido concorrentemente à documentação, porém não possuímos um aplicativo completo para receber a documentação. Logo, uma primeira parte do Blog deverá ser construída até que seja possível o desenvolvimento textual.
+
+Existem ferramentas prontas para criação de Blogs. Este projeto não visa competir com estas, mas irá utilizar muitas das suas características. Funcionalidades como _indexing_ facilitado aos sites de busca, controle de categorias e registros bibliográficos devem ser incluídos.
