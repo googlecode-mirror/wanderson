@@ -30,3 +30,23 @@ Serão tratadas como necessidades primárias para foco do projeto:
   * Facilidade para que leitores diversos consigam visualizar o conteúdo apresentado
  * Módulo interno pode não respeitar as padronizações da W3C
   * Facilidade em tempo de programação que trabalha com técnicas adicionais não padronizadas, como atributos de _tags_ para _Dojo Toolkit_ no estilo marcação
+
+= Análise de Requisitos =
+
+Para criação deste Blog, necessitamos de um local específico para armazenamento na linha de desenvolvimento deste repositório. Para isto, registramos a localização {{{Blog/}}}, subdiretório da linha principal {{{trunk/}}}, centralizando assim o código gerado.
+
+== Estrutura Base ==
+
+O Blog deverá primeiramente possuir uma estrutura base para receber o desenvolvimento. Conforme padronização do ZF, a estrutura padrão de projeto será utilizada. Dois módulos deverão ser desenvolvidos: {{{default}}} e {{{publisher}}}.
+
+O módulo {{{default}}} deverá receber toda a programação de visualização externa de documentação, para leitura dos artigos, pesquisa de categorias e etiquetas, bem como seguir documentos relacionados, _feeders_ ou versões de impressão.
+
+Já o módulo {{{publisher}}} será responsável pela administração de conteúdo relacionado à criação de artigos, fornecendo ferramentas específicas para este fim. Junto aos artigos, podemos considerar outras informações periféricas como dados do autor, controle de bibliografia, categorias, etiquetas e outras adiante descritas.
+
+Acrescentando, o módulo {{{admin}}} deverá controlar os usuários, _logs_ de erros e outras coisas necessárias para que o sistema sobreviva.
+
+O controle de usuários deverá ser feito por grupos hierárquicos. Teremos dois grupos de usuários: {{{Administradores}}} e {{{Contribuidores}}}. Um usuário do grupo de {{{Contribuidores}}} terá direito a trabalhar no módulo {{{publisher}}}. Já os {{{Administradores}}} poderão manipular o módulo {{{admin}}}.
+
+== Autores e Autenticação ==
+
+Um Blog armazena artigos que devem ser registrados por autores previamente cadastrados. Estes autores deverão entrar no aplicativo mediante credenciais. Portanto, precisamos de uma controladora de *Autores* do Blog que forneça manutenção nestes dados. São necessários dados como {{{nome}}}, {{{usuário}}}, {{{senha}}}, {{{ativo}}} e {{{removido}}}. Também devemos cadastrar a última vez que este usuário entrou no sistema. Um usuário pertence a somente um grupo de usuários.
