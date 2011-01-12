@@ -11,3 +11,18 @@ CREATE TABLE people
     PRIMARY KEY(idpeople),
     CHECK(role >= 0)
 );
+
+CREATE TABLE message
+(
+    idmessage SERIAL,
+    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    priority SMALLINT NOT NULL DEFAULT 6,
+    priorityName VARCHAR(20),
+    content TEXT NOT NULL,
+    info TEXT,
+    ip VARCHAR(17),
+    idpeople INTEGER,
+    PRIMARY KEY(idmessage),
+    FOREIGN KEY(idpeople) REFERENCES people(idpeople),
+    CHECK (priority >= 0)
+);
