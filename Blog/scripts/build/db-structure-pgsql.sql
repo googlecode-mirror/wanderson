@@ -17,7 +17,7 @@ CREATE TABLE message
     idmessage SERIAL,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     priority SMALLINT NOT NULL DEFAULT 6,
-    priorityName VARCHAR(20),
+    priorityname VARCHAR(20),
     content TEXT NOT NULL,
     info TEXT,
     ip VARCHAR(17),
