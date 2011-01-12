@@ -1,6 +1,6 @@
 CREATE TABLE people
 (
-    idpeople SERIAL,
+    idpeople INTEGER AUTO_INCREMENT NOT NULL,
     name VARCHAR(100),
     username VARCHAR(20) NOT NULL UNIQUE,
     password CHAR(32) NOT NULL,
@@ -10,4 +10,4 @@ CREATE TABLE people
     removed BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY(idpeople),
     CHECK(role >= 0)
-);
+) TYPE=INNODB;
