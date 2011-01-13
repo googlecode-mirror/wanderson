@@ -7,7 +7,7 @@
  * @category Hazel
  * @package  Log
  */
-class Hazel_Log extends Zend_Log
+class Hazel_Log
 {
     /**
      * Singleton Instance
@@ -15,11 +15,18 @@ class Hazel_Log extends Zend_Log
      */
     private static $_instance = null;
 
-    const LOGIN = 8; // Login: Autenticação do Usuário no Sistema
+    /**
+     * Objeto Manipulador das Informações
+     * @var Zend_Log
+     */
+    private $_logger = null;
 
-    public function __construct(Zend_Log_Writer_Abstract $writer = null)
+    /**
+     * Construtor Padrão da Classe
+     */
+    private function __construct()
     {
-        parent::__construct($writer);
+        $logger = new Zend_Log();
 
         // Adicionar Escritor de Banco de Dados
         $mapper = array(
@@ -35,7 +42,7 @@ class Hazel_Log extends Zend_Log
         $adapter = $table->getAdapter();
         $tableName = $table->info(Zend_Db_Table::NAME);
         $element = new Zend_Log_Writer_Db($adapter, $tableName, $mapper);
-        $this->addWriter($element);
+        $logger->addWriter($element);
 
         // Elemento Extra: Identificador do Usuário
         $user = null;
@@ -43,12 +50,14 @@ class Hazel_Log extends Zend_Log
         if ($auth->hasIdentity()) {
             $user = $auth->getIdentity()->idpeople;
         }
-        $this->setEventItem('user', $user);
+        $logger->setEventItem('user', $user);
 
         // Elemento Extra: IP do Cliente
         $front = Zend_Controller_Front::getInstance();
         $address = $front->getRequest()->getClientIp();
-        $this->setEventItem('address', $address);
+        $logger->setEventItem('address', $address);
+
+        $this->_setLogger($logger);
     }
 
     /**
@@ -61,5 +70,36 @@ class Hazel_Log extends Zend_Log
             self::$_instance = new Hazel_Log();
         }
         return self::$_instance;
+    }
+
+    /**
+     * Configuração do Manipulador de Informações
+     * @param Zend_Log $logger
+     * @return Hazel_Log Próprio Objeto para Encadeamento
+     */
+    protected function _setLogger(Zend_Log $logger)
+    {
+        $this->_logger = $logger;
+        return $this;
+    }
+
+    /**
+     * Informação do Manipulador de Informações
+     * @return Zend_Log Objeto Manipulador de Informações
+     */
+    public function getLogger()
+    {
+        return $this->_logger;
+    }
+
+    /**
+     * Proxy Pattern
+     * Acesso Interno Direto ao Objeto de Logging
+     * @return Hazel_Log Próprio Objeto para Encadeamento
+     */
+    public function __call($method, $params)
+    {
+        $this->getLogger()->__call($method, $params);
+        return $this;
     }
 }
