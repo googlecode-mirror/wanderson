@@ -1,0 +1,35 @@
+% Sociedade Brasileira de Computação
+% Modelo para Artigos Propostos pela Instituição
+% Baseado em SBC 2001 Style por Jumi Hubner e Rafael Bordini
+% @author Wanderson Henrique Camargo Rosa
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{sbc-template}[2011/02/22 v1]
+
+% Formatação de Página
+\RequirePackage[a4paper,top=3.5cm,bottom=2.5cm,left=3cm,right=3cm]{geometry}
+
+% Páginas na Mesma Altura
+\flushbottom{}
+
+% Parágrafos
+% Indentação de Primeira Linha
+\parindent 1.27cm
+% Separação entre Parágrafos
+\parskip 6pt
+
+% Fonte
+\RequirePackage{times}
+\renewcommand{\normalsize}{\@setfontsize\normalsize\@xiipt\@xivpt}
+
+% Novos Comandos ---------------------------------------------------------------
+
+% Contador de Instituições
+\newcounter{instn}
+\setcounter{instn}{1}
+% Informação do Número da Instituição
+\newcommand{\instnum}{\arabic{instn}}
+% Número da Instituição
+\newcommand{\inst}[1]{\ensuremath{^{#1}}}
+% E-mail dos Autores
+\renewcommand{\and}{, }
