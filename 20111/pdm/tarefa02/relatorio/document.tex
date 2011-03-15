@@ -117,7 +117,9 @@ Assim, desenvolvi um programa que possui um ambiente para desenho muito simples,
 onde o usuário pode movimentar o cursor e colorir a localização atual do mesmo,
 chamado JDrawME.
 
+% JDrawME ----------------------------------------------------------------------
 \section{JDrawME}
+\label{sec:jdrawme}
 
 O JDrawME é um aplicativo que carrega uma tela da cor preta na tela e cria um
 cursor branco que pode ser movimentado utilizando os números do teclado. A
@@ -173,5 +175,44 @@ Após gerar o MIDlet, executei em duas plataformas: uma emulada do próprio WTK 
 um celular Nokia C3-00 com sistema operacional Nokia S40 Mobile. Por ser muito
 simples, nenhuma arquitetura ocasionou defeito, porém no celular físico a tecla
 SHIFT precisa ser pressionada para acessar os números.
+
+% Anotações Finais -------------------------------------------------------------
+\section{Anotações Finais}
+\label{sec:finais}
+
+A facilidade de desenvolvimento sobre a plataforma J2ME é muito visível quando o
+programador está acostumado com o ambiente Java. Podemos concluir que existem
+diferenças nos componentes utilizados, porém a lógica de aplicação é a mesma.
+
+Senti dificuldades na pesquisa de estruturas de dados disponíveis. O Java para
+\emph{desktops} possui uma grande de quantidades de listas encadeadas
+disponíveis. Para J2ME somente encontrei uma implementação da classe
+\texttt{Vector}.
+
+Também encontrei diferença quanto a utilização do laço de repetição
+\texttt{for}. Este não pode ser utilizado com um elemento anônimo para iteração
+com todos os objetos inclusos em uma lista. Isto deve acontecer para otimização
+da máquina virtual que é executada sobre dispositivos embarcados.
+
+A portabilidade do Java sobre as plataformas embarcadas é dificultada quando
+dispositivos diferentes recebem o programa. Podemos exemplificar com a execução
+do mesmo aplicativo sobre o emulador com teclado de dígitos e o celular com
+teclado completo e sem acesso direto aos números, ou com o tamanho da tela que
+no emulador possui orientação vertical e no celular orientação horizontal.
+
+O programador deve especificar arquiteturas semelhantes para execução do
+programa ou tratar todas as possibilidades de entrada e saída, algo quase
+impossível se comparado com a quantidade de dispositivos que possuem uma máquina
+virtual Java.
+
+Para a instalação do ambiente de desenvolvimento foram gastos 3h30min, a
+inicialização no desenvolvimento, ambientação com a linguagem e estrutura e
+aplicação dos \emph{tutoriais} fornecidos ocorreu em 2h, aprendizado sobre
+componentes disponibilizados pelo J2ME em 2h, desenvolvimento do aplicativo
+final em 4h30min e documentação final em cerca de 4h. Todos estes horários
+estão distribuídos entre os dias 09 de março e 13 de março de 2011.
+
+Fico com idéias para desenvolvimento com a próxima plataforma de estudo da
+disciplina, um apresentador de \emph{slides} para Android.
 
 \end{document}
