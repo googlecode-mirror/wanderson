@@ -137,4 +137,41 @@ teclas:
 \item[Número 5] Colore a posição atual do cursor.
 \end{description}
 
+\subsection{Classes}
+
+Buscando dividir as tarefas, criei algumas classes para encapsulamento de
+funcionalidades.
+
+A classe \texttt{Main} é responsável pela execução principal do programa que
+inicializa um objeto da classe \texttt{Drawer}, estendida da classe
+\texttt{Canvas}, que recebe o controle de desenho. Houve a necessidade de
+criação da classe \texttt{Point} para trabalhar como pontos em tela e sua
+derivada \texttt{Cursor} para controlar a movimentação. Finalizando, existe a
+classe \texttt{Color} que administra a manipulação de cores.
+
+\subsection{Funcionalidades}
+
+Os principais métodos da aplicação são duas sobrescritas da classe
+\texttt{Canvas} na \texttt{Drawer}, uma para controle de pintura em tela e
+outra que administra os pontos já inseridos.
+
+Quando uma tecla é pressionada, o método \texttt{keyPressed} é chamado pelo
+Java. Um bloco condicional do tipo \texttt{switch} foi desenvolvido e as
+chamadas de movimentação são delegadas para cada tecla. Caso a tecla de
+colorização seja ativada, um novo cursor é adicionado a uma lista de objetos
+pertencente ao objeto do tipo \texttt{Drawer}. Ao final, solicita-se que o
+ambiente seja redesenhado.
+
+Neste momento, o Java executa o método \texttt{paint}, que limpa o ambiente de
+desenho com a cor de fundo configurada, renderiza cada ponto adicionado à lista
+com a cor de primeiro plano. Ao final, o cursor é renderizado com cor inversa ao
+fundo na posição atual.
+
+\subsection{Execução}
+
+Após gerar o MIDlet, executei em duas plataformas: uma emulada do próprio WTK e
+um celular Nokia C3-00 com sistema operacional Nokia S40 Mobile. Por ser muito
+simples, nenhuma arquitetura ocasionou defeito, porém no celular físico a tecla
+SHIFT precisa ser pressionada para acessar os números.
+
 \end{document}
