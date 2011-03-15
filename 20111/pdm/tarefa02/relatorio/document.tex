@@ -54,7 +54,9 @@ disponível na tarefa e encontrei a WDK. Para instalação, a WDK exige o diret�
 onde a máquina virtual Java está instalada. O Ubuntu salva este diretório em um
 local diferenciado, possivelmente visando velocidade.
 
-O Eclipse necessita de configurações para encontrar o caminho da WDK
+O Eclipse necessita de configurações para encontrar o caminho da WDK e o caminho
+para pesquisa de dispositivos para emulação. Após o fornecimentos destas
+informações, o Eclipse exibe 4 dispositivos encontrados.
 
 % Sobre o Aplicativo -----------------------------------------------------------
 \section{Sobre o Aplicativo}
@@ -65,8 +67,26 @@ menor porque está sendo menos usado hoje em dia. Outras tecnologias serão
 inseridas no conteúdo com o passar das aulas. Porém, nesta semana, devemos criar
 uma aplicação simples.
 
-\subsection{Apresentador de Slides}
+\subsection{Apresentador de \emph{Slides}}
 
-A primeira idéia de desenvolvimento 
+A primeira idéia de desenvolvimento foi um aplicativo que estou idealizando para
+Android há quase 1 ano. Um apresentador de \emph{slides} é um dispositivo de
+\emph{hardware} que trabalha como um controle remoto para navegação em exibição
+de palestras. O problema é que este dispositivo custa muito caro pelas funções
+que executa.
+
+Basicamente, precisamos de um elemento que estabeleça uma conexão com o
+computador da apresentação e envie comandos para avançar ou retroceder
+\emph{slides}. Um dispositivo móvel como um celular \emph{smartphone} possui
+estas características e pode receber um programa capaz de abranger as
+necessidades.
+
+Para troca de informações com o computador, devemos criar um programa servidor
+que administre conexões e interprete os comandos enviados pelo dispositivo
+móvel.
+
+Como esta tarefa é um pouco maior e a idéia principal do desenvolvimento sobre
+J2ME não deve ser tão complexa, resolvi deixar este para aplicar sobre a
+plataforma Android, próximo assunto da disciplina.
 
 \end{document}
