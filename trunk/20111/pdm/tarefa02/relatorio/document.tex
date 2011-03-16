@@ -5,6 +5,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[brazil]{babel}
 \usepackage{sbc-template}
+\usepackage{graphicx}
 
 % Informações Pessoais ---------------------------------------------------------
 \title{Tarefa 02 sobre Desenvolvimento com J2ME}
@@ -126,6 +127,16 @@ cursor branco que pode ser movimentado utilizando os números do teclado. A
 posição atual do cursor pode ser colorida através de um número específico. Para
 finalização, há um comando para saída.
 
+\begin{figure}
+    \centering{}
+    \includegraphics[scale=0.4]{screenshot01-emulator.png}
+    \caption{Captura de Tela do Emulador}
+    \label{fig:emulador}
+\end{figure}
+
+Podemos visualizar uma captura de tela do JDrawME sendo executado no emulador na
+Figura \ref{fig:emulador}.
+
 \subsection{Teclas para Movimentação e Desenho}
 
 O cursor pode ser movimentado e a posição colorida utilizando as seguintes
@@ -142,7 +153,15 @@ teclas:
 \subsection{Classes}
 
 Buscando dividir as tarefas, criei algumas classes para encapsulamento de
-funcionalidades.
+funcionalidades. A estrutura do projeto pode ser visualizada na Figura
+\ref{fig:projeto}.
+
+\begin{figure}
+    \centering{}
+    \includegraphics[scale=0.45]{screenshot01-project.png}
+    \caption{Estrutura do Projeto}
+    \label{fig:projeto}
+\end{figure}
 
 A classe \texttt{Main} é responsável pela execução principal do programa que
 inicializa um objeto da classe \texttt{Drawer}, estendida da classe
@@ -172,9 +191,17 @@ fundo na posição atual.
 \subsection{Execução}
 
 Após gerar o MIDlet, executei em duas plataformas: uma emulada do próprio WTK e
-um celular Nokia C3-00 com sistema operacional Nokia S40 Mobile. Por ser muito
-simples, nenhuma arquitetura ocasionou defeito, porém no celular físico a tecla
-SHIFT precisa ser pressionada para acessar os números.
+um celular Nokia C3-00 com sistema operacional Nokia S40 Mobile, conforme
+Figura \ref{fig:nokia}. Por ser muito simples, nenhuma arquitetura ocasionou
+defeito, porém no celular físico a tecla SHIFT precisa ser pressionada para
+acessar os números.
+
+\begin{figure}
+    \centering{}
+    \includegraphics[scale=0.5]{screenshot02.jpg}
+    \caption{Aplicativo Executado no Nokia C3-00}
+    \label{fig:nokia}
+\end{figure}
 
 % Anotações Finais -------------------------------------------------------------
 \section{Anotações Finais}
@@ -209,8 +236,8 @@ Para a instalação do ambiente de desenvolvimento foram gastos 3h30min, a
 inicialização no desenvolvimento, ambientação com a linguagem e estrutura e
 aplicação dos \emph{tutoriais} fornecidos ocorreu em 2h, aprendizado sobre
 componentes disponibilizados pelo J2ME em 2h, desenvolvimento do aplicativo
-final em 4h30min e documentação final em cerca de 4h. Todos estes horários
-estão distribuídos entre os dias 09 de março e 13 de março de 2011.
+final em 4h30min e documentação final em cerca de 4h. Todos estes horários somam
+16h estão distribuídos entre os dias 09 de março e 13 de março de 2011.
 
 Fico com idéias para desenvolvimento com a próxima plataforma de estudo da
 disciplina, um apresentador de \emph{slides} para Android.
