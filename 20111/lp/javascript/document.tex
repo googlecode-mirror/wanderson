@@ -5,6 +5,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[brazil]{babel}
+\usepackage{graphicx}
 
 % Informações Pessoais ---------------------------------------------------------
 \author[ROSA]{Wanderson Henrique Camargo Rosa}
@@ -14,8 +15,10 @@
 Ciências Exatas e Tecnológicas\\Universidade do Vale do Rio dos Sinos ---
 UNISINOS}
 
+% Documento --------------------------------------------------------------------
 \begin{document}
 
+% Apresentação -----------------------------------------------------------------
 \begin{frame}
     \maketitle{}
 \end{frame}
@@ -29,27 +32,35 @@ UNISINOS}
 \begin{frame}{Javascript}{Ambientes de Utilização}
     Basicamente, o Javascript é utilizado principalmente em navegadores
     \emph{web}\cite{mozilla} no cliente, porém podem ser executados em
-    servidores\cite{mozilla} que recebem e enviam informações Javascript,
-    documentos no formato PDF, navegadores específicos e \emph{widgets} para
-    áreas de trabalho\cite{wikipedia}.
+    servidores\cite{mozilla} que recebem e enviam informações Javascript.
+
+    Também pode ser encontrado em documentos no formato PDF, navegadores
+    específicos e \emph{widgets} para áreas de trabalho\cite{wikipedia}.
 \end{frame}
 
 \begin{frame}{Javascript}{Histórico}
     A linguagem de programação Javascript foi criada por Brendan
     Eich\cite{mozilla,wikipedia} na Netscape, sobre um motor chamado
     SpiderMonkey\cite{mozilla}, implementado em C. Primeiramente nomeado como
-    Mocha\cite{wikipedia} e logo após
-    Livescript\cite{history,diff,wikipedia,plotter}, o Javascript foi idealizado
-    para tornar as páginas mais dinâmicas, evitando uma nova requisição para o
-    serviço \emph{web}\cite{history}.
+    Mocha\cite{wikipedia}, após Livescript\cite{history,diff,wikipedia,plotter}
+    e por fim seu nome atual, o Javascript foi idealizado para tornar as páginas
+    mais dinâmicas, evitando uma nova requisição para o serviço
+    \emph{web}\cite{history}.
+\end{frame}
+
+\begin{frame}{Javascript}{Criador da Linguagem}
+    \begin{figure}
+        \includegraphics[scale=0.35]{brendan-eich}
+        \caption{Brendan Eich. Twitter @brendaneich}
+    \end{figure}
 \end{frame}
 
 \begin{frame}{Javascript}{Padronização Internacional}
     Javascript recebeu em 1996 uma padronização internacional\cite{history} com
     a \emph{European Computer Manufacturers Association}, sob o nome ECMA-262 ou
-    ECMAScript. Existem outras linguagens baseadas com o Javascript, como a
-    JScript da Microsoft\cite{diff}. A empresa afirma que o JScript não é
-    executável sobre ambientes ECMAScript\cite{wikipedia}.
+    ECMAScript. Existem outras linguagens baseadas no Javascript, como a JScript
+    da Microsoft\cite{diff}. A empresa afirma que o JScript não é executável
+    sobre ambientes ECMAScript\cite{wikipedia}.
 \end{frame}
 
 \begin{frame}{Javascript}{Programação Orientada a Protótipos}
@@ -61,6 +72,44 @@ UNISINOS}
 
     Cada objeto possui uma referência para o objeto clonado e não nula,
     fornecendo o encadeamento de protótipos\cite{ecma}.
+\end{frame}
+
+\begin{frame}{Javascript}{Influências da Linguagem}
+    Segundo a Wikipédia\cite{wikipedia}, Javascript foi baseado nas linguagens
+    Self e Scheme. Porém, o grafo de Histórico das Linguagens de Programação
+    desenvolvido por Lévénez\cite{plotter} afirma que a linguagem é influenciada
+    diretamente pela Cmm (C Minus Minus\cite{cmm}).
+\end{frame}
+
+\begin{frame}{Javascript}{Influências da Linguagem}
+    \begin{description}
+    \item[2002] ECMAScript Draft 04
+    \item[2002] Javascript 2.0 Draft 04
+    \item[1999] Javascript 2.0 Draft 01
+    \item[1999] Javascript 1.5
+    \item[1995] Javascript
+        \begin{description}
+        \item[1999] ECMAScript
+        \item[1996] JScript
+        \end{description}
+    \item[1995] Livescript
+    \item[1992] Cmm
+        \begin{description}
+        \item[1990] ISO C C90
+        \item[1989] ARM C++
+        \end{description}
+    \end{description}
+\end{frame}
+
+\begin{frame}{Javascript}{Linguagens Influenciadas}
+    Ainda segundo a Wikipédia\cite{wikipedia}, são linguagens influenciadas pelo
+    Javascript:
+    \begin{itemize}
+        \item JScript
+        \item JScript .NET
+        \item Objective-J
+        \item TIScript
+    \end{itemize}
 \end{frame}
 
 \begin{frame}
