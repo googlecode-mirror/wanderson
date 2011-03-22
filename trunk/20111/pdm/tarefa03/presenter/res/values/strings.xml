@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Presenter</string>
+    <string name="empty"></string>
+    <string name="save">Save</string>
+    <string name="label_server">Server</string>
+    <string name="label_port">Port</string>
+    <string name="menu_config">Config</string>
+    <string name="message">Message</string>
+    <string name="send">Send Message</string>
+</resources>
