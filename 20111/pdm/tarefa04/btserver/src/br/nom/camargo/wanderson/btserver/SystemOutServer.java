@@ -108,9 +108,9 @@ public class SystemOutServer implements Runnable
                 output("V: Fluxo de Entrada de Dados Aberto");
                 output("V: Conexão Estabelecida");
 
-                int size; byte buffer[];
+                int size = 0; byte buffer[];
                 output("V: Inicializando Laço Infinito");
-                while (true) {
+                while (true && size >= 0) {
                     /* Leitura Bloqueante */
                     output("V: Esperando Quantidade de Bytes para Recebimento");
                     size = in.read();
