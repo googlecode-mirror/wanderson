@@ -121,7 +121,7 @@ public class SystemOutServer implements Runnable
                         output("V: Esperando Buffer");
                         in.read(buffer);
                         output("V: Buffer Enviado");
-                        output("V: Resultado > " + buffer);
+                        output("V: Resultado > " + (new String(buffer)));
                     } else {
                         output("W: Quantidade de Bytes Inválida > " + size);
                     }
