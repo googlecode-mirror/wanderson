@@ -59,7 +59,7 @@ public class SystemOutServer implements Runnable
     public String getUUID()
     {
         /* Formato javax.bluetooth sem Separação */
-        output("Transformação de Identificador Único");
+        output("V: Transformação de Identificador Único");
         return UUID.replace("-", "");
     }
 
