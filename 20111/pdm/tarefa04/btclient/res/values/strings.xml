@@ -3,4 +3,7 @@
     <string name="app_name">Bluetooth Client</string>
     <string name="send">Send</string>
     <string name="message"></string>
+    <string name="device:empty">Empty List</string>
+    <string name="device:name">Device Name</string>
+    <string name="device:address">Device Address</string>
 </resources>
