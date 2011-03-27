@@ -8,11 +8,10 @@
 
 
     <application android:icon="@drawable/icon" android:label="@string/app_name">
-        <activity android:name=".Main"
-                  android:label="@string/app_name">
+        <activity android:name="DeviceListActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"></action>
+                <category android:name="android.intent.category.LAUNCHER"></category>
             </intent-filter>
         </activity>
 
