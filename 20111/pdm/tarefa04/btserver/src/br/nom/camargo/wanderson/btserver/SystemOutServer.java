@@ -1,5 +1,8 @@
 package br.nom.camargo.wanderson.btserver;
 
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -31,6 +34,11 @@ public class SystemOutServer implements Runnable
     private SystemOutConnection connection;
 
     /**
+     * Simulador de Teclado
+     */
+    private Robot robot;
+
+    /**
      * Construtor Padrão
      * @throws SystemOutServerException Impossível Construir Servidor
      */
@@ -44,9 +52,15 @@ public class SystemOutServer implements Runnable
             output("V: Servidor de Conexão Aberto");
             /* Fluxo Concorrente para Transferência */
             connection = new SystemOutConnection();
+            /* Inicialização do Simulador */
+            robot = new Robot();
         } catch (IOException e) {
             /* Erro ao Abrir o Serviço */
             output("W: Erro ao Abrir o Serviço");
+            output("W: Mensagem > " + e.getMessage());
+            throw new SystemOutServerException(e);
+        } catch (AWTException e) {
+            output("W: Erro ao Inicializar o Simulador de Mouse");
             output("W: Mensagem > " + e.getMessage());
             throw new SystemOutServerException(e);
         }
@@ -108,7 +122,7 @@ public class SystemOutServer implements Runnable
                 output("V: Fluxo de Entrada de Dados Aberto");
                 output("V: Conexão Estabelecida");
 
-                int size = 0; byte buffer[];
+                int size = 0; byte buffer[]; String message;
                 output("V: Inicializando Laço Infinito");
                 while (true && size >= 0) {
                     /* Leitura Bloqueante */
@@ -121,7 +135,21 @@ public class SystemOutServer implements Runnable
                         output("V: Esperando Buffer");
                         in.read(buffer);
                         output("V: Buffer Enviado");
-                        output("V: Resultado > " + (new String(buffer)));
+                        message = new String(buffer);
+                        output("V: Resultado > " + message);
+                        output("V: Simulando Teclado conforme Mensagem");
+                        if (message.equals("LEFT")) {
+                            robot.keyPress(KeyEvent.VK_LEFT);
+                            robot.keyRelease(KeyEvent.VK_LEFT);
+                            output("V: Simulação para Esquerda");
+                        } else if (message.equals("RIGHT")) {
+                            robot.keyPress(KeyEvent.VK_RIGHT);
+                            robot.keyRelease(KeyEvent.VK_RIGHT);
+                            output("V: Simulação para Direita");
+                        } else {
+                            output("V: Mensagem Desconhecida");
+                        }
+                        output("V: Simulação Concluída");
                     } else {
                         output("W: Quantidade de Bytes Inválida > " + size);
                     }
