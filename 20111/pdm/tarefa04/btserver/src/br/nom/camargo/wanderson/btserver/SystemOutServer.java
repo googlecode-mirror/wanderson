@@ -124,7 +124,7 @@ public class SystemOutServer implements Runnable
 
                 int size = 0; byte buffer[]; String message;
                 output("V: Inicializando Laço Infinito");
-                while (true && size >= 0) {
+                while (size >= 0) {
                     /* Leitura Bloqueante */
                     output("V: Esperando Quantidade de Bytes para Recebimento");
                     size = in.read();
