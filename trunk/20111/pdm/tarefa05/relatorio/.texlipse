@@ -1,0 +1,13 @@
+#TeXlipse project settings
+#Tue Apr 05 00:20:41 BRT 2011
+builderNum=2
+outputDir=
+makeIndSty=
+bibrefDir=
+outputFormat=pdf
+tempDir=tmp
+mainTexFile=document.tex
+outputFile=tarefa05.pdf
+langSpell=en
+markDer=true
+srcDir=
