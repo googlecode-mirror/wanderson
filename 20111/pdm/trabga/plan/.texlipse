@@ -1,0 +1,13 @@
+#TeXlipse project settings
+#Tue Apr 05 22:14:38 BRT 2011
+builderNum=2
+outputDir=
+makeIndSty=
+bibrefDir=
+outputFormat=pdf
+tempDir=tmp
+mainTexFile=document.tex
+outputFile=planga.pdf
+langSpell=en
+markDer=true
+srcDir=
