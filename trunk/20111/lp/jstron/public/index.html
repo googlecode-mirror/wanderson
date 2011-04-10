@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+        <title>JsTron</title>
+        <script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js" type="text/javascript"></script>
+        <script type="text/javascript" src="jstron.js"></script>
+        <link href="jstron.css" rel="stylesheet" type="text/css">
+        <script type="text/javascript">
+            var game;
+            window.onload = function() {
+                var field = document.getElementById('field');
+                game = new jstron(field);
+                var player1 = new player('#f00');
+                game.setPlayer(player1);
+                game.play();
+            };
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <canvas id="field"></canvas>
+        </div>
+    </body>
+</html>
