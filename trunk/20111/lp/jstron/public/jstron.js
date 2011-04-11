@@ -156,19 +156,21 @@ var player = function(color)
      */
     this.move = function() {
         var direction = this.getDirection();
-        switch (direction) {
-        case 'left':
-            this.left();
-            break;
-        case 'right':
-            this.right();
-            break;
-        case 'up':
-            this.up();
-            break;
-        case 'down':
-            this.down();
-            break;
+        if (!this.getBroken()) {
+            switch (direction) {
+            case 'left':
+                this.left();
+                break;
+            case 'right':
+                this.right();
+                break;
+            case 'up':
+                this.up();
+                break;
+            case 'down':
+                this.down();
+                break;
+            }
         }
         return this;
     };
@@ -229,6 +231,7 @@ var player = function(color)
             this.setPositionX(x + size);
             if (this.isBlocked()) {
                 this.setBroken(true);
+                this.getGame().stop();
                 x = this.getPositionX();
                 this.setPositionX(x - size);
             } else {
@@ -249,6 +252,7 @@ var player = function(color)
             this.setPositionY(y + size);
             if (this.isBlocked()) {
                 this.setBroken(true);
+                this.getGame().stop();
                 y = this.getPositionY();
                 this.setPositionY(y - size);
             } else {
@@ -591,9 +595,26 @@ var jstron = function(field)
      * Captura de Teclas para Troca de Direcionamentos do Jogador
      */
     this.play = function() {
-        window.onkeypress = this.onKeyBoardEvent;
-        window.setInterval(this.onInterval, 50);
+        window.onkeypress = function(event){
+            game.onKeyBoardEvent(event);
+        };
+        this.interval = window.setInterval(function(){
+            game.onInterval();
+        }, 50);
         return this;
+    };
+
+    /**
+     * Termina a Execução Principal do Jogo
+     * Finaliza o Contador para Movimentação do Jogador
+     * Limpa a Captura de Teclas para Direcionamento do Jogador
+     */
+    this.stop = function() {
+        window.onkeypress = function(){};
+        window.clearInterval(this.interval);
+        window.setTimeout(function(){
+            game.render();
+        }, 50);
     };
 
     /**
@@ -602,9 +623,8 @@ var jstron = function(field)
      */
     this.onKeyBoardEvent = function(event) {
         var confirm = false;
-        /* Variável Externa - Deve ser Modificado */
         /* Primeiro Jogador */
-        var player1 = game.getPlayer1();
+        var player1 = this.getPlayer1();
         switch (event.keyCode) {
         case 37: /* Left */
             player1.setDirection('left');
@@ -624,7 +644,7 @@ var jstron = function(field)
             break;
         }
         /* Segundo Jogador */
-        var player2 = game.getPlayer2();
+        var player2 = this.getPlayer2();
         switch (event.charCode) {
         case 97: /* A: Left */
             player2.setDirection('left');
@@ -657,7 +677,7 @@ var jstron = function(field)
      */
     this.onInterval = function() {
         /* Variável Externa - Deve ser Modificado */
-        game.render();
+        this.render();
         p1 = game.getPlayer1(); if (p1) p1.move();
         p2 = game.getPlayer2(); if (p2) p2.move();
     };
