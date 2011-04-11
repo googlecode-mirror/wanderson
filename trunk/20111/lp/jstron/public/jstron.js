@@ -171,13 +171,7 @@ var player = function(color)
     this.setPositionX = function(x) {
         var game = this.getGame();
         if (game) {
-            var width = game.getWidth();
-            var step  = game.getStep();
-            if (x * step >= 0 && x * step <= width - step) {
-                this.x = x;
-            } else {
-                this.setBroken(true);
-            }
+            this.x = x;
         } else {
             this.x = 0;
         }
@@ -200,13 +194,7 @@ var player = function(color)
     this.setPositionY = function(y) {
         var game = this.getGame();
         if (game) {
-            var height = game.getHeight();
-            var step   = game.getStep();
-            if (y * step >= 0 && y * step <= height - step) {
-                this.y = y;
-            } else {
-                this.setBroken(true);
-            }
+            this.y = y;
         } else {
             this.y = 0;
         }
@@ -553,10 +541,12 @@ var jstron = function(field)
      * Verifica se um Bloco Já Foi Utilizado no Mapeamento
      */
     this.isFilled = function(x,y) {
-        var confirm = false;
-        if (typeof(this.map[x][y]) != 'undefined') {
+        var confirm = true;
+        if (typeof(this.map[x]) != 'undefined' &&
+            typeof(this.map[x][y]) != 'undefined') {
             confirm = this.map[x][y];
         }
+        console.info(x,y,confirm);
         return confirm;
     };
 
@@ -611,6 +601,7 @@ var jstron = function(field)
     this.onInterval = function() {
         /* Variável Externa - Deve ser Modificado */
         game.render();
+        game.getPlayer().move();
     };
 
     /* Construtor */
