@@ -47,6 +47,9 @@ var player = function(color)
      * Configuração da Referência ao Jogo
      */
     this.setGame = function(game) {
+        var x = this.getPositionX();
+        var y = this.getPositionY();
+        game.fill(x,y);
         this.game = game;
         return this;
     };
@@ -118,13 +121,20 @@ var player = function(color)
      * Possíveis Valores: stop,left,right,up,down
      */
     this.setDirection = function(direction) {
+        var current = this.getDirection();
         switch (direction) {
         case 'stop':
         case 'left':
         case 'up':
         case 'right':
         case 'down':
-            this.direction = direction;
+            var confirm = 
+                current == 'right' && direction != 'left'  ||
+                current == 'left'  && direction != 'right' ||
+                current == 'up'    && direction != 'down'  ||
+                current == 'down'  && direction != 'up'    ||
+                current == 'stop'  || current == undefined;
+            if (confirm) this.direction = direction;
             break;
         default:
             this.direction = 'stop';
@@ -363,6 +373,11 @@ var jstron = function(field)
     this.player1;
 
     /**
+     * Referência ao Jogador
+     */
+    this.player2;
+
+    /**
      * Mapa para Controle de Blocos
      * Posicionamentos de Jogadores
      */
@@ -472,6 +487,24 @@ var jstron = function(field)
     };
 
     /**
+     * Encapsulamento
+     * Configura a Referência ao Objeto Jogador
+     */
+    this.setPlayer2 = function(player) {
+        player.setGame(this);
+        this.player2 = player;
+        return this;
+    };
+
+    /**
+     * Encapsulamento
+     * Informa a Referência ao Objeto Jogador
+     */
+    this.getPlayer2 = function() {
+        return this.player2;
+    };
+
+    /**
      * Renderização
      * Desenha a Grade de Orientação no Campo de Jogo
      */
@@ -505,6 +538,7 @@ var jstron = function(field)
      */
     this.render = function() {
         p1 = this.getPlayer1(); if (p1) p1.render();
+        p2 = this.getPlayer2(); if (p2) p2.render();
     };
 
     /**
@@ -548,7 +582,6 @@ var jstron = function(field)
             typeof(this.map[x][y]) != 'undefined') {
             confirm = this.map[x][y];
         }
-        console.info(x,y,confirm);
         return confirm;
     };
 
@@ -570,22 +603,43 @@ var jstron = function(field)
     this.onKeyBoardEvent = function(event) {
         var confirm = false;
         /* Variável Externa - Deve ser Modificado */
-        var player  = game.getPlayer1();
+        /* Primeiro Jogador */
+        var player1 = game.getPlayer1();
         switch (event.keyCode) {
         case 37: /* Left */
-            player.setDirection('left');
+            player1.setDirection('left');
             confirm = true;
             break;
         case 38: /* Up */
-            player.setDirection('up');
+            player1.setDirection('up');
             confirm = true;
             break;
         case 39: /* Right */
-            player.setDirection('right');
+            player1.setDirection('right');
             confirm = true;
             break;
         case 40: /* Down */
-            player.setDirection('down');
+            player1.setDirection('down');
+            confirm = true;
+            break;
+        }
+        /* Segundo Jogador */
+        var player2 = game.getPlayer2();
+        switch (event.charCode) {
+        case 97: /* A: Left */
+            player2.setDirection('left');
+            confirm = true;
+            break;
+        case 119: /* W: Up */
+            player2.setDirection('up');
+            confirm = true;
+            break;
+        case 100: /* D: Right */
+            player2.setDirection('right');
+            confirm = true;
+            break;
+        case 115: /* S: Down */
+            player2.setDirection('down');
             confirm = true;
             break;
         }
@@ -593,6 +647,7 @@ var jstron = function(field)
             /* Previne Execução Padrão da Tecla Pressionada */
             event.preventDefault();
         }
+        console.debug(event);
         return true;
     };
 
@@ -604,6 +659,7 @@ var jstron = function(field)
         /* Variável Externa - Deve ser Modificado */
         game.render();
         p1 = game.getPlayer1(); if (p1) p1.move();
+        p2 = game.getPlayer2(); if (p2) p2.move();
     };
 
     /* Construtor */

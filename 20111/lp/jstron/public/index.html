@@ -13,6 +13,9 @@
                 game = new jstron(field);
                 var player1 = new player('#f00');
                 game.setPlayer1(player1);
+                var player2 = new player('#00f');
+                player2.setPositionX(79);
+                game.setPlayer2(player2);
                 game.play();
             };
         </script>
