@@ -6,6 +6,8 @@ var player = function(color) {
     this.x;
     this.y;
     this.broken;
+    this.moved;
+    this.direction; /* left,up,right,down,stop */
     /* Methods */
     this.setGame = function(game) {
         this.game = game;
@@ -28,6 +30,48 @@ var player = function(color) {
     };
     this.getBroken = function() {
         return this.broken;
+    };
+    this.setMoved = function(moved) {
+        this.moved = moved;
+        return this;
+    };
+    this.getMoved = function() {
+        return this.moved;
+    };
+    this.setDirection = function(direction) {
+        switch (direction) {
+        case 'stop':
+        case 'left':
+        case 'up':
+        case 'right':
+        case 'down':
+            this.direction = direction;
+            break;
+        default:
+            this.direction = 'stop';
+        }
+        return this;
+    };
+    this.getDirection = function() {
+        return this.direction;
+    };
+    this.move = function() {
+        var direction = this.getDirection();
+        switch (direction) {
+        case 'left':
+            this.left();
+            break;
+        case 'right':
+            this.right();
+            break;
+        case 'up':
+            this.up();
+            break;
+        case 'down':
+            this.down();
+            break;
+        }
+        return this;
     };
     this.setPositionX = function(x) {
         var game = this.getGame();
@@ -66,26 +110,32 @@ var player = function(color) {
         return this.y;
     };
     this.horizontal = function(size) {
-        var x = this.getPositionX();
-        this.setPositionX(x + size);
-        if (this.isBlocked()) {
-            this.setBroken(true);
-            x = this.getPositionX();
-            this.setPositionX(x - size);
-        } else {
-            this.fill();
+        if (!this.getMoved()) {
+            var x = this.getPositionX();
+            this.setPositionX(x + size);
+            if (this.isBlocked()) {
+                this.setBroken(true);
+                x = this.getPositionX();
+                this.setPositionX(x - size);
+            } else {
+                this.fill();
+                this.setMoved(true);
+            }
         }
         return this;
     };
     this.vertical = function(size) {
-        var y = this.getPositionY();
-        this.setPositionY(y + size);
-        if (this.isBlocked()) {
-            this.setBroken(true);
-            y = this.getPositionY();
-            this.setPositionY(y - size);
-        } else {
-            this.fill();
+        if (!this.getMoved()) {
+            var y = this.getPositionY();
+            this.setPositionY(y + size);
+            if (this.isBlocked()) {
+                this.setBroken(true);
+                y = this.getPositionY();
+                this.setPositionY(y - size);
+            } else {
+                this.fill();
+                this.setMoved(true);
+            }
         }
         return this;
     };
@@ -131,12 +181,14 @@ var player = function(color) {
             var context = game.getField().getContext('2d');
             context.fillStyle = this.getColor();
             context.fillRect(x,y,step,step);
+            this.setMoved(false);
         }
         return this;
     };
     /* Constructor */
     this.setGame(game).setColor(color)
-        .setPositionX(0).setPositionY(0);
+        .setPositionX(0).setPositionY(0)
+        .setMoved(false).setDirection('stop');
 };
 /* Prototype */
 var jstron = function(field) {
@@ -245,8 +297,6 @@ var jstron = function(field) {
         return confirm;
     };
     this.play = function() {
-        this.render();
-        console.debug(this);
         return this;
     };
     this.onKeyBoardEvent = function(event) {
@@ -254,27 +304,30 @@ var jstron = function(field) {
         var player  = game.getPlayer(); /* Variável Externa */
         switch (event.keyCode) {
         case 37: /* Left */
-            player.left();
+            player.setDirection('left');
             confirm = true;
             break;
         case 38: /* Up */
-            player.up();
+            player.setDirection('up');
             confirm = true;
             break;
         case 39: /* Right */
-            player.right();
+            player.setDirection('right');
             confirm = true;
             break;
         case 40: /* Down */
-            player.down();
+            player.setDirection('down');
             confirm = true;
             break;
         }
         if (confirm) {
-            player.render();
             event.preventDefault();
         }
         return true;
+    };
+    this.onInterval = function() {
+        game.render(); /* Variável Externa */
+        console.log(game.getPlayer().move());
     };
     /* Constructor */
     this.setField(field)
@@ -282,4 +335,5 @@ var jstron = function(field) {
         .setGridColor('#efefef')
         .renderGrid().buildMap();
     window.onkeypress = this.onKeyBoardEvent;
+    window.setInterval(this.onInterval, 50);
 };
