@@ -360,7 +360,7 @@ var jstron = function(field)
     /**
      * Referência ao Jogador
      */
-    this.player;
+    this.player1;
 
     /**
      * Mapa para Controle de Blocos
@@ -457,9 +457,9 @@ var jstron = function(field)
      * Encapsulamento
      * Configura a Referência ao Objeto Jogador
      */
-    this.setPlayer = function(player) {
+    this.setPlayer1 = function(player) {
         player.setGame(this);
-        this.player = player;
+        this.player1 = player;
         return this;
     };
 
@@ -467,8 +467,8 @@ var jstron = function(field)
      * Encapsulamento
      * Informa a Referência ao Objeto Jogador
      */
-    this.getPlayer = function() {
-        return this.player;
+    this.getPlayer1 = function() {
+        return this.player1;
     };
 
     /**
@@ -504,7 +504,7 @@ var jstron = function(field)
      * Desenha o Objeto Jogador no Campo de Jogo
      */
     this.render = function() {
-        this.getPlayer().render();
+        p1 = this.getPlayer1(); if (p1) p1.render();
     };
 
     /**
@@ -531,7 +531,8 @@ var jstron = function(field)
      * Preenche um Bloco no Mapeamento
      */
     this.fill = function(x,y) {
-        if (typeof(this.map[x][y]) != 'undefined') {
+        if (typeof(this.map[x]) != 'undefined' &&
+            typeof(this.map[x][y]) != 'undefined') {
             this.map[x][y] = true;
         }
         return this;
@@ -541,6 +542,7 @@ var jstron = function(field)
      * Verifica se um Bloco Já Foi Utilizado no Mapeamento
      */
     this.isFilled = function(x,y) {
+        /* Sempre Preenchido Inclusive Fora do Intervalo */
         var confirm = true;
         if (typeof(this.map[x]) != 'undefined' &&
             typeof(this.map[x][y]) != 'undefined') {
@@ -568,7 +570,7 @@ var jstron = function(field)
     this.onKeyBoardEvent = function(event) {
         var confirm = false;
         /* Variável Externa - Deve ser Modificado */
-        var player  = game.getPlayer();
+        var player  = game.getPlayer1();
         switch (event.keyCode) {
         case 37: /* Left */
             player.setDirection('left');
@@ -601,7 +603,7 @@ var jstron = function(field)
     this.onInterval = function() {
         /* Variável Externa - Deve ser Modificado */
         game.render();
-        game.getPlayer().move();
+        p1 = game.getPlayer1(); if (p1) p1.move();
     };
 
     /* Construtor */
