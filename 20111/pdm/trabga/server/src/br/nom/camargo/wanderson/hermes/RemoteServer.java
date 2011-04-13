@@ -12,7 +12,7 @@ import br.nom.camargo.wanderson.hermes.adapter.ConnectionAdapter;
  * 
  * @author Wanderson Henrique Camargo Rosa
  */
-public class RemoteServer
+public class RemoteServer implements Runnable
 {
     /**
      * Adaptador da Conexão
@@ -37,5 +37,15 @@ public class RemoteServer
     public ConnectionAdapter getAdapter()
     {
         return this.adapter;
+    }
+
+    /**
+     * Execução Principal do Servidor de Mensagens
+     * Utiliza o adaptador de conexão para receber as informações transferidas
+     * do dispositivo remoto e fornece estes dados para o interpretador.
+     */
+    public void run()
+    {
+        
     }
 }
