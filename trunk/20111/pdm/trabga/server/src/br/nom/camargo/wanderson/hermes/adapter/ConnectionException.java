@@ -1,5 +1,7 @@
 package br.nom.camargo.wanderson.hermes.adapter;
 
+import br.nom.camargo.wanderson.hermes.RemoteException;
+
 /**
  * Erro de Conexão
  * 
@@ -7,7 +9,7 @@ package br.nom.camargo.wanderson.hermes.adapter;
  * 
  * @author Wanderson Henrique Camargo Rosa
  */
-public class ConnectionException extends Exception
+public class ConnectionException extends RemoteException
 {
     /**
      * Número de Serialização
