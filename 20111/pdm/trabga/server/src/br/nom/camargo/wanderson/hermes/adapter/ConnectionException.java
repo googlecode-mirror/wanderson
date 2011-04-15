@@ -15,4 +15,13 @@ public class ConnectionException extends RemoteException
      * Número de Serialização
      */
     private static final long serialVersionUID = -7112386528827424435L;
+
+    /**
+     * Construtor
+     * @param e Encapsulamento da Causa sobre Erro Gerado
+     */
+    public ConnectionException(Throwable e)
+    {
+        super(e);
+    }
 }
