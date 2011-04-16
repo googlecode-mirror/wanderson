@@ -158,7 +158,13 @@ abstract class Hazel_Controller_DatabaseCrudAbstract
             $this->_dbtable = $this->_getPackageElement('Model_DbTable');
         }
         $name    = $this->_dbtable;
+        if (!class_exists($name)) {
+            throw new Hazel_Controller_Exception('Invalid DbTable Model');
+        }
         $element = new $name();
+        if (!($element instanceof Zend_Db_Table_Abstract)) {
+            throw new Hazel_Controller_Exception('Invalid Zend DbTable Class');
+        }
         return $element;
     }
 
@@ -201,7 +207,13 @@ abstract class Hazel_Controller_DatabaseCrudAbstract
             $this->_form = $this->_getPackageElement('Form');
         }
         $name    = $this->_form;
+        if (!class_exists($name)) {
+            throw new Hazel_Controller_Exception('Invalid Form');
+        }
         $element = new $name();
+        if (!($element instanceof Zend_Form)) {
+            throw new Hazel_Controller_Exception('Invalid Zend Form');
+        }
         return $element;
     }
 
@@ -241,7 +253,8 @@ abstract class Hazel_Controller_DatabaseCrudAbstract
      */
     public function indexAction()
     {
-        $this->_helper->redirector('retrieve');
+        $table = new Application_Model_DbTable_Pessoa();
+        $this->getHelper('Redirector')->gotoSimple('retrieve');
     }
 
     /**
@@ -259,8 +272,9 @@ abstract class Hazel_Controller_DatabaseCrudAbstract
                 $element = $table->createRow($data);
                 try {
                     $element->save();
-                    $this->view->message = self::MESSAGE_CREATE_SUCCESS;
-                    $this->_forward('retrieve');
+                    $this->getHelper('FlashMessenger')
+                        ->addMessage(self::MESSAGE_CREATE_SUCCESS);
+                    $this->getHelper('Redirector')->gotoSimple('retrieve');
                 } catch (Zend_Db_Exception $e) {
                     if ($this->getDisplayExceptions()) {
                         throw $e;
@@ -288,6 +302,8 @@ abstract class Hazel_Controller_DatabaseCrudAbstract
         $this->view->result    = $paginator;
         $this->view->columns   = $this->getColumns();
         $this->view->primaries = $table->info(Zend_Db_Table::PRIMARY);
+        $this->view->messages  = $this
+            ->getHelper('FlashMessenger')->getMessages();
     }
 
     /**
@@ -305,8 +321,9 @@ abstract class Hazel_Controller_DatabaseCrudAbstract
                 $element->setFromArray($data);
                 try {
                     $element->save();
-                    $this->view->message = self::MESSAGE_UPDATE_SUCCESS;
-                    $this->_forward('retrieve');
+                    $this->getHelper('FlashMessenger')
+                        ->addMessage(self::MESSAGE_UPDATE_SUCCESS);
+                    $this->getHelper('Redirector')->gotoSimple('retrieve');
                 } catch (Zend_Db_Exception $e) {
                     if ($this->getDisplayExceptions()) {
                         throw $e;
@@ -314,8 +331,9 @@ abstract class Hazel_Controller_DatabaseCrudAbstract
                     $form->addError($e->getMessage());
                 }
             }
+        } else {
+            $form->populate($element->toArray());
         }
-        $form->populate($element->toArray());
         $this->view->form = $form;
     }
 
@@ -328,14 +346,17 @@ abstract class Hazel_Controller_DatabaseCrudAbstract
         $element = $this->getElement();
         try {
             $element->delete();
-            $this->view->message = self::MESSAGE_DELETE_SUCCESS;
-            $this->_forward('retrieve');
+            $this->getHelper('FlashMessenger')
+                ->addMessage(self::MESSAGE_DELETE_SUCCESS);
+            $this->getHelper('Redirector')->gotoSimple('retrieve');
         } catch (Zend_Db_Exception $e) {
             if ($this->getDisplayExceptions()) {
                 throw $e;
             }
-            $this->view->message = self::MESSAGE_DELETE_ERROR;
+            $this->getHelper('FlashMessenger')
+                ->addMessage(self::MESSAGE_DELETE_ERROR)
+                ->addMessage($e->getMessage());
         }
-        $this->_forward('retrieve');
+        $this->getHelper('Redirector')->gotoSimple('retrieve');
     }
 }
