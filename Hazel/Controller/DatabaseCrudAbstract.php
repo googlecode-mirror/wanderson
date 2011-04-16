@@ -149,6 +149,16 @@ abstract class Hazel_Controller_DatabaseCrudAbstract
     }
 
     /**
+     * Informa a Mensagem Solicitada
+     * @param string $message Mensagem de Entrada
+     * @return string Resultado de Manipulação da Entrada
+     */
+    protected function _getMessage($message)
+    {
+        return $message;
+    }
+
+    /**
      * Criação de Objeto de Tabela do Banco de Dados
      * @return Zend_Db_Table_Abstract
      */
@@ -272,14 +282,15 @@ abstract class Hazel_Controller_DatabaseCrudAbstract
                 $element = $table->createRow($data);
                 try {
                     $element->save();
-                    $this->getHelper('FlashMessenger')
-                        ->addMessage(self::MESSAGE_CREATE_SUCCESS);
+                    $message = $this->_getMessage(self::MESSAGE_CREATE_SUCCESS);
+                    $this->getHelper('FlashMessenger')->addMessage($message);
                     $this->getHelper('Redirector')->gotoSimple('retrieve');
                 } catch (Zend_Db_Exception $e) {
                     if ($this->getDisplayExceptions()) {
                         throw $e;
                     }
-                    $form->addError($e->getMessage());
+                    $message = $this->_getMessage(self::MESSAGE_CREATE_ERROR);
+                    $form->addError($message)->addError($e->getMessage());
                 }
             }
         }
@@ -321,14 +332,15 @@ abstract class Hazel_Controller_DatabaseCrudAbstract
                 $element->setFromArray($data);
                 try {
                     $element->save();
-                    $this->getHelper('FlashMessenger')
-                        ->addMessage(self::MESSAGE_UPDATE_SUCCESS);
+                    $message = $this->_getMessage(self::MESSAGE_UPDATE_SUCCESS);
+                    $this->getHelper('FlashMessenger')->addMessage($message);
                     $this->getHelper('Redirector')->gotoSimple('retrieve');
                 } catch (Zend_Db_Exception $e) {
                     if ($this->getDisplayExceptions()) {
                         throw $e;
                     }
-                    $form->addError($e->getMessage());
+                    $message = $this->_getMessage(self::MESSAGE_UPDATE_ERROR);
+                    $form->addError($message)->addError($e->getMessage());
                 }
             }
         } else {
@@ -346,15 +358,16 @@ abstract class Hazel_Controller_DatabaseCrudAbstract
         $element = $this->getElement();
         try {
             $element->delete();
-            $this->getHelper('FlashMessenger')
-                ->addMessage(self::MESSAGE_DELETE_SUCCESS);
+            $message = $this->_getMessage(self::MESSAGE_DELETE_SUCCESS);
+            $this->getHelper('FlashMessenger')->addMessage($message);
             $this->getHelper('Redirector')->gotoSimple('retrieve');
         } catch (Zend_Db_Exception $e) {
             if ($this->getDisplayExceptions()) {
                 throw $e;
             }
+            $message = $this->_getMessage(self::MESSAGE_DELETE_ERROR);
             $this->getHelper('FlashMessenger')
-                ->addMessage(self::MESSAGE_DELETE_ERROR)
+                ->addMessage($message)
                 ->addMessage($e->getMessage());
         }
         $this->getHelper('Redirector')->gotoSimple('retrieve');
