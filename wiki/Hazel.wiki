@@ -11,38 +11,28 @@ Framework. _Esta documentação está incompleta e carece de informações_.
 
 Pacote http://code.google.com/p/wanderson/source/browse/trunk/Hazel/Controller/
 
-O pacote de controle do Hazel trabalha com especializações para manipulação de
-objetos provenientes do banco de dados. Se existe uma entidade no banco de dados
-que pode ser trabalhada através do padrão CRUD, utilizando um formulário e uma
-tabela somente, a classe {{{Hazel_Controller_DatabaseCrudAbstract}}} pode ser
-extendida. Esta classe possui as ações padrão para edição e toda a programação
-necessária para edição simples das informações.
+O pacote de controle do Hazel trabalha com especializações para manipulação de objetos provenientes do banco de dados. Se existe uma entidade no banco de dados que pode ser trabalhada através do padrão CRUD, utilizando um formulário e uma tabela somente, a classe {{{Hazel_Controller_DatabaseCrudAbstract}}} pode ser estendida. Esta classe possui as ações padrão para edição e toda a programação necessária para edição simples das informações.
 
-A idéia principal da classe é que toda a programação seja encapsulada nas
-controladoras e caso seja necessário a modificação de alguns métodos, estes
-consigam ser sobrescritos, afetando ao mínimo o fluxo de processamento; ou sejam
-adicionados métodos nas classes de formulário e tabela, dando flexibilidade à
-programação.
+A idéia principal da classe é que toda a programação seja encapsulada nas controladoras e caso seja necessário a modificação de alguns métodos, estes
+consigam ser sobrescritos, afetando ao mínimo o fluxo de processamento; ou sejam adicionados métodos nas classes de formulário e tabela, dando flexibilidade à programação.
 
-Para exemplificar, temos a seguinte tabela de usuários de um sistema, criada em
-banco de dados PostgreSQL:
+Para exemplificar, temos a seguinte tabela de usuários de um sistema, criada em banco de dados PostgreSQL:
 
 {{{
 -- migration usuario-up 10 lines
 CREATE TABLE usuario
 (
-    idusuario SERIAL NOT NULL,
+    idusuario SERIAL,
     display   VARCHAR(40),
     nome      VARCHAR(20) NOT NULL UNIQUE,
     senha     CHAR(32) NOT NULL,
-    ativado   BOOLEAN DEFAULT TRUE,
-    deletado  BOOLEAN DEFAULT FALSE,
+    ativado   BOOLEAN NOT NULL DEFAULT TRUE,
+    deletado  BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY(idusuario)
 );
 }}}
 
-Podemos criar uma classe representante desta tabela utilizando o padrão de
-aplicativos do Zend Framework:
+Podemos criar uma classe representante desta tabela utilizando o padrão de aplicativos do Zend Framework:
 
 {{{
 <?php
@@ -52,14 +42,14 @@ aplicativos do Zend Framework:
  * @author Wanderson Henrique Camargo Rosa
  * @see    APPLICATION_PATH /model/DbTable/Usuario.php
  */
-class Application_Model_DbTable_Usuario extends Zend_Db_Table_Usuario
+class Application_Model_DbTable_Usuario extends Zend_Db_Table_Abstract
 {
     protected $_name = 'usuario';
+    protected $_primaries = array('idusuario');
 }
 }}}
 
-Também vamos criar um formulário para edição destes dados para uma tupla da
-tabela. Note que é importante a adição de um filtro de elementos nulos à chave primária representante neste formulário: ele é utilizado tanto para inserção ou atualização dos dados, pois se a chave primária é zerada pelo filtro de inteiros, então o filtro de elementos nulos irá retornar nulo e o elemento será salvo no banco; caso contrário ele é atualizado. Se este filtro de valores nulos não fosse inserido neste caso, um elemento de chave primária de valor zero será criado, o que não queremos que aconteça. Vejamos o exemplo abaixo:
+Também vamos criar um formulário para edição destes dados para uma linha da tabela. Note que é importante a adição de um filtro de elementos nulos à chave primária representante neste formulário: ele é utilizado tanto para inserção ou atualização dos dados, pois se a chave primária é zerada pelo filtro de inteiros, então o filtro de elementos nulos irá retornar nulo e o elemento será salvo no banco; caso contrário ele é atualizado. Se este filtro de valores nulos não fosse inserido neste caso, um elemento de chave primária de valor zero será criado, o que não queremos que aconteça. Vejamos o exemplo abaixo:
 
 {{{
 <?php
@@ -69,7 +59,7 @@ tabela. Note que é importante a adição de um filtro de elementos nulos à cha
  * @author Wanderson Henrique Camargo Rosa
  * @see    APPLICATION_PATH /forms/Usuario.php
  */
-class Application_Form_Usuario extends Zend_Dojo_Form
+class Application_Form_Usuario extends Zend_Form
 {
     public function init()
     {
@@ -78,34 +68,37 @@ class Application_Form_Usuario extends Zend_Dojo_Form
         $idusuario->removeDecorator('Label')->setRequired(true)
             ->addFilter(new Zend_Filter_Int())
             ->addFilter(new Zend_Filter_Null());
+        $this->addElement($idusuario);
 
-        $display = new Zend_Dojo_Form_Element_TextBox('display');
+        $display = new Zend_Form_Element_Text('display');
         $display->setLabel('Nome Completo')->setRequired(true)
             ->setAllowEmpty(true)->addFilter(new Zend_Filter_Null())
             ->addValidator(new Zend_Validate_StringLength(1,40))
             ->addValidator(new Zend_Validate_Alnum(true));
+        $this->addElement($display);
 
-        $nome = new Zend_Dojo_Form_Element_TextBox('nome');
+        $nome = new Zend_Form_Element_Text('nome');
         $nome->setLabel('Usuário')->setRequired(true)->setAllowEmpty(false)
             ->addValidator(new Zend_Validate_NotEmpty())
             ->addValidator(new Zend_Validate_StringLength(1,20))
             ->addValidator(new Zend_Validate_Alpha(false))
             ->addFilter(new Zend_Filter_StringToLower());
+        $this->addElement($nome);
 
-        $senha = new Zend_Dojo_Form_Element_PasswordTextBox('senha');
-        $senha->setLabel('Senha')->setRequired(false)->setAllowEmpty(true);
+        $senha = new Zend_Form_Element_Password('senha');
+        $senha->setLabel('Senha')->setRequired(false)->setAllowEmpty(true)
+            ->setRenderPassword(false);
+        $this->addElement($senha);
 
-        $ativado = new Zend_Dojo_Form_Element_CheckBox('ativado');
+        $ativado = new Zend_Form_Element_Checkbox('ativado');
         $ativado->setLabel('Ativado')->addFilter(new Zend_Filter_Boolean());
+        $this->addElement($ativado);
 
-        $submit = new Zend_Dojo_Form_Element_SubmitButton('submit');
+        $submit = new Zend_Form_Element_Submit('submit');
         $submit->setLabel('Gravar')->setIgnore(true);
+        $this->addElement($submit);
 
-        $elements = array($idusuario, $display, $nome, $senha, $ativado,
-            $submit);
-
-        $this->addElements($elements)->setName('usuario')
-            ->setMethod(self::METHOD_POST);
+        $this->setName('usuario_form')->setMethod(self::METHOD_POST);
     }
 }
 }}}
@@ -124,17 +117,7 @@ class UsuarioController extends Hazel_Controller_DatabaseCrudAbstract
 }
 }}}
 
-Quando a classe é extendida, métodos representantes do padrão CRUD são criados
-no controle para manipulação dos dados. Lembramos que o nome do formulário e da
-tabela devem seguir o padrão do nome da controladora para que sejam
-automaticamente carregados. Se precisamos de um controle de {{{Musica}}},
-devemos criar a classe de controle {{{MusicaController}}}, o formulário
-{{{Application_Form_Musica}}} e a representante de tabela
-{{{Application_Model_DbTable_Musica}}}. Não há problemas quando estas classes
-são criadas em módulos: a classe do Hazel pesquisa corretamente os locais. Se
-temos o módulo {{{Servico}}} e o controle de {{{Servico_RelatorioController}}},
-necessitamos criar o formulário {{{Servico_Form_Relatorio}}} e a representante
-da tabela {{{Servico_Model_DbTable_Relatorio}}}.
+Quando a classe é estendida, métodos representantes do padrão CRUD são criados no controle para manipulação dos dados. Lembramos que o nome do formulário e da tabela devem seguir o padrão do nome da controladora para que sejam automaticamente carregados. Se precisamos de um controle de {{{Musica}}}, devemos criar a classe de controle {{{MusicaController}}}, o formulário {{{Application_Form_Musica}}} e a representante de tabela {{{Application_Model_DbTable_Musica}}}. Não há problemas quando estas classes são criadas em módulos: a classe do Hazel pesquisa corretamente os locais. Se temos o módulo {{{Servico}}} e o controle de {{{Servico_RelatorioController}}}, necessitamos criar o formulário {{{Servico_Form_Relatorio}}} e a representante da tabela {{{Servico_Model_DbTable_Relatorio}}}.
 
 Se há necessidade de carregamento de um formulário ou tabela de nomes diferentes, podemos configurar o atributo da classe na controladora, informando qual classe representante deve ser utilizada.
 
@@ -163,25 +146,25 @@ class UsuarioController extends Hazel_Controller_DatabaseCrudAbstract
 }
 }}}
 
-Ainda utilizando o exemplo de controle de {{{Usuario}}}, devemos criar as
-visualizações, que não são executadas automaticamente para que seja possível a
-renderização especializada, como o {{{Zend_View_Helper_PaginationControl}}}.
+Ainda utilizando o exemplo de controle de {{{Usuario}}}, devemos criar as visualizações, que não são executadas automaticamente para que seja possível a renderização especializada, como o {{{Zend_View_Helper_PaginationControl}}}.
 
-Um modelo de visualização de dados em tabela pode ser construído para a ação
-{{{retrieve}}} do controle de {{{Usuario}}} da seguinte maneira:
+Um modelo de visualização de dados em tabela pode ser construído para a ação {{{retrieve}}} do controle de {{{Usuario}}} da seguinte maneira:
 
 {{{
 <!-- @see APPLICATION_PATH /views/scripts/datagrid.phtml -->
-<?php $address = array('action' => 'retrieve') ?>
-<?php foreach ($this->primaries as $primary) : ?>
-<?php $address[$primary] = null ?>
+<?php if (count($this->messages) > 0) : ?>
+<ul>
+<?php foreach ($this->messages as $message) : ?>
+    <li><?php echo $message ?></li>
 <?php endforeach ?>
+</ul>
+<?php endif ?>
 <table>
     <tr>
 <?php foreach ($this->columns as $column => $label) : ?>
-        <th><a href="<?php echo $this->url(array_merge($address, array('order' => $column))) ?>"><?php echo $label?></a></th>
+        <th><a href="<?php echo $this->url(array('order' => $column)) ?>"><?php echo $label?></a></th>
 <?php endforeach ?>
-        <th colspan="2"><a href="<?php echo $this->url(array_merge($address, array('action' => 'create', 'order' => null, 'page' => null))) ?>">Adicionar</a></th>
+        <th colspan="2"><a href="<?php echo $this->url(array('action' => 'create', 'order' => null, 'page' => null)) ?>">Adicionar</a></th>
     </tr>
 <?php if (count($this->result) > 0) : ?>
 <?php foreach ($this->result as $element) : ?>
@@ -205,8 +188,7 @@ Um modelo de visualização de dados em tabela pode ser construído para a açã
 </table>
 }}}
 
-Este padrão de elementos em tabela é renderizado no arquivo {{{retrieve}}} da
-camada de visualização utilizando método específico:
+Este padrão de elementos em tabela é renderizado no arquivo {{{retrieve.phtml}}} da camada de visualização utilizando método específico:
 
 {{{
 <!-- @see APPLICATION_PATH /views/scripts/usuario/retrieve.phtml -->
@@ -225,9 +207,7 @@ Os outros arquivos de visualização recebem o seguinte conteúdo de programaç�
 <?php echo $this->form ?>
 }}}
 
-Não há encapsulamento destas execuções pois geralmente são necessários dados
-adicionais referente ao conteúdo, sobre como um usuário deve ser adicionado ou
-saída de dados que auxiliam o utilizador do sistema a trabalhar.
+Não há encapsulamento destas execuções pois geralmente são necessários dados adicionais referente ao conteúdo, sobre como um usuário deve ser adicionado ou saída de dados que auxiliam o utilizador do sistema a trabalhar.
 
 As colunas para exibição nos dados tabulares podem ser modificadas configurando as colunas no controle. As informações são passadas através de _arrays_ associativos onde a chave fornece o nome da coluna para renderização da tabela e o valor trabalha como tituleira da coluna, preenchendo o cabeçalho.
 
