@@ -113,7 +113,7 @@ public class RemoteServer implements Runnable
      * Atualização de Elementos Necessários
      * @return Próprio Objeto para Encadeamento
      */
-    public RemoteServer update()
+    protected RemoteServer update()
     {
         return this;
     }
