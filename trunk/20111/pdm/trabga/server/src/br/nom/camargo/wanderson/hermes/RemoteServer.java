@@ -34,6 +34,8 @@ public class RemoteServer implements Runnable
      */
     public RemoteServer setAdapter(ConnectionAdapter adapter)
     {
+        /* Modificação do Adaptador em Tempo de Execução */
+        if (this.adapter != null) this.adapter.disconnect();
         this.adapter = adapter;
         return this;
     }
@@ -68,38 +70,76 @@ public class RemoteServer implements Runnable
     }
 
     /**
+     * Conexão do Servidor de Mensagens
+     * @return Próprio Objeto para Encadeamento
+     * @throws RemoteException Problema Durante Conexão
+     */
+    public RemoteServer connect() throws RemoteException
+    {
+        if (adapter == null) {
+            throw new RemoteException("Invalid Connection Adapter");
+        }
+        if (control == null) {
+            throw new RemoteException("Invalid Remote Control");
+        }
+        adapter.connect();
+        return this;
+    }
+
+    /**
+     * Desconexão do Servidor de Mensagens
+     * @return Próprio Objeto para Encadeamento
+     */
+    public RemoteServer disconnect()
+    {
+        if (adapter != null) adapter.disconnect();
+        return this;
+    }
+
+    /**
+     * Verificação de Conexão Ativa
+     * @return Informação sobre existência de uma conexão aberta e ativa
+     */
+    public boolean isConnected()
+    {
+        return adapter.isConnected();
+    }
+
+    /**
      * Execução Principal do Servidor de Mensagens
      * Utiliza o adaptador de conexão para receber as informações transferidas
      * do dispositivo remoto e fornece estes dados para o interpretador.
      */
     public void run()
     {
-        /* Captura de Elementos Necessários */
-        RemoteControl control     = getControl();
-        ConnectionAdapter adapter = getAdapter();
-        if (control != null && adapter != null) {
-            /* Fluxo de Dados */
-            InputStream in   = adapter.getInputStream();
-            if (in != null) {
-                int size = 0;
-                byte buffer[];
-                /* Manipulação da Conexão */
+        try {
+            /* Conexão do Serviço */
+            connect();
+            /* Elementos para Manipulação */
+            ConnectionAdapter adapter = getAdapter();
+            RemoteControl control     = getControl();
+            /* Fluxo de Entrada de Dados */
+            InputStream in = adapter.getInputStream();
+            /* Elementos Auxiliares */
+            int size; byte buffer[];
+            /* Laço de Repetição para Transferência */
+            while (isConnected()) {
+                size = in.read();
+                buffer = new byte[size];
+                in.read(buffer);
                 try {
-                    while ((size = in.read()) > 0) {
-                        buffer = new byte[size];
-                        in.read(buffer);
-                        control.exec(buffer);
-                    }
-                } catch (IOException e) {
-                    /* Problema na Conexão */
+                    control.exec(this, buffer);
                 } catch (RemoteException e) {
-                    /* Problema na Execução */
+                    /* Erro de Execução */
                 }
-            } else {
-                /* Fluxos de Dados Não Informados */
             }
-        } else {
-            /* Elementos Necessários Não Informados */
+        } catch (RemoteException e) {
+            /* Erro de Conexão */
+        } catch (IOException e) {
+            /* Erro de Transferência de Dados */
+        } finally {
+            /* Desconexão de Dados */
+            disconnect();
         }
     }
 }

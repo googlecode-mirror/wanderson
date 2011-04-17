@@ -17,5 +17,6 @@ public interface RemoteControl
      * @return Próprio Objeto para Encadeamento
      * @throws RemoteException Problemas Internos na Execução
      */
-    public RemoteControl exec(byte content[]) throws RemoteException;
+    public RemoteControl exec(RemoteServer server, byte content[])
+        throws RemoteException;
 }
