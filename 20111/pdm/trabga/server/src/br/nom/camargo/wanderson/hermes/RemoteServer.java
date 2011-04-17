@@ -145,13 +145,15 @@ public class RemoteServer implements Runnable
             /* Laço de Repetição para Transferência */
             while (isConnected()) {
                 l.info("Server Esperando Tamanho da Transferência");
-                update();
                 size = in.read();
+                /* Tamanho do Conteúdo Recebido */
                 update();
                 l.info("Server Tamanho da Transferência: " + size + " bytes");
                 buffer = new byte[size];
                 l.info("Server Esperando Conteúdo da Transferência");
                 in.read(buffer);
+                /* Ćonteúdo Recebido */
+                update();
                 l.info("Server Conteúdo da Transferência: " + buffer);
                 try {
                     l.info("Server Execução do Controle Remoto");
