@@ -141,15 +141,15 @@ public class RemoteServer implements Runnable
                     control.exec(this, buffer);
                 } catch (RemoteException e) {
                     /* Erro de Execução */
-                    l.info("Server" + e.getMessage());
+                    l.info("Server " + e.getMessage());
                 }
             }
         } catch (RemoteException e) {
             /* Erro de Conexão */
-            l.warning("Server" + e.getMessage());
+            l.warning("Server " + e.getMessage());
         } catch (IOException e) {
             /* Erro de Transferência de Dados */
-            l.warning("Server" + e.getMessage());
+            l.warning("Server " + e.getMessage());
         } finally {
             /* Desconexão de Dados */
             l.info("Server Disconnecting");
