@@ -2,6 +2,7 @@ package br.nom.camargo.wanderson.hermes;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Logger;
 
 import br.nom.camargo.wanderson.hermes.adapter.ConnectionAdapter;
 
@@ -112,34 +113,48 @@ public class RemoteServer implements Runnable
      */
     public void run()
     {
+        Logger l =
+            Logger.getLogger("Hermes_RemoteLogger");
         try {
             /* Conexão do Serviço */
+            l.info("Server Connecting");
             connect();
+            l.info("Server Connected");
             /* Elementos para Manipulação */
+            l.info("Server Handler Elements");
             ConnectionAdapter adapter = getAdapter();
             RemoteControl control     = getControl();
             /* Fluxo de Entrada de Dados */
+            l.info("Server Input Stream");
             InputStream in = adapter.getInputStream();
             /* Elementos Auxiliares */
             int size; byte buffer[];
             /* Laço de Repetição para Transferência */
             while (isConnected()) {
+                l.info("Server Size Buffer");
                 size = in.read();
                 buffer = new byte[size];
+                l.info("Server Buffer Capture");
                 in.read(buffer);
                 try {
+                    l.info("Server Remote Executer");
                     control.exec(this, buffer);
                 } catch (RemoteException e) {
                     /* Erro de Execução */
+                    l.info("Server" + e.getMessage());
                 }
             }
         } catch (RemoteException e) {
             /* Erro de Conexão */
+            l.warning("Server" + e.getMessage());
         } catch (IOException e) {
             /* Erro de Transferência de Dados */
+            l.warning("Server" + e.getMessage());
         } finally {
             /* Desconexão de Dados */
+            l.info("Server Disconnecting");
             disconnect();
+            l.info("Server Disconnected");
         }
     }
 }
