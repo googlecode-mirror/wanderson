@@ -94,9 +94,9 @@ public class RemoteServer implements Runnable
     public RemoteServer disconnect()
     {
         Logger l = Logger.getLogger("Hermes_RemoteLogger");
-        l.info("Server Disconnecting");
+        l.info("Server Desconectando o Servidor");
         if (adapter != null) adapter.disconnect();
-        l.info("Server Disconnected");
+        l.info("Server Servidor Desconectado");
         return this;
     }
 
@@ -120,39 +120,43 @@ public class RemoteServer implements Runnable
             Logger.getLogger("Hermes_RemoteLogger");
         try {
             /* Conexão do Serviço */
-            l.info("Server Connecting");
+            l.info("Server Abrindo a Conexão de Dados");
             connect();
-            l.info("Server Connected");
+            l.info("Server Conexão Concluída com Sucesso");
             /* Elementos para Manipulação */
-            l.info("Server Handler Elements");
+            l.info("Server Manipulando Elementos de Comunicação");
             ConnectionAdapter adapter = getAdapter();
             RemoteControl control     = getControl();
             /* Fluxo de Entrada de Dados */
-            l.info("Server Input Stream");
+            l.info("Server Abrindo Fluxo de Entrada de Dados");
             InputStream in = adapter.getInputStream();
             /* Elementos Auxiliares */
             int size; byte buffer[];
             /* Laço de Repetição para Transferência */
             while (isConnected()) {
-                l.info("Server Size Buffer");
+                l.info("Server Esperando Tamanho da Transferência");
                 size = in.read();
+                l.info("Server Tamanho da Transferência: " + size + " bytes");
                 buffer = new byte[size];
-                l.info("Server Buffer Capture");
+                l.info("Server Esperando Conteúdo da Transferência");
                 in.read(buffer);
+                l.info("Server Conteúdo da Transferência: " + buffer);
                 try {
-                    l.info("Server Remote Executer");
+                    l.info("Server Execução do Controle Remoto");
                     control.exec(this, buffer);
                 } catch (RemoteException e) {
                     /* Erro de Execução */
-                    l.info("Server " + e.getMessage());
+                    l.warning("Server Erro de Execução do Controle Remoto: "
+                        + e.getMessage());
                 }
             }
         } catch (RemoteException e) {
             /* Erro de Conexão */
-            l.warning("Server " + e.getMessage());
+            l.warning("Server Erro de Conexão do Servidor: " + e.getMessage());
         } catch (IOException e) {
             /* Erro de Transferência de Dados */
-            l.warning("Server " + e.getMessage());
+            l.warning("Server Erro na Transferência de Dados: "
+                + e.getMessage());
         } finally {
             /* Desconexão de Dados */
             disconnect();
