@@ -31,7 +31,7 @@ public class EthernetAdapter extends ConnectionAdapter
     /**
      * Porta para Comunicação
      */
-    private int port;
+    private int port = DEFAULT_PORT;
 
     /**
      * Configuração da Porta para Comunicação
@@ -55,7 +55,7 @@ public class EthernetAdapter extends ConnectionAdapter
 
     public EthernetAdapter connect() throws ConnectionException
     {
-        if (isConnected()) disconnect();
+        Logger l = Logger.getLogger("Hermes_RemoteLogger");
         /* Comunicação Física */
         Socket s        = null;
         ServerSocket sv = null;
@@ -63,8 +63,13 @@ public class EthernetAdapter extends ConnectionAdapter
         InputStream in   = null;
         OutputStream out = null;
         try {
+            l.info("Adapter Ethernet Abrindo Porta " + getPort());
             sv = new ServerSocket(getPort());
+            l.info("Adapter Ethernet Esperando Conexão de Dados");
             s  = sv.accept();
+            l.info("Adapter Ethernet Conexão Aceita");
+            l.info("Adapter Ethernet Abrindo Fluxos de Dados");
+            /* Fluxos de Dados */
             in  = s.getInputStream();
             out = s.getOutputStream();
             /* Configuração do Comunicador */
@@ -72,27 +77,30 @@ public class EthernetAdapter extends ConnectionAdapter
             /* Configuração de Fluxos */
             setInputStream(in).setOutputStream(out);
         } catch (IOException e) {
-            Logger l = Logger.getLogger("Hermes_RemoteLogger");
-            l.info("Adapter " + e.getMessage());
+            l.warning("Adapter Ethernet Erro na Abertura de Fluxos de Dados: " +
+                e.getMessage());
             disconnect();
         }
         /* Fechar Serviço */
         try {
+            l.info("Adapter Ethernet Finalizando Servidor de Conexões");
             if (sv != null) sv.close();
         } catch (IOException e) {
-            Logger l = Logger.getLogger("Hermes_RemoteLogger");
-            l.info("Adapter " + e.getMessage());
+            l.warning("Adapter Ethernet Erro ao Finalizar a Conexão: " +
+                e.getMessage());
         }
         return this;
     }
 
     public EthernetAdapter disconnect()
     {
+        Logger l = Logger.getLogger("Hermes_RemoteLogger");
         try {
+            l.info("Adapter Ethernet Finalizando Conexão");
             if (isConnected()) socket.close();
         } catch (IOException e) {
-            Logger l = Logger.getLogger("Hermes_RemoteLogger");
-            l.info("Adapter " + e.getMessage());
+            l.warning("Adapter Ethernet Erro ao Finalizar a Conexão: " +
+                e.getMessage());
         }
         setInputStream(null).setOutputStream(null);
         return this;

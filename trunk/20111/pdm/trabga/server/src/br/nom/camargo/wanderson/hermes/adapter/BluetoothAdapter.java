@@ -42,6 +42,7 @@ public class BluetoothAdapter extends ConnectionAdapter
 
     public BluetoothAdapter connect() throws ConnectionException
     {
+        Logger l = Logger.getLogger("Hermes_RemoteLogger");
         /* Endereço de Conexão */
         String addr = "btspp://localhost:" + getUUID();
         /* Conexão Física */
@@ -51,8 +52,13 @@ public class BluetoothAdapter extends ConnectionAdapter
         InputStream in   = null;
         OutputStream out = null;
         try {
+            l.info("Adapter Bluetooth Abrindo Porta " + getUUID());
             n = (StreamConnectionNotifier) Connector.open(addr);
+            l.info("Adapter Bluetooth Esperando Conexão de Dados");
             s = n.acceptAndOpen();
+            l.info("Adapter Bluetooth Conexão Aceita");
+            l.info("Adapter Bluetooth Abrindo Fluxos de Dados");
+            /* Fluxos de Dados */
             in  = s.openInputStream();
             out = s.openOutputStream();
             /* Configuração do Comunicador */
@@ -60,27 +66,30 @@ public class BluetoothAdapter extends ConnectionAdapter
             /* Configuração de Fluxos */
             setInputStream(in).setOutputStream(out);
         } catch (IOException e) {
-            Logger l = Logger.getLogger("Hermes_RemoteLogger");
-            l.info("Adapter " + e.getMessage());
+            l.warning("Adapter Bluetooth Erro na Abertura de Fluxos de Dados: "+
+                e.getMessage());
             disconnect();
         }
         /* Fechar Serviço */
         try {
+            l.info("Adapter Bluetooth Finalizando Servidor de Conexões");
             if (n != null) n.close();
         } catch (IOException e) {
-            Logger l = Logger.getLogger("Hermes_RemoteLogger");
-            l.info("Adapter " + e.getMessage());
+            l.warning("Adapter Bluetooth Erro ao Finalizar a Conexão: " +
+                e.getMessage());
         }
         return this;
     }
 
     public BluetoothAdapter disconnect()
     {
+        Logger l = Logger.getLogger("Hermes_RemoteLogger");
         try {
+            l.info("Adapter Bluetooth Finalizando Conexão");
             if (stream != null) stream.close();
         } catch (IOException e) {
-            Logger l = Logger.getLogger("Hermes_RemoteLogger");
-            l.info("Adapter " + e.getMessage());
+            l.warning("Adapter Bluetooth Erro ao Finalizar a Conexão: " +
+                e.getMessage());
         }
         setInputStream(null).setOutputStream(null);
         return this;
