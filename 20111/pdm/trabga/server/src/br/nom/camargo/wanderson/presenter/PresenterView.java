@@ -18,11 +18,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-public class PresenterView extends JFrame implements Observer
+public class PresenterView extends JFrame implements Observer, Runnable
 {
     private static final long serialVersionUID = 866195409376067052L;
     private JLabel status;
     private PresenterDebugger debugger;
+    private Presenter presenter;
 
     public PresenterView()
     {
@@ -33,7 +34,8 @@ public class PresenterView extends JFrame implements Observer
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
 
-        debugger = new PresenterDebugger();
+        presenter = new Presenter();
+        debugger  = new PresenterDebugger();
 
         JPanel top = new JPanel();
         top.setBackground(Color.WHITE);
@@ -55,6 +57,32 @@ public class PresenterView extends JFrame implements Observer
 
         JMenu mserver = new JMenu("Server");
         mserver.setMnemonic('S');
+        JMenuItem methernet = new JMenuItem("Start Ethernet");
+        methernet.setMnemonic('E');
+        methernet.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                presenter.ethernet();
+                new Thread(presenter).start();
+            }
+        });
+        mserver.add(methernet);
+        JMenuItem mbluetooth = new JMenuItem("Start Bluetooth");
+        mbluetooth.setMnemonic('B');
+        mbluetooth.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                presenter.bluetooth();
+                new Thread(presenter).start();
+            }
+        });
+        mserver.add(mbluetooth);
+        JMenuItem mstop = new JMenuItem("Stop");
+        mstop.setMnemonic('S');
+        mstop.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                presenter.disconnect();
+            }
+        });
+        mserver.add(mstop);
         JMenuItem mdebugger = new JMenuItem("Debugger");
         mdebugger.setMnemonic('D');
         mdebugger.addActionListener(new ActionListener() {
@@ -69,6 +97,7 @@ public class PresenterView extends JFrame implements Observer
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
                 dispose();
+                System.exit(0);
             }
         });
         mserver.add(mclose);
@@ -95,7 +124,20 @@ public class PresenterView extends JFrame implements Observer
 
     public void update(Observable o, Object arg)
     {
-        
+        if (o instanceof PresenterRemote) {
+            System.out.println("Ação!");
+        }
+    }
+
+    public void run()
+    {
+        setVisible(true);
+    }
+
+    public static void main(String args[])
+    {
+        PresenterView main = new PresenterView();
+        main.run();
     }
 
 }

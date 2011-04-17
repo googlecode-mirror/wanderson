@@ -93,7 +93,10 @@ public class RemoteServer implements Runnable
      */
     public RemoteServer disconnect()
     {
+        Logger l = Logger.getLogger("Hermes_RemoteLogger");
+        l.info("Server Disconnecting");
         if (adapter != null) adapter.disconnect();
+        l.info("Server Disconnected");
         return this;
     }
 
@@ -103,7 +106,7 @@ public class RemoteServer implements Runnable
      */
     public boolean isConnected()
     {
-        return adapter.isConnected();
+        return adapter == null ? false : adapter.isConnected();
     }
 
     /**
@@ -152,9 +155,7 @@ public class RemoteServer implements Runnable
             l.warning("Server " + e.getMessage());
         } finally {
             /* Desconexão de Dados */
-            l.info("Server Disconnecting");
             disconnect();
-            l.info("Server Disconnected");
         }
     }
 }
