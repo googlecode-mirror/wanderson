@@ -110,6 +110,15 @@ public class RemoteServer implements Runnable
     }
 
     /**
+     * Atualização de Elementos Necessários
+     * @return Próprio Objeto para Encadeamento
+     */
+    public RemoteServer update()
+    {
+        return this;
+    }
+
+    /**
      * Execução Principal do Servidor de Mensagens
      * Utiliza o adaptador de conexão para receber as informações transferidas
      * do dispositivo remoto e fornece estes dados para o interpretador.
@@ -122,6 +131,7 @@ public class RemoteServer implements Runnable
             /* Conexão do Serviço */
             l.info("Server Abrindo a Conexão de Dados");
             connect();
+            update();
             l.info("Server Conexão Concluída com Sucesso");
             /* Elementos para Manipulação */
             l.info("Server Manipulando Elementos de Comunicação");
@@ -135,7 +145,9 @@ public class RemoteServer implements Runnable
             /* Laço de Repetição para Transferência */
             while (isConnected()) {
                 l.info("Server Esperando Tamanho da Transferência");
+                update();
                 size = in.read();
+                update();
                 l.info("Server Tamanho da Transferência: " + size + " bytes");
                 buffer = new byte[size];
                 l.info("Server Esperando Conteúdo da Transferência");
@@ -160,6 +172,7 @@ public class RemoteServer implements Runnable
         } finally {
             /* Desconexão de Dados */
             disconnect();
+            update();
         }
     }
 }
