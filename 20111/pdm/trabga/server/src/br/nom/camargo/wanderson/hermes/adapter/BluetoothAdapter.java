@@ -60,12 +60,17 @@ public class BluetoothAdapter extends ConnectionAdapter
             /* Configuração de Fluxos */
             setInputStream(in).setOutputStream(out);
         } catch (IOException e) {
+            Logger l = Logger.getLogger("Hermes_RemoteLogger");
+            l.info("Adapter " + e.getMessage());
             disconnect();
         }
         /* Fechar Serviço */
         try {
             if (n != null) n.close();
-        } catch (IOException e) {}
+        } catch (IOException e) {
+            Logger l = Logger.getLogger("Hermes_RemoteLogger");
+            l.info("Adapter " + e.getMessage());
+        }
         return this;
     }
 
@@ -73,7 +78,10 @@ public class BluetoothAdapter extends ConnectionAdapter
     {
         try {
             if (stream != null) stream.close();
-        } catch (IOException e) {}
+        } catch (IOException e) {
+            Logger l = Logger.getLogger("Hermes_RemoteLogger");
+            l.info("Adapter " + e.getMessage());
+        }
         setInputStream(null).setOutputStream(null);
         return this;
     }
