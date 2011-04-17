@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.logging.Logger;
 
 /**
  * Adaptador de Comunicação Ethernet
@@ -71,12 +72,17 @@ public class EthernetAdapter extends ConnectionAdapter
             /* Configuração de Fluxos */
             setInputStream(in).setOutputStream(out);
         } catch (IOException e) {
+            Logger l = Logger.getLogger("Hermes_RemoteLogger");
+            l.info("Adapter " + e.getMessage());
             disconnect();
         }
         /* Fechar Serviço */
         try {
             if (sv != null) sv.close();
-        } catch (IOException e) {}
+        } catch (IOException e) {
+            Logger l = Logger.getLogger("Hermes_RemoteLogger");
+            l.info("Adapter " + e.getMessage());
+        }
         return this;
     }
 
@@ -84,7 +90,10 @@ public class EthernetAdapter extends ConnectionAdapter
     {
         try {
             if (isConnected()) socket.close();
-        } catch (IOException e) {}
+        } catch (IOException e) {
+            Logger l = Logger.getLogger("Hermes_RemoteLogger");
+            l.info("Adapter " + e.getMessage());
+        }
         setInputStream(null).setOutputStream(null);
         return this;
     }
