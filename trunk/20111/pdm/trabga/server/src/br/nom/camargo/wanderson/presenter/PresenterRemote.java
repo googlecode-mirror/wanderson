@@ -11,51 +11,51 @@ import br.nom.camargo.wanderson.hermes.RemoteException;
 import br.nom.camargo.wanderson.hermes.RemoteServer;
 
 /**
- * Interpretador de Comandos do Apresentador de Slides
+ * Controle de Apresentação
  * 
- * Trabalha como um tradutor do conteúdo enviado pelo serviço de mensagens. As
- * informações utilizam a Javascript Objeto Notation (JSON) para declarar os
- * comandos que devem ser executados sobre a máquina local.
+ * Interpretador dos comandos enviados pelo servidor de mensagens. Executa
+ * tarefas sobre o computador local utilizando um simulador de usuário
+ * disponível no Java.
  * 
  * @author Wanderson Henrique Camargo Rosa
  */
 public class PresenterRemote extends Observable implements RemoteControl
 {
     /**
-     * Simulador de Execução
+     * Simulador de Usuário
      */
-    private Robot robot;
+    private static Robot robot = null;
 
-    public PresenterRemote exec(RemoteServer server, byte content[])
+    public PresenterRemote exec(RemoteServer server, byte buffer[])
         throws RemoteException
     {
         Logger l = Logger.getLogger("Hermes_RemoteLogger");
-        String message = new String(content);
-        l.info("Control Presenter Mensagem Recebida: " + message);
+        l.info("Control Presenter Execução do Interpretador");
+        String message = new String(buffer);
         try {
             if (message.equals("LEFT")) {
-                l.info("Control Presenter Navegação para Esquerda");
+                l.info("Control Presenter Movimentação para Esquerda");
                 getRobot().keyPress(KeyEvent.VK_LEFT);
                 getRobot().keyRelease(KeyEvent.VK_LEFT);
             } else if (message.equals("RIGHT")) {
-                l.info("Control Presenter Navegação para Direita");
+                l.info("Control Presenter Movimentação para Direita");
                 getRobot().keyPress(KeyEvent.VK_RIGHT);
                 getRobot().keyRelease(KeyEvent.VK_RIGHT);
-            } else {
-                l.warning("Control Presenter Comando de Navegação Inválido");
+            }
+            else {
+                l.warning("Control Presenter Comando Desconhecido");
                 throw new RemoteException("Invalid Command");
             }
         } finally {
-            l.info("Control Presenter Notificando Observadores");
-            notifyObservers();
+            l.info("Control Presenter Finalização de Execução do Controle");
         }
         return this;
     }
 
     /**
-     * Informação do Simulador de Execução
-     * @return Elemento de Informação
-     * @throws RemoteException Problemas na Criação do Simulador
+     * Captura do Simulador de Usuário
+     * @return Objeto Solicitado
+     * @throws RemoteException Impossível Criar um Simulador
      */
     protected Robot getRobot() throws RemoteException
     {

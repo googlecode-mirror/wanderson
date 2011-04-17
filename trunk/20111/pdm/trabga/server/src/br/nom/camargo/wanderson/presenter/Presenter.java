@@ -1,8 +1,5 @@
 package br.nom.camargo.wanderson.presenter;
 
-import java.util.Observable;
-
-import br.nom.camargo.wanderson.hermes.RemoteControl;
 import br.nom.camargo.wanderson.hermes.RemoteServer;
 import br.nom.camargo.wanderson.hermes.adapter.BluetoothAdapter;
 import br.nom.camargo.wanderson.hermes.adapter.EthernetAdapter;
@@ -10,34 +7,40 @@ import br.nom.camargo.wanderson.hermes.adapter.EthernetAdapter;
 /**
  * Apresentador de Slides
  * 
- * Configura o serviço de mensagens para trabalho com o controle de apresentação
- * com métodos adicionais que executam os adaptadores de conexão Bluetooth ou
- * Ethernet conforme necessário. Funciona como um Wrapper para o serviço de
- * mensagens, pois o acesso direto aos adaptadores não deve ser fornecido e deve
- * incluir o padrão de projeto Observer.
- * 
  * @author Wanderson Henrique Camargo Rosa
  */
-public class Presenter extends Observable implements Runnable
+public class Presenter implements Runnable
 {
     /**
      * Servidor de Mensagens
      */
-    private RemoteServer server;
+    private PresenterServer server;
 
     /**
-     * Construtor Padrão
+     * Controle de Apresentação
+     */
+    private PresenterRemote control;
+
+    /**
+     * Visualização do Servidor
+     */
+    private PresenterView view;
+
+
+    /**
+     * Construtor
      */
     public Presenter()
     {
-        server = new RemoteServer();
-        /* Configuração do Controle */
-        RemoteControl control = new PresenterRemote();
-        server.setControl(control);
+        control = new PresenterRemote();
+        view    = new PresenterView();
+        server  = new PresenterServer();
+        /* Padrão de Projeto Observador */
+        control.addObserver(view);
     }
 
     /**
-     * Configura o Adaptador Bluetooth
+     * Inicialização de Adaptador Bluetooth
      * @return Próprio Objeto para Encadeamento
      */
     public Presenter bluetooth()
@@ -48,7 +51,7 @@ public class Presenter extends Observable implements Runnable
     }
 
     /**
-     * Configura o Adaptador Ethernet
+     * Inicialização de Adaptador Ethernet
      * @return Próprio Objeto para Encadeamento
      */
     public Presenter ethernet()
@@ -59,7 +62,7 @@ public class Presenter extends Observable implements Runnable
     }
 
     /**
-     * Desconexão de Dados
+     * Desconexão do Servidor
      * @return Próprio Objeto para Encadeamento
      */
     public Presenter disconnect()
@@ -70,6 +73,26 @@ public class Presenter extends Observable implements Runnable
 
     public void run()
     {
-        server.run();
+        view.setDefaultCloseOperation(PresenterView.EXIT_ON_CLOSE);
+        view.setVisible(true);
+    }
+
+    public static void main(String args[])
+    {
+        Presenter p = new Presenter();
+        p.run();
+    }
+
+    /**
+     * Trabalho com Gancho de Execução
+     * 
+     * @author Wanderson Henrique Camargo Rosa
+     */
+    private class PresenterServer extends RemoteServer
+    {
+        protected RemoteServer update()
+        {
+            return this;
+        }
     }
 }
