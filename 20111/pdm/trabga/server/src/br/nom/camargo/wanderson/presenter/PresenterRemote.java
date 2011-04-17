@@ -37,10 +37,12 @@ public class PresenterRemote extends Observable implements RemoteControl
                 l.info("Control Presenter Movimentação para Esquerda");
                 getRobot().keyPress(KeyEvent.VK_LEFT);
                 getRobot().keyRelease(KeyEvent.VK_LEFT);
+                setChanged();
             } else if (message.equals("RIGHT")) {
                 l.info("Control Presenter Movimentação para Direita");
                 getRobot().keyPress(KeyEvent.VK_RIGHT);
                 getRobot().keyRelease(KeyEvent.VK_RIGHT);
+                setChanged();
             }
             else {
                 l.warning("Control Presenter Comando Desconhecido");
@@ -49,6 +51,7 @@ public class PresenterRemote extends Observable implements RemoteControl
         } finally {
             l.info("Control Presenter Finalização de Execução do Controle");
         }
+        notifyObservers();
         return this;
     }
 

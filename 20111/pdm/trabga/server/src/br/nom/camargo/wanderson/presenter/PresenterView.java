@@ -1,14 +1,23 @@
 package br.nom.camargo.wanderson.presenter;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class PresenterView extends JFrame implements Observer
 {
@@ -17,6 +26,10 @@ public class PresenterView extends JFrame implements Observer
      */
     private static final long serialVersionUID = -3018980289724185784L;
     private JStatusBar status;
+    private JTable table;
+    private JMenuItem mbluetooth;
+    private JMenuItem methernet;
+    private JMenuItem mstop;
 
     /**
      * Construtor
@@ -39,9 +52,52 @@ public class PresenterView extends JFrame implements Observer
         setPreferredSize(d);
         setResizable(false);
 
+        /* Topo */
+        JPanel banner = new JPanel();
+        banner.setBackground(Color.WHITE);
+        banner.setPreferredSize(new Dimension(0, 100));
+        JLabel blabel = new JLabel("Commands");
+        banner.setLayout(new BorderLayout());
+        banner.add(blabel, BorderLayout.WEST);
+        add(banner, BorderLayout.NORTH);
+
         /* Status */
         status = new JStatusBar();
         add(status, BorderLayout.PAGE_END);
+
+        /* Tabela de Comandos */
+        table = new JTable();
+        JScrollPane scroll = new JScrollPane(table);
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("Name");
+        model.addColumn("Status");
+        model.addRow(new Object[]{"Left","Released"});
+        model.addRow(new Object[]{"Right","Released"});
+        table.setModel(model);
+        table.setEnabled(false);
+        add(scroll, BorderLayout.CENTER);
+
+        /* Menu Servidor */
+        mbluetooth = new JMenuItem("Start Bluetooth");
+        methernet = new JMenuItem("Start Ethernet");
+        mstop = new JMenuItem("Stop");
+        JMenuItem mquit = new JMenuItem("Quit");
+        mquit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+                dispose();
+            }
+        });
+        JMenu mserver = new JMenu("Server");
+        mserver.add(mbluetooth);
+        mserver.add(methernet);
+        mserver.add(mstop);
+        mserver.add(mquit);
+
+        /* Menu Barra */
+        JMenuBar menubar = new JMenuBar();
+        menubar.add(mserver);
+        setJMenuBar(menubar);
 
         return this;
     }
@@ -49,6 +105,14 @@ public class PresenterView extends JFrame implements Observer
     public PresenterView setStatusMessage(String message)
     {
         status.setMessage(message);
+        return this;
+    }
+
+    public PresenterView setConnected(boolean confirm)
+    {
+        mbluetooth.setEnabled(!confirm);
+        methernet.setEnabled(!confirm);
+        mstop.setEnabled(confirm);
         return this;
     }
 
