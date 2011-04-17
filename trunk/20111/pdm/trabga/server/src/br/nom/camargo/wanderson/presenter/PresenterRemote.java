@@ -4,6 +4,7 @@ import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
 import java.util.Observable;
+import java.util.logging.Logger;
 
 import br.nom.camargo.wanderson.hermes.RemoteControl;
 import br.nom.camargo.wanderson.hermes.RemoteException;
@@ -28,18 +29,24 @@ public class PresenterRemote extends Observable implements RemoteControl
     public PresenterRemote exec(RemoteServer server, byte content[])
         throws RemoteException
     {
+        Logger l = Logger.getLogger("Hermes_RemoteLogger");
         String message = new String(content);
+        l.info("Control Presenter Mensagem Recebida: " + message);
         try {
             if (message.equals("LEFT")) {
+                l.info("Control Presenter Navegação para Esquerda");
                 getRobot().keyPress(KeyEvent.VK_LEFT);
                 getRobot().keyRelease(KeyEvent.VK_LEFT);
             } else if (message.equals("RIGHT")) {
+                l.info("Control Presenter Navegação para Direita");
                 getRobot().keyPress(KeyEvent.VK_RIGHT);
                 getRobot().keyRelease(KeyEvent.VK_RIGHT);
             } else {
+                l.warning("Control Presenter Comando de Navegação Inválido");
                 throw new RemoteException("Invalid Command");
             }
         } finally {
+            l.info("Control Presenter Notificando Observadores");
             notifyObservers();
         }
         return this;

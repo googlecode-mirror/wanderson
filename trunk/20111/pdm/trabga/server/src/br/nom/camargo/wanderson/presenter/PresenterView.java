@@ -25,9 +25,8 @@ public class PresenterView extends JFrame implements Observer, Runnable
     private PresenterDebugger debugger;
     private Presenter presenter;
 
-    public PresenterView()
+    public PresenterView init()
     {
-        super("Presenter");
         Dimension d = new Dimension(300, 400);
         setSize(d);
         setPreferredSize(d);
@@ -114,6 +113,13 @@ public class PresenterView extends JFrame implements Observer, Runnable
         setJMenuBar(bar);
 
         setStatus("Closed");
+
+        return this;
+    }
+
+    public PresenterView()
+    {
+        super("Presenter");
     }
 
     public PresenterView setStatus(String message)
