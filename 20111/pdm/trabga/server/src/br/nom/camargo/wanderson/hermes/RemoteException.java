@@ -16,6 +16,15 @@ public class RemoteException extends Exception
 
     /**
      * Construtor
+     * @param message Mensagem do Erro Gerado
+     */
+    public RemoteException(String message)
+    {
+        super(message);
+    }
+
+    /**
+     * Construtor
      * @param e Encapsulamento da Causa sobre Erro Gerado
      */
     public RemoteException(Throwable e)
