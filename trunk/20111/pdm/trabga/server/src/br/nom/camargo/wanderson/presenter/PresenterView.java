@@ -108,17 +108,11 @@ public class PresenterView extends JFrame implements Observer
         return this;
     }
 
-    public PresenterView setConnected(boolean confirm)
-    {
-        mbluetooth.setEnabled(!confirm);
-        methernet.setEnabled(!confirm);
-        mstop.setEnabled(confirm);
-        return this;
-    }
-
     public void update(Observable o, Object arg)
     {
-        
+        if (o instanceof PresenterRemote) {
+            
+        }
     }
 
     public class JStatusBar extends JPanel

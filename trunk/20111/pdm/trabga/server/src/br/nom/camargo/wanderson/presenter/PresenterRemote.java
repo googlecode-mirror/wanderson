@@ -26,32 +26,49 @@ public class PresenterRemote extends Observable implements RemoteControl
      */
     private static Robot robot = null;
 
+    /**
+     * Último Comando Executado pelo Interpretador
+     */
+    private PresenterCommand last = null;
+
+    /**
+     * Informação do Último Comando Executado
+     * @return Elemento de Informação
+     */
+    public PresenterCommand getLastCommand()
+    {
+        return last;
+    }
+
     public PresenterRemote exec(RemoteServer server, byte buffer[])
         throws RemoteException
     {
         Logger l = Logger.getLogger("Hermes_RemoteLogger");
         l.info("Control Presenter Execução do Interpretador");
         String message = new String(buffer);
+        last = PresenterCommand.valueOf(message);
         try {
-            if (message.equals("LEFT")) {
+            switch (last) {
+            case LEFT:
                 l.info("Control Presenter Movimentação para Esquerda");
                 getRobot().keyPress(KeyEvent.VK_LEFT);
                 getRobot().keyRelease(KeyEvent.VK_LEFT);
                 setChanged();
-            } else if (message.equals("RIGHT")) {
+                break;
+            case RIGHT:
                 l.info("Control Presenter Movimentação para Direita");
                 getRobot().keyPress(KeyEvent.VK_RIGHT);
                 getRobot().keyRelease(KeyEvent.VK_RIGHT);
                 setChanged();
-            }
-            else {
+                break;
+            default:
                 l.warning("Control Presenter Comando Desconhecido");
                 throw new RemoteException("Invalid Command");
             }
         } finally {
             l.info("Control Presenter Finalização de Execução do Controle");
+            notifyObservers();
         }
-        notifyObservers();
         return this;
     }
 
@@ -70,5 +87,15 @@ public class PresenterRemote extends Observable implements RemoteControl
             }
         }
         return robot;
+    }
+
+    /**
+     * Comandos Disponíveis
+     * 
+     * @author Wanderson Henrique Camargo Rosa
+     */
+    public enum PresenterCommand
+    {
+        LEFT, RIGHT;
     }
 }

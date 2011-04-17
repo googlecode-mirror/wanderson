@@ -2,6 +2,7 @@ package br.nom.camargo.wanderson.hermes;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Observable;
 import java.util.logging.Logger;
 
 import br.nom.camargo.wanderson.hermes.adapter.ConnectionAdapter;
@@ -16,8 +17,13 @@ import br.nom.camargo.wanderson.hermes.adapter.ConnectionAdapter;
  * 
  * @author Wanderson Henrique Camargo Rosa
  */
-public class RemoteServer implements Runnable
+public class RemoteServer extends Observable implements Runnable
 {
+    /**
+     * Estado do Servidor
+     */
+    public RemoteStatus status = RemoteStatus.DISCONNECTED;
+
     /**
      * Adaptador da Conexão
      */
@@ -27,6 +33,28 @@ public class RemoteServer implements Runnable
      * Intepretador de Mensagens
      */
     private RemoteControl control;
+
+    /**
+     * Informação do Estado Atual do Servidor
+     * @return Elemento de Informação
+     */
+    public RemoteStatus getStatus()
+    {
+        return status;
+    }
+
+    /**
+     * Configuração do Estado da Conexão
+     * @param s Elemento para Configuração
+     * @return Próprio Objeto para Encadeamento
+     */
+    private RemoteServer setStatus(RemoteStatus s)
+    {
+        status = s;
+        setChanged();
+        notifyObservers();
+        return this;
+    }
 
     /**
      * Configuração do Adaptador de Conexão
@@ -110,15 +138,6 @@ public class RemoteServer implements Runnable
     }
 
     /**
-     * Atualização de Elementos Necessários
-     * @return Próprio Objeto para Encadeamento
-     */
-    protected RemoteServer update()
-    {
-        return this;
-    }
-
-    /**
      * Execução Principal do Servidor de Mensagens
      * Utiliza o adaptador de conexão para receber as informações transferidas
      * do dispositivo remoto e fornece estes dados para o interpretador.
@@ -127,11 +146,12 @@ public class RemoteServer implements Runnable
     {
         Logger l =
             Logger.getLogger("Hermes_RemoteLogger");
+        /* Tentativa de Conexão */
+        setStatus(RemoteStatus.CONNECTING);
         try {
             /* Conexão do Serviço */
             l.info("Server Abrindo a Conexão de Dados");
             connect();
-            update();
             l.info("Server Conexão Concluída com Sucesso");
             /* Elementos para Manipulação */
             l.info("Server Manipulando Elementos de Comunicação");
@@ -142,18 +162,18 @@ public class RemoteServer implements Runnable
             InputStream in = adapter.getInputStream();
             /* Elementos Auxiliares */
             int size; byte buffer[];
+            /* Conexão Concluída */
+            setStatus(RemoteStatus.CONNECTED);
             /* Laço de Repetição para Transferência */
             while (isConnected()) {
                 l.info("Server Esperando Tamanho da Transferência");
                 size = in.read();
                 /* Tamanho do Conteúdo Recebido */
-                update();
                 l.info("Server Tamanho da Transferência: " + size + " bytes");
                 buffer = new byte[size];
                 l.info("Server Esperando Conteúdo da Transferência");
                 in.read(buffer);
                 /* Ćonteúdo Recebido */
-                update();
                 l.info("Server Conteúdo da Transferência: " + buffer);
                 try {
                     l.info("Server Execução do Controle Remoto");
@@ -172,9 +192,22 @@ public class RemoteServer implements Runnable
             l.warning("Server Erro na Transferência de Dados: "
                 + e.getMessage());
         } finally {
+            /* Tentativa de Desconexão */
+            setStatus(RemoteStatus.DISCONNECTING);
             /* Desconexão de Dados */
             disconnect();
-            update();
+            /* Desconexão Concluída */
+            setStatus(RemoteStatus.DISCONNECTED);
         }
+    }
+
+    /**
+     * Estado do Servidor
+     *
+     * @author Wanderson Henrique Camargo Rosa
+     */
+    public enum RemoteStatus
+    {
+        DISCONNECTED, CONNECTING, CONNECTED, DISCONNECTING;
     }
 }
