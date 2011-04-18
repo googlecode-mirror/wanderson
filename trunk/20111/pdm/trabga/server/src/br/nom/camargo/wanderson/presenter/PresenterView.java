@@ -25,6 +25,16 @@ import br.nom.camargo.wanderson.hermes.adapter.BluetoothAdapter;
 import br.nom.camargo.wanderson.hermes.adapter.EthernetAdapter;
 import br.nom.camargo.wanderson.presenter.PresenterRemote.PresenterCommand;
 
+/**
+ * Apresentador
+ * 
+ * Utiliza um serviço de mensagens e um interpretador de comandos para receber
+ * as informações de dispositivos remotos. Trabalha com o padrão de projeto
+ * Observer para que a visualização esteja sempre atualizada conforme estado da
+ * conexão.
+ * 
+ * @author Wanderson Henrique Camargo Rosa
+ */
 public class PresenterView extends JFrame implements Observer
 {
     /**
@@ -68,6 +78,11 @@ public class PresenterView extends JFrame implements Observer
     private PresenterRemote remote;
 
     /**
+     * Debugger de Mensagens
+     */
+    private PresenterDebugger debugger;
+
+    /**
      * Construtor
      */
     public PresenterView()
@@ -98,6 +113,9 @@ public class PresenterView extends JFrame implements Observer
         setSize(d);
         setPreferredSize(d);
         setResizable(false);
+
+        /* Janelas Secundárias */
+        debugger = new PresenterDebugger();
 
         /* Topo */
         JPanel banner = new JPanel();
@@ -161,9 +179,19 @@ public class PresenterView extends JFrame implements Observer
         mserver.add(mstop);
         mserver.add(mquit);
 
+        JMenuItem mviewer = new JMenuItem("View Debugger");
+        mviewer.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                debugger.setVisible(true);
+            }
+        });
+        JMenu mdebugger = new JMenu("Debugger");
+        mdebugger.add(mviewer);
+
         /* Menu Barra */
         JMenuBar menubar = new JMenuBar();
         menubar.add(mserver);
+        menubar.add(mdebugger);
         setJMenuBar(menubar);
 
         return this;
