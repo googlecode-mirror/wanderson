@@ -46,7 +46,11 @@ public class PresenterRemote extends Observable implements RemoteControl
         Logger l = Logger.getLogger("Hermes_RemoteLogger");
         l.info("Control Presenter Execução do Interpretador");
         String message = new String(buffer);
-        last = PresenterCommand.valueOf(message);
+        try {
+            last = PresenterCommand.valueOf(message);
+        } catch (IllegalArgumentException e) {
+            last = PresenterCommand.NONE;
+        }
         try {
             switch (last) {
             case LEFT:
@@ -96,6 +100,6 @@ public class PresenterRemote extends Observable implements RemoteControl
      */
     public enum PresenterCommand
     {
-        LEFT, RIGHT;
+        LEFT, RIGHT, NONE;
     }
 }

@@ -29,6 +29,11 @@ public class EthernetAdapter extends ConnectionAdapter
     private Socket socket;
 
     /**
+     * Serviço de Elementos para Comunicação
+     */
+    private ServerSocket sv;
+
+    /**
      * Porta para Comunicação
      */
     private int port = DEFAULT_PORT;
@@ -57,8 +62,7 @@ public class EthernetAdapter extends ConnectionAdapter
     {
         Logger l = Logger.getLogger("Hermes_RemoteLogger");
         /* Comunicação Física */
-        Socket s        = null;
-        ServerSocket sv = null;
+        Socket s = null;
         /* Fluxos de Dados */
         InputStream in   = null;
         OutputStream out = null;
@@ -81,14 +85,6 @@ public class EthernetAdapter extends ConnectionAdapter
                 e.getMessage());
             disconnect();
         }
-        /* Fechar Serviço */
-        try {
-            l.info("Adapter Ethernet Finalizando Servidor de Conexões");
-            if (sv != null) sv.close();
-        } catch (IOException e) {
-            l.warning("Adapter Ethernet Erro ao Finalizar a Conexão: " +
-                e.getMessage());
-        }
         return this;
     }
 
@@ -97,7 +93,10 @@ public class EthernetAdapter extends ConnectionAdapter
         Logger l = Logger.getLogger("Hermes_RemoteLogger");
         try {
             l.info("Adapter Ethernet Finalizando Conexão");
-            if (isConnected()) socket.close();
+            /* Finalizando Socket */
+            if (socket != null) socket.close(); socket = null;
+            /* Finalizando Serviço de Socket */
+            if (sv != null) sv.close(); sv = null;
         } catch (IOException e) {
             l.warning("Adapter Ethernet Erro ao Finalizar a Conexão: " +
                 e.getMessage());
