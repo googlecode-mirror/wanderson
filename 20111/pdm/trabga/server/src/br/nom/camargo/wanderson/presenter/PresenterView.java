@@ -110,6 +110,7 @@ public class PresenterView extends JFrame implements Observer
     private PresenterView init()
     {
         /* Janela */
+        setTitle("Presenter View");
         Dimension d = new Dimension(300,400);
         setSize(d);
         setPreferredSize(d);
