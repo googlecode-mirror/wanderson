@@ -19,6 +19,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import br.nom.camargo.wanderson.hermes.RemoteServer;
+import br.nom.camargo.wanderson.hermes.RemoteServer.RemoteStatus;
+import br.nom.camargo.wanderson.hermes.adapter.BluetoothAdapter;
+import br.nom.camargo.wanderson.hermes.adapter.EthernetAdapter;
+import br.nom.camargo.wanderson.presenter.PresenterRemote.PresenterCommand;
+
 public class PresenterView extends JFrame implements Observer
 {
     /**
@@ -31,12 +37,23 @@ public class PresenterView extends JFrame implements Observer
     private JMenuItem methernet;
     private JMenuItem mstop;
 
+    private RemoteServer server;
+    private PresenterRemote remote;
+
     /**
      * Construtor
      */
     public PresenterView()
     {
         super(); init();
+
+        server = new RemoteServer();
+        remote = new PresenterRemote();
+        server.setControl(remote);
+
+        server.addObserver(this);
+        remote.addObserver(this);
+
         setStatusMessage("Ready");
     }
 
@@ -79,8 +96,27 @@ public class PresenterView extends JFrame implements Observer
 
         /* Menu Servidor */
         mbluetooth = new JMenuItem("Start Bluetooth");
+        mbluetooth.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                BluetoothAdapter adapter = new BluetoothAdapter();
+                server.setAdapter(adapter);
+                new Thread(server).start();
+            }
+        });
         methernet = new JMenuItem("Start Ethernet");
+        methernet.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                EthernetAdapter adapter = new EthernetAdapter();
+                server.setAdapter(adapter);
+                new Thread(server).start();
+            }
+        });
         mstop = new JMenuItem("Stop");
+        mstop.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                server.disconnect();
+            }
+        });
         JMenuItem mquit = new JMenuItem("Quit");
         mquit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -110,9 +146,30 @@ public class PresenterView extends JFrame implements Observer
 
     public void update(Observable o, Object arg)
     {
-        if (o instanceof PresenterRemote) {
-            
+        if (o instanceof RemoteServer) {
+            RemoteStatus status = ((RemoteServer) o).getStatus();
+            switch (status) {
+            case DISCONNECTED:
+                setStatusMessage("Disconnected");
+                break;
+            case CONNECTING:
+                setStatusMessage("Connecting...");
+                break;
+            case CONNECTED:
+                setStatusMessage("Connected!");
+                break;
+            case DISCONNECTING:
+                setStatusMessage("Disconnecting...");
+                break;
+            }
         }
+    }
+
+    public static void main(String args[])
+    {
+        PresenterView view = new PresenterView();
+        view.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        view.setVisible(true);
     }
 
     public class JStatusBar extends JPanel

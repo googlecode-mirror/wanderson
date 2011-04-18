@@ -165,9 +165,7 @@ public class RemoteServer extends Observable implements Runnable
             /* Conexão Concluída */
             setStatus(RemoteStatus.CONNECTED);
             /* Laço de Repetição para Transferência */
-            while (isConnected()) {
-                l.info("Server Esperando Tamanho da Transferência");
-                size = in.read();
+            while (isConnected() && (size = in.read()) > 0) {
                 /* Tamanho do Conteúdo Recebido */
                 l.info("Server Tamanho da Transferência: " + size + " bytes");
                 buffer = new byte[size];
