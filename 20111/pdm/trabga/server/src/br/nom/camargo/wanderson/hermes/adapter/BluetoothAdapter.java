@@ -27,6 +27,11 @@ public class BluetoothAdapter extends ConnectionAdapter
     private final String uuid = "879c3537-ae66-4013-a677-9b7e5339d13c";
 
     /**
+     * Notificador de Comunicações
+     */
+    private StreamConnectionNotifier n;
+
+    /**
      * Elemento para Comunicação
      */
     private StreamConnection stream;
@@ -46,8 +51,7 @@ public class BluetoothAdapter extends ConnectionAdapter
         /* Endereço de Conexão */
         String addr = "btspp://localhost:" + getUUID();
         /* Conexão Física */
-        StreamConnectionNotifier n = null;
-        StreamConnection s         = null;
+        StreamConnection s = null;
         /* Fluxos de Dados */
         InputStream in   = null;
         OutputStream out = null;
@@ -70,14 +74,6 @@ public class BluetoothAdapter extends ConnectionAdapter
                 e.getMessage());
             disconnect();
         }
-        /* Fechar Serviço */
-        try {
-            l.info("Adapter Bluetooth Finalizando Servidor de Conexões");
-            if (n != null) n.close();
-        } catch (IOException e) {
-            l.warning("Adapter Bluetooth Erro ao Finalizar a Conexão: " +
-                e.getMessage());
-        }
         return this;
     }
 
@@ -86,7 +82,10 @@ public class BluetoothAdapter extends ConnectionAdapter
         Logger l = Logger.getLogger("Hermes_RemoteLogger");
         try {
             l.info("Adapter Bluetooth Finalizando Conexão");
-            if (stream != null) stream.close();
+            /* Finalizando Fluxo */
+            if (stream != null) stream.close(); stream = null;
+            /* Finalizando Serviço de Fluxo */
+            if (n != null) n.close(); n = null;
         } catch (IOException e) {
             l.warning("Adapter Bluetooth Erro ao Finalizar a Conexão: " +
                 e.getMessage());

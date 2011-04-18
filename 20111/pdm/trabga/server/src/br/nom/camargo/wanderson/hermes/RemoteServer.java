@@ -105,6 +105,8 @@ public class RemoteServer extends Observable implements Runnable
      */
     public RemoteServer connect() throws RemoteException
     {
+        setStatus(RemoteStatus.CONNECTING);
+        setChanged(); notifyObservers();
         if (adapter == null) {
             throw new RemoteException("Invalid Connection Adapter");
         }
@@ -112,6 +114,8 @@ public class RemoteServer extends Observable implements Runnable
             throw new RemoteException("Invalid Remote Control");
         }
         adapter.connect();
+        setStatus(RemoteStatus.CONNECTED);
+        setChanged(); notifyObservers();
         return this;
     }
 
@@ -121,10 +125,14 @@ public class RemoteServer extends Observable implements Runnable
      */
     public RemoteServer disconnect()
     {
+        setStatus(RemoteStatus.DISCONNECTING);
+        setChanged(); notifyObservers();
         Logger l = Logger.getLogger("Hermes_RemoteLogger");
         l.info("Server Desconectando o Servidor");
         if (adapter != null) adapter.disconnect();
         l.info("Server Servidor Desconectado");
+        setStatus(RemoteStatus.DISCONNECTED);
+        setChanged(); notifyObservers();
         return this;
     }
 
@@ -146,8 +154,6 @@ public class RemoteServer extends Observable implements Runnable
     {
         Logger l =
             Logger.getLogger("Hermes_RemoteLogger");
-        /* Tentativa de Conexão */
-        setStatus(RemoteStatus.CONNECTING);
         try {
             /* Conexão do Serviço */
             l.info("Server Abrindo a Conexão de Dados");
@@ -162,8 +168,6 @@ public class RemoteServer extends Observable implements Runnable
             InputStream in = adapter.getInputStream();
             /* Elementos Auxiliares */
             int size; byte buffer[];
-            /* Conexão Concluída */
-            setStatus(RemoteStatus.CONNECTED);
             /* Laço de Repetição para Transferência */
             while (isConnected() && (size = in.read()) > 0) {
                 /* Tamanho do Conteúdo Recebido */
@@ -190,12 +194,8 @@ public class RemoteServer extends Observable implements Runnable
             l.warning("Server Erro na Transferência de Dados: "
                 + e.getMessage());
         } finally {
-            /* Tentativa de Desconexão */
-            setStatus(RemoteStatus.DISCONNECTING);
             /* Desconexão de Dados */
             disconnect();
-            /* Desconexão Concluída */
-            setStatus(RemoteStatus.DISCONNECTED);
         }
     }
 

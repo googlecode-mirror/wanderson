@@ -31,13 +31,40 @@ public class PresenterView extends JFrame implements Observer
      * Número de Serialização
      */
     private static final long serialVersionUID = -3018980289724185784L;
+
+    /**
+     * Barra de Estado
+     */
     private JStatusBar status;
+
+    /**
+     * Tabela de Comandos
+     */
     private JTable table;
+
+    /**
+     * Elemento de Menu para Conexão Bluetooth
+     */
     private JMenuItem mbluetooth;
+
+    /**
+     * Elemento de Menu para Conexão Ethernet
+     */
     private JMenuItem methernet;
+
+    /**
+     * Finaliza o Serviço de Mensagens
+     */
     private JMenuItem mstop;
 
+    /**
+     * Servidor de Mensagens
+     */
     private RemoteServer server;
+
+    /**
+     * Controle do Servidor de Mensagens
+     */
     private PresenterRemote remote;
 
     /**
@@ -47,14 +74,17 @@ public class PresenterView extends JFrame implements Observer
     {
         super(); init();
 
+        /* Elementos Básicos */
         server = new RemoteServer();
         remote = new PresenterRemote();
         server.setControl(remote);
 
+        /* Padrão de Projeto Observer */
         server.addObserver(this);
         remote.addObserver(this);
 
-        setStatusMessage("Ready");
+        /* Mensagem Inicial da Barra de Estado */
+        setStatusMessage("Disconnected");
     }
 
     /**
@@ -120,6 +150,7 @@ public class PresenterView extends JFrame implements Observer
         JMenuItem mquit = new JMenuItem("Quit");
         mquit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                server.disconnect();
                 setVisible(false);
                 dispose();
             }
@@ -138,9 +169,34 @@ public class PresenterView extends JFrame implements Observer
         return this;
     }
 
+    /**
+     * Modifica a Mensagem na Barra de Estado
+     * @param message Valor para Inclusão
+     * @return Próprio Objeto para Encadeamento
+     */
     public PresenterView setStatusMessage(String message)
     {
         status.setMessage(message);
+        return this;
+    }
+
+    /**
+     * Exibição do Último Comando Executado
+     * @param command Valor para Configuração
+     * @return Próprio Objeto para Encadeamento
+     */
+    public PresenterView setLastCommand(PresenterCommand command)
+    {
+        switch (command) {
+        case LEFT:
+            table.setValueAt("Pressed", 0, 1);
+            table.setValueAt("Released", 1, 1);
+            break;
+        case RIGHT:
+            table.setValueAt("Pressed", 1, 1);
+            table.setValueAt("Released", 0, 1);
+            break;
+        }
         return this;
     }
 
@@ -163,8 +219,16 @@ public class PresenterView extends JFrame implements Observer
                 break;
             }
         }
+        if (o instanceof PresenterRemote) {
+            PresenterCommand command = ((PresenterRemote) o).getLastCommand();
+            setLastCommand(command);
+        }
     }
 
+    /**
+     * Execução Principal do Programa
+     * @param args Argumentos de Entrada
+     */
     public static void main(String args[])
     {
         PresenterView view = new PresenterView();
@@ -172,14 +236,35 @@ public class PresenterView extends JFrame implements Observer
         view.setVisible(true);
     }
 
+    /**
+     * Barra de Estado
+     * 
+     * @author Wanderson Henrique Camargo Rosa
+     */
     public class JStatusBar extends JPanel
     {
-        private JLabel message;
+        /**
+         * Número de Serialização
+         */
         private static final long serialVersionUID = -2831849678412866272L;
+
+        /**
+         * Componente para Mensagem
+         */
+        private JLabel message;
+
+        /**
+         * Construtor
+         */
         public JStatusBar()
         {
             super(); init();
         }
+
+        /**
+         * Inicialização do Componente
+         * @return Próprio Objeto para Encadeamento
+         */
         private JStatusBar init()
         {
             /* Local */
@@ -192,6 +277,12 @@ public class PresenterView extends JFrame implements Observer
 
             return this;
         }
+
+        /**
+         * Configura a Mensagem Exibida
+         * @param m Valor para Modificação
+         * @return Próprio Objeto para Encadeamento
+         */
         public JStatusBar setMessage(String m)
         {
             message.setText(m);
