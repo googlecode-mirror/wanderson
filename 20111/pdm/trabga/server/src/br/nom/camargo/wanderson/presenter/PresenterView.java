@@ -100,6 +100,7 @@ public class PresenterView extends JFrame implements Observer
 
         /* Mensagem Inicial da Barra de Estado */
         setStatusMessage("Disconnected");
+        setConnectionEnable(true);
     }
 
     /**
@@ -235,15 +236,19 @@ public class PresenterView extends JFrame implements Observer
             switch (status) {
             case DISCONNECTED:
                 setStatusMessage("Disconnected");
+                setConnectionEnable(true);
                 break;
             case CONNECTING:
                 setStatusMessage("Connecting...");
+                setConnectionEnable(false);
                 break;
             case CONNECTED:
                 setStatusMessage("Connected!");
+                setConnectionEnable(false);
                 break;
             case DISCONNECTING:
                 setStatusMessage("Disconnecting...");
+                setConnectionEnable(false);
                 break;
             }
         }
@@ -251,6 +256,19 @@ public class PresenterView extends JFrame implements Observer
             PresenterCommand command = ((PresenterRemote) o).getLastCommand();
             setLastCommand(command);
         }
+    }
+
+    /**
+     * Configura Elementos para Habilitar Conexão
+     * @param confirm Confirmação da Possibilida de Conexão
+     * @return Próprio Objeto para Encadeamento
+     */
+    protected PresenterView setConnectionEnable(boolean confirm)
+    {
+        mbluetooth.setEnabled(confirm);
+        methernet.setEnabled(confirm);
+        mstop.setEnabled(!confirm);
+        return this;
     }
 
     /**
