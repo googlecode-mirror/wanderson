@@ -1,6 +1,5 @@
 package br.nom.camargo.wanderson.renato;
 
-import java.io.OutputStream;
 import java.util.Observable;
 import java.util.logging.Logger;
 
@@ -14,7 +13,7 @@ import br.nom.camargo.wanderson.renato.adapter.ConnectionAdapter;
  * 
  * @author Wanderson Henrique Camargo Rosa
  */
-public class RemoteClient extends Observable implements Runnable
+public class RemoteClient extends Observable
 {
     /**
      * Adaptador de Conexão
@@ -113,28 +112,6 @@ public class RemoteClient extends Observable implements Runnable
     public boolean isConnected()
     {
         return adapter == null ? false : adapter.isConnected();
-    }
-
-    public void run()
-    {
-        Logger l = Logger.getLogger("Renato_RemoteLogger");
-        try {
-            /* Conexão com o Serviço de Mensagens */
-            l.info("Client Abrindo Conexão de Dados");
-            connect();
-            l.info("Client Conexão Concluída com Sucesso");
-            /* Elementos de Manipulação */
-            l.info("Client Manipulando Elementos de Comunicação");
-            ConnectionAdapter adapter = getAdapter();
-            /* Fluxo de Entrada de Dados */
-            l.info("Client Abrindo Fluxo de Saída de Dados");
-            /* Manipulação de Informação */
-            OutputStream out = adapter.getOutputStream();
-        } catch (RemoteException e) {
-            l.warning("Client Erro de Conexão: " + e.getMessage());
-        } finally {
-            disconnect();
-        }
     }
 
     /**
