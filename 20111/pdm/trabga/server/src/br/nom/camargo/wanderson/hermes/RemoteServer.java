@@ -51,8 +51,7 @@ public class RemoteServer extends Observable implements Runnable
     private RemoteServer setStatus(RemoteStatus s)
     {
         status = s;
-        setChanged();
-        notifyObservers();
+        setChanged(); notifyObservers();
         return this;
     }
 
@@ -106,7 +105,6 @@ public class RemoteServer extends Observable implements Runnable
     public RemoteServer connect() throws RemoteException
     {
         setStatus(RemoteStatus.CONNECTING);
-        setChanged(); notifyObservers();
         if (adapter == null) {
             throw new RemoteException("Invalid Connection Adapter");
         }
@@ -115,7 +113,6 @@ public class RemoteServer extends Observable implements Runnable
         }
         adapter.connect();
         setStatus(RemoteStatus.CONNECTED);
-        setChanged(); notifyObservers();
         return this;
     }
 
@@ -126,13 +123,11 @@ public class RemoteServer extends Observable implements Runnable
     public RemoteServer disconnect()
     {
         setStatus(RemoteStatus.DISCONNECTING);
-        setChanged(); notifyObservers();
         Logger l = Logger.getLogger("Hermes_RemoteLogger");
         l.info("Server Desconectando o Servidor");
         if (adapter != null) adapter.disconnect();
         l.info("Server Servidor Desconectado");
         setStatus(RemoteStatus.DISCONNECTED);
-        setChanged(); notifyObservers();
         return this;
     }
 
