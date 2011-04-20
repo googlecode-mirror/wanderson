@@ -38,14 +38,14 @@ public class DatabaseHelper extends SQLiteOpenHelper
     public void onCreate(SQLiteDatabase db)
     {
         db.execSQL(
-            "CREATE TABLE device (" +
-            "    name TEXT," +
-            "    type TEXT" +
-            "    updated TEXT" +
-            "    address TEXT" +
-            "    port TEXT" +
-            "    PRIMARY KEY(name,type)," +
-            "    CHECK(type IN('Bluetooth','Ethernet')" +
+            "CREATE TABLE " + DeviceModel.TABLE_NAME + " (" +
+                DeviceModel.NAME    + " TEXT," +
+                DeviceModel.TYPE    + " TEXT" +
+                DeviceModel.UPDATED + " TEXT" +
+                DeviceModel.ADDRESS + " TEXT" +
+                DeviceModel.PORT    + " TEXT" +
+            "   PRIMARY KEY(" + DeviceModel.NAME + ","+ DeviceModel.TYPE +")," +
+            "   CHECK("+ DeviceModel.TYPE +" IN('Bluetooth','Ethernet')" +
             ");"
         );
     }
