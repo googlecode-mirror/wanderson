@@ -51,7 +51,7 @@ public abstract class DatabaseModel
      * @return Próprio Objeto para Encadeamento
      * @throws SQLException Erro de Execução
      */
-    public abstract DatabaseHelper create(Object o) throws SQLException;
+    public abstract DatabaseModel create(Object o) throws SQLException;
 
     /**
      * CRUD Stereotype Update
@@ -60,7 +60,7 @@ public abstract class DatabaseModel
      * @return Próprio Objeto para Encadeamento
      * @throws SQLException Erro de Execução
      */
-    public abstract DatabaseHelper update(Object o) throws SQLException;
+    public abstract DatabaseModel update(Object o) throws SQLException;
 
     /**
      * CRUD Stereotype Delete
@@ -69,7 +69,7 @@ public abstract class DatabaseModel
      * @return Próprio Objeto para Encadeamento
      * @throws SQLException Erro de Execução
      */
-    public abstract DatabaseHelper delete(Object o) throws SQLException;
+    public abstract DatabaseModel delete(Object o) throws SQLException;
 
     /**
      * CRUD Stereotype Retrieve
@@ -78,7 +78,7 @@ public abstract class DatabaseModel
      * @return Próprio Objeto para Encadeamento
      * @throws SQLException Erro de Execução
      */
-    public abstract DatabaseHelper retrieve(Object o) throws SQLException;
+    public abstract DatabaseModel retrieve(Object o) throws SQLException;
 
     /**
      * CRUD Stereotype Retrieve Complete List
