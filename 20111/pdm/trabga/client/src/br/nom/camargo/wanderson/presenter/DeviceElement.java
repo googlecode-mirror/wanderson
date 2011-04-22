@@ -1,5 +1,9 @@
 package br.nom.camargo.wanderson.presenter;
 
+import java.util.Calendar;
+
+import android.content.ContentValues;
+
 /**
  * Dispositivo
  * 
@@ -128,6 +132,21 @@ public class DeviceElement
     public String getPort()
     {
         return port;
+    }
+
+    public ContentValues getContentValues()
+    {
+        ContentValues content = new ContentValues();
+
+        /* Conteúdo do Dispositivo */
+        content.put("name", getName());
+        content.put("type", getType().toString());
+        content.put("address", getAddress());
+        content.put("port", getPort());
+        /* Última Atualização */
+        content.put("updated", Calendar.getInstance().get(Calendar.DATE));
+
+        return content;
     }
 
     /**
