@@ -1,7 +1,5 @@
 package br.nom.camargo.wanderson.presenter;
 
-import java.util.Calendar;
-
 import android.content.ContentValues;
 
 /**
@@ -33,6 +31,11 @@ public class DeviceElement
      * Porta para Conexão
      */
     private String port;
+
+    /**
+     * Última Utilização do Dispositivo
+     */
+    private String update;
 
     /**
      * Configura o Nome do Dispositivo
@@ -134,6 +137,30 @@ public class DeviceElement
         return port;
     }
 
+    /**
+     * Configura a Última Utilização do Dispositivo
+     * @param update Elemento para Configuração
+     * @return Próprio Objeto para Encadeamento
+     */
+    public DeviceElement setUpdate(String update)
+    {
+        this.update = update;
+        return this;
+    }
+
+    /**
+     * Informa a Última Utilização do Dispositivo
+     * @return Elemento de Informação
+     */
+    public String getUpdate()
+    {
+        return update;
+    }
+
+    /**
+     * Informa o Conteúdo do Dispositivo
+     * @return Manipulador de Valores
+     */
     public ContentValues getContentValues()
     {
         ContentValues content = new ContentValues();
@@ -143,8 +170,7 @@ public class DeviceElement
         content.put("type", getType().toString());
         content.put("address", getAddress());
         content.put("port", getPort());
-        /* Última Atualização */
-        content.put("updated", Calendar.getInstance().get(Calendar.DATE));
+        content.put("updated", getUpdate());
 
         return content;
     }
