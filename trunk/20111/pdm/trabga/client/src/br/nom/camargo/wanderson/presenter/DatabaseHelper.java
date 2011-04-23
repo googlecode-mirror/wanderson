@@ -87,6 +87,24 @@ public class DatabaseHelper extends SQLiteOpenHelper
     }
 
     /**
+     * Recupera um Dispositivo Específico do Banco de Dados
+     * @param name Nome do Dispositivo
+     * @param type Tipo do Dispositivo
+     * @return Dispositivo Solicitado conforme Parâmetros
+     */
+    public DeviceElement retrieve(String name, Type type)
+    {
+        Cursor c = getReadableDatabase()
+            .rawQuery("SELECT name,type,updated,address,port FROM device WHERE name = ? AND type = ? LIMIT 1", new String[]{name, type.toString()});
+        DeviceElement element = null;
+        if (c.moveToFirst()) {
+            element = new DeviceElement(c.getString(0), DeviceElement.Type.valueOf(c.getString(1)));
+            element.setUpdate(c.getLong(2)).setAddress(c.getString(3)).setPort(c.getString(4));
+        }
+        return element;
+    }
+
+    /**
      * Remove um Dispositivo do Banco
      * @param device Elemento para Remoção
      * @return Próprio Objeto para Encadeamento
@@ -107,6 +125,19 @@ public class DatabaseHelper extends SQLiteOpenHelper
     public DatabaseHelper insert(DeviceElement device)
     {
         getWritableDatabase().insert("device", null, device.getContentValues());
+        return this;
+    }
+
+    /**
+     * Atualiza um Dispositivo no Banco
+     * @param device Elemento para Atualização
+     * @return Próprio Objeto para Encadeamento
+     */
+    public DatabaseHelper update(DeviceElement device)
+    {
+        ContentValues content = device.getContentValues();
+        getWritableDatabase().update("device", content, "name = ? AND type = ?",
+            new String[]{content.getAsString("name"), content.getAsString("type")});
         return this;
     }
 
