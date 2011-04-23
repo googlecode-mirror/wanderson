@@ -50,7 +50,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
             "CREATE TABLE device (" +
             "    name TEXT," +
             "    type TEXT," +
-            "    updated TEXT," +
+            "    updated REAL," +
             "    address TEXT," +
             "    port TEXT," +
             "    PRIMARY KEY(name,type)," +
@@ -77,7 +77,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
             DeviceElement element;
             do {
                 element = new DeviceElement(c.getString(0), DeviceElement.Type.valueOf(c.getString(1)));
-                element.setUpdate(c.getString(2))
+                element.setUpdate(c.getLong(2))
                        .setAddress(c.getString(3))
                        .setPort(c.getString(4));
                 devices.add(element);
