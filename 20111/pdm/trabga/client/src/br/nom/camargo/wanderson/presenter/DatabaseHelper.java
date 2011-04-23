@@ -131,13 +131,15 @@ public class DatabaseHelper extends SQLiteOpenHelper
     /**
      * Atualiza um Dispositivo no Banco
      * @param device Elemento para Atualização
+     * @param name Antigo Nome do Dispositivo
+     * @param type Antigo Tipo do Dispositivo
      * @return Próprio Objeto para Encadeamento
      */
-    public DatabaseHelper update(DeviceElement device)
+    public DatabaseHelper update(DeviceElement device, String name, Type type)
     {
         ContentValues content = device.getContentValues();
         getWritableDatabase().update("device", content, "name = ? AND type = ?",
-            new String[]{content.getAsString("name"), content.getAsString("type")});
+            new String[]{name, type.toString()});
         return this;
     }
 
