@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       android:versionCode="1"
       android:versionName="1.0" package="br.nom.camargo.wanderson.presenter">
+<uses-permission android:name="android.permission.BLUETOOTH"></uses-permission>
+<uses-permission android:name="android.permission.BLUETOOTH_ADMIN"></uses-permission>
 
 
     <application android:icon="@drawable/icon" android:label="@string/app_name" android:name="PresenterApplication">
@@ -9,6 +11,12 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"></action>
                 <category android:name="android.intent.category.LAUNCHER"></category>
+            </intent-filter>
+        </activity>
+        <activity android:name="EthernetActivity">
+            <intent-filter>
+                <action android:name="br.nom.camargo.wanderson.presenter.EthernetActivity"></action>
+                <category android:name="android.intent.category.DEFAULT"></category>
             </intent-filter>
         </activity>
 
