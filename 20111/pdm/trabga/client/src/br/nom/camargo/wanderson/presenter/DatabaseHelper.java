@@ -2,6 +2,7 @@ package br.nom.camargo.wanderson.presenter;
 
 import java.util.ArrayList;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -79,6 +80,30 @@ public class DatabaseHelper extends SQLiteOpenHelper
             } while (c.moveToNext());
         }
         return devices;
+    }
+
+    /**
+     * Remove um Dispositivo do Banco
+     * @param device Elemento para Remoção
+     * @return Próprio Objeto para Encadeamento
+     */
+    public DatabaseHelper remove(DeviceElement device)
+    {
+        ContentValues content = device.getContentValues();
+        getWritableDatabase().delete("device", "name = ? AND type = ?",
+            new String[]{content.getAsString("name"), content.getAsString("type")});
+        return this;
+    }
+
+    /**
+     * Insere um Dispositivo no Banco
+     * @param device Elemento para Inclusão
+     * @return Próprio Objeto para Encadeamento
+     */
+    public DatabaseHelper insert(DeviceElement device)
+    {
+        getWritableDatabase().insert("device", null, device.getContentValues());
+        return this;
     }
 
 }
