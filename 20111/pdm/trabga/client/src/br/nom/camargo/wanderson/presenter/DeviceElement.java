@@ -1,7 +1,5 @@
 package br.nom.camargo.wanderson.presenter;
 
-import java.util.Date;
-
 import android.content.ContentValues;
 
 /**
@@ -37,7 +35,7 @@ public class DeviceElement implements Comparable<DeviceElement>
     /**
      * Última Utilização do Dispositivo
      */
-    private Date update;
+    private long update;
 
     /**
      * Construtor
@@ -46,7 +44,7 @@ public class DeviceElement implements Comparable<DeviceElement>
      */
     public DeviceElement(String name, Type type)
     {
-        setName(name).setType(type).setUpdate(new Date(0));
+        setName(name).setType(type);
     }
 
     /**
@@ -154,18 +152,7 @@ public class DeviceElement implements Comparable<DeviceElement>
      * @param update Elemento para Configuração
      * @return Próprio Objeto para Encadeamento
      */
-    public DeviceElement setUpdate(String update)
-    {
-        this.update = new Date(update);
-        return this;
-    }
-
-    /**
-     * Configura a Última Utilização do Dispositivo
-     * @param update Elemento para Configuração
-     * @return Próprio Objeto para Encadeamento
-     */
-    public DeviceElement setUpdate(Date update)
+    public DeviceElement setUpdate(long update)
     {
         this.update = update;
         return this;
@@ -175,7 +162,7 @@ public class DeviceElement implements Comparable<DeviceElement>
      * Informa a Última Utilização do Dispositivo
      * @return Elemento de Informação
      */
-    public Date getUpdate()
+    public long getUpdate()
     {
         return update;
     }
@@ -188,20 +175,26 @@ public class DeviceElement implements Comparable<DeviceElement>
     {
         ContentValues content = new ContentValues();
 
-        /* Tratamento da Atualização */
-        Date update = getUpdate();
-        if (update == null) {
-            update = new Date(0);
-        }
-
         /* Conteúdo do Dispositivo */
         content.put("name", getName());
         content.put("type", getType().toString());
         content.put("address", getAddress());
         content.put("port", getPort());
-        content.put("updated", update.toString());
+        content.put("updated", getUpdate());
 
         return content;
+    }
+
+    public boolean equals(Object other)
+    {
+        boolean result;
+        if (other instanceof DeviceElement) {
+            DeviceElement device = (DeviceElement) other;
+            result = equals(device);
+        } else {
+            result = super.equals(other);
+        }
+        return result;
     }
 
     /**
@@ -218,7 +211,17 @@ public class DeviceElement implements Comparable<DeviceElement>
 
     public int compareTo(DeviceElement device)
     {
-        return getUpdate().compareTo(device.getUpdate());
+        long local = getUpdate();
+        long other = device.getUpdate();
+
+        int result = 0;
+        if (local < other) {
+            result = -1;
+        } else if (local > other) {
+            result = 1;
+        }
+
+        return result;
     }
 
     /**
