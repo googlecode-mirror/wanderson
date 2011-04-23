@@ -40,6 +40,16 @@ public class DeviceElement implements Comparable<DeviceElement>
     private Date update;
 
     /**
+     * Construtor
+     * @param name Nome do Dispositivo
+     * @param type Tipo do Dispositivo
+     */
+    public DeviceElement(String name, Type type)
+    {
+        setName(name).setType(type).setUpdate(new Date(0));
+    }
+
+    /**
      * Configura o Nome do Dispositivo
      * @param name Elemento para Configuração
      * @return Próprio Objeto para Encadeamento
@@ -178,12 +188,18 @@ public class DeviceElement implements Comparable<DeviceElement>
     {
         ContentValues content = new ContentValues();
 
+        /* Tratamento da Atualização */
+        Date update = getUpdate();
+        if (update == null) {
+            update = new Date(0);
+        }
+
         /* Conteúdo do Dispositivo */
         content.put("name", getName());
         content.put("type", getType().toString());
         content.put("address", getAddress());
         content.put("port", getPort());
-        content.put("updated", getUpdate().toString());
+        content.put("updated", update.toString());
 
         return content;
     }
