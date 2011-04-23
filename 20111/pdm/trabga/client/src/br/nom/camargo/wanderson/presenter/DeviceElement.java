@@ -176,6 +176,18 @@ public class DeviceElement
     }
 
     /**
+     * Comparação de Igualdade
+     * Trabalha Sobre Nome e Tipo de Objeto
+     * @param device Outro Dispositivo para Comparação
+     * @return Confirmação de Igualdade
+     */
+    public boolean equals(DeviceElement device)
+    {
+        return getName().equals(device.getName()) &&
+               getType().equals(device.getType());
+    }
+
+    /**
      * Tipo de Elemento de Dispositivo
      * 
      * @author Wanderson Henrique Camargo Rosa
