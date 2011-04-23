@@ -1,7 +1,12 @@
 package br.nom.camargo.wanderson.presenter;
 
 import java.util.ArrayList;
+import java.util.Set;
 
+import br.nom.camargo.wanderson.presenter.DeviceElement.Type;
+
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -63,7 +68,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
      * Recupera os Dispositivos do Banco
      * @return Conjunto de Dispositivos
      */
-    public ArrayList<DeviceElement> getDevices()
+    public ArrayList<DeviceElement> retrieve()
     {
         Cursor c = getReadableDatabase()
             .rawQuery("SELECT name,type,updated,address,port FROM device ORDER BY updated DESC", new String[]{});
@@ -102,6 +107,38 @@ public class DatabaseHelper extends SQLiteOpenHelper
     public DatabaseHelper insert(DeviceElement device)
     {
         getWritableDatabase().insert("device", null, device.getContentValues());
+        return this;
+    }
+
+    public DatabaseHelper synchronize()
+    {
+        /* Elementos Bluetooth do Sistema */
+        BluetoothAdapter bluetooth = BluetoothAdapter.getDefaultAdapter();
+        Set<BluetoothDevice> devices = bluetooth.getBondedDevices();
+
+        /* Elementos Cadastrados no Banco */
+        ArrayList<DeviceElement> database = retrieve();
+
+        /* Verificação Banco Contra Sistema */
+        for (DeviceElement e : database) {
+            if (e.getType() == Type.Bluetooth) {
+                /* Comparação Somente Dispositivo Bluetooth */
+                boolean found = false;
+                for (BluetoothDevice d : devices) {
+                    if (!found) found = d.getName().equals(e.getName());
+                }
+                /* Dispositivo do Banco Não Encontrado no Sistema */
+                if (!found) remove(e);
+            }
+        }
+
+        /* Verificação Sistema Contra Banco */
+        for (BluetoothDevice d : devices) {
+            DeviceElement e = new DeviceElement(d.getName(), Type.Bluetooth);
+            /* Insere Dispositivo Não Cadastrado */
+            if (!database.contains(e)) insert(e);
+        }
+
         return this;
     }
 
