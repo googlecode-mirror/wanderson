@@ -141,6 +141,11 @@ public class DatabaseHelper extends SQLiteOpenHelper
         return this;
     }
 
+    /**
+     * Sincronização de Dispositivos Bluetooth
+     * Banco de Dados Local e Sistema Operacional
+     * @return Próprio Objeto para Encadeamento
+     */
     public DatabaseHelper synchronize()
     {
         /* Elementos Bluetooth do Sistema */
