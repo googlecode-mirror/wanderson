@@ -1,5 +1,7 @@
 package br.nom.camargo.wanderson.presenter;
 
+import java.util.Date;
+
 import android.content.ContentValues;
 
 /**
@@ -10,7 +12,7 @@ import android.content.ContentValues;
  * 
  * @author Wanderson Henrique Camargo Rosa
  */
-public class DeviceElement
+public class DeviceElement implements Comparable<DeviceElement>
 {
     /**
      * Nome do Dispositivo
@@ -35,7 +37,7 @@ public class DeviceElement
     /**
      * Última Utilização do Dispositivo
      */
-    private String update;
+    private Date update;
 
     /**
      * Configura o Nome do Dispositivo
@@ -144,6 +146,17 @@ public class DeviceElement
      */
     public DeviceElement setUpdate(String update)
     {
+        this.update = new Date(update);
+        return this;
+    }
+
+    /**
+     * Configura a Última Utilização do Dispositivo
+     * @param update Elemento para Configuração
+     * @return Próprio Objeto para Encadeamento
+     */
+    public DeviceElement setUpdate(Date update)
+    {
         this.update = update;
         return this;
     }
@@ -152,7 +165,7 @@ public class DeviceElement
      * Informa a Última Utilização do Dispositivo
      * @return Elemento de Informação
      */
-    public String getUpdate()
+    public Date getUpdate()
     {
         return update;
     }
@@ -170,7 +183,7 @@ public class DeviceElement
         content.put("type", getType().toString());
         content.put("address", getAddress());
         content.put("port", getPort());
-        content.put("updated", getUpdate());
+        content.put("updated", getUpdate().toString());
 
         return content;
     }
@@ -185,6 +198,11 @@ public class DeviceElement
     {
         return getName().equals(device.getName()) &&
                getType().equals(device.getType());
+    }
+
+    public int compareTo(DeviceElement device)
+    {
+        return getUpdate().compareTo(device.getUpdate());
     }
 
     /**
