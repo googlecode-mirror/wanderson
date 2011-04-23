@@ -71,9 +71,8 @@ public class DatabaseHelper extends SQLiteOpenHelper
         if (c.moveToFirst()) {
             DeviceElement element;
             do {
-                element = new DeviceElement();
-                element.setName(c.getString(0))
-                       .setType(DeviceElement.Type.valueOf(c.getString(1)))
+                element = new DeviceElement(c.getString(0), DeviceElement.Type.valueOf(c.getString(1)));
+                element.setUpdate(c.getString(2))
                        .setAddress(c.getString(3))
                        .setPort(c.getString(4));
                 devices.add(element);
