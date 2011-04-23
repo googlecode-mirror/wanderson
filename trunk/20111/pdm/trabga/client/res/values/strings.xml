@@ -1,4 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Android Presenter</string>
+    <string name="device_name">Device Name</string>
+    <string name="device_status">Type @ Updated</string>
+    <string name="ethernet_name">Device Name</string>
+    <string name="ethernet_address">Address</string>
+    <string name="ethernet_port">Port</string>
+    <string name="ethernet_add">Add Device</string>
+    <string name="empty"></string>
+    <string name="bluetooth_connect">Connect</string>
+    <string name="ethernet_connect">Connect</string>
+    <string name="ethernet_remove">Remove</string>
+    <string name="ethernet_update">Update</string>
+    <string name="ethernet_remove_confirm">Are you sure?</string>
+    <string name="app_yes">Yes</string>
+    <string name="app_no">No</string>
+    <string name="ethernet_save">Save Device</string>
+    <string name="device_cancel">Cancel</string>
+    <string name="app_ethernet">Ethernet</string>
+    <string name="app_bluetooth">Bluetooth</string>
 </resources>
