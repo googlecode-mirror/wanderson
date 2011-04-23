@@ -1,9 +1,11 @@
 package br.nom.camargo.wanderson.presenter;
 
-import br.nom.camargo.wanderson.presenter.DeviceElement.Type;
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
+import br.nom.camargo.wanderson.presenter.DeviceElement.Type;
 
 /**
  * Cadastro de Dispositivos Ethernet
@@ -63,6 +65,36 @@ public class EthernetActivity extends Activity
 
     }
 
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.save, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        boolean result;
+        switch (item.getItemId()) {
+        case R.id.menu_device_add:
+            save();
+            finish();
+            result = true;
+            break;
+        case R.id.menu_device_cancel:
+            finish();
+            result = true;
+            break;
+        default:
+            result = super.onOptionsItemSelected(item);
+        }
+        return result;
+    }
+
+    /**
+     * Salva as Alterações do Dispositivo
+     * Insere ou Atualiza os Dados Informados
+     * @return Próprio Objeto para Encadeamento
+     */
     public EthernetActivity save()
     {
         if (device == null) {
@@ -75,11 +107,12 @@ public class EthernetActivity extends Activity
                 .getDatabase().insert(device);
         } else {
             /* Atualizar Dispositivo Existente */
+            String dname = device.getName();
             device.setName(name.getText().toString())
                   .setAddress(address.getText().toString())
                   .setPort(port.getText().toString());
             ((PresenterApplication) getApplication())
-                .getDatabase().update(device);
+                .getDatabase().update(device, dname, Type.Ethernet);
         }
 
         return this;
