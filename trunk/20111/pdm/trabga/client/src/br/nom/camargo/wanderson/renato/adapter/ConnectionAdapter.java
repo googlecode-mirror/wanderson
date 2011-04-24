@@ -17,7 +17,7 @@ public abstract class ConnectionAdapter
     /**
      * Etiqueta para Log do Sistema
      */
-    public static final String TAG = "ConnectionAdapter";
+    public static final String TAG = "Bluetooth Client";
 
     /**
      * Fluxo para Entrada de Dados

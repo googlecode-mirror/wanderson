@@ -71,6 +71,10 @@ public class BluetoothAdapter extends ConnectionAdapter
         String address = getAddress();
         android.bluetooth.BluetoothAdapter adapter =
             android.bluetooth.BluetoothAdapter.getDefaultAdapter();
+        /* Bluetooth Não Habilitado */
+        if (!adapter.isEnabled()) {
+            throw new ConnectionException("Enable Bluetooth");
+        }
         /* Captura do Dispositivo */
         BluetoothDevice device = null;
         for (BluetoothDevice d : adapter.getBondedDevices()) {
@@ -92,6 +96,7 @@ public class BluetoothAdapter extends ConnectionAdapter
                 ", UUID: " + getUUID());
             s = device
                 .createRfcommSocketToServiceRecord(UUID.fromString(getUUID()));
+            s.connect();
             Log.i(TAG, "Conexão Aberta e Aceita");
             Log.i(TAG, "Abrindo Fluxos de Dados");
             /* Fluxos de Dados */
@@ -104,6 +109,7 @@ public class BluetoothAdapter extends ConnectionAdapter
         } catch (IOException e) {
             Log.w(TAG, "Adapter Bluetooth Erro na Abertura de Fluxos de Dados "
                 + e.getMessage());
+            e.printStackTrace();
             disconnect();
         }
         return this;

@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import br.nom.camargo.wanderson.presenter.DeviceElement.Type;
 
@@ -47,6 +48,19 @@ public class DeviceListActivity extends ListActivity
         for (DeviceElement device : list) {
             adapter.add(device);
         }
+        return this;
+    }
+
+    /**
+     * Cria uma Conexão ao Dispositivo Informado
+     * Enviando uma Intensão para Atividade do Apresentador
+     */
+    public DeviceListActivity connect(DeviceElement device)
+    {
+        Intent intent = new Intent(PresenterActivity.class.getName());
+        intent.putExtra("name", device.getName());
+        intent.putExtra("type", device.getType().toString());
+        startActivity(intent);
         return this;
     }
 
@@ -92,6 +106,7 @@ public class DeviceListActivity extends ListActivity
         case R.id.menu_ethernet_connect:
         case R.id.menu_bluetooth_connect:
             /* Conexão */
+            connect(element);
             break;
         case R.id.menu_ethernet_remove:
         {
@@ -124,6 +139,13 @@ public class DeviceListActivity extends ListActivity
             break;
         }
         return true;
+    }
+
+    public void onListItemClick(ListView l, View v, int position, long id)
+    {
+        DeviceElement device =
+            (DeviceElement) getListAdapter().getItem(position);
+        connect(device);
     }
 
     public boolean onCreateOptionsMenu(Menu menu)

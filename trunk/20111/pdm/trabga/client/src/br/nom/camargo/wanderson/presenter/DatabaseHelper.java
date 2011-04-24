@@ -173,6 +173,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
         /* Verificação Sistema Contra Banco */
         for (BluetoothDevice d : devices) {
             DeviceElement e = new DeviceElement(d.getName(), Type.Bluetooth);
+            e.setAddress(d.getAddress());
             /* Insere Dispositivo Não Cadastrado */
             if (!database.contains(e)) insert(e);
         }

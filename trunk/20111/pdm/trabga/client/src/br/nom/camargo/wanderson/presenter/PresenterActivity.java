@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-
 import br.nom.camargo.wanderson.presenter.DeviceElement.Type;
 import br.nom.camargo.wanderson.renato.RemoteClient;
 import br.nom.camargo.wanderson.renato.RemoteException;
@@ -31,6 +30,11 @@ import br.nom.camargo.wanderson.renato.adapter.EthernetAdapter;
  */
 public class PresenterActivity extends Activity implements Observer
 {
+    /**
+     * Constante para Resposta de Conexão
+     */
+    private static final int REQUEST_ENABLE_BT = 0;
+
     /**
      * Dispositivo para Conexão
      */
@@ -108,6 +112,12 @@ public class PresenterActivity extends Activity implements Observer
             BluetoothAdapter b = new BluetoothAdapter();
             b.setAddress(device.getAddress());
             client.setAdapter(b);
+            android.bluetooth.BluetoothAdapter radio =
+                android.bluetooth.BluetoothAdapter.getDefaultAdapter();
+            if (!radio.isEnabled()) {
+                Intent enablebt = new Intent(android.bluetooth.BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enablebt, REQUEST_ENABLE_BT);
+            }
         } else {
             /* Ethernet */
             EthernetAdapter e = new EthernetAdapter();
@@ -121,7 +131,7 @@ public class PresenterActivity extends Activity implements Observer
 
         /* Eventos em Botões */
         left  = (Button) findViewById(R.id.presenter_left);
-        left.setEnabled(false);
+//        left.setEnabled(false);
         left.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 /* Envia Mensagem para Esquerda */
@@ -130,7 +140,7 @@ public class PresenterActivity extends Activity implements Observer
             }
         });
         right = (Button) findViewById(R.id.presenter_right);
-        right.setEnabled(false);
+//        right.setEnabled(false);
         right.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 /* Envia Mensagem para Direita */
@@ -142,8 +152,7 @@ public class PresenterActivity extends Activity implements Observer
         /* Caixa de Diálogo */
         connecting = new ProgressDialog(this);
         connecting.setTitle(getString(R.string.app_name));
-        connecting.setCancelable(false);
-        connecting.setMessage(getString(R.string.app_connecting));
+        connecting.setMessage("Teste");
 
         /* Execução Concorrente de Conexão */
         connector = new PresenterConnector();
@@ -151,6 +160,25 @@ public class PresenterActivity extends Activity implements Observer
 
         /* Exibição da Caixa de Diálogo */
         connecting.show();
+    }
+
+    protected void onActivityResult(int request, int result, Intent data)
+    {
+        switch (request) {
+        case REQUEST_ENABLE_BT:
+            /* Requisição Bluetooth */
+            if (result == RESULT_CANCELED) {
+                /* Erro ao Habilitar Bluetooth */
+                finish();
+            }
+            break;
+        }
+    }
+
+    public void onDestroy()
+    {
+        super.onDestroy();
+        client.disconnect();
     }
 
     /**
@@ -195,6 +223,7 @@ public class PresenterActivity extends Activity implements Observer
         {
             try {
                 /* Tentativa de Conexão */
+                Log.v("Bluetooth Client", "Tentando Conectar");
                 client.connect();
             } catch (RemoteException e) {
                 /* Impossível Conectar ao Servidor */
@@ -209,15 +238,15 @@ public class PresenterActivity extends Activity implements Observer
             RemoteClient client = (RemoteClient) o;
             switch (client.getStatus()) {
             case CONNECTED:
-                left.setEnabled(true);
-                right.setEnabled(true);
+//                left.setEnabled(true);
+//                right.setEnabled(true);
                 break;
             case CONNECTING:
             case DISCONNECTING:
             case DISCONNECTED:
             default:
-                left.setEnabled(false);
-                right.setEnabled(false);
+//                left.setEnabled(false);
+//                right.setEnabled(false);
             }
         }
     }
