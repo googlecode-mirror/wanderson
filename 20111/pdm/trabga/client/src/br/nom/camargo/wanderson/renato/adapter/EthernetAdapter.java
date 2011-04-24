@@ -100,9 +100,8 @@ public class EthernetAdapter extends ConnectionAdapter
             /* Configuração dos Fluxos de Dados */
             setInputStream(in).setOutputStream(out);
         } catch (IOException e) {
-            Log.w(TAG, "Adapter Ethernet Erro na Abertura de Fluxos de Dados: "
-                + e.getMessage());
-            disconnect();
+            Log.w(TAG, "Adapter Ethernet Erro na Abertura de Fluxos de Dados");
+            throw new ConnectionException(e);
         }
         return this;
     }
