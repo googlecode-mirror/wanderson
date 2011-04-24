@@ -15,6 +15,11 @@ import java.io.OutputStream;
 public abstract class ConnectionAdapter
 {
     /**
+     * Etiqueta para Log do Sistema
+     */
+    public static final String TAG = "ConnectionAdapter";
+
+    /**
      * Fluxo para Entrada de Dados
      */
     private InputStream input;
