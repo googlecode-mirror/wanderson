@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.util.logging.Logger;
+
+import android.util.Log;
 
 /**
  * Adaptador de Conexão Ethernet
@@ -79,18 +80,18 @@ public class EthernetAdapter extends ConnectionAdapter
 
     public EthernetAdapter connect() throws ConnectionException
     {
-        Logger l = Logger.getLogger("Renato_RemoteClient");
+        Log.i(TAG, "Inicializando Conexão Ethernet");
         /* Comunicação Física */
         Socket s = null;
         /* Fluxos de Dados */
         InputStream in   = null;
         OutputStream out = null;
         try {
-            l.info("Adapter Ethernet Endereço: "
+            Log.i(TAG, "Adapter Ethernet Endereço: "
                 + getAddress() + " Porta: " + getPort());
             s = new Socket(getAddress(), getPort());
-            l.info("Conexão Aberta e Aceita");
-            l.info("Abrindo Fluxos de Dados");
+            Log.i(TAG, "Conexão Aberta e Aceita");
+            Log.i(TAG, "Abrindo Fluxos de Dados");
             /* Fluxos de Dados */
             in  = s.getInputStream();
             out = s.getOutputStream();
@@ -99,24 +100,24 @@ public class EthernetAdapter extends ConnectionAdapter
             /* Configuração dos Fluxos de Dados */
             setInputStream(in).setOutputStream(out);
         } catch (IOException e) {
-            l.warning("Adapter Ethernet Erro na Abertura de Fluxos de Dados: " +
-                e.getMessage());
+            Log.w(TAG, "Adapter Ethernet Erro na Abertura de Fluxos de Dados: "
+                + e.getMessage());
             disconnect();
         }
         return this;
     }
 
-    public ConnectionAdapter disconnect()
+    public EthernetAdapter disconnect()
     {
-        Logger l = Logger.getLogger("Renato_RemoteClient");
         try {
-            l.info("Adapter Ethernet Finalizando Conexão");
+            Log.i(TAG, "Adapter Ethernet Finalizando Conexão");
             /* Finalizando Socket */
-            if (socket != null) socket.close(); socket = null;
+            if (socket != null) socket.close();
         } catch (IOException e) {
-            l.warning("Adapter Ethernet Adapter Erro ao Finalizar a Conexão: "
+            Log.w(TAG, "Adapter Ethernet Adapter Erro ao Finalizar a Conexão: "
                 + e.getMessage());
         }
+        socket = null;
         setInputStream(null).setOutputStream(null);
         return this;
     }
