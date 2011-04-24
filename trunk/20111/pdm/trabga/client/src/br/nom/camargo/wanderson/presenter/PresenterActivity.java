@@ -1,5 +1,7 @@
 package br.nom.camargo.wanderson.presenter;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -118,10 +120,14 @@ public class PresenterActivity extends Activity implements OnClickListener
     public void onClick(View view)
     {
         if (view == left) {
-            /** TODO Mensagem para Esquerda */
+            /* Mensagem para Esquerda */
+            PresenterSender sender = new PresenterSender("LEFT");
+            sender.start();
         }
         if (view == right) {
-            /** TODO Mensagem para Direita */
+            /* Mensagem para Direita */
+            PresenterSender sender = new PresenterSender("RIGHT");
+            sender.start();
         }
     }
 
@@ -280,6 +286,49 @@ public class PresenterActivity extends Activity implements OnClickListener
                 Message msg = obtainMessage();
                 msg.obj = client.getStatus();
                 sendMessage(msg);
+            }
+        }
+    }
+
+    /**
+     * Mensageiro de Informações
+     * 
+     * Recebe uma mensagem em tempo de construção. Envia as informações para o
+     * servidor em um fluxo de execução separado evitando bloqueio de interface
+     * 
+     * @author Wanderson Henrique Camargo Rosa
+     */
+    private class PresenterSender extends Thread
+    {
+        /**
+         * Mensagem para Envio
+         */
+        private String message;
+
+        /**
+         * Construtor
+         * @param message Mensagem para Envio
+         */
+        public PresenterSender(String message)
+        {
+            this.message = message;
+        }
+
+        /*
+         * Fluxo Secundário de Execução
+         */
+        public void run()
+        {
+            if (client.isConnected()) {
+                OutputStream out = client.getAdapter().getOutputStream();
+                byte buffer[] = message.getBytes();
+                try {
+                    out.write(buffer.length);
+                    out.write(buffer);
+                } catch (IOException e) {
+                    /** TODO Tratamento de Erro */
+                    /* Problema: o OutputStream acumula mensagens! */
+                }
             }
         }
     }
