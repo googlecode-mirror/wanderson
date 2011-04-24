@@ -107,10 +107,8 @@ public class BluetoothAdapter extends ConnectionAdapter
             /* Configuração dos Fluxos de Dados */
             setInputStream(in).setOutputStream(out);
         } catch (IOException e) {
-            Log.w(TAG, "Adapter Bluetooth Erro na Abertura de Fluxos de Dados "
-                + e.getMessage());
-            e.printStackTrace();
-            disconnect();
+            Log.w(TAG, "Adapter Bluetooth Erro na Abertura de Fluxos de Dados");
+            throw new ConnectionException(e);
         }
         return this;
     }
