@@ -19,4 +19,8 @@
     <string name="device_cancel">Cancel</string>
     <string name="app_ethernet">Ethernet</string>
     <string name="app_bluetooth">Bluetooth</string>
+    <string name="presenter_left">&lt;</string>
+    <string name="presenter_right">&gt;</string>
+    <string name="app_connecting">Connecting</string>
+    <string name="app_connect_error">Connecting Error</string>
 </resources>
