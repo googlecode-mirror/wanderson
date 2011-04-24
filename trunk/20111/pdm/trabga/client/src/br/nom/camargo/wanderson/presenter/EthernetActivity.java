@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
+import android.widget.EditText;
 import br.nom.camargo.wanderson.presenter.DeviceElement.Type;
 
 /**
@@ -27,17 +27,17 @@ public class EthernetActivity extends Activity
     /**
      * Campo Nome do Dispositivo
      */
-    private TextView name;
+    private EditText name;
 
     /**
      * Campo Endereço de Conexão
      */
-    private TextView address;
+    private EditText address;
 
     /**
      * Campo Porta de Conexão Ethernet
      */
-    private TextView port;
+    private EditText port;
 
     public void onCreate(Bundle savedInstanceState)
     {
@@ -45,9 +45,9 @@ public class EthernetActivity extends Activity
         setContentView(R.layout.ethernet);
 
         /* Captura de Elementos de Visualização */
-        name    = (TextView) findViewById(R.id.ethernet_name);
-        address = (TextView) findViewById(R.id.ethernet_address);
-        port    = (TextView) findViewById(R.id.ethernet_port);
+        name    = (EditText) findViewById(R.id.ethernet_name);
+        address = (EditText) findViewById(R.id.ethernet_address);
+        port    = (EditText) findViewById(R.id.ethernet_port);
 
         /* Nome do Dispositivo para População */
         String identifier = getIntent().getStringExtra("name");
