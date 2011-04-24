@@ -1,8 +1,8 @@
 package br.nom.camargo.wanderson.renato;
 
 import java.util.Observable;
-import java.util.logging.Logger;
 
+import android.util.Log;
 import br.nom.camargo.wanderson.renato.adapter.ConnectionAdapter;
 
 /**
@@ -55,8 +55,8 @@ public class RemoteClient extends Observable
     private RemoteClient setStatus(RemoteStatus s)
     {
         /* Notificação de Observadores */
-        setChanged(); notifyObservers();
         status = s;
+        setChanged(); notifyObservers();
         return this;
     }
 
@@ -96,10 +96,9 @@ public class RemoteClient extends Observable
     {
         /* Tentativa de Desconexão */
         setStatus(RemoteStatus.DISCONNECTING);
-        Logger l = Logger.getLogger("Renato_RemoteClient");
-        l.info("Client Desconectando o Cliente");
+        Log.v(ConnectionAdapter.TAG, "Client Desconectando o Cliente");
         if (adapter != null) adapter.disconnect();
-        l.info("Client Cliente Desconectado");
+        Log.v(ConnectionAdapter.TAG, "Client Cliente Desconectado");
         /* Desconexão Estabelecida */
         setStatus(RemoteStatus.DISCONNECTED);
         return this;
