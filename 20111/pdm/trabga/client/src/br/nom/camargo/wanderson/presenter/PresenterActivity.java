@@ -9,6 +9,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -66,6 +68,30 @@ public class PresenterActivity extends Activity implements Observer
     private ProgressDialog connecting;
 
     /**
+     * Manipulador para Comunicação de
+     * Visualizações em Threads Separadas
+     */
+    final Handler handler = new Handler() {
+        public void handleMessage(Message msg) {
+            int command = msg.arg1;
+            switch (command) {
+            case 0: /* Enable View */
+                setEnableView(true);
+                break;
+            case 1: /* Disable View */
+                setEnableView(false);
+                break;
+            case 2: /* Turn On Loading Screen */
+                connecting.show();
+                break;
+            case 3: /* Turn Off Loading Screen */
+                connecting.dismiss();
+                break;
+            }
+        }
+    };
+
+    /**
      * Botão para Movimentação para Esquerda
      */
     private Button left;
@@ -88,6 +114,18 @@ public class PresenterActivity extends Activity implements Observer
             this.message = message;
         }
         return this.message;
+    }
+
+    /**
+     * Habilita os Componentes de Visualização
+     * @param flag Elemento para Verificação
+     * @return Próprio Objeto para Encadeamento
+     */
+    public PresenterActivity setEnableView(boolean flag)
+    {
+        left.setEnabled(flag);
+        right.setEnabled(flag);
+        return this;
     }
 
     public void onCreate(Bundle savedInstanceState)
@@ -131,7 +169,7 @@ public class PresenterActivity extends Activity implements Observer
 
         /* Eventos em Botões */
         left  = (Button) findViewById(R.id.presenter_left);
-//        left.setEnabled(false);
+        left.setEnabled(false);
         left.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 /* Envia Mensagem para Esquerda */
@@ -140,7 +178,7 @@ public class PresenterActivity extends Activity implements Observer
             }
         });
         right = (Button) findViewById(R.id.presenter_right);
-//        right.setEnabled(false);
+        right.setEnabled(false);
         right.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 /* Envia Mensagem para Direita */
@@ -157,9 +195,6 @@ public class PresenterActivity extends Activity implements Observer
         /* Execução Concorrente de Conexão */
         connector = new PresenterConnector();
         connector.start();
-
-        /* Exibição da Caixa de Diálogo */
-        connecting.show();
     }
 
     protected void onActivityResult(int request, int result, Intent data)
@@ -238,15 +273,43 @@ public class PresenterActivity extends Activity implements Observer
             RemoteClient client = (RemoteClient) o;
             switch (client.getStatus()) {
             case CONNECTED:
-//                left.setEnabled(true);
-//                right.setEnabled(true);
+            {
+                Message m = handler.obtainMessage();
+                m.arg1 = 3; /* Turn Off Loading Screen */
+                handler.sendMessage(m);
+            }
+            {
+                Message m = handler.obtainMessage();
+                m.arg1 = 0; /* Enable View */
+                handler.sendMessage(m);
                 break;
+            }
             case CONNECTING:
+            {
+                Message m = handler.obtainMessage();
+                m.arg1 = 2; /* Turn On Loading Screen */
+                handler.sendMessage(m);
+            }
+            {
+                Message m = handler.obtainMessage();
+                m.arg1 = 1; /* Disable View */
+                handler.sendMessage(m);
+            }
+                break;
             case DISCONNECTING:
+            {
+                Message m = handler.obtainMessage();
+                m.arg1 = 1; /* Disable View */
+                handler.sendMessage(m);
+            }
             case DISCONNECTED:
+            {
+                Message m = handler.obtainMessage();
+                m.arg1 = 1; /* Disable View */
+                handler.sendMessage(m);
+                break;
+            }
             default:
-//                left.setEnabled(false);
-//                right.setEnabled(false);
             }
         }
     }
