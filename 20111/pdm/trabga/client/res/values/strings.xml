@@ -23,4 +23,5 @@
     <string name="presenter_right">&gt;</string>
     <string name="app_connecting">Connecting</string>
     <string name="app_connect_error">Connecting Error</string>
+    <string name="app_never">Never Used</string>
 </resources>
