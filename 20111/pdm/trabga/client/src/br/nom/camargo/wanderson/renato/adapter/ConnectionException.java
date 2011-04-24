@@ -18,6 +18,15 @@ public class ConnectionException extends RemoteException
 
     /**
      * Construtor
+     * @param message Mensagem de Erro
+     */
+    public ConnectionException(String message)
+    {
+        super(message);
+    }
+
+    /**
+     * Construtor
      * @param e Encapsulamento da Causa sobre o Erro Gerado
      */
     public ConnectionException(Throwable e)
