@@ -1,6 +1,8 @@
 package br.nom.camargo.wanderson.presenter;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -61,6 +63,10 @@ public class DeviceListActivity extends ListActivity
         intent.putExtra("name", device.getName());
         intent.putExtra("type", device.getType().toString());
         startActivity(intent);
+        /* Atualização da Última Conexão */
+        device.setUpdate(System.currentTimeMillis());
+        ((PresenterApplication) getApplication())
+            .getDatabase().update(device, device.getName(), device.getType());
         return this;
     }
 
@@ -118,6 +124,7 @@ public class DeviceListActivity extends ListActivity
                 public void onClick(DialogInterface dialog, int which) {
                     ((PresenterApplication) getApplication())
                         .getDatabase().remove(element);
+                    update();
                 }
             });
             builder.setNegativeButton(R.string.app_no, new DialogInterface.OnClickListener() {
@@ -207,7 +214,13 @@ public class DeviceListActivity extends ListActivity
             /* Preenchimento de Campos */
             ContentValues content = getItem(position).getContentValues();
             name.setText(content.getAsString("name"));
-            summary.setText(content.getAsString("type") + " @ " + content.getAsString("updated"));
+            long timestamp = content.getAsLong("updated");
+            String update = "Never";
+            if (timestamp > 0) {
+                Date d = new Date(timestamp);
+                update = DateFormat.getDateInstance().format(d);
+            }
+            summary.setText(content.getAsString("type") + " @ " + update);
 
             return convert;
         }
