@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/about_home" android:title="@string/about_home" android:icon="@android:drawable/ic_media_rew"></item>
+    <item android:id="@+id/about_back" android:icon="@android:drawable/ic_menu_revert" android:title="@string/about_back"></item>
+    <item android:id="@+id/about_close" android:icon="@android:drawable/ic_menu_close_clear_cancel" android:title="@string/about_close"></item>
+</menu>

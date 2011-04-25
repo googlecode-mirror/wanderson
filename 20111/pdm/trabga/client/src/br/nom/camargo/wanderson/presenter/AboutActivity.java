@@ -3,6 +3,8 @@ package br.nom.camargo.wanderson.presenter;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -38,6 +40,42 @@ public class AboutActivity extends Activity
         about.setWebViewClient(new AboutClient());
         /* Página Inicial */
         about.loadUrl("file:///android_asset/index.html");
+    }
+
+    /*
+     * Criação do Menu de Opções
+     */
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.about, menu);
+        return true;
+    }
+
+    /*
+     * Seleção de Elemento do Menu de Opções
+     */
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        /* Resultado Esperado */
+        boolean result = false;
+        /* Blocos Condicionais */
+        switch (item.getItemId()) {
+        case R.id.about_home:
+            /* Página Inicial */
+            about.loadUrl("file:///android_asset/index.html");
+            result = true;
+            break;
+        case R.id.about_back:
+            /* Voltar Navegação */
+            if (about.canGoBack()) about.goBack();
+            result = true;
+            break;
+        case R.id.about_close:
+            /* Finalizar Atividade */
+            finish();
+            break;
+        }
+        return result;
     }
 
     /*
