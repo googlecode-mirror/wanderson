@@ -99,7 +99,7 @@ public class PresenterActivity extends Activity implements OnClickListener
         /* Reduzir Brilho */
         if (prefs.getBoolean("config_brightness", false)) {
             WindowManager.LayoutParams lp = getWindow().getAttributes();
-            lp.screenBrightness = 0f;
+            lp.screenBrightness = 0.1f;
         }
 
         /* Inicialização do Layout */
