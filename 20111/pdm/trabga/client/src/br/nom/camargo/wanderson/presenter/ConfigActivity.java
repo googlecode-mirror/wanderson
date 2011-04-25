@@ -28,6 +28,11 @@ public class ConfigActivity extends PreferenceActivity
      */
     private Preference keepalive;
 
+    /**
+     * Reduzir Brilho
+     */
+    private Preference brightness;
+
     /*
      * Tempo de Criação da Atividade
      */
@@ -43,6 +48,10 @@ public class ConfigActivity extends PreferenceActivity
         /* Manter Exibição de Tela */
         keepalive = findPreference("config_keepalive");
         keepalive.setOnPreferenceClickListener(this);
+
+        /* Reduzir o Brilho da Tela */
+        brightness = findPreference("config_brightness");
+        brightness.setOnPreferenceClickListener(this);
     }
 
     /*

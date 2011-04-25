@@ -96,6 +96,11 @@ public class PresenterActivity extends Activity implements OnClickListener
         if (prefs.getBoolean("config_keepalive", false)) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
+        /* Reduzir Brilho */
+        if (prefs.getBoolean("config_brightness", false)) {
+            WindowManager.LayoutParams lp = getWindow().getAttributes();
+            lp.screenBrightness = 0f;
+        }
 
         /* Inicialização do Layout */
         setContentView(R.layout.presenter);
