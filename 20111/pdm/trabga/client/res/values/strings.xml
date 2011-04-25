@@ -28,4 +28,5 @@
     <string name="menu_config">Config</string>
     <string name="config_keepalive">Keep Alive</string>
     <string name="config_brightness">Reduce Brightness</string>
+    <string name="menu_about">About</string>
 </resources>

@@ -183,6 +183,13 @@ public class DeviceListActivity extends ListActivity
             result = true;
             break;
         }
+        case R.id.menu_about:
+        {
+            Intent intent = new Intent(AboutActivity.class.getName());
+            startActivity(intent);
+            result = true;
+            break;
+        }
         default:
             result = super.onOptionsItemSelected(item);
         }
