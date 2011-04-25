@@ -3,4 +3,5 @@
   xmlns:android="http://schemas.android.com/apk/res/android">
     <CheckBoxPreference android:key="config_fullscreen" android:title="@string/config_fullscreen" android:defaultValue="false"></CheckBoxPreference>
     <CheckBoxPreference android:key="config_keepalive" android:defaultValue="false" android:title="@string/config_keepalive"></CheckBoxPreference>
+    <CheckBoxPreference android:defaultValue="false" android:key="config_brightness" android:title="@string/config_brightness"></CheckBoxPreference>
 </PreferenceScreen>
