@@ -26,6 +26,12 @@
                 <category android:name="android.intent.category.DEFAULT"></category>
             </intent-filter>
         </activity>
+        <activity android:name="ConfigActivity">
+            <intent-filter>
+                <action android:name="br.nom.camargo.wanderson.presenter.ConfigActivity"></action>
+                <category android:name="android.intent.category.DEFAULT"></category>
+            </intent-filter>
+        </activity>
 
 
     </application>

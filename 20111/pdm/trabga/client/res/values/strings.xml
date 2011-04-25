@@ -24,4 +24,7 @@
     <string name="app_connecting">Connecting</string>
     <string name="app_connect_error">Connecting Error</string>
     <string name="app_never">Never Used</string>
+    <string name="config_fullscreen">Full Screen</string>
+    <string name="menu_config">Config</string>
+    <string name="config_keepalive">Keep Alive</string>
 </resources>
