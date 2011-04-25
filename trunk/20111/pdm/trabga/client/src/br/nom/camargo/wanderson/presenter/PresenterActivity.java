@@ -9,10 +9,14 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import br.nom.camargo.wanderson.presenter.DeviceElement.Type;
@@ -78,6 +82,22 @@ public class PresenterActivity extends Activity implements OnClickListener
     public void onCreate(Bundle state)
     {
         super.onCreate(state);
+
+        /* Preferências */
+        SharedPreferences prefs =
+            PreferenceManager.getDefaultSharedPreferences(this);
+
+        /* Tela Cheia */
+        if (prefs.getBoolean("config_fullscreen", false)) {
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
+        /* Manter Exibição de Tela */
+        if (prefs.getBoolean("config_keepalive", false)) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
+
+        /* Inicialização do Layout */
         setContentView(R.layout.presenter);
 
         /* User Interface */

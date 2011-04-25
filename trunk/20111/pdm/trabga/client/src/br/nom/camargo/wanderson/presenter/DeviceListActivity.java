@@ -170,10 +170,19 @@ public class DeviceListActivity extends ListActivity
         boolean result = false;
         switch (item.getItemId()) {
         case R.id.menu_device_add:
+        {
             Intent intent = new Intent(EthernetActivity.class.getName());
             startActivity(intent);
             result = true;
             break;
+        }
+        case R.id.menu_config:
+        {
+            Intent intent = new Intent(ConfigActivity.class.getName());
+            startActivity(intent);
+            result = true;
+            break;
+        }
         default:
             result = super.onOptionsItemSelected(item);
         }
