@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import br.nom.camargo.wanderson.presenter.DeviceElement.Type;
@@ -227,6 +228,8 @@ public class DeviceListActivity extends ListActivity
                 convert.findViewById(R.id.devicerow_name);
             TextView summary = (TextView)
                 convert.findViewById(R.id.devicerow_summary);
+            ImageView image = (ImageView)
+                convert.findViewById(R.id.devicerow_image);
             /* Preenchimento de Campos */
             ContentValues content = getItem(position).getContentValues();
             name.setText(content.getAsString("name"));
@@ -237,6 +240,11 @@ public class DeviceListActivity extends ListActivity
                 update = DateFormat.getDateInstance().format(d);
             }
             summary.setText(content.getAsString("type") + " @ " + update);
+            if (getItem(position).getType() == Type.Bluetooth) {
+                image.setImageResource(R.drawable.bluetooth);
+            } else {
+                image.setImageResource(R.drawable.wifi);
+            }
 
             return convert;
         }
