@@ -22,16 +22,10 @@ class PSNode extends Node
     protected static $_distancey;
 
     /**
-     * Coordenada das Abscissas
-     * @var float
+     * Altura da Árvore
+     * @var integer
      */
-    protected $_positionx;
-
-    /**
-     * Coordenada das Ordenadas
-     * @var float
-     */
-    protected $_positiony;
+    protected $_height = 0;
 
     /**
      * Configura a Distância entre Elementos nas Abscissas
@@ -72,43 +66,77 @@ class PSNode extends Node
     }
 
     /**
-     * Configura a Posição no Eixo das Abscissas
-     * @param float $position Valor para Configuração
+     * Configura a Altura da Árvore
+     * @param int $height Valor para Configuração
      * @return PSNode Próprio Objeto para Encadeamento
      */
-    public function setPositionX($position)
+    public function setHeight($height)
     {
-        $this->_positionx = (float) $position;
+        $this->_height = (int) $height;
         return $this;
     }
 
     /**
-     * Informa a Posição no Eixo das Abscissas
-     * @return float Elemento Solicitado
+     * Informa a Altura da Árvore
+     * @return int Valor Solicitado
      */
-    public function getPositionX()
+    public function getHeight()
     {
-        return $this->_positionx;
+        return $this->_height;
     }
 
     /**
-     * Configura a Posição no Eixo das Ordenadas
-     * @param float $position Valor para Configuração
+     * Renderização do Elemento no Plano Cartesiano
+     * @param float $positionx Posição no Eixo das Abscissas
+     * @param float $positiony Posição no Eixo das Ordenadas
      * @return PSNode Próprio Objeto para Encadeamento
      */
-    public function setPositionY($position)
+    public function render($positionx, $positiony)
     {
-        $this->_positiony = (float) $position;
+        /* Deslocamentos */
+        $distancex = self::getDistanceX() * $this->getHeight();
+        $distancey = self::getDistanceY();
+        /* Renderização Local (x,y) */
+        /* @todo Renderização Local */
+        /* Subárvores */
+        $left  = $this->getLeft();
+        $right = $this->getRight();
+        /* Renderização de Filhas */
+        if ($left !== NULL) {
+            /* @var $left PSNode */
+            $left->render($positionx - $distancex, $positiony + $distancey);
+        }
+        if ($right !== NULL) {
+            /* @var $right PSNode */
+            $right->render($positionx + $distancex, $positiony + $distancey);
+        }
         return $this;
     }
 
-    /**
-     * Informa a Posição no Eixo das Ordenadas
-     * @return float Elemento Solicitado
-     */
-    public function getPositionY()
+    public function insert(PSNode $node)
     {
-        return $this->_positiony;
+        /* Sobrescrita para Tipagem Correta */
+        parent::insert($node);
+
+        /* Verificação de Alturas */
+        $left  = $this->getLeft();
+        $right = $this->getRight();
+        /* Configuração de Alturas */
+        $lheight = 0;
+        $rheight = 0;
+        /* Altura da Subárvore Esquerda */
+        if ($left !== NULL) {
+            $lheight = $left->getHeight();
+        }
+        /* Altura da Subárvore Direita */
+        if ($right !== NULL) {
+            $rheight = $right->getHeight();
+        }
+        /* Altura Local */
+        $height = $lheight < $rheight ? $rheight : $lheight;
+        $this->setHeight($height + 1);
+
+        return $this;
     }
 
 }
