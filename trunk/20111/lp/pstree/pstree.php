@@ -20,10 +20,14 @@ class PSTree extends Tree
      */
     public function render()
     {
+        echo "%!\n";
+        echo "200 200 translate\n";
+        echo "/Courier findfont 10 scalefont setfont\n";
         $root = $this->getRoot();
         if ($root !== NULL) {
             /* @var $root PSNode */
             $height = $root->render(0,0);
         }
+        echo "showpage\n";
     }
 }
