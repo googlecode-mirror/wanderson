@@ -41,6 +41,17 @@ class Tree
     public function insert($content)
     {
         $node = new Node($content);
+        $this->_insert($node);
+        return $this;
+    }
+
+    /**
+     * Insere um Elemento na Árvore
+     * @param Node $node Elemento para Inserção
+     * @return Tree Próprio Objeto para Encadeamento
+     */
+    protected function _insert(Node $node)
+    {
         $root = $this->getRoot();
         if ($root === NULL) {
             $this->setRoot($node);
