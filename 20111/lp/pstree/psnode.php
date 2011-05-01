@@ -97,18 +97,28 @@ class PSNode extends Node
         $distancex = self::getDistanceX() * $this->getHeight();
         $distancey = self::getDistanceY();
         /* Renderização Local (x,y) */
-        /* @todo Renderização Local */
+        $content = $this->getContent();
+        /* Elemento */
+        echo "newpath $positionx $positiony 10 0 360 arc closepath fill\n";
+        /* Identificador */
+        echo "newpath $positionx 10 add $positiony 10 sub moveto ($content) show\n";
         /* Subárvores */
         $left  = $this->getLeft();
         $right = $this->getRight();
         /* Renderização de Filhas */
         if ($left !== NULL) {
             /* @var $left PSNode */
-            $left->render($positionx - $distancex, $positiony + $distancey);
+            /* Caminho de Ligação */
+            echo "newpath $positionx $positiony moveto $positionx $distancex sub $positiony $distancey sub lineto stroke\n";
+            /* Renderização Esquerda */
+            $left->render($positionx - $distancex, $positiony - $distancey);
         }
         if ($right !== NULL) {
             /* @var $right PSNode */
-            $right->render($positionx + $distancex, $positiony + $distancey);
+            /* Caminho de Ligação */
+            echo "newpath $positionx $positiony moveto $positionx $distancex add $positiony $distancey sub lineto stroke\n";
+            /* Renderização Direita */
+            $right->render($positionx + $distancex, $positiony - $distancey);
         }
         return $this;
     }
