@@ -104,7 +104,8 @@ class Node
     {
         /* Conteúdo Idêntico */
         if ($node->getContent() == $this->getContent()) {
-            throw new InvalidArgumentException('Conteúdo Inválido: Valores Idênticos');
+            $content = $node->getContent();
+            throw new InvalidArgumentException("Conteúdo Inválido: Valores Idênticos '$content'");
         }
         $local = NULL;
         if ($node->getContent() < $this->getContent()) {

@@ -12,14 +12,14 @@ class PSNode extends Node
      * Eixo das Abscissas
      * @var float
      */
-    protected static $_distancex;
+    protected static $_distancex = 0.0;
 
     /**
      * Distância entre Elementos
      * Eixo das Ordenadas
      * @var float
      */
-    protected static $_distancey;
+    protected static $_distancey = 0.0;
 
     /**
      * Altura da Árvore
