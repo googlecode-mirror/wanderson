@@ -73,6 +73,18 @@ class PSNode extends Node
     public function setHeight($height)
     {
         $this->_height = (int) $height;
+
+        /* Atualização da Altura Esquerda */
+        $left  = $this->getLeft();
+        if (isset($left)) {
+            $left->setHeight($height - 1);
+        }
+        /* Atualização da Altura Direita */
+        $right = $this->getRight();
+        if (isset($right)) {
+            $right->setHeight($height - 1);
+        }
+
         return $this;
     }
 
