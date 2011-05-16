@@ -1,0 +1,9 @@
+{
+	"id": "br.nom.camargo.wanderson.jstron",
+	"version": "0.1.1",
+	"vendor": "Self",
+	"type": "web",
+	"main": "index.html",
+	"title": "Javascript Tron",
+	"icon": "icon.png"
+}
