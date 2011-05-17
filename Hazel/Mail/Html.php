@@ -25,28 +25,16 @@ class Hazel_Mail_Html extends Zend_Mail
     protected $_script;
 
     /**
-     * Camada de Transporte
-     * @var Zend_Mail_Transport_Abstract
+     * Construtor
+     * @param string $charset 
      */
-    protected $_transport;
-
-    /**
-     * Construtor da Classe
-     * @param $options Opções para Configuração
-     */
-    public function __construct(array $options = array())
+    public function __construct($charset = 'utf-8')
     {
-        /* Construção da Superclasse */
-        $charset = isset($options['charset']) ? $options : 'utf-8';
+        /* Sobrescrita */
         parent::__construct($charset);
-        unset($options['charset']);
-
-        /* Visualização */
+        /* Camada de Visualização */
         $view = new Zend_View();
         $this->setView($view);
-        /* Transporte */
-        $transport = new Zend_Mail_Transport_Smtp();
-        $this->setTransport($transport);
     }
 
     /**
@@ -90,34 +78,42 @@ class Hazel_Mail_Html extends Zend_Mail
     }
 
     /**
-     * Configura a Camada de Transporte
-     * @param Zend_Mail_Transport_Abstract $transport Elemento para Configuração
+     * Renderização do Conteúdo
      * @return Hazel_Mail_Html Próprio Objeto para Encadeamento
      */
-    public function setTransport(Zend_Mail_Transport_Abstract $transport)
+    public function render()
     {
-        $this->_transport = $transport;
+        /* Renderização do Conteúdo */
+        $script = $this->getScript();
+        $content = $this->getView()->render($script);
+        /* Configuração do Conteúdo */
+        $this->setBodyHtml($content);
         return $this;
     }
 
     /**
-     * Informa a Camada de Transporte
-     * @return Zend_Mail_Transport_Abstract Elemento Solicitado
+     * Sobrescrita de Método para Renderização da Visualização
+     * @param boolean $htmlOnly Renderização do Corpo do Email
+     * @param boolean $render   Renderização da Visualização Anexada
+     * @return false|Zend_Mime_Part|string Resultado do Método na Superclasse
      */
-    public function getTransport()
+    public function getBodyHtml($htmlOnly = false, $render = true)
     {
-        return $this->_transport;
+        /* BodyHtml Possivelmente Objeto */
+        if ($render && $this->_bodyHtml === false) {
+            $this->render();
+        }
+        return parent::getBodyHtml($htmlOnly);
     }
 
-    public function send()
+    /**
+     * Acesso a Métodos da Visualização
+     * @param string $name Nome do Método
+     * @param array  $args Argumentos de Execução
+     * @return mixed Resultado da Execução pela Camada de Visualização
+     */
+    public function __call($name, $args)
     {
-        /* Renderização do Conteúdo */
-        $script = $this->getScript();
-        $body   = $this->getView()->render($script);
-        $this->setBodyHtml($body);
-        /* Camada de Transporte */
-        $transport = $this->getTransport();
-        /* Envio */
-        return parent::send($transport);
+        return $this->getView()->__call($name, $args);
     }
 }
