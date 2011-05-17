@@ -114,6 +114,11 @@ class Hazel_Mail_Html extends Zend_Mail
      */
     public function __call($name, $args)
     {
-        return $this->getView()->__call($name, $args);
+        /* Captura da Visualização */
+        $view = $this->getView();
+        /* Execução do Método */
+        $result = call_user_method_array($name, $view, $args);
+        /* Envio do Resultado */
+        return $result;
     }
 }
