@@ -31,13 +31,13 @@ MainAssistant.prototype.setup = function() {
     game.clear();
     game.play();
 };
-MainAssistant.prototype.handleButtonPress = function(event){
+MainAssistant.prototype.handleButtonPress = function(event) {
     var game   = window.game;
     var player = game.getPlayerA();
     game.stop();
     player.setX(0).setY(0)
-        .setColor(255 << 8 | 255)
-        .direction = 'right'; // yellow
+        .setColor(255 << 8 | 255) // yellow
+        .direction = 'right';
     game.clear();
     game.play();
 };
