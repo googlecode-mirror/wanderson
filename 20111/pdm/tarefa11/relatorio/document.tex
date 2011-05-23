@@ -5,6 +5,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[brazil]{babel}
 \usepackage{sbc-template}
+\usepackage{graphicx}
 
 % Informações Pessoais ---------------------------------------------------------
 \title{Tarefa 11 sobre Desenvolvimento com WebOS}
@@ -26,6 +27,12 @@ O presente documento é resultado da décima primeira tarefa sobre desenvolvimen
 em dispositivos móveis. Há necessidade de criação de um aplicativo qualquer
 sobre a plataforma HP Palm WebOS.
 
+A Seção \ref{sec:idealizacao} apresenta a idealização do aplicativo
+desenvolvido. Já a Seção \ref{sec:ambiente} dialoga sobre o ambiente de
+programação utilizado. As técnicas de implementação do aplicativo estão
+descritas na Seção \ref{sec:implementacao}. Por fim, as considerações finais são
+apresentadas na Seção \ref{sec:consideracoes}.
+
 % Idealização ------------------------------------------------------------------
 \section{Idealização}
 \label{sec:idealizacao}
@@ -35,10 +42,10 @@ de um programa que utilize Javascript sobre HTML5 e Canvas. Aproveitando a
 idéia, resolvi utilizar o mesmo aplicativo e verificar semelhanças entre o
 desenvolvimento Web comum e o dispositivo da HP.
 
-O programa desenvolvido é uma pequena parte do Javascript Tron projeto para
+O programa desenvolvido é uma pequena parte do Javascript Tron, projeto para
 aquela disciplina, com pequenas melhorias na programação orientada a objetos em
-Javascript e utilização de somente um jogador para verificar a semelhança
-anteriormente citada.
+Javascript e utilização de um jogador somente para melhor aprendizado da
+arquitetura.
 
 % Ambiente de Desenvolvimento --------------------------------------------------
 \section{Ambiente de Desenvolvimento}
@@ -47,8 +54,8 @@ anteriormente citada.
 Primeiramente, o emulador disponível para programação é disponibilizado numa
 máquina virtual da Virtualbox. Isto é muito interessante porque facilita a
 instalação do emulador. Porém a sua instalação exige que a Virtualbox esteja na
-versão 3.2, ocasionando alguns problemas em minha máquina que já tinha uma
-versão mais recente.
+versão 3.2, ocasionando alguns problemas em máquinas que já possuem uma versão
+mais recente.
 
 Também posso afirmar que a utilização do emulador é muito mais simples do que
 outros utilizados, principalmente se comparado com o Blackberry que gerou muitos
@@ -96,7 +103,15 @@ A \texttt{jstron.field} foi a primeira classe desenvolvida e recebe em tempo de
 construção um objeto do tipo \texttt{canvas} para desenhar o campo de movimento
 na tela. Com método específico, a grade para movimento é renderizada na tela,
 juntamente com o objeto jogador caso exista. Esta classe também é responsável
-pelo controle dos blocos que não podem ser ocupados.
+pelo controle dos blocos que não podem ser ocupados. O diagrama de classes está
+representado na Figura \ref{fig:diagram}.
+
+\begin{figure}
+    \centering{}
+    \includegraphics[scale=0.5]{class-diagram.png}
+    \caption{Diagrama de Classes}
+    \label{fig:diagram}
+\end{figure}
 
 O jogador é representado pela classe \texttt{jstron.player} e possui uma
 referência ao campo de movimentação. O deslocamento do jogador é centralizado
@@ -125,6 +140,16 @@ Na camada de visualização foi adicionado um elemento do tipo \texttt{canvas} q
 são trabalhados pelo Mojo para estilizar o aplicativo conforme o WebOS. Também
 foi utilizado folhas de estilo em cascata para formatar o aplicativo.
 
+\begin{figure}
+    \centering{}
+    \includegraphics[scale=0.5]{screenshot.png}
+    \caption{Máquina Virtual executando o Aplicativo}
+    \label{fig:screenshot}
+\end{figure}
+
+O resultado final do aplicativo é apresentado na Figura \ref{fig:screenshot},
+que exibe a execução do mesmo sobre a máquina virtual.
+
 % Considerações Finais ---------------------------------------------------------
 \section{Considerações Finais}
 \label{sec:consideracoes}
@@ -140,5 +165,19 @@ A documentação para desenvolvimento não é organizada e algumas vezes tornou 
 leitura um pouco exaustiva com informações em múltiplas páginas. Também existem
 ligações inválidas entre elas e a conexão segura HTTPS não é reconhecida como
 confiável pelos navegadores.
+
+O aplicativo desenvolvido possui somente um jogador e não deve ser considerado
+como um aplicativo completo. Outro jogador poderá ser implementado porque a
+estrutura foi desenvolvida com métodos isolados. Seria interessante a
+comunicação via Bluetooth para jogos em dupla.
+
+O WebOS tem uma \emph{interface} melhor trabalhada e intuitiva se comparada com
+Android. A teoria de cartões fornece uma outra forma de trabalho sobre
+aplicativos, algo que considerei muito interessante e atrativo. Por outro lado,
+acho que o desenvolvimento sobre a plataforma ainda precisa crescer muito.
+
+A questão de que aplicativos desenvolvidos em navegadores podem ser executados
+com a mesma estrutura de classes no WebOS faz com que o dispositivo esteja cada
+vez mais conectado a Internet, base de sua filosofia.
 
 \end{document}
