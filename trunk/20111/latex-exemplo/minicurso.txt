@@ -1,0 +1,173 @@
+% Minicurso ====================================================================
+
+
+% Corpo do Documento -----------------------------------------------------------
+\begin{document}
+
+
+% Título -----------------------------------------------------------------------
+\maketitle{} % Título do Artigo Formatado Automaticamente
+
+
+% Resumo em Inglês -------------------------------------------------------------
+\begin{abstract}
+This meta-paper describes the style to be used in articles and short papers for
+SBC conferences. For papers in English, you should add just an abstract while
+for the papers in Portuguese, we also ask for an abstract in Portuguese. In both
+cases, abstracts should not have more than 10 lines and must be in the first
+page of the paper.
+\end{abstract}
+
+
+% Resumo em Português ----------------------------------------------------------
+\begin{resumo}
+Este meta-artigo descreve o estilo a ser usado na confecção de artigos e resumos
+de artigos para publicação nos anais das conferências organizadas pela SBC. É
+solicitada a escrita de resumo e abstract apenas para os artigos escritos em
+português. Artigos em inglês deverão apresentar apenas abstract. Nos dois casos,
+o autor deve tomar cuidado para que o resumo não ultrapasse 10 linhas cada,
+sendo que ambos devem estar na primeira página do artigo.
+\end{resumo}
+
+
+% Seções =======================================================================
+
+
+% Seção Introdução -------------------------------------------------------------
+\section{Introdução} % Este é o Nome da Seção
+\label{sec:introducao} % Esta é a Etiqueta da Seção
+
+Este documento é um pequeno exemplo de como podemos criar um documento conforme
+as normas da Sociedade Brasileira de Computação utilizando \LaTeX{}. Você pode
+notar que não estamos formatando as informações em nenhum local, apenas
+\emph{marcando} blocos de texto conforme o seu significado.
+
+
+% Subseção Teoria --------------------------------------------------------------
+\subsection{Teoria} % Este é o Nome da Subseção
+\label{sec:introducao.teoria} % Esta é a Etiqueta da Seção
+
+Com o \LaTeX{}, não é necessário preocupação com a formatação. Deixamos que o
+motor de código aplique os estilos do documento conforme solicitado. No nosso
+caso, estamos utilizando um pacote para formatar este documento com o nome
+\texttt{sbc-template} que contém informações sobre o modelo. Não é necessário
+modificá-lo, basta colocar este arquivo no mesmo diretório do seu documento
+atual e trabalhar normalmente. Também são necessários os arquivos
+\texttt{caption2.sty} para auxiliar o pacote em alguns estilos específicos e
+\texttt{sbc.bst} para formatar as referências bibliográficas.
+
+
+% Seção Nova Teoria ------------------------------------------------------------
+\section{Nova Teoria} % Este é o Nome da Seção
+\label{sec:nova-teoria} % Esta é a Etiqueta da Seção
+
+
+Podemos neste momento utilizar referências cruzadas. Note que a Seção
+\ref{sec:introducao} apresentou uma idéia básica sobre o \LaTeX{}. Você pode
+fazer muito mais estudando a ferramenta. Com a separação da lógica e conteúdo da
+formatação do documento, podemos nos concentrar diretamente na idealização, sem
+nenhuma preocupação se um parágrafo está desalinhado. O \LaTeX{} irá fazer o
+trabalho sujo para nós.
+
+
+% Estruturação Adicional =======================================================
+% POR FAVOR NÃO UTILIZE AINDA O PRÓXIMO CONTEÚDO - ESPERE O PROFESSOR ==========
+% ==============================================================================
+
+
+% Notas de Rodapé --------------------------------------------------------------
+
+
+Você deve estar achando estranho o desenvolvimento deste documento.
+Primeiramente, todos acham estranho trabalhar sem a visualização. Mas, algumas
+vezes, a formatação atrapalha, principalmente em Editores de Texto
+Visuais\footnote{Microsoft Word ou LibreOffice}. Acabamos de utilizar uma nota
+de rodapé! O texto fica incluso no texto, sempre mantendo o foco do autor.
+
+
+% Listas Numeradas e Não Numeradas ---------------------------------------------
+
+
+O LaTeX{} é uma ferramenta antiga. O \TeX{} foi criado no início dos anos 70 por
+Donald Knuth. Ele estava insatisfeito com a má qualidade de suas publicações
+impressas. Buscando melhorias, inventou o \TeX{}. Leslie Lamport no meio dos
+anos 80 queria transformar o \TeX{} em algo mais fácil de ser trabalhado e
+desenvolveu um conjunto de macros chamada \LaTeX.
+
+Você não precisa ser um usuário avançado em computação para utilizar o \LaTeX{}.
+Basta você ter em mãos poucas ferramentas, como:
+
+\begin{itemize}
+    \item Editor de texto simples; e
+    \item Tradutor da Linguagem LaTeX.
+\end{itemize}
+
+Seguindo a lógica de desenvolvimento, precisamos seguir poucos passos para
+concluir o desenvolvimento do documento.
+
+\begin{enumerate}
+    \item Idealizar o documento;
+    \item Colocar suas principais idéias no arquivo;
+    \item Marcar os elementos conforme seus significados; e
+    \item Solicitar ao LaTeX{} a formatação.
+\end{enumerate}
+
+
+% Bibliografia =================================================================
+% POR FAVOR NÃO UTILIZE AINDA O PRÓXIMO CONTEÚDO - ESPERE O PROFESSOR ==========
+% ==============================================================================
+
+
+\section{Referências Bibliográficas} % Este é o Nome da Seção
+\label{sec:ref-bibliograficas} % Esta é a etiqueta da Seção
+
+
+Os documentos técnicos normalmente necessitam de referências bibliográficas.
+Basicamente, existe uma ferramenta chamada Bib\TeX{} que também gerencia as
+referências do documento. Basicamente você deve incluir um arquivo de nome
+\texttt{document.bib}, ou um outro qualquer com a mesma extensão, incluir
+algumas informações e após informar o arquivo ao final do documento, você pode
+citar as referências dentro do próprio texto.
+
+
+% Descomente a Estrutura Abaixo ------------------------------------------------
+% Crie um documento com o nome 'document.bib' no mesmo diretório deste arquivo -
+% Inclua o seguinte conteúdo descomentado! -------------------------------------
+
+
+% Estrutura BibTeX -------------------------------------------------------------
+
+
+% @book{livro,
+%     name      = "As Viagens de Fulano",
+%     author    = "Fulano de Tal",
+%     publisher = "Editora Fim do Mundo",
+%     year      = "2012"
+% }
+
+
+% Referenciando o Livro --------------------------------------------------------
+
+
+Segundo Fulano\ref{livro} o mundo irá acabar em 21 de dezembro de 2012. Você
+acredita nisto mesmo? Muitos estão comentando mas ainda nada está acontecendo.
+Acho que temos que \emph{esperar} o mundo acabar.
+
+Este é o final do documento. Acho que agora não precisamos ter mais medo de um
+documento escrito no formato \LaTeX{}. Lembre-se, não esqueça de colocar a
+bibliografia ao final do documento! Abraços!
+
+
+% Bloco de Bibliografia --------------------------------------------------------
+
+
+\bibliographystyle{sbc} % Formatação das Referências
+\bibliography{document} % Arquivo de Referências
+
+
+% Final do Documento -----------------------------------------------------------
+% Agora espere o professor e você irá aprender como colocar imagens no documento
+% Você poderá encontrar o conteúdo de imagens no arquivo 'imagem.txt' ----------
+% ------------------------------------------------------------------------------
+
+\end{document}

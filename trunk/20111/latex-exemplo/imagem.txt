@@ -1,0 +1,25 @@
+% Imagem =======================================================================
+
+% Inclua o Pacote no Preâmbulo -------------------------------------------------
+
+
+\usepackage{graphicx}
+
+
+% Insira em qualquer parte do texto o código abaixo ----------------------------
+
+
+\begin{figure}
+    \centering{}
+    \includegraphics[scale=0.5]{figura}
+    \caption{Chapolim Colorado}
+    \label{fig:chapolim}
+\end{figure}
+
+
+% Agora você pode colocar uma referência cruzada na forma abaixo ---------------
+
+
+... conforme a Figura \ref{fig:chapolim} ....
+
+
