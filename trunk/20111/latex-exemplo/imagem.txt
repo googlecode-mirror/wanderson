@@ -12,8 +12,8 @@
 \begin{figure}
     \centering{}
     \includegraphics[scale=0.5]{figura}
-    \caption{Chapolim Colorado}
-    \label{fig:chapolim}
+    \caption{Chapolin Colorado}
+    \label{fig:chapolin}
 \end{figure}
 
 
