@@ -139,7 +139,7 @@ citar as referências dentro do próprio texto.
 
 
 % @book{livro,
-%     name      = "As Viagens de Fulano",
+%     title     = "As Viagens de Fulano",
 %     author    = "Fulano de Tal",
 %     publisher = "Editora Fim do Mundo",
 %     year      = "2012"
@@ -149,7 +149,7 @@ citar as referências dentro do próprio texto.
 % Referenciando o Livro --------------------------------------------------------
 
 
-Segundo Fulano\ref{livro} o mundo irá acabar em 21 de dezembro de 2012. Você
+Segundo Fulano \cite{livro} o mundo irá acabar em 21 de dezembro de 2012. Você
 acredita nisto mesmo? Muitos estão comentando mas ainda nada está acontecendo.
 Acho que temos que \emph{esperar} o mundo acabar.
 
