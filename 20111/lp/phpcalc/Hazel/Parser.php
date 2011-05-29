@@ -66,5 +66,5 @@ abstract class Parser
      * Execução do Tradutor Após Lista de Tokens
      * @return mixed Saída Esperada
      */
-    abstract public function execute() {}
+    abstract public function execute();
 }
