@@ -52,6 +52,16 @@ abstract class Lexer
     }
 
     /**
+     * Limpa a Lista de Tokens
+     * @return Lexer Próprio Objeto para Encadeamento
+     */
+    public function clear()
+    {
+        $this->_tokenList = array();
+        return $this;
+    }
+
+    /**
      * Leitura e Análise Léxica da Entrada
      * @param string $input Conteúdo para Análise
      * @throws Exception Erro de Leitura
