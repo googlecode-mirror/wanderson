@@ -24,6 +24,16 @@ class Parser extends ParserAbstract
     );
 
     /**
+     * Construtor
+     * Utiliza o Analisador Léxico do Pacote
+     */
+    public function __construct()
+    {
+        $lexer = new Lexer();
+        parent::__construct($lexer);
+    }
+
+    /**
      * Verificação da Precedência
      * @param Token $tokenA Token para Verificação
      * @param Token $tokenB Token para Verificação
@@ -45,7 +55,7 @@ class Parser extends ParserAbstract
         /* Analisador Léxico */
         $lexer = $this->getLexer();
         /* Pilha para Conversão */
-        $stack = new SplStack();
+        $stack = new \SplStack();
         /* Notação Polonesa Reversa */
         $postfix = array();
         /* Execução */
@@ -93,7 +103,7 @@ class Parser extends ParserAbstract
      */
     protected function _calc(array $input)
     {
-        $stack = new SplStack();
+        $stack = new \SplStack();
         foreach ($input as $token) {
             if ($token->isA('T_OPERATOR')) {
                 $valueA = $stack->pop();
