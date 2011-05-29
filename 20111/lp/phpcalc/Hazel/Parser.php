@@ -57,7 +57,7 @@ abstract class Parser
     {
         /* Analisador Léxico */
         $lexer = $this->getLexer();
-        $lexer->read($input);
+        $lexer->clear()->read($input);
         /* Analisador Sintático */
         return $this->execute();
     }
