@@ -106,8 +106,8 @@ class Parser extends ParserAbstract
         $stack = new \SplStack();
         foreach ($input as $token) {
             if ($token->isA('T_OPERATOR')) {
-                $valueA = $stack->pop();
                 $valueB = $stack->pop();
+                $valueA = $stack->pop();
                 $result = $this->_operate($token->getContent(), $valueA, $valueB);
                 $stack->push($result);
             } else {
