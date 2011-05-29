@@ -114,7 +114,7 @@ class Parser extends ParserAbstract
                 $stack->push($token->getContent());
             }
         }
-        $result = $stack->push();
+        $result = $stack->pop();
         /* @todo Verificar Pilha Não Vazia */
         return $result;
     }
