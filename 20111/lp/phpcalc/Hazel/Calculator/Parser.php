@@ -66,7 +66,7 @@ class Parser extends ParserAbstract
         /* Execução */
         while (($token = $lexer->getToken()) != null) {
             /* Analisador Sintático */
-            if ($token->isA('T_NUMBER')) {
+            if ($token->isA('T_NUMBER') || $token->isA('T_FLOAT')) {
                 $postfix[] = $token;
             } elseif ($token->isA('T_OPERATOR')) {
                 /* @todo Melhorar Pesquisa */
