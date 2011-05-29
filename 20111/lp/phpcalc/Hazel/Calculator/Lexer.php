@@ -28,11 +28,13 @@ class Lexer extends LexerAbstract
             $content = $input[$i];
             if (preg_match('/^[0-9]$/', $content)) {
                 /* Número */
-                $token = new Token('T_NUMBER', $content);
+                $token = new Token('T_NUMBER');
+                $token->setContent($content)->setPosition($i);
                 $this->addToken($token);
             } elseif (preg_match('/^[+]$/', $content)) {
                 /* Operador */
-                $token = new Token('T_OPERATOR', $content);
+                $token = new Token('T_OPERATOR');
+                $token->setContent($content)->setPosition($i);
                 $this->addToken($token);
             } else {
                 throw new Exception("Invalid Input: '$content'");
