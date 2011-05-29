@@ -19,6 +19,7 @@ class Parser extends ParserAbstract
      * @var array
      */
     protected $_mapper = array(
+        '=' => 0,
         '+' => 1, '-' => 1,
         '*' => 2, '/' => 2,
         '^' => 3, '#' => 3,
@@ -49,9 +50,7 @@ class Parser extends ParserAbstract
      */
     public function precedence($tokenA, $tokenB)
     {
-        if (!($tokenA->isA('T_OPERATOR') && $tokenB->isA('T_OPERATOR'))) {
-            throw new Exception('Token must be an Operator');
-        }
+        /* @todo Checar Precedência */
         $precedenceA = $this->_mapper[$tokenA->getContent()];
         $precedenceB = $this->_mapper[$tokenB->getContent()];
         return $precedenceA - $precedenceB;
@@ -74,7 +73,7 @@ class Parser extends ParserAbstract
             /* Analisador Sintático */
             if ($token->isA('T_NUMBER') || $token->isA('T_FLOAT') || $token->isA('T_VAR')) {
                 $postfix[] = $token;
-            } elseif ($token->isA('T_OPERATOR')) {
+            } elseif ($token->isA('T_OPERATOR') || $token->isA('T_ASSIGN')) {
                 /* @todo Melhorar Pesquisa */
                 $found = false;
                 while (!$found) {
@@ -137,16 +136,17 @@ class Parser extends ParserAbstract
                 $valueA = $stack->pop();
                 $result = $this->_operate($token->getContent(), $valueA, $valueB);
                 $stack->push($result);
+            } elseif ($token->isA('T_ASSIGN')) {
+                $valueB = $stack->pop();
+                $valueA = $stack->pop();
+                $this->setValue($valueA, $valueB);
+                $stack->push($valueB);
             } else {
-                if ($token->isA('T_VAR')) {
-                    $value = $this->getValue($token->getContent());
-                    $stack->push($value);
-                } else {
-                    $stack->push($token->getContent());
-                }
+                $stack->push($token->getContent());
             }
         }
-        $result = $stack->pop();
+        /* @todo Verificar Filtro */
+        $result = $this->_filter($stack->pop());
         /* @todo Verificar Pilha Não Vazia */
         return $result;
     }
@@ -160,6 +160,11 @@ class Parser extends ParserAbstract
      */
     protected function _operate($operator, $valueA, $valueB = null)
     {
+        /* Filtro de Valores */
+        $valueA = $this->_filter($valueA);
+        $valueB = $this->_filter($valueB);
+        /* @todo Verificar Filtro */
+
         $result = 0;
         switch ($operator) {
         case '+':
@@ -183,6 +188,21 @@ class Parser extends ParserAbstract
         }
         /* @todo Verificar Operador Inválido */
         return $result;
+    }
+
+    /**
+     * Filtro de Valores Conforme Necessidade
+     * Pode buscar informações na tabela de variáveis caso valor seja String
+     * @param mixed $value Valor para Filtragem
+     * @return mixed Valor Filtrado
+     */
+    public function _filter($value)
+    {
+        /* @todo Melhorias em Filtragem */
+        if (is_string($value) && preg_match('/^\\$/', $value)) {
+            $value = $this->getValue($value);
+        }
+        return $value;
     }
 
     /**
