@@ -46,6 +46,8 @@ class Lexer extends LexerAbstract
                 $token = new Token('T_CB');
                 $token->setContent($content)->setPosition($i);
                 $this->addToken($token);
+            } elseif (preg_match('/^[ \n\t]$/', $content)) {
+                /* Descarte de Entrada */
             } else {
                 throw new Exception("Invalid Input: '$content'");
             }
