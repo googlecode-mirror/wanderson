@@ -58,7 +58,7 @@ class Lexer extends LexerAbstract
                 $token = new Token($type);
                 $token->setContent($content)->setPosition($position);
                 $this->addToken($token);
-            } elseif (preg_match('/^[+-\\\*\/^#]$/', $content)) {
+            } elseif (preg_match('/^(?:\+|-|\\*|\/|\\^|#)$/', $content)) {
                 /* Operador */
                 $token = new Token('T_OPERATOR');
                 $token->setContent($content)->setPosition($i);
@@ -97,6 +97,11 @@ class Lexer extends LexerAbstract
                 /* Adição do Token */
                 $token = new Token($type);
                 $token->setContent($content)->setPosition($position);
+                $this->addToken($token);
+            } elseif (preg_match('/^=$/', $content)) {
+                /* Inferência */
+                $token = new Token('T_ASSIGN');
+                $token->setContent($content)->setPosition($i);
                 $this->addToken($token);
             } elseif (preg_match('/^[ \n\t]$/', $content)) {
                 /* Descarte de Entrada */
