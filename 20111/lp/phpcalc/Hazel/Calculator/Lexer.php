@@ -73,6 +73,31 @@ class Lexer extends LexerAbstract
                 $token = new Token('T_CB');
                 $token->setContent($content)->setPosition($i);
                 $this->addToken($token);
+            } elseif (preg_match('/^[$]$/', $content)) {
+                /* Tipagem do Token */
+                $type = 'T_VAR';
+                /* Posição Inicial */
+                $position = $i;
+                /* Execução de Leitura */
+                $reading = true;
+                /* Avanço de Posição */
+                $i = $i + 1;
+                while ($reading && isset($input[$i])) {
+                    if (preg_match('/^[a-z]$/', $input[$i])) {
+                        /* Identificador */
+                        $content .= $input[$i];
+                        /* Avanço de Posição */
+                        $i = $i + 1;
+                    } else {
+                        /* Parada de Captura */
+                        $reading = false;
+                        $i = $i - 1;
+                    }
+                }
+                /* Adição do Token */
+                $token = new Token($type);
+                $token->setContent($content)->setPosition($position);
+                $this->addToken($token);
             } elseif (preg_match('/^[ \n\t]$/', $content)) {
                 /* Descarte de Entrada */
             } else {
