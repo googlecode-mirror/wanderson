@@ -21,6 +21,7 @@ class Parser extends ParserAbstract
     protected $_mapper = array(
         '+' => 1, '-' => 1,
         '*' => 2, '/' => 2,
+        '^' => 3, '#' => 3,
     );
 
     /**
@@ -68,6 +69,7 @@ class Parser extends ParserAbstract
             if ($token->isA('T_NUMBER')) {
                 $postfix[] = $token;
             } elseif ($token->isA('T_OPERATOR')) {
+                /* @todo Melhorar Pesquisa */
                 $found = false;
                 while (!$found) {
                     if ($stack->isEmpty()) {
@@ -148,6 +150,12 @@ class Parser extends ParserAbstract
             break;
         case '/':
             $result = $valueA / $valueB;
+            break;
+        case '^':
+            $result = pow($valueA, $valueB);
+            break;
+        case '#':
+            $result = pow($valueA, 1/$valueB);
             break;
         }
         /* @todo Verificar Operador Inválido */
