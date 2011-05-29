@@ -27,9 +27,36 @@ class Lexer extends LexerAbstract
             /* Elemento Atual */
             $content = $input[$i];
             if (preg_match('/^[0-9]$/', $content)) {
-                /* Número */
-                $token = new Token('T_NUMBER');
-                $token->setContent($content)->setPosition($i);
+                /* Tipagem do Token */
+                $type = 'T_NUMBER';
+                /* Posição Inicial */
+                $position = $i;
+                /* Execução de Leitura */
+                $reading = true;
+                /* Avanço de Posição */
+                $i = $i + 1;
+                /* Laço de Captura */
+                while ($reading && isset($input[$i])) {
+                    if (preg_match('/^[0-9]$/', $input[$i])) {
+                        /* Número */
+                        $content .= $input[$i];
+                        /* Avanço de Posição */
+                        $i = $i + 1;
+                    } elseif (preg_match('/^[.]$/', $input[$i])) {
+                        /* Ponto Flutuante */
+                        $type = 'T_FLOAT';
+                        $content .= $input[$i];
+                        /* Avanço de Posição */
+                        $i = $i + 1;
+                    } else {
+                        /* Parada de Captura */
+                        $reading = false;
+                        $i = $i - 1;
+                    }
+                }
+                /* Adição de Token */
+                $token = new Token($type);
+                $token->setContent($content)->setPosition($position);
                 $this->addToken($token);
             } elseif (preg_match('/^[+-\\\*\/^#]$/', $content)) {
                 /* Operador */
