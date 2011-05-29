@@ -36,6 +36,16 @@ class Lexer extends LexerAbstract
                 $token = new Token('T_OPERATOR');
                 $token->setContent($content)->setPosition($i);
                 $this->addToken($token);
+            } elseif (preg_match('/^[(]$/', $content)) {
+                /* Parêntese Esquerdo */
+                $token = new Token('T_OB');
+                $token->setContent($content)->setPosition($i);
+                $this->addToken($token);
+            } elseif (preg_match('/^[)]$/', $content)) {
+                /* Parêntese Direito */
+                $token = new Token('T_CB');
+                $token->setContent($content)->setPosition($i);
+                $this->addToken($token);
             } else {
                 throw new Exception("Invalid Input: '$content'");
             }
