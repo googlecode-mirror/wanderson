@@ -76,7 +76,10 @@ class Parser extends ParserAbstract
                         $stack->push($token);
                         $found = true;
                     } else {
-                        if ($this->precedence($token, $stack->top()) > 0) {
+                        if ($stack->top()->isA('T_OB')) {
+                            $stack->push($token);
+                            $found = true;
+                        } elseif ($this->precedence($token, $stack->top()) > 0) {
                             $stack->push($token);
                             $found = true;
                         } else {
@@ -84,8 +87,17 @@ class Parser extends ParserAbstract
                         }
                     }
                 }
+            } elseif ($token->isA('T_OB')) {
+                $stack->push($token);
+            } elseif ($token->isA('T_CB')) {
+                while (!$stack->isEmpty() && !$stack->top()->isA('T_OB')) {
+                    $postfix[] = $stack->pop();
+                }
+                $stack->pop();
             } else {
-                /* @todo Verificar Tipo de Token */
+                $format  = "Invalid Token '%s' @column %d";
+                $message = sprintf($format, $token->getType(), $token->getPosition());
+                throw new Exception($message);
             }
         }
         /* Tokens Restantes na Pilha */
