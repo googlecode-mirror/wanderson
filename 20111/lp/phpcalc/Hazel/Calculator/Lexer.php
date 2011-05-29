@@ -31,7 +31,7 @@ class Lexer extends LexerAbstract
                 $token = new Token('T_NUMBER');
                 $token->setContent($content)->setPosition($i);
                 $this->addToken($token);
-            } elseif (preg_match('/^[+-]$/', $content)) {
+            } elseif (preg_match('/^[+-\\\*\/]$/', $content)) {
                 /* Operador */
                 $token = new Token('T_OPERATOR');
                 $token->setContent($content)->setPosition($i);

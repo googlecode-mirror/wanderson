@@ -50,7 +50,11 @@ class Parser extends ParserAbstract
         return $precedenceA - $precedenceB;
     }
 
-    public function execute()
+    /**
+     * Conversão de Formato Infixo para Posfixo
+     * @return array Fila de Tokens para Cálculo Posfixo
+     */
+    public function toPostfix()
     {
         /* Analisador Léxico */
         $lexer = $this->getLexer();
@@ -64,32 +68,35 @@ class Parser extends ParserAbstract
             if ($token->isA('T_NUMBER')) {
                 $postfix[] = $token;
             } elseif ($token->isA('T_OPERATOR')) {
-                /* Consulta na Pilha */
-                if ($stack->isEmpty()) {
-                    /* Adiciona Elemento */
-                    $stack->push($token);
-                } else {
-                    /* Precedência */
-                    $top = $stack->top();
-                    if ($this->precedence($top, $token) < 0) {
-                        /* Empilhamento */
+                $found = false;
+                while (!$found) {
+                    if ($stack->isEmpty()) {
                         $stack->push($token);
+                        $found = true;
                     } else {
-                        /* Retirada de Elementos */
-                        while ($this->precedence($top, $token) >= 0 && !$stack->isEmpty()) {
-                            $postfix[] = $top;
-                            $top = $stack->pop();
+                        if ($this->precedence($token, $stack->top()) > 0) {
+                            $stack->push($token);
+                            $found = true;
+                        } else {
+                            $postfix[] = $stack->pop();
                         }
-                        /* Adiciona Elemento */
-                        $postfix[] = $token;
                     }
                 }
+            } else {
+                /* @todo Verificar Tipo de Token */
             }
         }
         /* Tokens Restantes na Pilha */
         while (!$stack->isEmpty()) {
             $postfix[] = $stack->pop();
         }
+        return $postfix;
+    }
+
+    public function execute()
+    {
+        /* Conversão para Posfixo */
+        $postfix = $this->toPostfix();
         /* Cálculo */
         $result = $this->_calc($postfix);
         /* Envio do Resultado */
