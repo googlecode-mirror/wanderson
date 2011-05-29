@@ -25,6 +25,12 @@ class Parser extends ParserAbstract
     );
 
     /**
+     * Variáveis Configuradas
+     * @var array
+     */
+    protected $_variables = array();
+
+    /**
      * Construtor
      * Utiliza o Analisador Léxico do Pacote
      */
@@ -66,7 +72,7 @@ class Parser extends ParserAbstract
         /* Execução */
         while (($token = $lexer->getToken()) != null) {
             /* Analisador Sintático */
-            if ($token->isA('T_NUMBER') || $token->isA('T_FLOAT')) {
+            if ($token->isA('T_NUMBER') || $token->isA('T_FLOAT') || $token->isA('T_VAR')) {
                 $postfix[] = $token;
             } elseif ($token->isA('T_OPERATOR')) {
                 /* @todo Melhorar Pesquisa */
@@ -132,7 +138,12 @@ class Parser extends ParserAbstract
                 $result = $this->_operate($token->getContent(), $valueA, $valueB);
                 $stack->push($result);
             } else {
-                $stack->push($token->getContent());
+                if ($token->isA('T_VAR')) {
+                    $value = $this->getValue($token->getContent());
+                    $stack->push($value);
+                } else {
+                    $stack->push($token->getContent());
+                }
             }
         }
         $result = $stack->pop();
@@ -172,5 +183,28 @@ class Parser extends ParserAbstract
         }
         /* @todo Verificar Operador Inválido */
         return $result;
+    }
+
+    /**
+     * Informa o Valor de Variáveis
+     * @param string $name Nome da Variável
+     * @return mixed Valor Solicitado
+     */
+    public function getValue($name)
+    {
+        /* @todo Verificar Existência de Variável */
+        return $this->_variables[$name];
+    }
+
+    /**
+     * Configura o Valor de Variável
+     * @param string $name Nome da Variável
+     * @param mixed $value Valor para Configuração
+     * @return Parser Próprio Objeto para Encadeamento
+     */
+    public function setValue($name, $value)
+    {
+        $this->_variables[$name] = $value;
+        return $this;
     }
 }
