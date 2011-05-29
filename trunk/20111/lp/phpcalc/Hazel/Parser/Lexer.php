@@ -3,6 +3,7 @@
 namespace Hazel\Parser;
 
 use Hazel\Parser\Token;
+use Hazel\Parser\Exception;
 
 /**
  * Analisador Léxico
@@ -53,6 +54,7 @@ abstract class Lexer
     /**
      * Leitura e Análise Léxica da Entrada
      * @param string $input Conteúdo para Análise
+     * @throws Exception Erro de Leitura
      * @return Lexer Próprio Objeto para Encadeamento
      */
     abstract public function read($input);
