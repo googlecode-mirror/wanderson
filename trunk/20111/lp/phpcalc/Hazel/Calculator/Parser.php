@@ -77,7 +77,7 @@ class Parser extends ParserAbstract
         /* Execução */
         while (($token = $lexer->getToken()) != null) {
             /* Analisador Sintático */
-            if ($token->isA('T_NUMBER') || $token->isA('T_FLOAT') || $token->isA('T_VAR')) {
+            if ($token->isA('T_NUMBER') || $token->isA('T_FLOAT') || $token->isA('T_VAR') || $token->isA('T_DEF') || $token->isA('T_BLOCKDEF')) {
                 $postfix[] = $token;
             } elseif ($token->isA('T_OPERATOR') || $token->isA('T_ASSIGN')) {
                 /* @todo Melhorar Pesquisa */
@@ -145,8 +145,17 @@ class Parser extends ParserAbstract
             } elseif ($token->isA('T_ASSIGN')) {
                 $valueB = $stack->pop();
                 $valueA = $stack->pop();
-                $this->setValue($valueA, $valueB);
-                $stack->push($valueB);
+                /* @todo Necessidade de Utilização de Tokens */
+                if (preg_match('/^\\$/', $valueA)) {
+                    /* Variável */
+                    $this->setValue($valueA, $valueB);
+                    $stack->push($valueB);
+                } elseif (preg_match('/^\\\\/', $valueA)) {
+                    /* Definição de Comando */
+                    $this->setDefinition($valueA, $valueB);
+                    /* Vazio */
+                    $stack->push(0);
+                }
             } else {
                 $stack->push($token->getContent());
             }
@@ -206,7 +215,20 @@ class Parser extends ParserAbstract
     {
         /* @todo Melhorias em Filtragem */
         if (is_string($value) && preg_match('/^\\$/', $value)) {
+            /* Busca de Variável */
             $value = $this->getValue($value);
+        }
+        if (is_string($value) && preg_match('/^\\\\/', $value)) {
+            /* @todo Melhorar Caso */
+            /* Processar Subcomando */
+            $lexer = new Lexer();
+            $swap  = $this->_lexer;
+            $this->_lexer = $lexer;
+            /* Leitura de Bloco */
+            $block = $this->getDefinition($value);
+            $lexer->read(str_replace(array('{','}'), array('',''), $block));
+            $value = $this->execute();
+            $this->_lexer = $swap;
         }
         return $value;
     }
@@ -254,6 +276,17 @@ class Parser extends ParserAbstract
     public function setDefinition($name, $block)
     {
         $this->_definitions[$name] = $block;
+        return $this;
+    }
+
+    /**
+     * Limpeza de Variáveis e Definições
+     * @return Parser Próprio Objeto para Encadeamento
+     */
+    public function clear()
+    {
+        $this->_variables = array();
+        $this->_definitions = array();
         return $this;
     }
 }
