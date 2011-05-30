@@ -98,7 +98,57 @@ class Lexer extends LexerAbstract
                 $token = new Token($type);
                 $token->setContent($content)->setPosition($position);
                 $this->addToken($token);
-            } elseif (preg_match('/^=$/', $content)) {
+            } elseif (preg_match('/^\\\\$/', $content)) {
+                /* Comando */
+                $type = 'T_DEF';
+                /* Posição Inicial */
+                $position = $i;
+                /* Execução de Leitura */
+                $reading = true;
+                /* Avanço de Posição */
+                $i = $i + 1;
+                while ($reading && isset($input[$i])) {
+                    if (preg_match('/^[a-z]$/', $input[$i])) {
+                        /* Identificador */
+                        $content .= $input[$i];
+                        /* Avanço de Posição */
+                        $i = $i + 1;
+                    } else {
+                        /* Parada de Captura */
+                        $reading = false;
+                        $i = $i - 1;
+                    }
+                }
+                /* Adição do Token */
+                $token = new Token($type);
+                $token->setContent($content)->setPosition($position);
+                $this->addToken($token);
+            } elseif (preg_match('/^{$/', $content)) {
+                /* Bloco de Definição */
+                $type = 'T_BLOCKDEF';
+                /* Posição Inicial */
+                $position = $i;
+                /* Execução de Leitura */
+                $reading = true;
+                /* Avanço de Posição */
+                $i = $i + 1;
+                while ($reading && isset($input[$i])) {
+                    if (!preg_match('/^}$/', $input[$i])) {
+                        /* Bloco de Comando */
+                        $content .= $input[$i];
+                        /* Avanço de Posição */
+                        $i = $i + 1;
+                    } else {
+                        /* Capturar Final */
+                        $content .= $input[$i];
+                        /* Parada de Captura */
+                        $reading = false;
+                    }
+                }
+                $token = new Token($type);
+                $token->setContent($content)->setPosition($position);
+                $this->addToken($token);
+            }elseif (preg_match('/^=$/', $content)) {
                 /* Inferência */
                 $token = new Token('T_ASSIGN');
                 $token->setContent($content)->setPosition($i);
