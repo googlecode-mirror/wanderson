@@ -32,6 +32,12 @@ class Parser extends ParserAbstract
     protected $_variables = array();
 
     /**
+     * Definições de Comandos
+     * @var array
+     */
+    protected $_definitions = array();
+
+    /**
      * Construtor
      * Utiliza o Analisador Léxico do Pacote
      */
@@ -225,6 +231,29 @@ class Parser extends ParserAbstract
     public function setValue($name, $value)
     {
         $this->_variables[$name] = $value;
+        return $this;
+    }
+
+    /**
+     * Informa o Bloco de Comando para Definição
+     * @param string $name Nome da Definição
+     * @return mixed Valor Solicitado
+     */
+    public function getDefinition($name)
+    {
+        /* @todo Verificar Existência de Definição */
+        return $this->_definitions[$name];
+    }
+
+    /**
+     * Configura um Bloco de Comando
+     * @param string $name Nome da Definição
+     * @param mixed $block Bloco para Configuração
+     * @return Parser Próprio Objeto para Encadeamento
+     */
+    public function setDefinition($name, $block)
+    {
+        $this->_definitions[$name] = $block;
         return $this;
     }
 }
