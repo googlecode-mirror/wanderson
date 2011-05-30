@@ -396,5 +396,35 @@ class CalculatorTest extends PHPUnit_Framework_TestCase
         $token = $lexer->clear()->read('{1+1}')->getToken();
         $this->assertTrue($token->isA('T_BLOCKDEF'));
         $this->assertEquals('{1+1}', $token->getContent());
+
+        /* Análise Sintática */
+        $lexer->clear()->read('\\mul={1*2}');
+        $postfix = $parser->toPostfix();
+        $result  = '';
+        foreach ($postfix as $token) {
+            $result .= $token->getContent();
+        }
+        $this->assertEquals('\\mul{1*2}=', $result);
+
+        /* Análise Sintática */
+        $lexer->rewind();
+        $parser->execute();
+        $this->assertEquals('{1*2}', $parser->getDefinition('\\mul'));
+
+        /* Análise Sintática */
+        $this->assertEquals(2, $parser->parse('\\mul'));
+    }
+
+    public function testBlockDefinition()
+    {
+        $parser = new Hazel\Calculator\Parser();
+
+        /* Análise Sintática */
+        $this->assertEquals(1, $parser->parse('$value = 1'));
+        $this->assertEquals(0, $parser->parse('\\plus = {$value = $value + 1}'));
+        $this->assertEquals(1, $parser->parse('$value'));
+        $this->assertEquals(2, $parser->parse('\\plus'));
+        $this->assertEquals(2, $parser->parse('$value'));
+        $this->assertEquals(6, $parser->parse('\\plus + $value'));
     }
 }
