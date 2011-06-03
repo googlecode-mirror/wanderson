@@ -289,4 +289,22 @@ class Parser extends ParserAbstract
         $this->_definitions = array();
         return $this;
     }
+
+    /**
+     * Informa o Conjunto de Variáveis
+     * @return array Elementos Solicitados
+     */
+    public function getValues()
+    {
+        return $this->_variables;
+    }
+
+    /**
+     * Informa o Conjunto de Definições
+     * @return array Elementos Solicitados
+     */
+    public function getDefinitions()
+    {
+        return $this->_definitions;
+    }
 }
