@@ -1,0 +1,70 @@
+\documentclass{article}
+
+% Configurações Genéricas ------------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{sbc-template}
+\usepackage{graphicx}
+
+% Informações Pessoais ---------------------------------------------------------
+\title{Especificação de Trabalho de Grau B}
+\author{Wanderson Henrique Camargo Rosa\inst{1}}
+\address{Linguagens de Programação 2011/1\\Centro de Ciências Exatas e
+Tecnológicas\\Universidade do Vale do Rio dos Sinos ---
+UNISINOS\email{wandersonwhcr@gmail.com}}
+
+\hyphenation{antlrphpruntime postgresql}
+
+% Documento --------------------------------------------------------------------
+\begin{document}
+
+\maketitle{}
+
+% Introdução -------------------------------------------------------------------
+\section{Introdução}
+\label{sec:introducao}
+
+Este documento tem por objetivo especificar brevemente a idéia inicial sobre o
+desenvolvimento do Trabalho de Grau B desta disciplina.
+
+Será criado um sistema \textit{web} capaz de gerenciar artigos no formato
+disponível pela Sociedade Brasileira de Computação (SBC), escritos utilizando um
+subconjunto da linguagem de marcação de texto Wiki Creole. O sistema deverá ser
+capaz de traduzir este conteúdo para o formato LaTeX, disponibilizando-o para o
+usuário. Também deve ser possível a exportação do conteúdo para arquivo no
+formato PDF.
+
+% Motivação --------------------------------------------------------------------
+\section{Motivação}
+\label{sec:motivacao}
+
+Documentos técnicos e padronizados geralmente obedecem a regras específicas de
+formatação. A comunidade acadêmica, em muitos casos, desconhece ferramentas que
+podem facilitar a criação de documentos científicos, abstraindo a formatação dos
+mesmos.
+
+A linguagem baseada em marcação de textos \LaTeX{} pode auxiliar o autor 
+
+% Tecnologias ------------------------------------------------------------------
+\section{Tecnologias}
+\label{sec:tecnologias}
+
+Primeiramente será criada uma máquina virtual para testes com o Sistema
+Operacional GNU/Linux Debian. Após, deverão ser instalados um serviço de conexão
+HTTP utilizando Lighttpd e possibilidade a interpretação de arquivos descritos
+sobre a linguagem de programação PHP. As informações devem ser armazenadas sobre
+o banco de dados PostgreSQL. O sistema será desenvolvido com a linguagem de
+programação PHP utilizando Zend Framework na estrutura do servidor e Javascript
+com Dojo Toolkit no cliente.
+
+O tradutor será gerado a partir da especificação disponível sobre a Wiki Creole
+com o aplicativo ANTLR e exportação alvo para linguagem PHP com a extensão
+ANTLRPhpRuntime.
+
+Para interpretação do documento resultante no formato \LaTeX{}, pacotes serão
+instalados no Sistema Operacional para compilação, gerando assim os documentos
+no formato PDF. A padronização do documento conforme normas da SBC dar-se-á a
+partir de pacote disponibilizado pela própria instituição no formato \LaTeX{}.
+
+\end{document}
