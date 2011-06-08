@@ -31,8 +31,8 @@ desenvolvimento do Trabalho de Grau B desta disciplina.
 Será criado um sistema \textit{web} capaz de gerenciar artigos no formato
 disponível pela Sociedade Brasileira de Computação (SBC), escritos utilizando um
 subconjunto da linguagem de marcação de texto Wiki Creole. O sistema deverá ser
-capaz de traduzir este conteúdo para o formato LaTeX, disponibilizando-o para o
-usuário. Também deve ser possível a exportação do conteúdo para arquivo no
+capaz de traduzir este conteúdo para o formato \LaTeX{}, disponibilizando-o para
+o usuário. Também deve ser possível a exportação do conteúdo para arquivo no
 formato PDF.
 
 % Motivação --------------------------------------------------------------------
@@ -44,7 +44,39 @@ formatação. A comunidade acadêmica, em muitos casos, desconhece ferramentas q
 podem facilitar a criação de documentos científicos, abstraindo a formatação dos
 mesmos.
 
-A linguagem baseada em marcação de textos \LaTeX{} pode auxiliar o autor 
+O \LaTeX{} é um conjunto de macros e programas que tornam o \TeX{} mais fácil de
+ser usar, possuindo muitos modelos e estilos disponíveis para formatos
+específicos \cite{p241-salzberg}. \TeX{} é reconhecido pela sua ``curva íngrime
+de aprendizado'' e um usuário iniciante adapta-se mais rapidamente se já conhece
+alguma linguagem de marcação de textos.
+
+Por este motivo, podemos procurar uma outra linguagem que abstraia alguns
+elementos balanceados na sintaxe do \LaTeX{}, retirando estruturas que exigem
+abertura e fechamento de blocos. Como existe uma popularização dos formatos
+Wiki, podemos trabalhar com esta linguagem e transformar o conteúdo do texto em
+\LaTeX{}, apresentando um ambiente mais amigável de criação de artigos aos
+usuários iniciantes.
+
+% Bases de Estudo --------------------------------------------------------------
+\section{Bases de Estudo}
+\label{sec:bases-estudo}
+
+Em 2006 no Simpósio Internacional sobre Wikis, houve o início da padronização da
+linguagem de marcação de textos chamada Wiki Creole \cite{a21-junghans}. Porém,
+esta padronização foi desenvolvida sem métodos formais. Com a necessidade de
+formalização, foi desenvolvida uma gramática para reconhecimento da linguagem
+utilizando ANTLR \cite{a4-junghans}.
+
+Levando em consideração a popularização desta linguagem e especificação formal
+completa, podemos utilizar um conjunto menor de regras desta gramática e gerar
+um documento com a mesma estrutura lógica utilizando \LaTeX{}.
+
+Um projeto semelhante usufrui de um programa capaz de transformar apresentações
+criadas em \LaTeX{} com a classe Prosper em páginas Wiki, porém buscando
+organizar notas de aula colaborativas \cite{p267-oneill}. Também existe um
+sistema capaz de gerenciar exercícios para alunos utilizando uma extensão do
+\LaTeX{}, onde um usuário pode escolher os exercícios e gerar um arquivo PDF
+para impressão \cite{p161-gregorio-rodriguez}.
 
 % Tecnologias ------------------------------------------------------------------
 \section{Tecnologias}
@@ -66,5 +98,26 @@ Para interpretação do documento resultante no formato \LaTeX{}, pacotes serão
 instalados no Sistema Operacional para compilação, gerando assim os documentos
 no formato PDF. A padronização do documento conforme normas da SBC dar-se-á a
 partir de pacote disponibilizado pela própria instituição no formato \LaTeX{}.
+
+% Considerações Finais ---------------------------------------------------------
+\section{Considerações Finais}
+\label{sec:consideracoes}
+
+Quando é necessária a criação de um documento que possui sempre o mesmo formato,
+podemos trabalhar com ferramentas que facilitam o projeto. O \LaTeX{} é uma
+linguagem para marcação de textos que busca separar a lógica do documento da
+formatação.
+
+Em contrapartida, usuários iniciantes que aspiram a aprender \LaTeX{} podem
+considerar a linguagem de compreensão complicada, muitas vezes pela necessidade
+de balanceamento em blocos de execução.
+
+A utilização da Wiki Creole como linguagem de alto nível e que deve receber um
+tradutor para a \LaTeX{} pode ser um caminho interessante na popularização de
+documentos formatados utilizando determinadas estruturas padrão.
+
+% Referências ------------------------------------------------------------------
+\bibliographystyle{sbc}
+\bibliography{document}
 
 \end{document}
