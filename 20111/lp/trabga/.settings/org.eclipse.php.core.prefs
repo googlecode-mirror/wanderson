@@ -1,0 +1,10 @@
+#Thu Jun 09 01:28:47 BRT 2011
+eclipse.preferences.version=1
+include_path=0;/Wiki Artigos\u00055;org.eclipse.dltk.USER_LIBRARY/Zend Framework
+org.eclipse.php.core.phpForamtterIndentationSize=4
+org.eclipse.php.core.phpForamtterUseTabs=false
+org.eclipse.php.core.taskCaseSensitive=enabled
+org.eclipse.php.core.taskPriorities=NORMAL
+org.eclipse.php.core.taskTags=@todo
+phpVersion=php5.3
+useShortTags=false
