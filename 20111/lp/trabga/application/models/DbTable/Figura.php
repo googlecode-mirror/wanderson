@@ -25,7 +25,7 @@ class Application_Model_DbTable_Figura extends Zend_Db_Table_Abstract
      * Chaves Primárias
      * @var array
      */
-    protected $_primaries = array('figura');
+    protected $_primaries = array('idfigura');
 
     /**
      * Tabelas Dependentes
