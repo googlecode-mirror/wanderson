@@ -15,7 +15,19 @@
       </controllersDirectory>
       <formsDirectory enabled="false"/>
       <layoutsDirectory enabled="false"/>
-      <modelsDirectory/>
+      <modelsDirectory>
+        <dbTableDirectory>
+          <dbTableFile dbTableName="Artigo"/>
+          <dbTableFile dbTableName="Autor"/>
+          <dbTableFile dbTableName="Figura"/>
+          <dbTableFile dbTableName="Instituicao"/>
+          <dbTableFile dbTableName="RArtigoAutor"/>
+          <dbTableFile dbTableName="RArtigoFigura"/>
+          <dbTableFile dbTableName="RArtigoReferencia"/>
+          <dbTableFile dbTableName="Referencia"/>
+          <dbTableFile dbTableName="Usuario"/>
+        </dbTableDirectory>
+      </modelsDirectory>
       <modulesDirectory enabled="false"/>
       <viewsDirectory>
         <viewScriptsDirectory>
