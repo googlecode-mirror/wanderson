@@ -1,0 +1,12 @@
+<h1>Erro Encontrado</h1>
+<h2><?php echo $this->message ?></h2>
+<?php if (isset($this->exception)): ?>
+<h3>Informações:</h3>
+<p>
+    <b>Message:</b> <?php echo $this->exception->getMessage() ?>
+</p>
+<h3>Pilha de Execução:</h3>
+<pre><?php echo $this->exception->getTraceAsString() ?></pre>
+<h3>Parâmetros da Requisição:</h3>
+<pre><?php echo var_export($this->request->getParams(), true) ?></pre>
+<?php endif ?>
