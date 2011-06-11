@@ -42,7 +42,7 @@ class Application_Model_DbTable_Usuario extends Local_Db_TableAbstract
     protected $_referenceMap = array(
         'Autor' => array(
             'columns' => array('idusuario'),
-            'refColumns' => array('idusuario'),
+            'refColumns' => array('idautor'),
             'refTableClass' => 'Application_Model_DbTable_Autor',
         ),
     );

@@ -28,8 +28,24 @@ class UsuarioController extends Local_Controller_ActionAbstract
         // Formulário
         $form = $this->_getForm();
 
+        // @todo Fornecer o Identificador do Usuário
+        $idusuario = 1;
+
+        // Pesquisa do Usuário
+        $table   = $this->_getDbTable();
+        $element = $table->find($idusuario)->current();
+
+        // Elemento não Encontrado
+        if ($element === null) {
+            throw new Zend_Db_Exception('Invalid Element');
+        }
+
         // Ignorar Nome de Usuário
         $form->identidade->setIgnore(true);
+
+        // Valores para Preenchimento
+        $autor = $element->findParentRow('Application_Model_DbTable_Autor');
+        $instituicao = $autor->findParentRow('Application_Model_DbTable_Instituicao');
 
         if ($this->getRequest()->isPost()) {
             // Dados Enviados
@@ -37,18 +53,55 @@ class UsuarioController extends Local_Controller_ActionAbstract
             if ($form->isValid($data)) {
                 $data = $form->getValues();
 
-                // Filtro Inicial
-                Zend_Debug::dump($data);
+                // Banco de Dados
+                $table->getAdapter()->beginTransaction();
+                try {
+
+                    // Usuário
+                    if ($data['credencial'] !== null) {
+                        $credencial = md5($data['credencial']);
+                        $element->credencial = $credencial;
+                        $element->save();
+                    }
+
+                    // Autor
+                    $autor->nome  = $data['autor']['nome'];
+                    $autor->email = $data['autor']['email'];
+                    $autor->save();
+
+                    // Endereço
+                    $instituicao->endereco = $data['autor']['instituicao']['endereco'];
+                    $instituicao->save();
+
+                    $table->getAdapter()->commit();
+
+                } catch (Zend_Db_Exception $e) {
+                    $table->getAdapter()->rollBack();
+                    throw $e;
+                }
+
+                $this->_helper->flashMessenger('success');
+                $this->_helper->redirector('index');
 
             }
+        } else {
+
+            // População
+            $form->autor->nome->setValue($autor->nome);
+            $form->autor->email->setValue($autor->email);
+            $form->autor->instituicao->endereco->setValue($instituicao->endereco);
+
         }
 
+        // População Padrão
+        $form->identidade->setValue($element->identidade);
+        $form->credencial->setValue(null);
+
         // Nome do Usuário é Preenchido e Desabilitado
-        $form->identidade
-             ->setValue('wandersonwhcr')
-             ->setAttrib('disabled', true);
+        $form->identidade->setAttrib('disabled', true);
 
         // Camada de Visualização
         $this->view->form = $form;
+        $this->view->messages = $this->_helper->flashMessenger->getMessages();
     }
 }
