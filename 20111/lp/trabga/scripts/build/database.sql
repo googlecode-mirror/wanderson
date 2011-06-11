@@ -77,3 +77,10 @@ CREATE TABLE "sistema".figura (
     FOREIGN KEY(idusuario) REFERENCES "sistema".usuario(idusuario)
         ON UPDATE CASCADE ON DELETE CASCADE
 );
+
+-- Valores Iniciais
+INSERT INTO "sistema".instituicao(endereco) VALUES ('Sistema');
+INSERT INTO "sistema".autor(nome,email,idinstituicao) VALUES
+    ('Administrador','root@localhost',1);
+INSERT INTO "sistema".usuario(idusuario,identidade,credencial) VALUES
+    (1,'root',MD5('102030'));
