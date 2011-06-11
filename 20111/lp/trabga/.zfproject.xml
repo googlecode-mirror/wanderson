@@ -18,6 +18,9 @@
           <actionMethod actionName="edit"/>
           <actionMethod actionName="remove"/>
         </controllerFile>
+        <controllerFile controllerName="Usuario">
+          <actionMethod actionName="index"/>
+        </controllerFile>
       </controllersDirectory>
       <formsDirectory>
         <formFile formName="Figura"/>
@@ -56,6 +59,9 @@
           <viewControllerScriptsDirectory forControllerName="Figura">
             <viewScriptFile forActionName="edit"/>
           </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Usuario">
+            <viewScriptFile forActionName="index"/>
+          </viewControllerScriptsDirectory>
         </viewScriptsDirectory>
         <viewHelpersDirectory/>
         <viewFiltersDirectory enabled="false"/>
@@ -91,6 +97,7 @@
         <testApplicationBootstrapFile filesystemName="bootstrap.php"/>
         <testApplicationControllerDirectory>
           <testApplicationControllerFile filesystemName="FiguraControllerTest.php"/>
+          <testApplicationControllerFile filesystemName="UsuarioControllerTest.php"/>
         </testApplicationControllerDirectory>
       </testApplicationDirectory>
       <testLibraryDirectory>

@@ -19,7 +19,8 @@ class Application_Form_Usuario extends Local_Form_FormAbstract
         // Credenciais
         $credencial = new Zend_Dojo_Form_Element_PasswordTextBox('credencial');
         $credencial->setLabel('Senha')
-                   ->setDescription('Credenciais para Autenticação');
+                   ->setDescription('Credenciais para Autenticação')
+                   ->addFilter(new Zend_Filter_Null());
         $this->addElement($credencial);
 
         // Autor

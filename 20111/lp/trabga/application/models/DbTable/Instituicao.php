@@ -7,7 +7,7 @@
  * @package    Application_Model
  * @subpackage DbTable
  */
-class Application_Model_DbTable_Instituicao extends Zend_Db_Table_Abstract
+class Application_Model_DbTable_Instituicao extends Local_Db_TableAbstract
 {
     /**
      * Esquema

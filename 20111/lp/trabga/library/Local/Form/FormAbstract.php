@@ -25,6 +25,7 @@ abstract class Local_Form_FormAbstract extends Zend_Dojo_Form
         $form->loadDefaultDecorators();
         $form->removeDecorator('Form');
         $form->addDecorator('Fieldset')->addDecorator('DtDdWrapper');
+        $form->setElementsBelongTo($name);
         return parent::addSubForm($form, $name, $order);
     }
 }
