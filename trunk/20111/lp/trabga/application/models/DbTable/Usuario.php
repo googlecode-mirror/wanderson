@@ -27,12 +27,10 @@ class Application_Model_DbTable_Usuario extends Local_Db_TableAbstract
      */
     protected $_primaries = array('idusuario');
 
-    /**
-     * Tabelas Dependentes
-     * @var array
-     */
     protected $_dependentTables = array(
-        'RAutorArtigo' => 'Application_Model_DbTable_RAutorArtigo',
+        'Artigo'     => 'Application_Model_DbTable_Artigo',
+        'Figura'     => 'Application_Model_DbTable_Figura',
+        'Referencia' => 'Application_Model_DbTable_Referencia',
     );
 
     /**

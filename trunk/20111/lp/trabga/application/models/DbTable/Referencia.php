@@ -27,11 +27,14 @@ class Application_Model_DbTable_Referencia extends Local_Db_TableAbstract
     protected $_primaries = array('idreferencia');
 
     /**
-     * Mapa de Referências
+     * Mapa de Referência
      * @var array
      */
-    protected $_dependentTables = array(
-        'RArtigoAutor' => 'Application_Model_DbTable_RArtigoAutor',
+    protected $_referenceMap = array(
+        'Usuario' => array(
+            'columns' => array('idusuario'),
+            'refColumns' => array('idusuario'),
+            'refTableClass' => 'Application_Model_DbTable_Usuario',
+        ),
     );
 }
-

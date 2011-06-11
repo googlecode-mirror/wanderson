@@ -33,8 +33,6 @@ class Application_Model_DbTable_Artigo extends Local_Db_TableAbstract
      */
     protected $_dependentTables = array(
         'RArtigoAutor' => 'Application_Model_DbTable_RArtigoAutor',
-        'RArtigoFigura' => 'Application_Model_DbTable_RArtigoFigura',
-        'RArtigoReferencia' => 'Application_Model_DbTable_RArtigoReferencia',
     );
 
     /**
