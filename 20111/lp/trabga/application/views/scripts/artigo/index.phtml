@@ -1,0 +1,26 @@
+<h2>Listar Artigos</h2>
+<table>
+    <thead>
+        <tr>
+            <td>Título</td>
+            <td>&nbsp;</td>
+        </tr>
+    </thead>
+    <tbody>
+<?php if (count($this->result) > 0) : ?>
+<?php foreach ($this->result as $element) : ?>
+        <tr>
+            <td><?php echo $this->escape($element->titulo) ?></td>
+            <td>
+                <a href="<?php echo $this->url(array('action' => 'edit', 'idartigo' => $element->idartigo)) ?>">Editar</a>
+                <a href="<?php echo $this->url(array('action' => 'remove', 'idartigo' => $element->idartigo)) ?>">Remover</a>
+            </td>
+        </tr>
+<?php endforeach ?>
+<?php else : ?>
+        <tr>
+            <td colspan="2">Lista Vazia</td>
+        </tr>
+<?php endif ?>
+    </tbody>
+</table>
