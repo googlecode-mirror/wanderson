@@ -19,4 +19,12 @@ abstract class Local_Form_FormAbstract extends Zend_Dojo_Form
         // Superclasse
         parent::__construct($options);
     }
+
+    public function addSubForm(Zend_Form $form, $name, $order = null)
+    {
+        $form->loadDefaultDecorators();
+        $form->removeDecorator('Form');
+        $form->addDecorator('Fieldset')->addDecorator('DtDdWrapper');
+        return parent::addSubForm($form, $name, $order);
+    }
 }

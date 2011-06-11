@@ -20,7 +20,7 @@ class Application_Form_Usuario extends Local_Form_FormAbstract
         $credencial = new Zend_Dojo_Form_Element_PasswordTextBox('credencial');
         $credencial->setLabel('Senha')
                    ->setDescription('Credenciais para Autenticação');
-        $this->addElement($identidade);
+        $this->addElement($credencial);
 
         // Autor
         $autor = new Application_Form_Autor();
