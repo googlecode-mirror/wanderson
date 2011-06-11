@@ -23,15 +23,16 @@ class Application_Form_Autor extends Local_Form_FormAbstract
         // Email
         $tbAutor = new Application_Model_DbTable_Autor();
         $options = array(
-            'table' => $tbAutor->getTableName(),
-            'field' => 'email',
+            'table'  => $tbAutor->info(Zend_Db_Table::NAME),
+            'schema' => $tbAutor->info(Zend_Db_Table::SCHEMA),
+            'field'  => 'email',
         );
         $email = new Zend_Dojo_Form_Element_TextBox('email');
         $email->setLabel('Email')
               ->setDescription('Email para Contato')
               ->addValidator(new Zend_Validate_EmailAddress())
               ->addValidator(new Zend_Validate_StringLength(1,100))
-              ->addValidator(new Zend_Validate_Db_NoRecordExists($options))
+              ->addValidator(new Local_Validate_Db_NoRecordExists($options))
               ->addFilter(new Zend_Filter_StringTrim())
               ->setRequired(true);
         $this->addElement($email);
