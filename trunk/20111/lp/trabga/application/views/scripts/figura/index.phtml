@@ -1,0 +1,35 @@
+<h2>Listar Figuras</h2>
+<?php if (count($this->messages) > 0) : ?>
+<ul>
+<?php foreach ($this->messages as $message) : ?>
+    <li><?php echo $this->escape($message) ?></li>
+<?php endforeach ?>
+</ul>
+<?php endif ?>
+<table>
+    <thead>
+        <tr>
+            <th>Legenda</th>
+            <th>Identificador</th>
+            <th>&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+<?php if (count($this->result) > 0) : ?>
+<?php foreach ($this->result as $element) : ?>
+        <tr>
+            <td><?php echo $this->escape($element->legenda) ?></td>
+            <td><?php echo $this->escape($element->identificador) ?></td>
+            <td>
+                <a href="<?php echo $this->url(array('action' => 'edit', 'idfigura' => $element->idfigura)) ?>">Editar</a>
+                <a href="<?php echo $this->url(array('action' => 'remove', 'idfigura' => $element->idfigura)) ?>">Remover</a>
+            </td>
+        </tr>
+<?php endforeach ?>
+<?php else : ?>
+        <tr>
+            <td colspan="3">Lista Vazia</td>
+        </tr>
+<?php endif ?>
+    </tbody>
+</table>
