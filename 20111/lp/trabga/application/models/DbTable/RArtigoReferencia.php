@@ -38,8 +38,8 @@ class Application_Model_DbTable_RArtigoReferencia extends Local_Db_TableAbstract
             'refTableClass' => 'Application_Model_DbTable_Artigo',
         ),
         'Referencia' => array(
-            'columns' => array('referencia'),
-            'refColumns' => array('idautor'),
+            'columns' => array('idreferencia'),
+            'refColumns' => array('idreferencia'),
             'refTableClass' => 'Application_Model_DbTable_Referencia',
         ),
     );

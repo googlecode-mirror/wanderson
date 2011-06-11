@@ -40,7 +40,7 @@ class Application_Model_DbTable_RArtigoFigura extends Local_Db_TableAbstract
         'Figura' => array(
             'columns' => array('idfigura'),
             'refColumns' => array('idfigura'),
-            'refTableClass' => 'Application_Model_DbTable_Autor',
+            'refTableClass' => 'Application_Model_DbTable_Figura',
         ),
     );
 }

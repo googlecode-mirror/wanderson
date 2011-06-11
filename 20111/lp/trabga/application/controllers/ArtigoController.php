@@ -112,7 +112,13 @@ class ArtigoController extends Local_Controller_ActionAbstract
             $form->conteudo->setValue($element->conteudo);
         }
 
+        // Anexos
+        $figuras     = $element->findManyToManyRowset('Figura','RArtigoFigura');
+        $referencias = $element->findManyToManyRowset('Referencia','RArtigoReferencia');
+
         // Camada de Visualização
         $this->view->form = $form;
+        $this->view->figuras = $figuras;
+        $this->view->referencias = $referencias;
     }
 }
