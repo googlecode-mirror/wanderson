@@ -24,5 +24,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         // Meta
         $view->headMeta()
              ->appendHttpEquiv('Content-Type', 'text/html; charset=utf-8');
+        // Link
+        $view->headLink()
+             ->appendStylesheet('/js/dojo/resources/dojo.css');
+        // Dojo Toolkit
+        Zend_Dojo::enableView($view);
+        $view->dojo()
+             ->setLocalPath('/js/dojo/dojo.js')
+             ->addStylesheetModule('dijit.themes.claro');
     }
 }
