@@ -20,7 +20,7 @@ class Application_Form_Instituicao extends Zend_Dojo_Form
             ->setRequired(true)
             ->setAllowEmpty(false)
             ->setDescription('Endereço Completo da Instituição');
-        $this->addElement($submit);
+        $this->addElement($endereco);
 
         // Botão de Envio
         $submit = new Local_Form_Element_SubmitButton('submit');
