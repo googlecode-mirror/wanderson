@@ -23,7 +23,7 @@ class Application_Form_Autor extends Local_Form_FormAbstract
         // Email
         $tbAutor = new Application_Model_DbTable_Autor();
         $options = array(
-            'table' => $tbAutor,
+            'table' => $tbAutor->info(Zend_Db_Table::NAME),
             'field' => 'email',
         );
         $email = new Zend_Dojo_Form_Element_TextBox('email');
