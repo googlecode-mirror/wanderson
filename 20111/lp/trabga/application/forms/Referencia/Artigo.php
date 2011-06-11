@@ -6,7 +6,7 @@
  * @category Application
  * @package  Application_Form
  */
-class Application_Form_Artigo extends Application_Form_Referencia
+class Application_Form_Referencia_Artigo extends Application_Form_Referencia
 {
     public function init()
     {

@@ -18,7 +18,7 @@ class ReferenciaController extends Local_Controller_ActionAbstract
      * Formulário Padrão da Controladora
      * @var string
      */
-    protected $_formClass = 'Application_Form_Artigo';
+    protected $_formClass = 'Application_Form_Referencia_Artigo';
 
     /**
      * Tipos de Referências Disponíveis
@@ -42,7 +42,7 @@ class ReferenciaController extends Local_Controller_ActionAbstract
         if (!in_array($tipo, $this->_references)) {
             throw new Zend_Controller_Action_Exception('Invalid Referencia');
         }
-        $classname = 'Application_Form_' . $tipo;
+        $classname = 'Application_Form_Referencia_' . $tipo;
         $reflect = new Zend_Reflection_Class($classname);
         return $reflect->newInstance(array());
     }
