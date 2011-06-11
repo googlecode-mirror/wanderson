@@ -36,6 +36,11 @@ class Application_Form_Autor extends Local_Form_FormAbstract
               ->setRequired(true);
         $this->addElement($email);
 
+        // Instituição
+        $instituicao = new Application_Form_Instituicao();
+        $instituicao->removeElement('submit');
+        $this->addSubForm($instituicao, 'instituicao');
+
         // Botão de Envio
         $submit = new Local_Form_Element_SubmitButton('submit');
         $this->addElement($submit);
