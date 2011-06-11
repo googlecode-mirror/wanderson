@@ -6,7 +6,7 @@
  * @author Wanderson Henrique Camargo Rosa
  *
  */
-class Application_Model_DbTable_Referencia extends Zend_Db_Table_Abstract
+class Application_Model_DbTable_Referencia extends Local_Db_TableAbstract
 {
     /**
      * Esquema

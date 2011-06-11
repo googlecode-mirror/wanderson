@@ -15,7 +15,7 @@ class Application_Form_Autor extends Local_Form_FormAbstract
         $nome->setLabel('Nome')
              ->setDescription('Nome do Autor')
              ->addValidator(new Zend_Validate_StringLength(0,100))
-             ->addValidator(new Zend_Validate_Alpha())
+             ->addValidator(new Zend_Validate_Alpha(true))
              ->addFilter(new Zend_Filter_StringTrim())
              ->setRequired(true);
         $this->addElement($nome);
@@ -23,7 +23,7 @@ class Application_Form_Autor extends Local_Form_FormAbstract
         // Email
         $tbAutor = new Application_Model_DbTable_Autor();
         $options = array(
-            'table' => $tbAutor->info(Zend_Db_Table::NAME),
+            'table' => $tbAutor->getTableName(),
             'field' => 'email',
         );
         $email = new Zend_Dojo_Form_Element_TextBox('email');

@@ -7,7 +7,7 @@
  * @package    Application_Model
  * @subpackage DbTable
  */
-class Application_Model_DbTable_RArtigoFigura extends Zend_Db_Table_Abstract
+class Application_Model_DbTable_RArtigoFigura extends Local_Db_TableAbstract
 {
     /**
      * Esquema
