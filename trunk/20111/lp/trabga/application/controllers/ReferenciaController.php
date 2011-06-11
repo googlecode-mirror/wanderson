@@ -53,7 +53,7 @@ class ReferenciaController extends Local_Controller_ActionAbstract
     public function indexAction()
     {
         // Banco de Dados
-        $table = $this->_getDbTable();
+        $table  = $this->_getDbTable();
         $select = $table->select()->order('idreferencia ASC');
         $result = $table->fetchAll($select);
 
@@ -70,24 +70,8 @@ class ReferenciaController extends Local_Controller_ActionAbstract
      */
     public function createAction()
     {
-        // Anexo a Artigo
-        $artigo = null;
-        if ($this->_hasParam('idartigo')) {
-            $idartigo = (int) $this->_getParam('idartigo');
-            $tbArtigo = new Application_Model_DbTable_Artigo();
-            $artigo   = $tbArtigo->find($idartigo)->current();
-            if ($artigo === null) {
-                throw new Zend_Db_Exception('Invalid Artigo Element');
-            }
-        }
-
         // Tipo da Referência
         $tipo = $this->_getParam('tipo', 'artigo');
-
-        // Anexo ao Artigo
-        $idartigo = (int) $this->_getParam('idartigo');
-        $tbArtigo = new Application_Model_DbTable_Artigo();
-        $artigo   = $tbArtigo->find($idartigo)->current();
 
         // Formulário
         $form = $this->_getFormReferencia($tipo);
@@ -114,17 +98,6 @@ class ReferenciaController extends Local_Controller_ActionAbstract
                 $element->conteudo      = $conteudo;
 
                 $element->save();
-
-                // Artigo Informado ?
-                if ($artigo !== null) {
-                    $tbRArtigoReferencia = new Application_Model_DbTable_RArtigoReferencia();
-                    $rArtigoReferencia   = $tbRArtigoReferencia->createRow();
-
-                    $rArtigoReferencia->idartigo     = $artigo->idartigo;
-                    $rArtigoReferencia->idreferencia = $element->idreferencia;
-
-                    $rArtigoReferencia->save();
-                }
 
                 $table->getAdapter()->commit();
                 } catch (Zend_Db_Exception $e) {

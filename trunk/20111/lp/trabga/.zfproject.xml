@@ -49,8 +49,6 @@
           <dbTableFile dbTableName="Figura"/>
           <dbTableFile dbTableName="Instituicao"/>
           <dbTableFile dbTableName="RArtigoAutor"/>
-          <dbTableFile dbTableName="RArtigoFigura"/>
-          <dbTableFile dbTableName="RArtigoReferencia"/>
           <dbTableFile dbTableName="Referencia"/>
           <dbTableFile dbTableName="Usuario"/>
         </dbTableDirectory>
