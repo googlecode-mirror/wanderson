@@ -22,6 +22,7 @@
       <formsDirectory>
         <formFile formName="Figura"/>
         <formFile formName="Autor"/>
+        <formFile formName="Usuario"/>
       </formsDirectory>
       <layoutsDirectory enabled="false"/>
       <modelsDirectory>
