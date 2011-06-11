@@ -26,6 +26,8 @@
         <formFile formName="Figura"/>
         <formFile formName="Autor"/>
         <formFile formName="Usuario"/>
+        <formFile formName="Referencia"/>
+        <formFile formName="Artigo"/>
       </formsDirectory>
       <layoutsDirectory enabled="false"/>
       <modelsDirectory>
