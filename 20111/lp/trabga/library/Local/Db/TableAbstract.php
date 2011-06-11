@@ -10,6 +10,12 @@
 class Local_Db_TableAbstract extends Zend_Db_Table_Abstract
 {
     /**
+     * Linha da Tabela
+     * @var string
+     */
+    protected $_rowClass = 'Local_Db_Table_Row';
+
+    /**
      * Informa o Nome Completo da Tabela no Banco de Dados
      * @return string Valor Solicitado
      */

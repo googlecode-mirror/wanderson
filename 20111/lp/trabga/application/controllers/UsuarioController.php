@@ -44,8 +44,8 @@ class UsuarioController extends Local_Controller_ActionAbstract
         $form->identidade->setIgnore(true);
 
         // Valores para Preenchimento
-        $autor = $element->findParentRow('Application_Model_DbTable_Autor');
-        $instituicao = $autor->findParentRow('Application_Model_DbTable_Instituicao');
+        $autor = $element->findParentRow('Autor');
+        $instituicao = $autor->findParentRow('Instituicao');
 
         if ($this->getRequest()->isPost()) {
             // Dados Enviados
