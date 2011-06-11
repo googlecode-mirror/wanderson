@@ -6,58 +6,19 @@
  * @category Application
  * @package  Application_Controller
  */
-class FiguraController extends Zend_Controller_Action
+class FiguraController extends Local_Controller_ActionAbstract
 {
     /**
-     * Formulário Padrão da Controladora
-     * @var Application_Form_Figura
+     * Nome da Classe Padrão de Tabela
+     * @var string
      */
-    protected $_form;
+    protected $_dbTableClass = 'Application_Model_DbTable_Figura';
 
     /**
-     * Tabela Padrão da Controladora
-     * @var Application_Model_DbTable_Figura
+     * Nome da Classe Padrão de Formulários
+     * @var string
      */
-    protected $_dbTable;
-
-    /**
-     * Informa o Formulário Padrão da Controladora
-     * @return Application_Form_Figura Elemento Solicitado
-     */
-    protected function _getForm()
-    {
-        if ($this->_form === null) {
-            $this->_form = new Application_Form_Figura();
-        }
-        return $this->_form;
-    }
-
-    /**
-     * Informa a Tabela Padrão da Controladora
-     * @return Application_Model_DbTable_Figura Elemento Solicitado
-     */
-    protected function _getDbTable()
-    {
-        if ($this->_dbTable === null) {
-            $this->_dbTable = new Application_Model_DbTable_Figura();
-        }
-        return $this->_dbTable;
-    }
-
-    /**
-     * Captura de Chaves Primárias
-     * @return array Elementos Solicitados
-     */
-    protected function _getPrimaries($closure = null)
-    {
-        $primaries = $this->_getDbTable()->info(Zend_Db_Table::PRIMARY);
-        $mapper    = array();
-        foreach ($primaries as $name) {
-            $value = $this->_getParam($name);
-            $mapper[$name] = isset($closure) ? $closure($value) : $value;
-        }
-        return $mapper;
-    }
+    protected $_formClass = 'Application_Form_Figura';
 
     /**
      * Realoca uma Imagem do Formulário
@@ -158,6 +119,8 @@ class FiguraController extends Zend_Controller_Action
                 $this->_helper->redirector('index');
             }
         }
+
+        // Camada de Visualização
         $this->view->form = $form;
     }
 
@@ -217,6 +180,7 @@ class FiguraController extends Zend_Controller_Action
             $form->populate($element->toArray());
         }
 
+        // Camada de Visualização
         $this->view->form = $form;
         $this->view->element = $element;
     }
@@ -232,15 +196,23 @@ class FiguraController extends Zend_Controller_Action
         });
 
         // Recuperação do Elemento
-        $table = $this->_getTable();
+        $table = $this->_getDbTable();
         $element = $table->find($primaries)->current();
 
+        // Elemento Inexistente
         if ($element === null) {
             throw new Zend_Db_Exception('Invalid Element');
         }
 
+        // Caminho Real para o Arquivo
+        $dirname = realpath(APPLICATION_PATH . '/../public/images/sistema/');
+        unlink($dirname . '/' . $element->arquivo);
+
+        // Remoção do Elemento no Banco
+        // Mensagens
         $element->delete();
 
+        // Mensagens
         $this->_helper->flashMessenger('delete');
         $this->_helper->redirector('index');
     }
