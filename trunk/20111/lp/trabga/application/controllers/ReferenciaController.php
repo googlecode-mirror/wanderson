@@ -121,7 +121,7 @@ class ReferenciaController extends Local_Controller_ActionAbstract
                     $rArtigoReferencia   = $tbRArtigoReferencia->createRow();
 
                     $rArtigoReferencia->idartigo     = $artigo->idartigo;
-                    $rArtigoReferencia->idreferencia = $artigo->idreferencia;
+                    $rArtigoReferencia->idreferencia = $element->idreferencia;
 
                     $rArtigoReferencia->save();
                 }
