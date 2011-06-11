@@ -6,13 +6,10 @@
  * @category Application
  * @package  Application_Form
  */
-class Application_Form_Figura extends Zend_Dojo_Form
+class Application_Form_Figura extends Local_Form_FormAbstract
 {
     public function init()
     {
-        // Configurações Locais
-        $this->setMethod(self::METHOD_POST)->setAction($this->getView()->url());
-
         // Identificador
         $identificador = new Application_Form_Element_Label('identificador');
         $identificador
@@ -47,7 +44,6 @@ class Application_Form_Figura extends Zend_Dojo_Form
 
         // Botão de Envio
         $submit = new Local_Form_Element_SubmitButton('submit');
-        $submit->setLabel('Salvar');
         $this->addElement($submit);
     }
 }

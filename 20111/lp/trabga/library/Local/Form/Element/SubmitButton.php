@@ -14,6 +14,6 @@ class Local_Form_Element_SubmitButton extends Zend_Dojo_Form_Element_SubmitButto
 {
     public function init()
     {
-        $this->setRequired(false)->setIgnore(true);
+        $this->setRequired(false)->setIgnore(true)->setLabel('Salvar');
     }
 }

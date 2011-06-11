@@ -6,13 +6,10 @@
  * @category Application
  * @package  Application_Form
  */
-class Application_Form_Instituicao extends Zend_Dojo_Form
+class Application_Form_Instituicao extends Local_Form_FormAbstract
 {
     public function init()
     {
-        // Configurações Locais
-        $this->setMethod(self::METHOD_POST)->setAction($this->getView()->url());
-
         // Endereço
         $endereco = new Zend_Dojo_Form_Element_Textarea('endereco');
         $endereco
@@ -24,7 +21,6 @@ class Application_Form_Instituicao extends Zend_Dojo_Form
 
         // Botão de Envio
         $submit = new Local_Form_Element_SubmitButton('submit');
-        $submit->setLabel('Salvar');
         $this->addElement($submit);
     }
 }
