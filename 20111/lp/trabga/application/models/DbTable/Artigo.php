@@ -28,6 +28,12 @@ class Application_Model_DbTable_Artigo extends Local_Db_TableAbstract
     protected $_primaries = array('idartigo');
 
     /**
+     * Linha Padrão da Tabela
+     * @var string
+     */
+    protected $_rowClass = 'Application_Model_DbTable_Row_Artigo';
+
+    /**
      * Tabelas Dependentes
      * @var array
      */
