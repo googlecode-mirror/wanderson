@@ -21,6 +21,7 @@
       </controllersDirectory>
       <formsDirectory>
         <formFile formName="Figura"/>
+        <formFile formName="Autor"/>
       </formsDirectory>
       <layoutsDirectory enabled="false"/>
       <modelsDirectory>
