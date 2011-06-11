@@ -17,10 +17,8 @@ abstract class Application_Form_Referencia extends Local_Form_FormAbstract
     public function init()
     {
         // Tipo de Referência
-        $tipo = new Zend_Form_Element_Hidden('tipo');
-        $tipo->removeDecorator('Label')
-             ->setRequired(true)
-             ->addValidator(new Zend_Validate_InArray($this->_tipos));
+        $tipo = new Local_Form_Element_Hidden('tipo');
+        $tipo->addValidator(new Zend_Validate_InArray($this->_tipos));
         $this->addElement($tipo);
 
         // Identificador
