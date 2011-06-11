@@ -13,7 +13,7 @@ class Application_Model_DbTable_RArtigoFigura extends Zend_Db_Table_Abstract
      * Esquema
      * @var string
      */
-    protected $_name = 'sistema';
+    protected $_schema = 'sistema';
 
     /**
      * Nome da Tabela
