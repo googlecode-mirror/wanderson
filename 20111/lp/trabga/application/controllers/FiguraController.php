@@ -87,17 +87,6 @@ class FiguraController extends Local_Controller_ActionAbstract
      */
     public function createAction()
     {
-        // Anexo a Artigo
-        $artigo = null;
-        if ($this->_hasParam('idartigo')) {
-            $idartigo = (int) $this->_getParam('idartigo');
-            $tbArtigo = new Application_Model_DbTable_Artigo();
-            $artigo   = $tbArtigo->find($idartigo)->current();
-            if ($artigo === null) {
-                throw new Zend_Db_Exception('Invalid Artigo Element');
-            }
-        }
-
         // Formulário
         $form = $this->_getForm();
         if ($this->getRequest()->isPost()) {
@@ -123,17 +112,6 @@ class FiguraController extends Local_Controller_ActionAbstract
 
                     $element->arquivo = $slug;
                     $element->save();
-
-                    // Artigo Informado?
-                    if ($artigo !== null) {
-                        $tbRArtigoFigura = new Application_Model_DbTable_RArtigoFigura();
-                        $rArtigoFigura   = $tbRArtigoFigura->createRow();
-
-                        $rArtigoFigura->idartigo = $artigo->idartigo;
-                        $rArtigoFigura->idfigura = $element->idfigura;
-
-                        $rArtigoFigura->save();
-                    }
 
                     $table->getAdapter()->commit();
                 } catch (Zend_Db_Exception $e) {

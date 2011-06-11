@@ -27,6 +27,12 @@ class Application_Model_DbTable_Referencia extends Local_Db_TableAbstract
     protected $_primaries = array('idreferencia');
 
     /**
+     * Linha Padrão da Tabela
+     * @var string
+     */
+    protected $_rowClass = 'Application_Model_DbTable_Row_Referencia';
+
+    /**
      * Mapa de Referência
      * @var array
      */

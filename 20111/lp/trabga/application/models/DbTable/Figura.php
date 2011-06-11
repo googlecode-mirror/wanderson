@@ -28,6 +28,12 @@ class Application_Model_DbTable_Figura extends Local_Db_TableAbstract
     protected $_primaries = array('idfigura');
 
     /**
+     * Linha Padrão da Tabela
+     * @var string
+     */
+    protected $_rowClass = 'Application_Model_DbTable_Row_Figura';
+
+    /**
      * Mapa de Referências
      * @var array
      */
