@@ -8,12 +8,19 @@
  */
 abstract class Application_Form_Referencia extends Local_Form_FormAbstract
 {
+    /**
+     * Tipos Válidos
+     * @var array
+     */
+    protected $_tipos = array('artigo');
+
     public function init()
     {
         // Tipo de Referência
         $tipo = new Zend_Form_Element_Hidden('tipo');
         $tipo->removeDecorator('Label')
-             ->setRequired(true);
+             ->setRequired(true)
+             ->addValidator(new Zend_Validate_InArray($this->_tipos));
         $this->addElement($tipo);
 
         // Identificador
@@ -31,12 +38,14 @@ abstract class Application_Form_Referencia extends Local_Form_FormAbstract
      */
     public function addFields(array $fields)
     {
+        $form = new Zend_Form_SubForm();
         foreach ($fields as $identifier => $content) {
             $element = new Zend_Dojo_Form_Element_TextBox($identifier);
             $element->setLabel($content)
                     ->setRequired(true);
-            $this->addElement($element);
+            $form->addElement($element);
         }
+        $this->addSubForm($form, 'conteudo');
         return $this;
     }
 }

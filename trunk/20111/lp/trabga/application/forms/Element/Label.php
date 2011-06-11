@@ -17,7 +17,8 @@ class Application_Form_Element_Label extends Zend_Dojo_Form_Element_ValidationTe
         // Formulário Simples
         $this->setRequired(true)
              ->addValidator(new Zend_Validate_Regex('/^[a-z]{1,100}$/'))
-             ->addFilter(new Zend_Filter_StringTrim());
+             ->addFilter(new Zend_Filter_StringTrim())
+             ->addFilter(new Zend_Filter_PregReplace('/(  )+/', ''));
 
         // Extensão Dojo Toolkit
         $this->setRegExp('[a-z]{1,100}')->setLowercase(true)->setTrim(true);
