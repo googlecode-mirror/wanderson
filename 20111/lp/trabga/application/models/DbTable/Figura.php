@@ -28,10 +28,14 @@ class Application_Model_DbTable_Figura extends Local_Db_TableAbstract
     protected $_primaries = array('idfigura');
 
     /**
-     * Tabelas Dependentes
+     * Mapa de Referências
      * @var array
      */
-    protected $_dependentTables = array(
-        'RArtigoFigura' => 'Application_Model_DbTable_RArtigoFigura',
+    protected $_referenceMap = array(
+        'Usuario' => array(
+            'columns' => array('idusuario'),
+            'refColumns' => array('idusuario'),
+            'refTableClass' => 'Application_Model_DbTable_Usuario',
+        ),
     );
 }
