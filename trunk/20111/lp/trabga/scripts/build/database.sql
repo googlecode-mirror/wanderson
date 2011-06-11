@@ -61,17 +61,9 @@ CREATE TABLE "sistema".referencia (
     tipo REFERENCIA NOT NULL,
     identificador VARCHAR(100) NOT NULL,
     conteudo TEXT,
-    PRIMARY KEY(idreferencia)
-);
-
--- Referências para Artigos
-CREATE TABLE "sistema".r_artigo_referencia (
-    idartigo BIGINT NOT NULL,
-    idreferencia BIGINT NOT NULL,
-    PRIMARY KEY(idartigo, idreferencia),
-    FOREIGN KEY(idartigo) REFERENCES "sistema".artigo(idartigo)
-        ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY(idreferencia) REFERENCES "sistema".referencia(idreferencia)
+    idautor INT NOT NULL,
+    PRIMARY KEY(idreferencia),
+    FOREIGN KEY(idautor) REFERENCES "sistema".autor(idautor)
         ON UPDATE CASCADE ON DELETE CASCADE
 );
 
@@ -81,16 +73,8 @@ CREATE TABLE "sistema".figura (
     legenda VARCHAR(100),
     arquivo VARCHAR(100) NOT NULL,
     identificador VARCHAR(100) NOT NULL,
-    PRIMARY KEY(idfigura)
-);
-
--- Figuras para Artigos
-CREATE TABLE "sistema".r_artigo_figura (
-    idartigo BIGINT NOT NULL,
-    idfigura BIGINT NOT NULL,
-    PRIMARY KEY(idartigo, idfigura),
-    FOREIGN KEY(idartigo) REFERENCES "sistema".artigo(idartigo)
-        ON UPDATE CASCADE ON DELETE RESTRICT,
-    FOREIGN KEY(idfigura) REFERENCES "sistema".figura(idfigura)
+    idautor INT NOT NULL,
+    PRIMARY KEY(idfigura),
+    FOREIGN KEY(idautor) REFERENCES "sistema".autor(idautor)
         ON UPDATE CASCADE ON DELETE CASCADE
 );
