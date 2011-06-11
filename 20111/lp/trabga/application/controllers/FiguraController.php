@@ -209,7 +209,6 @@ class FiguraController extends Local_Controller_ActionAbstract
         unlink($dirname . '/' . $element->arquivo);
 
         // Remoção do Elemento no Banco
-        // Mensagens
         $element->delete();
 
         // Mensagens

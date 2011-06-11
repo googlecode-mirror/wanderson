@@ -15,7 +15,7 @@ class Application_Form_Artigo extends Application_Form_Referencia
 
         // Campos Adicionais
         $fields = array(
-            'article' => 'Artigo',
+            'author'  => 'Autor',
             'title'   => 'Título',
             'journal' => 'Revista',
             'year'    => 'Ano',
