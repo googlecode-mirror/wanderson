@@ -12,18 +12,28 @@ dojo.require('dijit.layout.AccordionContainer');
 dojo.require('dijit.form.Form');
 dojo.require('dijit.form.TextBox');
 dojo.require('dijit.form.Textarea');
+dojo.require('dijit.form.Button');
+
+dojo.require('dijit.Toolbar');
+dojo.require('dijit.Dialog');
 
 // Estrutura de Classe
 dojo.declare('app', null, {
     menu : null,
     tabber : null,
+    dialog : null,
     console : null,
+    toolbar : null,
     document : null,
     constructor : function() {
         this.menu     = new app.menu();
         this.tabber   = new app.tabber();
+        this.dialog   = new app.dialog();
+        this.toolbar  = new app.toolbar();
         this.console  = new app.console();
         this.document = new app.document();
+        // Criação de Artigo
+        
     },
     start : function() {
         this.console.clear();
@@ -121,6 +131,56 @@ dojo.declare('app.console', null, {
         var div  = dojo.doc.createElement('div');
         dojo.attr(div, 'innerHTML', message);
         dojo.place(div, node);
+    }
+});
+
+dojo.declare('app.toolbar', null, {
+    newpage : null,
+    constructor : function() {
+        // Botão de Novo Artigo
+        newpage = dijit.byId('toolbar-newpage');
+        // Estilos
+        newpage.attr('iconClass', 'dijitEditorIcon dijitEditorIconNewPage');
+        dojo.connect(newpage, 'onClick', function(event){
+            dojo.stopEvent(event);
+            system.dialog.create();
+        });
+        // Anexos
+        this.newpage = newpage;
+    }
+});
+
+dojo.declare('app.dialog', null, {
+    elements : {
+        create : null
+    },
+    constructor : function() {},
+    create : function() {
+        if (this.elements.create == null) {
+            var dialog = new dijit.Dialog({
+                title : 'Novo Artigo',
+                href : 'artigo/create'
+            });
+            dojo.connect(dialog, 'onDownloadEnd', function() {
+                var forms = dojo.query(this.domNode).query('form');
+                forms.connect('onsubmit', function(event){
+                    dojo.stopEvent(event);
+                    dojo.xhrPost({
+                        form : this,
+                        handleAs : 'json',
+                        load : function(data) {
+                            system.dialog.elements.create.destroyRecursive();
+                            system.dialog.elements.create = null;
+                            system.menu.load();
+                            system.tabber.open(data.titulo, 'artigo/edit/idartigo/'+data.idartigo);
+                        }
+                    });
+                });
+            });
+            console.log(this);
+            this.elements.create = dialog;
+        }
+        this.elements.create.show();
     }
 });
 
