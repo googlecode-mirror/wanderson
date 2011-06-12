@@ -21,10 +21,11 @@ html, body, #layout-main {
     margin-bottom: 1em;
     border-left: 1px #ccc dashed;
 }
+#layout-docs ul li:hover {
+    background-color: #efefef;
+}
 #layout-docs a {
     text-decoration: none;
     color: #000;
-}
-#layout-docs a:hover {
-    text-decoration: underline;
+    display: block;
 }
