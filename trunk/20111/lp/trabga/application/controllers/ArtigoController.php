@@ -79,6 +79,12 @@ class ArtigoController extends Local_Controller_ActionAbstract
      */
     public function editAction()
     {
+        // Requisição Ajax
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->view->layout()->disableLayout();
+            Zend_Dojo_View_Helper_Dojo::setUseDeclarative();
+        }
+
         // Chave Primária
         $primaries = $this->_getPrimaries(function($value){
             return (int) $value;
@@ -112,6 +118,11 @@ class ArtigoController extends Local_Controller_ActionAbstract
 
                 $messages[] = 'update';
 
+                if ($this->getRequest()->isXmlHttpRequest()) {
+                    // Resposta como Json para Ajax
+                    $this->_helper->json(array('messages'=> $messages));
+                }
+
             }
         } else {
             // População
@@ -122,5 +133,22 @@ class ArtigoController extends Local_Controller_ActionAbstract
         // Camada de Visualização
         $this->view->form = $form;
         $this->view->messages = $messages;
+    }
+
+    /**
+     * Service Action
+     */
+    public function serviceAction()
+    {
+        // Requisição Ajax
+        $this->view->layout()->disableLayout();
+
+        // Renderização de Títulos
+        $table  = $this->_getDbTable();
+        $select = $table->select()->order('idartigo ASC');
+        $result = $table->fetchAll($select);
+
+        // Camada de Visualização
+        $this->view->result = $result;
     }
 }

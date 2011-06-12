@@ -6,12 +6,6 @@
 <?php echo $this->dojo()->enable()->setDjConfigOption('parseOnLoad', true)
     ->registerModulePath('app', $this->baseUrl('/scripts/app'))->requireModule('app') ?>
 <?php echo $this->headLink()->appendStylesheet($this->baseUrl('/scripts/app/layout/layout.css')) ?>
-<script type="text/javascript">
-var sistema;
-dojo.ready(function(){
-    sistema = new app();
-});
-</script>
 </head>
 <body class="claro">
 <!-- dijit layout -->
