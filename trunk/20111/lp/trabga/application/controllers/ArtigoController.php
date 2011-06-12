@@ -56,7 +56,6 @@ class ArtigoController extends Local_Controller_ActionAbstract
                 $element = $table->createRow();
 
                 $element->titulo = $data['titulo'];
-                $element->idusuario = 1; // @todo Identificador do Usuário
                 $element->save();
 
                 $this->_helper->flashMessenger('insert');
@@ -80,6 +79,10 @@ class ArtigoController extends Local_Controller_ActionAbstract
             return (int) $value;
         });
 
+        // Mensagens Disponíveis
+        // FlashMessenger sem Nova Requisição
+        $messages = array();
+
         // Banco de Dados
         $table   = $this->_getDbTable();
         $element = $table->find($primaries)->current();
@@ -102,8 +105,7 @@ class ArtigoController extends Local_Controller_ActionAbstract
                 $element->conteudo = $data['conteudo'];
                 $element->save();
 
-                $this->_helper->flashMessenger('update');
-                $this->_helper->redirector('index');
+                $messages[] = 'update';
 
             }
         } else {
@@ -112,13 +114,8 @@ class ArtigoController extends Local_Controller_ActionAbstract
             $form->conteudo->setValue($element->conteudo);
         }
 
-        // Anexos
-        $figuras     = $element->findManyToManyRowset('Figura','RArtigoFigura');
-        $referencias = $element->findManyToManyRowset('Referencia','RArtigoReferencia');
-
         // Camada de Visualização
         $this->view->form = $form;
-        $this->view->figuras = $figuras;
-        $this->view->referencias = $referencias;
+        $this->view->messages = $messages;
     }
 }
