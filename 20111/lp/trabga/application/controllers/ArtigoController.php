@@ -30,6 +30,11 @@ class ArtigoController extends Local_Controller_ActionAbstract
         $select = $table->select()->order('idartigo');
         $result = $table->fetchAll($select);
 
+        // Requisição Ajax
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->json($result->toArray());
+        }
+
         // Mensagens
         $messages = $this->_helper->flashMessenger->getMessages();
 

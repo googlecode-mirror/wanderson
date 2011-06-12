@@ -3,7 +3,7 @@ html, body, #layout-main {
     border: 0; padding: 0; margin: 0;
 }
 #layout-leading {
-    width: 150px;
+    width: 200px;
 }
 #layout-output {
     height: 100px;
@@ -11,4 +11,13 @@ html, body, #layout-main {
 #layout-logo {
     border: 0;
     height: 80px;
+}
+#layout-docs ul {
+    border: 0; padding: 0; margin: 0;
+    list-style: none;
+}
+#layout-docs ul li {
+    padding-left: 1em;
+    margin-bottom: 1em;
+    border-left: 1px #ccc dashed;
 }
