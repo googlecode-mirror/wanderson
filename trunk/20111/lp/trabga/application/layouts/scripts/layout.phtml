@@ -6,6 +6,12 @@
 <?php echo $this->dojo()->enable()->setDjConfigOption('parseOnLoad', true)
     ->registerModulePath('app', $this->baseUrl('/scripts/app'))->requireModule('app') ?>
 <?php echo $this->headLink()->appendStylesheet($this->baseUrl('/scripts/app/layout/layout.css')) ?>
+<script type="text/javascript">
+var sistema;
+dojo.ready(function(){
+    sistema = new app();
+});
+</script>
 </head>
 <body class="claro">
 <!-- dijit layout -->
@@ -23,9 +29,9 @@
     <div id="layout-leading" dojoType="dijit.layout.BorderContainer" region="leading">
         <div id="layout-logo" dojoType="dijit.layout.ContentPane" region="top">Top Logo</div>
         <div id="layout-menu" dojoType="dijit.layout.AccordionContainer" region="center">
-            <div id="layout-docs" dojoType="dijit.layout.ContentPane" title="Documentos">
+            <div id="layout-docs" dojoType="dijit.layout.ContentPane" title="Artigos">
 <!-- documentos -->
-<?php echo $this->layout()->render('layout/docs') ?>
+&nbsp;
 <!-- documentos -->
             </div>
             <div id="layout-config" dojoType="dijit.layout.ContentPane" title="Configurações">
