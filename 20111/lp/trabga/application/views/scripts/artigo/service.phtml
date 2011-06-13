@@ -1,9 +1,0 @@
-<ul>
-<?php if (count($this->result) > 0) : ?>
-<?php foreach ($this->result as $element) : ?>
-<li><a href="<?php echo $this->url(array('action' => 'edit', 'idartigo' => $element->idartigo)) ?>"><?php echo $element->titulo ?></a></li>
-<?php endforeach ?>
-<?php else : ?>
-<li>Nenhum Documento</li>
-<?php endif ?>
-</ul>

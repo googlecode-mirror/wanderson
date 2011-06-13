@@ -125,19 +125,29 @@ class ArtigoController extends Local_Controller_ActionAbstract
     }
 
     /**
-     * Service Action
+     * Remove Action
      */
-    public function serviceAction()
+    public function removeAction()
     {
-        // Requisição Ajax
-        $this->view->layout()->disableLayout();
+        // Chave Primária
+        $primaries = $this->_getPrimaries(function($value){
+            return (int) $value;
+        });
 
-        // Renderização de Títulos
-        $table  = $this->_getDbTable();
-        $select = $table->select()->order('idartigo ASC');
-        $result = $table->fetchAll($select);
+        // Recuperação de Elemento
+        $table = $this->_getDbTable();
+        $element = $table->find($primaries)->current();
 
-        // Camada de Visualização
-        $this->view->result = $result;
+        // Verificação
+        if ($element === null) {
+            throw new Zend_Db_Exception('Invalid Element');
+        }
+
+        // Remoção do Elemento do Banco
+        $element->delete();
+
+        // Mensagens
+        $this->_helper->flashMessenger('delete');
+        $this->_helper->redirector('index');
     }
 }
