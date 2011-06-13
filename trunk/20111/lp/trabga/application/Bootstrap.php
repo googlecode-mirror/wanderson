@@ -33,4 +33,20 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
              ->setLocalPath('/js/dojo/dojo.js')
              ->addStylesheetModule('dijit.themes.claro');
     }
+
+    /**
+     * Inicialização da Navegação no Sistema
+     * @return null
+     */
+    protected function _initSystemNavigation()
+    {
+        // Arquivo de Configuração
+        $filename = realpath(APPLICATION_PATH . '/configs/navigation.xml');
+        $config   = new Zend_Config_Xml($filename);
+
+        // Navegação
+        $navigation = new Zend_Navigation($config);
+        $layout = $this->bootstrap('layout')->getResource('layout');
+        $layout->getView()->getHelper('navigation')->setContainer($navigation);
+    }
 }

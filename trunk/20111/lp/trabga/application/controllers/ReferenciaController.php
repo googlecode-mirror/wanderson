@@ -171,6 +171,10 @@ class ReferenciaController extends Local_Controller_ActionAbstract
 
         }
 
+        // Habilitando Migalha
+        $this->view->navigation()
+             ->findOneBy('active', true)->setVisible(true);
+
         $this->view->form = $form;
     }
 
