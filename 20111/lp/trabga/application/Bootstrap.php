@@ -27,6 +27,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         // Link
         $view->headLink()
              ->appendStylesheet('/js/dojo/resources/dojo.css');
+        // Title
+        $view->headTitle('Sistema de Artigos')->setSeparator(' - ');
         // Dojo Toolkit
         Zend_Dojo::enableView($view);
         $view->dojo()
