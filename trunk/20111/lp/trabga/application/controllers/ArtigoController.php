@@ -48,12 +48,6 @@ class ArtigoController extends Local_Controller_ActionAbstract
      */
     public function createAction()
     {
-        // Requisição Ajax
-        if ($this->getRequest()->isXmlHttpRequest()) {
-            $this->view->layout()->disableLayout();
-            Zend_Dojo_View_Helper_Dojo::setUseDeclarative();
-        }
-
         // Formulário
         $form = new Application_Form_ArtigoTitulo();
 
@@ -68,15 +62,6 @@ class ArtigoController extends Local_Controller_ActionAbstract
 
                 $element->titulo = $data['titulo'];
                 $element->save();
-
-                if ($this->getRequest()->isXmlHttpRequest()) {
-                    $messages = array('insert');
-                    $this->_helper->json(array(
-                        'messages' => $messages,
-                        'idartigo' => $element->idartigo,
-                        'titulo'   => $element->titulo
-                    ));
-                }
 
                 $this->_helper->flashMessenger('insert');
                 $this->_helper->redirector('edit', null, null, array(
@@ -94,12 +79,6 @@ class ArtigoController extends Local_Controller_ActionAbstract
      */
     public function editAction()
     {
-        // Requisição Ajax
-        if ($this->getRequest()->isXmlHttpRequest()) {
-            $this->view->layout()->disableLayout();
-            Zend_Dojo_View_Helper_Dojo::setUseDeclarative();
-        }
-
         // Chave Primária
         $primaries = $this->_getPrimaries(function($value){
             return (int) $value;
@@ -132,11 +111,6 @@ class ArtigoController extends Local_Controller_ActionAbstract
                 $element->save();
 
                 $messages[] = 'update';
-
-                if ($this->getRequest()->isXmlHttpRequest()) {
-                    // Resposta como Json para Ajax
-                    $this->_helper->json(array('messages'=> $messages));
-                }
 
             }
         } else {
