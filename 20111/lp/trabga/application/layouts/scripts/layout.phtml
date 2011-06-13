@@ -7,6 +7,8 @@
 <?php echo $this->headLink()->appendStylesheet($this->baseUrl('/styles/layout.css')) ?>
 </head>
 <body class="claro">
+<?php echo $this->navigation()->menu()->setMaxDepth(0) ?>
+<?php echo $this->navigation()->breadcrumbs() ?>
 <?php echo $this->layout()->content ?>
 </body>
 </html>

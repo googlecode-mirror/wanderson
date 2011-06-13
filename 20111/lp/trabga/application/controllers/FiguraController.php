@@ -184,6 +184,10 @@ class FiguraController extends Local_Controller_ActionAbstract
             $form->populate($element->toArray());
         }
 
+        // Habilitando Migalha
+        $this->view->navigation()
+             ->findOneBy('active', true)->setVisible(true);
+
         // Camada de Visualização
         $this->view->form = $form;
         $this->view->element = $element;

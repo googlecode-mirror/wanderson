@@ -119,6 +119,10 @@ class ArtigoController extends Local_Controller_ActionAbstract
             $form->conteudo->setValue($element->conteudo);
         }
 
+        // Habilitando Migalha
+        $this->view->navigation()
+             ->findOneBy('active', true)->setVisible(true);
+
         // Camada de Visualização
         $this->view->form = $form;
         $this->view->messages = $messages;

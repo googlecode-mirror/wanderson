@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application>
+    <index module="default" controller="index" action="index">
+        <label>Sistema</label>
+        <title>Sistema Facilitador de Artigos</title>
+        <pages>
+            <index module="default" controller="index" action="index">
+                <label>Principal</label>
+                <title>Página Principal</title>
+            </index>
+            <error module="default" controller="error" action="error" visible="0">
+                <label>Erro</label>
+                <title>Erro Encontrado</title>
+            </error>
+        </pages>
+    </index>
+    <artigo module="default" controller="artigo" action="index">
+        <label>Artigos</label>
+        <title>Controladora de Artigos</title>
+        <pages>
+            <index module="default" controller="artigo" action="index">
+                <label>Listar</label>
+                <title>Listar Artigos</title>
+            </index>
+            <create module="default" controller="artigo" action="create">
+                <label>Novo</label>
+                <title>Criar Novo Artigo</title>
+            </create>
+            <edit module="default" controller="artigo" action="edit" visible="0">
+                <label>Editar</label>
+                <title>Editar Artigo</title>
+            </edit>
+        </pages>
+    </artigo>
+    <figura module="default" controller="figura" action="index">
+        <label>Figuras</label>
+        <title>Controladora de Figuras</title>
+        <pages>
+            <index module="default" controller="figura" action="index">
+                <label>Listar</label>
+                <title>Listar Figuras</title>
+            </index>
+            <create module="default" controller="figura" action="create">
+                <label>Novo</label>
+                <title>Criar Nova Figura</title>
+            </create>
+            <edit module="default" controller="figura" action="edit" visible="0">
+                <label>Editar</label>
+                <title>Editar Figura</title>
+            </edit>
+        </pages>
+    </figura>
+    <referencia module="default" controller="referencia" action="index">
+        <label>Referência</label>
+        <title>Controladora de Referências</title>
+        <pages>
+            <index module="default" controller="referencia" action="index">
+                <label>Listar</label>
+                <title>Listar Referências</title>
+            </index>
+            <create module="default" controller="referencia" action="create">
+                <label>Novo</label>
+                <title>Criar Nova Referência</title>
+            </create>
+            <edit module="default" controller="referencia" action="edit" visible="0">
+                <label>Editar</label>
+                <title>Editar Referência</title>
+            </edit>
+        </pages>
+    </referencia>
+    <usuario module="default" controller="usuario" action="index">
+        <label>Usuário</label>
+        <title>Configurações Pessoais</title>
+        <pages>
+            <index module="default" controller="usuario" action="index">
+                <label>Configurações</label>
+                <title>Configurações Pessoais</title>
+            </index>
+        </pages>
+    </usuario>
+</application>
