@@ -1,4 +1,11 @@
 <h2>Listar Artigos</h2>
+<?php if (count($this->messages) > 0) : ?>
+<ul>
+<?php foreach ($this->messages as $message) : ?>
+<li><?php echo $message ?></li>
+<?php endforeach ?>
+</ul>
+<?php endif ?>
 <table>
     <thead>
         <tr>
