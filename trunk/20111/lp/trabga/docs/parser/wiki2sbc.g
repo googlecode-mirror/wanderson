@@ -4,30 +4,35 @@ wikitext
 	: paragraph+ EOF;
 
 paragraph
-	: markup+ T_EOL;
+	: paragraph_content+ T_EOL;
 
-markup
-	: bold
-	| italic
-	| unformatted;
+paragraph_content
+	: unformatted
+	| bold
+	| italic;
 
 bold
-	: T_BOLD bold_content T_BOLD;
+	: T_BOLD bold_content+ T_BOLD;
 
 bold_content
-	: text;
+	: unformatted
+	| T_ITALIC bold_content_italic + T_ITALIC;
+
+bold_content_italic
+	: unformatted;
 
 italic
-	: T_ITALIC italic_content T_ITALIC;
+	: T_ITALIC italic_content+ T_ITALIC;
 
 italic_content
-	: text;
+	: unformatted
+	| T_BOLD italic_content_bold+ T_BOLD;
+
+italic_content_bold
+	: unformatted;
 
 unformatted
-	: text;
-
-text
-	: (T_WORD|T_BLANK)+;
+	: T_WORD;
 
 T_BOLD: '**';
 T_ITALIC: '//';
