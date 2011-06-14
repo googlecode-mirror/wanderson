@@ -1,10 +1,21 @@
 grammar wiki2sbc;
 
+wiki
+	: wikitext+ EOF;
+
 wikitext
-	: paragraph+ EOF;
+	: heading T_EOL (T_EOL)+
+	| paragraph (T_EOL)+;
+
+heading
+	: T_HEADING heading_content T_HEADING;
+
+heading_content
+	: heading
+	| unformatted;
 
 paragraph
-	: paragraph_content+ T_EOL;
+	: paragraph_content+;
 
 paragraph_content
 	: unformatted
@@ -36,6 +47,8 @@ unformatted
 
 T_BOLD: '**';
 T_ITALIC: '//';
+
+T_HEADING : '=';
 
 T_WORD: ('a'..'z')+;
 T_EOL: '\n';
