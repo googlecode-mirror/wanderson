@@ -1,5 +1,9 @@
 grammar subwiki;
 
+options {
+	language = Php;
+}
+
 /**
  * Sublinguagem de Wiki Creole
  * Baseado em Martin Junghans [JUNGHANS 2007]
