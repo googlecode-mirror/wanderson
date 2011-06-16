@@ -1,4 +1,4 @@
-grammar teste;
+grammar subwiki;
 
 /**
  * Sublinguagem de Wiki Creole
