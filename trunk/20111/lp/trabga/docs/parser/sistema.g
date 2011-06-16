@@ -2,18 +2,45 @@ grammar sistema;
 
 /**
  * Gramática para Sublinguagem Wiki Creole
+ * Baseado em Martin Junghans [JUNGHANS 2007]
  * @author Wanderson Henrique Camargo Rosa
  */
+
+// Texto Wiki -----------------------------------------------------------------
+
+wikipage
+	: paragraphs EOF;
+paragraphs
+	: ( paragraph )*;
+
+// Parágrafo ------------------------------------------------------------------
+
+paragraph
+	: nowiki
+	| ( heading | text_paragraph );
+paragraph_separator
+	: ( newline )+
+	| EOF; 
+text_paragraph
+	: ( text_line )+;
+text_line
+	: ( text_element )+ text_lineseparator;
+text_element
+	: text_formatted_element
+	| text_unformatted;
+text_lineseparator
+	: newline ( blanks )? 
+	| EOF;
 
 // Elemento de Lista e Marcadores ---------------------------------------------
 
 list_element
-	: T_IDENTIFIER; // @todo Melhorar Captura
+	: text_line; // @todo Melhorar Captura
 
 // Lista Numerada -------------------------------------------------------------
 
 list_ord
-	: ( list_ord_element T_EOL )+;
+	: ( list_ord_element )+;
 markup_list_ord
 	: T_POUND;
 list_ord_element
@@ -22,7 +49,7 @@ list_ord_element
 // Lista Não Numerada ---------------------------------------------------------
 
 list_unord
-	: ( list_unord_element T_EOL )+;
+	: ( list_unord_element )+;
 markup_list_unord
 	: T_STAR;
 list_unord_element
@@ -51,8 +78,9 @@ text_italic_formatted
 text_bolditalic_content
 	: text_unformatted;
 
-text_unformatted
-	: ~( T_BOLD | T_ITALIC | T_IMAGE_OPEN | T_LINK_OPEN )+;
+text_unformatted 
+	: ~( T_ITALIC | T_STAR | T_LINK_OPEN | T_IMAGE_OPEN
+		| T_NOWIKI_OPEN | T_NEWLINE | T_EQUAL | EOF )+;
 
 markup_bold
 	: T_BOLD;
@@ -65,7 +93,7 @@ heading
 	: markup_heading heading_content ( markup_heading )? ( blanks )?;
 heading_content
 	: markup_heading heading_content markup_heading
-	| ~( T_EQUAL )+; // @todo Capturar Elementos Corretos
+	| ( text_unformatted )+; // @todo Capturar Elementos Corretos
 markup_heading
 	: T_EQUAL;
 
@@ -104,8 +132,12 @@ markup_nowiki_close
 
 // Capturas -------------------------------------------------------------------
 
+whitespaces
+	: ( blanks | newline )+;
 blanks
-	: T_SPACE+;
+	: T_BLANKS;
+newline
+	: T_NEWLINE;
 
 /**
  * Analisador Léxico
@@ -113,6 +145,14 @@ blanks
  */
 
 // Marcação de Texto ----------------------------------------------------------
+
+fragment T_SPACE     : ' ';
+fragment T_CR        : '\r';
+fragment T_LF        : '\n';
+fragment T_TABULATOR : '\t';
+
+T_BLANKS          : ( T_SPACE | T_TABULATOR )+;
+T_NEWLINE         : ( T_CR )? T_LF | T_CR;
 
 T_IDENTIFIER : ('a'..'z')+;
 
@@ -124,12 +164,9 @@ T_IMAGE_CLOSE : '}}';
 T_LINK_OPEN   : '[[';
 T_LINK_CLOSE  : ']]';
 
-T_EOL    : '\n';
-
 T_BOLD   : '**';
 T_ITALIC : '//';
 T_EQUAL  : '=';
 T_POUND  : '#';
 T_STAR   : '*';
-T_SPACE  : ' ';
 T_OTHER  : .;
