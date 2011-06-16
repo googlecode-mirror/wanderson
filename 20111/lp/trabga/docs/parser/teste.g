@@ -25,9 +25,7 @@ paragraph_end
 // Parágrafo de Texto ---------------------------------------------------------
 
 text_paragraph
-	: text_first_line ( text_eol text_line )*;
-text_first_line
-	: text_line;
+	: text_line ( text_eol text_line )*;
 text_line
 	: ( text_element )+;
 text_eol
@@ -52,22 +50,14 @@ list_eol
 list_unord
 	: list_unord_element ( list_eol list_unord_element )*;
 list_unord_element
-	: T_STAR text_unformatted;
-// Verificar
-list_unord_content
-	: list_ord_element
-	| text_unformatted;
+	: T_STAR ( list_ord_element | text_unformatted );
 
 // Lista Numerada -------------------------------------------------------------
 
 list_ord
 	: list_ord_element ( list_eol list_ord_element)*;
 list_ord_element
-	: T_POUND text_unformatted;
-// Verificar
-list_ord_content
-	: list_unord_content
-	| text_unformatted;
+	: T_POUND ( list_unord_element | text_unformatted );
 
 // Negrito e Itálico ----------------------------------------------------------
 
