@@ -14,7 +14,7 @@ wikipage
 // Parágrafo ------------------------------------------------------------------
 
 paragraphs
-	: ( heading | paragraph ) paragraph_end;
+	: ( heading | list |paragraph ) paragraph_end;
 
 paragraph
 	: ( text_paragraph )+ ;
@@ -38,6 +38,36 @@ text_element
 	| link
 	| nowiki
 	| image;
+
+// Listas ---------------------------------------------------------------------
+
+list
+	: list_ord
+	| list_unord;
+list_eol
+	: T_NEWLINE;
+
+// Lista Não Numerada ---------------------------------------------------------
+
+list_unord
+	: list_unord_element ( list_eol list_unord_element )*;
+list_unord_element
+	: T_STAR text_unformatted;
+// Verificar
+list_unord_content
+	: list_ord_element
+	| text_unformatted;
+
+// Lista Numerada -------------------------------------------------------------
+
+list_ord
+	: list_ord_element ( list_eol list_ord_element)*;
+list_ord_element
+	: T_POUND text_unformatted;
+// Verificar
+list_ord_content
+	: list_unord_content
+	| text_unformatted;
 
 // Negrito e Itálico ----------------------------------------------------------
 
@@ -130,4 +160,6 @@ T_EQUAL  : '=';
 T_TAB    : '\t';
 T_LETTER : 'a'..'z';
 T_SPACE  : ' ';
+T_STAR   : '*';
+T_POUND  : '#';
 T_CHAR   : .;
