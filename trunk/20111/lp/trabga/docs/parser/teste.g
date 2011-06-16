@@ -34,7 +34,10 @@ text_eol
 	: T_NEWLINE;
 text_element
 	: text_formatted
-	| text_unformatted;
+	| text_unformatted
+	| link
+	| nowiki
+	| image;
 
 // Negrito e Itálico ----------------------------------------------------------
 
@@ -55,7 +58,7 @@ markup_italic
 // Texto não Formatado --------------------------------------------------------
 
 text_unformatted
-	: ~( T_NOWIKI_OPEN | T_IMAGE_OPEN | T_LINK_OPEN | T_BOLD | T_ITALIC
+	: ~( T_LINK_OPEN | T_NOWIKI_OPEN | T_IMAGE_OPEN | T_BOLD | T_ITALIC
 		| T_EQUAL | T_NEWLINE )+ ;
 
 // Seção do Documento ---------------------------------------------------------
@@ -68,17 +71,12 @@ heading_content
 markup_heading
 	: T_EQUAL;
 
-// Identificador --------------------------------------------------------------
-
-identifier
-	: T_LETTER;
-
 // Imagem ---------------------------------------------------------------------
 
 image
 	: markup_image_open image_identifier markup_image_close;
 image_identifier
-	: identifier+;
+	: T_LETTER+;
 markup_image_open
 	: T_IMAGE_OPEN;
 markup_image_close
@@ -89,7 +87,7 @@ markup_image_close
 link
 	: markup_link_open link_content markup_link_close;
 link_content
-	: identifier+;
+	: T_LETTER+;
 markup_link_open
 	: T_LINK_OPEN;
 markup_link_close
