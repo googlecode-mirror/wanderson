@@ -18,7 +18,7 @@ wikipage
 // Parágrafo ------------------------------------------------------------------
 
 paragraphs
-	: ( heading | list |paragraph ) paragraph_end;
+	: ( heading | lists |paragraph ) paragraph_end;
 
 paragraph
 	: ( text_paragraph )+ ;
@@ -43,7 +43,7 @@ text_element
 
 // Listas ---------------------------------------------------------------------
 
-list
+lists
 	: list_ord
 	| list_unord;
 list_eol
