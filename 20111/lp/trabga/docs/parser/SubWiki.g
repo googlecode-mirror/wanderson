@@ -1,11 +1,15 @@
 grammar SubWiki;
 
+options {
+	language = Php;
+}
+
 // Página ----------------------------------------------------------------------
 
 wikipage
 	: ( container | nowiki )+ EOF;
 container
-	: ( heading | list | paragraph ) container_end;
+	: ( heading | lists | paragraph ) container_end;
 container_end
 	: T_NEWLINE+
 	| EOF;
@@ -31,7 +35,7 @@ text_element
 
 // Listas ----------------------------------------------------------------------
 
-list
+lists
 	: list_ord
 	| list_unord;
 list_eol
