@@ -1,5 +1,34 @@
 grammar SubWiki;
 
+// Página ----------------------------------------------------------------------
+
+wikipage
+	: ( container | nowiki )+ EOF;
+container
+	: ( heading | list | paragraph ) container_end;
+container_end
+	: T_NEWLINE+
+	| EOF;
+
+// Parágrafo -------------------------------------------------------------------
+
+paragraph
+	: ( text_paragraph )+;
+
+// Parágrafo de Texto ----------------------------------------------------------
+
+text_paragraph
+	: text_line ( text_eol text_line )*;
+text_line
+	: ( text_element )+;
+text_eol
+	: T_NEWLINE;
+text_element
+	: text_formatted
+	| text_unformatted
+	| cite
+	| image;
+
 // Listas ----------------------------------------------------------------------
 
 list
@@ -48,9 +77,9 @@ heading_content
 // Texto não Formatado ---------------------------------------------------------
 
 text_unformatted
-	: ~( T_STAR | T_EQUAL | T_POUND | T_BOLD | T_ITALIC | T_CITE_OPEN
-		| T_CITE_CLOSE | T_IMAGE_OPEN | T_IMAGE_CLOSE | T_NOWIKI_OPEN
-		| T_NOWIKI_CLOSE )+;
+	: ~( T_NEWLINE | T_STAR | T_EQUAL | T_POUND | T_BOLD | T_ITALIC
+		| T_CITE_OPEN | T_CITE_CLOSE | T_IMAGE_OPEN | T_IMAGE_CLOSE
+		| T_NOWIKI_OPEN | T_NOWIKI_CLOSE | EOF )+;
 
 // Referências Bibliográficas --------------------------------------------------
 
