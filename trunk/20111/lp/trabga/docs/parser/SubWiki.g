@@ -40,8 +40,8 @@ protected \$_cites = array();
  * @param \$content Conteúdo para Anexo
  * @return SubWikiParser Próprio Objeto para Encadeamento
  */
-protected function _append(\$content, \$separator = '') {
-	\$this->_content .= \$content . \$separator;
+protected function _append(\$content) {
+	\$this->_content .= \$content;
 	return \$this;
 }
 
@@ -62,7 +62,7 @@ protected function _section(\$content) {
 	\$level  = \$this->_getSectionLevel();
 	\$sub    = str_repeat('sub', (int) \$level);
 	\$result = '\\' . \$sub . 'section{' . trim(\$content) . '}';
-	\$this->_append(\$result, PHP_EOL);
+	\$this->_append(\$result);
 	return \$this;
 }
 
@@ -152,7 +152,7 @@ protected function _listItem(\$content) {
 	\$level   = \$this->_getListLevel();
 	\$ident   = str_repeat("\t", \$level);
 	\$result  = \$ident . '\item ' . \$content;
-	\$this->_append(\$result, PHP_EOL);
+	\$this->_append(\$result);
 	return \$this;
 }
 
@@ -216,7 +216,7 @@ protected function _list(\$type, \$location) {
 	\$ident  = str_repeat("\t", \$level);
 	\$env    = \$this->_environment(\$type, \$location);
 	\$result = \$ident . \$env;
-	\$this->_append(\$result, PHP_EOL);
+	\$this->_append(\$result);
 	return \$this;
 }
 
@@ -225,8 +225,10 @@ protected function _list(\$type, \$location) {
 // Página ----------------------------------------------------------------------
 
 wikipage
-	: ( container | nowiki )+ EOF { echo \$this->_render(); };
+@after { echo \$this->_render(); }
+	: ( container | nowiki )+ EOF;
 container
+@after { \$this->_append("\n\n"); }
 	: ( heading | lists | paragraph ) container_end;
 container_end
 	: T_NEWLINE+
@@ -244,10 +246,10 @@ text_paragraph
 text_line
 	: ( text_element )+;
 text_eol
-	: T_NEWLINE;
+	: T_NEWLINE { \$this->_append(' '); };
 text_element
 	: text_formatted
-	| text_unformatted
+	| text_unformatted { \$this->_append($text_unformatted.text); }
 	| cite
 	| image;
 
@@ -259,12 +261,13 @@ lists
 list_eol
 	: T_NEWLINE;
 list_item
+@after { \$this->_append("\n"); }
 	: text_unformatted { \$this->_listItem($text_unformatted.text); };
 
 // Lista não Numerada ----------------------------------------------------------
 
 list_unord
-@init  { \$this->_list('itemize', 'begin'); }
+@init  { \$this->_list('itemize', 'begin'); \$this->_append("\n"); }
 @after { \$this->_list('itemize', 'end'); }
 	: list_unord_element ( list_eol list_unord_element )*;
 list_unord_element
