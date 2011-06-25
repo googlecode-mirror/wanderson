@@ -30,6 +30,18 @@ protected \$_listLevel = 0;
 protected \$_images = array();
 
 /**
+ * Últimas Imagens Utilizadas no Parágrafo
+ * @var array
+ */
+protected \$_imagesLast = array();
+
+/**
+ * Informações de Imagens
+ * @var array
+ */
+protected \$_imagesInfo = array();
+
+/**
  * Conjunto de Citações Utilizadas
  * @var array
  */
@@ -101,10 +113,56 @@ protected function _getSectionLevel() {
  */
 protected function _image(\$content) {
 	\$content = trim(\$content);
-	\$this->_images[] = \$content;
+	// Imagem já inserida no documento?
+	if (!in_array(\$content, \$this->_images)) {
+		\$this->_imagesLast[] = \$content;
+	}
+	// Inclui Referência Cruzada
 	\$result = '\\ref{fig:' . \$content . '}';
 	\$this->_append(\$result);
 	return \$this;
+}
+
+/**
+ * Adiciona no Documento as Últimas Imagens Inseridas
+ * @return SubWikiParser Próprio Objeto para Encadeamento
+ */
+protected function _appendImagesLast() {
+	// Seleciona as Últimas Imagens Inseridas
+	foreach (\$this->_imagesLast as \$identifier) {
+		\$result = \$this->_renderImage(\$identifier);
+		\$this->_append("\n\n"); // Duplo Espaçamento
+		\$this->_append(\$result);
+		// Confirmar Inserção da Imagem
+		\$this->_images[] = \$identifier;
+	}
+	// Limpa as Últimas Imagens
+	\$this->_imagesLast = array();
+}
+
+/**
+ * Renderiza uma Imagem pelo Identificador
+ * @param \$identifier Identificador da Imagem
+ * @return string Conteúdo Resultante da Renderização
+ * @throws Exception Identificador de Imagem Inválido
+ */
+protected function _renderImage(\$identifier) {
+	// Imagem Registrada nas Informações?
+	if (!array_key_exists(\$identifier, \$this->_imagesInfo)) {
+		throw new Exception("Invalid Image: { img: '\$identifier' }");
+	}
+	// Informações da Imagem
+	\$filename = \$this->_imagesInfo[\$identifier]['filename'];
+	\$caption  = \$this->_imagesInfo[\$identifier]['caption'];
+	// Montagem da Renderização
+	\$result = \$this->_environment('figure','begin') . PHP_EOL;
+	\$result.= "\t\\centering{}\n";
+	\$result.= sprintf("\t\\includegraphics[\\textwidth]{\%s}\n", \$filename);
+	\$result.= sprintf("\t\\caption{\%s}\n", \$caption);
+	\$result.= sprintf("\t\\label{fig:\%s}\n", \$identifier);
+	\$result.= \$this->_environment('figure','end');
+	// Resultado do Processamento
+	return \$result;
 }
 
 /**
@@ -220,6 +278,30 @@ protected function _list(\$type, \$location) {
 	return \$this;
 }
 
+/**
+ * Adiciona Informações sobre Imagens
+ * @param \$identifier Identificador da Imagem
+ * @param \$filename   Nome do Arquivo para Utilização
+ * @param \$caption    Legenda da Imagem
+ * @return SubWikiParser Próprio Objeto para Encadeamento
+ */
+public function addImageInfo(\$identifier, \$filename, \$caption) {
+	\$this->_imagesInfo[\$identifier] = array(
+		'filename' => \$filename,
+		'caption'  => \$caption,
+	);
+	return \$this;
+}
+
+/**
+ * Criador de Referências Cruzadas
+ * @param \$content Conteúdo para Filtragem
+ * @return Valor Filtrado Resultante da Solicitação
+ */
+protected function slugger(\$content) {
+	
+}
+
 }
 
 // Página ----------------------------------------------------------------------
@@ -237,6 +319,7 @@ container_end
 // Parágrafo -------------------------------------------------------------------
 
 paragraph
+@after { \$this->_appendImagesLast(); }
 	: ( text_paragraph )+;
 
 // Parágrafo de Texto ----------------------------------------------------------
