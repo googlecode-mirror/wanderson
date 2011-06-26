@@ -54,6 +54,12 @@ protected \$_cites = array();
 protected \$_slugger = null;
 
 /**
+ * Filtro de CamerCase para Slugger
+ * @var Zend_Filter_Word_CamelCaseToSeparator
+ */
+protected \$_camelFilter = null;
+
+/**
  * Adiciona ao Final do Conteúdo
  * @param \$content Conteúdo para Anexo
  * @return SubWikiParser Próprio Objeto para Encadeamento
@@ -88,6 +94,22 @@ protected function _section(\$content) {
 	\$filter = \$this->getSlugger();
 	\$slug   = \$filter->filter(\$content);
 	\$result = sprintf('\\label{sec:\%s}', \$slug);
+	\$this->_append(\$result);
+	return \$this;
+}
+
+/**
+ * Renderização de Referência Cruzada para Seções
+ * @param string \$content Conteúdo para Renderização
+ * @return string Valor Traduzido para Referência Cruzada
+ * @throws Exception Referência Inválida
+ */
+protected function _sectionReference(\$content) {
+	\$filter  = \$this->getCamelFilter();
+	\$slugger = \$this->getSlugger();
+	\$content = \$filter->filter(\$content);
+	\$content = \$slugger->filter(\$content);
+	\$result  = sprintf('\\ref{sec:\%s}', \$content);
 	\$this->_append(\$result);
 	return \$this;
 }
@@ -329,6 +351,28 @@ public function getSlugger() {
 	return \$this->_slugger;
 }
 
+/**
+ * Configura o Filtro de CamelCase
+ * @param Zend_Filter_Word_CamelCaseToSeparator \$filter Elemento para Configuração
+ * @return SubWikiParser Próprio Objeto para Encadeamento
+ */
+public function setCamelFilter(Zend_Filter_Word_CamelCaseToSeparator \$filter) {
+	\$this->_camelFilter = \$filter;
+	return \$this;
+}
+
+/**
+ * Informa o Filtro de CamelCase
+ * @return Zend_Filter_Word_CamelCaseToSeparator Elemento Solicitado
+ */
+public function getCamelFilter() {
+	if (\$this->_camelFilter === null) {
+		\$filter = new Zend_Filter_Word_CamelCaseToSeparator();
+		\$this->setCamelFilter(\$filter);
+	}
+	return \$this->_camelFilter;
+}
+
 }
 
 // Página ----------------------------------------------------------------------
@@ -361,7 +405,8 @@ text_element
 	: text_formatted
 	| text_unformatted { \$this->_append($text_unformatted.text); }
 	| cite
-	| image;
+	| image
+	| headingref;
 
 // Listas ----------------------------------------------------------------------
 
@@ -417,6 +462,14 @@ heading_content
 	: T_EQUAL { \$this->_addSectionLevel(1); }
 		heading_content T_EQUAL
 	| text_unformatted { \$this->_section($text_unformatted.text); };
+
+// Referência Cruzada para Seções ----------------------------------------------
+
+headingref
+	: T_POUND headingref_content
+		{ \$this->_sectionReference($headingref_content.text); };
+headingref_content
+	: ~( T_SPACE )+;
 
 // Texto não Formatado ---------------------------------------------------------
 
