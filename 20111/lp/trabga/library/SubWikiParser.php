@@ -1,5 +1,5 @@
 <?php
-// $ANTLR 3.1.3 ìàé 06, 2009 18:28:01 SubWiki.g 2011-06-26 17:51:43
+// $ANTLR 3.1.3 ìàé 06, 2009 18:28:01 SubWiki.g 2011-06-26 19:14:09
 
 
 # for convenience in actions
@@ -122,6 +122,12 @@ class SubWikiParser extends AntlrParser {
 
 
     /**
+     * Erros Encontrados
+     * @var array
+     */
+    protected $_errors = array();
+
+    /**
      * Conteúdo
      * @var string
      */
@@ -164,6 +170,12 @@ class SubWikiParser extends AntlrParser {
     protected $_cites = array();
 
     /**
+     * Informações de Citações
+     * @var array
+     */
+    protected $_citesInfo = array();
+
+    /**
      * Filtro Slugger
      * @var Hazel_Filter_Slugger
      */
@@ -174,6 +186,26 @@ class SubWikiParser extends AntlrParser {
      * @var Zend_Filter_Word_CamelCaseToSeparator
      */
     protected $_camelFilter = null;
+
+    /**
+     * Sobrescrita para Manipulação de Erros
+     * @param string $message Mensagem de Erro
+     * @return void
+     */
+    public function emitErrorMessage($message) {
+    	$this->_errors[] = $message;
+    }
+
+    /**
+     * Sobrescrita para Reinicialização de Erros e Armazenamentos
+     * @return void
+     */
+    public function reset() {
+    	parent::reset();
+    	$this->_errors = array();
+    	$this->_images = array();
+    	$this->_cites  = array();
+    }
 
     /**
      * Adiciona ao Final do Conteúdo
@@ -218,7 +250,6 @@ class SubWikiParser extends AntlrParser {
      * Renderização de Referência Cruzada para Seções
      * @param string $content Conteúdo para Renderização
      * @return string Valor Traduzido para Referência Cruzada
-     * @throws Exception Referência Inválida
      */
     protected function _sectionReference($content) {
     	$filter  = $this->getCamelFilter();
@@ -283,8 +314,10 @@ class SubWikiParser extends AntlrParser {
     	// Seleciona as Últimas Imagens Inseridas
     	foreach ($this->_imagesLast as $identifier) {
     		$result = $this->_renderImage($identifier);
-    		$this->append("\n\n"); // Duplo Espaçamento
-    		$this->append($result);
+    		if ($result !== false) {
+    			$this->append("\n\n"); // Duplo Espaçamento
+    			$this->append($result);
+    		}
     		// Confirmar Inserção da Imagem
     		$this->_images[] = $identifier;
     	}
@@ -296,12 +329,12 @@ class SubWikiParser extends AntlrParser {
      * Renderiza uma Imagem pelo Identificador
      * @param $identifier Identificador da Imagem
      * @return string Conteúdo Resultante da Renderização
-     * @throws Exception Identificador de Imagem Inválido
      */
     protected function _renderImage($identifier) {
     	// Imagem Registrada nas Informações?
     	if (!array_key_exists($identifier, $this->_imagesInfo)) {
-    		throw new Exception("Invalid Image: { img: '$identifier' }");
+    		$this->emitErrorMessage("Invalid Image: '$identifier'");
+    		return false;
     	}
     	// Informações da Imagem
     	$filename = $this->_imagesInfo[$identifier]['filename'];
@@ -324,7 +357,11 @@ class SubWikiParser extends AntlrParser {
      */
     protected function _cite($content) {
     	$content = trim($content);
-    	$this->_cites[] = $content;
+    	if (!in_array($content, $this->_citesInfo)) {
+    		$this->emitErrorMessage("Invalid Citation: '$content'");
+    	} else {
+    		$this->_cites[] = $content;
+    	}
     	$result = '\\cite{' . $content . '}';
     	$this->append($result);
     	return $this;
@@ -446,6 +483,16 @@ class SubWikiParser extends AntlrParser {
     }
 
     /**
+     * Adiciona Informações sobre Citações
+     * @param string $identifier Identificador da Citação
+     * @return SubWikiParser Próprio Objeto para Encadeamento
+     */
+    public function addCiteInfo($identifier) {
+    	$this->_citesInfo[] = $identifier;
+    	return $this;
+    }
+
+    /**
      * Configura o Filtro de Slug
      * @param Hazel_Filter_Slugger $slugger Elemento para Configuração
      * @return SubWikiParser Próprio Objeto para Encadeamento
@@ -489,17 +536,41 @@ class SubWikiParser extends AntlrParser {
     	return $this->_camelFilter;
     }
 
+    /**
+     * Informa os Identificadores de Imagens Utilizadas no Documento
+     * @return array Conjunto de Valores Solicitados
+     */
+    public function getImages() {
+    	return $this->_images;
+    }
+
+    /**
+     * Informa os Identificadores de Citações Utilizadas no Documento
+     * @return array Conjunto de Valores Solicitados
+     */
+    public function getCitations() {
+    	return $this->_cites;
+    }
+
+    /**
+     * Informa os Erros Encontrados
+     * @return array Valores Solicitados
+     */
+    public function getErrors() {
+    	return $this->_errors;
+    }
+
 
 
 
     // $ANTLR start "wikipage"
-    // SubWiki.g:380:1: wikipage : ( container | nowiki )+ EOF ; 
+    // SubWiki.g:451:1: wikipage : ( container | nowiki )+ EOF ; 
     public function wikipage(){
         try {
-            // SubWiki.g:381:2: ( ( container | nowiki )+ EOF ) 
-            // SubWiki.g:381:4: ( container | nowiki )+ EOF 
+            // SubWiki.g:452:2: ( ( container | nowiki )+ EOF ) 
+            // SubWiki.g:452:4: ( container | nowiki )+ EOF 
             {
-            // SubWiki.g:381:4: ( container | nowiki )+ 
+            // SubWiki.g:452:4: ( container | nowiki )+ 
             $cnt1=0;
             //loop1:
             do {
@@ -516,7 +587,7 @@ class SubWikiParser extends AntlrParser {
 
                 switch ($alt1) {
             	case 1 :
-            	    // SubWiki.g:381:6: container 
+            	    // SubWiki.g:452:6: container 
             	    {
             	    $this->pushFollow(self::$FOLLOW_container_in_wikipage34);
             	    $this->container();
@@ -527,7 +598,7 @@ class SubWikiParser extends AntlrParser {
             	    }
             	    break;
             	case 2 :
-            	    // SubWiki.g:381:18: nowiki 
+            	    // SubWiki.g:452:18: nowiki 
             	    {
             	    $this->pushFollow(self::$FOLLOW_nowiki_in_wikipage38);
             	    $this->nowiki();
@@ -566,13 +637,13 @@ class SubWikiParser extends AntlrParser {
 
 
     // $ANTLR start "container"
-    // SubWiki.g:382:1: container : ( heading | lists | paragraph ) container_end ; 
+    // SubWiki.g:453:1: container : ( heading | lists | paragraph ) container_end ; 
     public function container(){
         try {
-            // SubWiki.g:384:2: ( ( heading | lists | paragraph ) container_end ) 
-            // SubWiki.g:384:4: ( heading | lists | paragraph ) container_end 
+            // SubWiki.g:455:2: ( ( heading | lists | paragraph ) container_end ) 
+            // SubWiki.g:455:4: ( heading | lists | paragraph ) container_end 
             {
-            // SubWiki.g:384:4: ( heading | lists | paragraph ) 
+            // SubWiki.g:455:4: ( heading | lists | paragraph ) 
             $alt2=3;
             $LA2 = $this->input->LA(1);
             if($this->getToken('T_EQUAL')== $LA2)
@@ -612,7 +683,7 @@ class SubWikiParser extends AntlrParser {
 
             switch ($alt2) {
                 case 1 :
-                    // SubWiki.g:384:6: heading 
+                    // SubWiki.g:455:6: heading 
                     {
                     $this->pushFollow(self::$FOLLOW_heading_in_container58);
                     $this->heading();
@@ -623,7 +694,7 @@ class SubWikiParser extends AntlrParser {
                     }
                     break;
                 case 2 :
-                    // SubWiki.g:384:16: lists 
+                    // SubWiki.g:455:16: lists 
                     {
                     $this->pushFollow(self::$FOLLOW_lists_in_container62);
                     $this->lists();
@@ -634,7 +705,7 @@ class SubWikiParser extends AntlrParser {
                     }
                     break;
                 case 3 :
-                    // SubWiki.g:384:24: paragraph 
+                    // SubWiki.g:455:24: paragraph 
                     {
                     $this->pushFollow(self::$FOLLOW_paragraph_in_container66);
                     $this->paragraph();
@@ -671,10 +742,10 @@ class SubWikiParser extends AntlrParser {
 
 
     // $ANTLR start "container_end"
-    // SubWiki.g:385:1: container_end : ( ( T_NEWLINE )+ | EOF ); 
+    // SubWiki.g:456:1: container_end : ( ( T_NEWLINE )+ | EOF ); 
     public function container_end(){
         try {
-            // SubWiki.g:386:2: ( ( T_NEWLINE )+ | EOF ) 
+            // SubWiki.g:457:2: ( ( T_NEWLINE )+ | EOF ) 
             $alt4=2;
             $LA4_0 = $this->input->LA(1);
 
@@ -691,9 +762,9 @@ class SubWikiParser extends AntlrParser {
             }
             switch ($alt4) {
                 case 1 :
-                    // SubWiki.g:386:4: ( T_NEWLINE )+ 
+                    // SubWiki.g:457:4: ( T_NEWLINE )+ 
                     {
-                    // SubWiki.g:386:4: ( T_NEWLINE )+ 
+                    // SubWiki.g:457:4: ( T_NEWLINE )+ 
                     $cnt3=0;
                     //loop3:
                     do {
@@ -707,7 +778,7 @@ class SubWikiParser extends AntlrParser {
 
                         switch ($alt3) {
                     	case 1 :
-                    	    // SubWiki.g:386:4: T_NEWLINE 
+                    	    // SubWiki.g:457:4: T_NEWLINE 
                     	    {
                     	    $this->match($this->input,$this->getToken('T_NEWLINE'),self::$FOLLOW_T_NEWLINE_in_container_end78); 
 
@@ -727,7 +798,7 @@ class SubWikiParser extends AntlrParser {
                     }
                     break;
                 case 2 :
-                    // SubWiki.g:387:4: EOF 
+                    // SubWiki.g:458:4: EOF 
                     {
                     $this->match($this->input,$this->getToken('EOF'),self::$FOLLOW_EOF_in_container_end84); 
 
@@ -750,13 +821,13 @@ class SubWikiParser extends AntlrParser {
 
 
     // $ANTLR start "paragraph"
-    // SubWiki.g:391:1: paragraph : ( text_paragraph )+ ; 
+    // SubWiki.g:462:1: paragraph : ( text_paragraph )+ ; 
     public function paragraph(){
         try {
-            // SubWiki.g:393:2: ( ( text_paragraph )+ ) 
-            // SubWiki.g:393:4: ( text_paragraph )+ 
+            // SubWiki.g:464:2: ( ( text_paragraph )+ ) 
+            // SubWiki.g:464:4: ( text_paragraph )+ 
             {
-            // SubWiki.g:393:4: ( text_paragraph )+ 
+            // SubWiki.g:464:4: ( text_paragraph )+ 
             $cnt5=0;
             //loop5:
             do {
@@ -770,7 +841,7 @@ class SubWikiParser extends AntlrParser {
 
                 switch ($alt5) {
             	case 1 :
-            	    // SubWiki.g:393:6: text_paragraph 
+            	    // SubWiki.g:464:6: text_paragraph 
             	    {
             	    $this->pushFollow(self::$FOLLOW_text_paragraph_in_paragraph102);
             	    $this->text_paragraph();
@@ -809,25 +880,25 @@ class SubWikiParser extends AntlrParser {
 
 
     // $ANTLR start "text_paragraph"
-    // SubWiki.g:397:1: text_paragraph : text_line ( text_eol text_line )* ; 
+    // SubWiki.g:468:1: text_paragraph : text_line ( text_eol text_line )* ; 
     public function text_paragraph(){
         try {
-            // SubWiki.g:398:2: ( text_line ( text_eol text_line )* ) 
-            // SubWiki.g:398:4: text_line ( text_eol text_line )* 
+            // SubWiki.g:469:2: ( text_line ( text_eol text_line )* ) 
+            // SubWiki.g:469:4: text_line ( text_eol text_line )* 
             {
             $this->pushFollow(self::$FOLLOW_text_line_in_text_paragraph116);
             $this->text_line();
 
             $this->state->_fsp--;
 
-            // SubWiki.g:398:14: ( text_eol text_line )* 
+            // SubWiki.g:469:14: ( text_eol text_line )* 
             //loop6:
             do {
                 $alt6=2;
                 $alt6 = $this->dfa6->predict($this->input);
                 switch ($alt6) {
             	case 1 :
-            	    // SubWiki.g:398:16: text_eol text_line 
+            	    // SubWiki.g:469:16: text_eol text_line 
             	    {
             	    $this->pushFollow(self::$FOLLOW_text_eol_in_text_paragraph120);
             	    $this->text_eol();
@@ -866,13 +937,13 @@ class SubWikiParser extends AntlrParser {
 
 
     // $ANTLR start "text_line"
-    // SubWiki.g:399:1: text_line : ( text_element )+ ; 
+    // SubWiki.g:470:1: text_line : ( text_element )+ ; 
     public function text_line(){
         try {
-            // SubWiki.g:400:2: ( ( text_element )+ ) 
-            // SubWiki.g:400:4: ( text_element )+ 
+            // SubWiki.g:471:2: ( ( text_element )+ ) 
+            // SubWiki.g:471:4: ( text_element )+ 
             {
-            // SubWiki.g:400:4: ( text_element )+ 
+            // SubWiki.g:471:4: ( text_element )+ 
             $cnt7=0;
             //loop7:
             do {
@@ -907,7 +978,7 @@ class SubWikiParser extends AntlrParser {
 
                 switch ($alt7) {
             	case 1 :
-            	    // SubWiki.g:400:6: text_element 
+            	    // SubWiki.g:471:6: text_element 
             	    {
             	    $this->pushFollow(self::$FOLLOW_text_element_in_text_line135);
             	    $this->text_element();
@@ -945,11 +1016,11 @@ class SubWikiParser extends AntlrParser {
 
 
     // $ANTLR start "text_eol"
-    // SubWiki.g:401:1: text_eol : T_NEWLINE ; 
+    // SubWiki.g:472:1: text_eol : T_NEWLINE ; 
     public function text_eol(){
         try {
-            // SubWiki.g:402:2: ( T_NEWLINE ) 
-            // SubWiki.g:402:4: T_NEWLINE 
+            // SubWiki.g:473:2: ( T_NEWLINE ) 
+            // SubWiki.g:473:4: T_NEWLINE 
             {
             $this->match($this->input,$this->getToken('T_NEWLINE'),self::$FOLLOW_T_NEWLINE_in_text_eol146); 
                $this->append(' '); 
@@ -971,13 +1042,13 @@ class SubWikiParser extends AntlrParser {
 
 
     // $ANTLR start "text_element"
-    // SubWiki.g:403:1: text_element : ( text_formatted | text_unformatted | cite | image | headingref ); 
+    // SubWiki.g:474:1: text_element : ( text_formatted | text_unformatted | cite | image | headingref ); 
     public function text_element(){
         $text_unformatted1 = null;
 
 
         try {
-            // SubWiki.g:404:2: ( text_formatted | text_unformatted | cite | image | headingref ) 
+            // SubWiki.g:475:2: ( text_formatted | text_unformatted | cite | image | headingref ) 
             $alt8=5;
             $LA8 = $this->input->LA(1);
             if($this->getToken('T_BOLD')== $LA8||$this->getToken('T_ITALIC')== $LA8)
@@ -1009,7 +1080,7 @@ class SubWikiParser extends AntlrParser {
 
             switch ($alt8) {
                 case 1 :
-                    // SubWiki.g:404:4: text_formatted 
+                    // SubWiki.g:475:4: text_formatted 
                     {
                     $this->pushFollow(self::$FOLLOW_text_formatted_in_text_element156);
                     $this->text_formatted();
@@ -1020,7 +1091,7 @@ class SubWikiParser extends AntlrParser {
                     }
                     break;
                 case 2 :
-                    // SubWiki.g:405:4: text_unformatted 
+                    // SubWiki.g:476:4: text_unformatted 
                     {
                     $this->pushFollow(self::$FOLLOW_text_unformatted_in_text_element161);
                     $text_unformatted1=$this->text_unformatted();
@@ -1032,7 +1103,7 @@ class SubWikiParser extends AntlrParser {
                     }
                     break;
                 case 3 :
-                    // SubWiki.g:406:4: cite 
+                    // SubWiki.g:477:4: cite 
                     {
                     $this->pushFollow(self::$FOLLOW_cite_in_text_element168);
                     $this->cite();
@@ -1043,7 +1114,7 @@ class SubWikiParser extends AntlrParser {
                     }
                     break;
                 case 4 :
-                    // SubWiki.g:407:4: image 
+                    // SubWiki.g:478:4: image 
                     {
                     $this->pushFollow(self::$FOLLOW_image_in_text_element173);
                     $this->image();
@@ -1054,7 +1125,7 @@ class SubWikiParser extends AntlrParser {
                     }
                     break;
                 case 5 :
-                    // SubWiki.g:408:4: headingref 
+                    // SubWiki.g:479:4: headingref 
                     {
                     $this->pushFollow(self::$FOLLOW_headingref_in_text_element178);
                     $this->headingref();
@@ -1081,10 +1152,10 @@ class SubWikiParser extends AntlrParser {
 
 
     // $ANTLR start "lists"
-    // SubWiki.g:412:1: lists : ( list_ord | list_unord ); 
+    // SubWiki.g:483:1: lists : ( list_ord | list_unord ); 
     public function lists(){
         try {
-            // SubWiki.g:413:2: ( list_ord | list_unord ) 
+            // SubWiki.g:484:2: ( list_ord | list_unord ) 
             $alt9=2;
             $LA9_0 = $this->input->LA(1);
 
@@ -1101,7 +1172,7 @@ class SubWikiParser extends AntlrParser {
             }
             switch ($alt9) {
                 case 1 :
-                    // SubWiki.g:413:4: list_ord 
+                    // SubWiki.g:484:4: list_ord 
                     {
                     $this->pushFollow(self::$FOLLOW_list_ord_in_lists189);
                     $this->list_ord();
@@ -1112,7 +1183,7 @@ class SubWikiParser extends AntlrParser {
                     }
                     break;
                 case 2 :
-                    // SubWiki.g:414:4: list_unord 
+                    // SubWiki.g:485:4: list_unord 
                     {
                     $this->pushFollow(self::$FOLLOW_list_unord_in_lists194);
                     $this->list_unord();
@@ -1139,11 +1210,11 @@ class SubWikiParser extends AntlrParser {
 
 
     // $ANTLR start "list_eol"
-    // SubWiki.g:415:1: list_eol : T_NEWLINE ; 
+    // SubWiki.g:486:1: list_eol : T_NEWLINE ; 
     public function list_eol(){
         try {
-            // SubWiki.g:416:2: ( T_NEWLINE ) 
-            // SubWiki.g:416:4: T_NEWLINE 
+            // SubWiki.g:487:2: ( T_NEWLINE ) 
+            // SubWiki.g:487:4: T_NEWLINE 
             {
             $this->match($this->input,$this->getToken('T_NEWLINE'),self::$FOLLOW_T_NEWLINE_in_list_eol202); 
 
@@ -1164,14 +1235,14 @@ class SubWikiParser extends AntlrParser {
 
 
     // $ANTLR start "list_item"
-    // SubWiki.g:417:1: list_item : text_unformatted ; 
+    // SubWiki.g:488:1: list_item : text_unformatted ; 
     public function list_item(){
         $text_unformatted2 = null;
 
 
         try {
-            // SubWiki.g:419:2: ( text_unformatted ) 
-            // SubWiki.g:419:4: text_unformatted 
+            // SubWiki.g:490:2: ( text_unformatted ) 
+            // SubWiki.g:490:4: text_unformatted 
             {
             $this->pushFollow(self::$FOLLOW_text_unformatted_in_list_item215);
             $text_unformatted2=$this->text_unformatted();
@@ -1198,19 +1269,19 @@ class SubWikiParser extends AntlrParser {
 
 
     // $ANTLR start "list_unord"
-    // SubWiki.g:423:1: list_unord : list_unord_element ( list_eol list_unord_element )* ; 
+    // SubWiki.g:494:1: list_unord : list_unord_element ( list_eol list_unord_element )* ; 
     public function list_unord(){
          $this->_list('itemize', 'begin'); $this->append("\n"); 
         try {
-            // SubWiki.g:426:2: ( list_unord_element ( list_eol list_unord_element )* ) 
-            // SubWiki.g:426:4: list_unord_element ( list_eol list_unord_element )* 
+            // SubWiki.g:497:2: ( list_unord_element ( list_eol list_unord_element )* ) 
+            // SubWiki.g:497:4: list_unord_element ( list_eol list_unord_element )* 
             {
             $this->pushFollow(self::$FOLLOW_list_unord_element_in_list_unord239);
             $this->list_unord_element();
 
             $this->state->_fsp--;
 
-            // SubWiki.g:426:23: ( list_eol list_unord_element )* 
+            // SubWiki.g:497:23: ( list_eol list_unord_element )* 
             //loop10:
             do {
                 $alt10=2;
@@ -1235,7 +1306,7 @@ class SubWikiParser extends AntlrParser {
 
                 switch ($alt10) {
             	case 1 :
-            	    // SubWiki.g:426:25: list_eol list_unord_element 
+            	    // SubWiki.g:497:25: list_eol list_unord_element 
             	    {
             	    $this->pushFollow(self::$FOLLOW_list_eol_in_list_unord243);
             	    $this->list_eol();
@@ -1275,11 +1346,11 @@ class SubWikiParser extends AntlrParser {
 
 
     // $ANTLR start "list_unord_element"
-    // SubWiki.g:427:1: list_unord_element : T_STAR list_item ; 
+    // SubWiki.g:498:1: list_unord_element : T_STAR list_item ; 
     public function list_unord_element(){
         try {
-            // SubWiki.g:428:2: ( T_STAR list_item ) 
-            // SubWiki.g:428:4: T_STAR list_item 
+            // SubWiki.g:499:2: ( T_STAR list_item ) 
+            // SubWiki.g:499:4: T_STAR list_item 
             {
             $this->match($this->input,$this->getToken('T_STAR'),self::$FOLLOW_T_STAR_in_list_unord_element256); 
             $this->pushFollow(self::$FOLLOW_list_item_in_list_unord_element258);
@@ -1305,19 +1376,19 @@ class SubWikiParser extends AntlrParser {
 
 
     // $ANTLR start "list_ord"
-    // SubWiki.g:432:1: list_ord : list_ord_element ( list_eol list_ord_element )* ; 
+    // SubWiki.g:503:1: list_ord : list_ord_element ( list_eol list_ord_element )* ; 
     public function list_ord(){
          $this->_list('enumerate', 'begin'); $this->append("\n"); 
         try {
-            // SubWiki.g:435:2: ( list_ord_element ( list_eol list_ord_element )* ) 
-            // SubWiki.g:435:4: list_ord_element ( list_eol list_ord_element )* 
+            // SubWiki.g:506:2: ( list_ord_element ( list_eol list_ord_element )* ) 
+            // SubWiki.g:506:4: list_ord_element ( list_eol list_ord_element )* 
             {
             $this->pushFollow(self::$FOLLOW_list_ord_element_in_list_ord280);
             $this->list_ord_element();
 
             $this->state->_fsp--;
 
-            // SubWiki.g:435:21: ( list_eol list_ord_element )* 
+            // SubWiki.g:506:21: ( list_eol list_ord_element )* 
             //loop11:
             do {
                 $alt11=2;
@@ -1345,7 +1416,7 @@ class SubWikiParser extends AntlrParser {
 
                 switch ($alt11) {
             	case 1 :
-            	    // SubWiki.g:435:23: list_eol list_ord_element 
+            	    // SubWiki.g:506:23: list_eol list_ord_element 
             	    {
             	    $this->pushFollow(self::$FOLLOW_list_eol_in_list_ord284);
             	    $this->list_eol();
@@ -1385,11 +1456,11 @@ class SubWikiParser extends AntlrParser {
 
 
     // $ANTLR start "list_ord_element"
-    // SubWiki.g:436:1: list_ord_element : T_POUND list_item ; 
+    // SubWiki.g:507:1: list_ord_element : T_POUND list_item ; 
     public function list_ord_element(){
         try {
-            // SubWiki.g:437:2: ( T_POUND list_item ) 
-            // SubWiki.g:437:4: T_POUND list_item 
+            // SubWiki.g:508:2: ( T_POUND list_item ) 
+            // SubWiki.g:508:4: T_POUND list_item 
             {
             $this->match($this->input,$this->getToken('T_POUND'),self::$FOLLOW_T_POUND_in_list_ord_element297); 
             $this->pushFollow(self::$FOLLOW_list_item_in_list_ord_element299);
@@ -1415,7 +1486,7 @@ class SubWikiParser extends AntlrParser {
 
 
     // $ANTLR start "text_formatted"
-    // SubWiki.g:441:1: text_formatted : ( markup_bold bold_content markup_bold | markup_italic italic_content markup_italic ); 
+    // SubWiki.g:512:1: text_formatted : ( markup_bold bold_content markup_bold | markup_italic italic_content markup_italic ); 
     public function text_formatted(){
         $bold_content3 = null;
 
@@ -1423,7 +1494,7 @@ class SubWikiParser extends AntlrParser {
 
 
         try {
-            // SubWiki.g:442:2: ( markup_bold bold_content markup_bold | markup_italic italic_content markup_italic ) 
+            // SubWiki.g:513:2: ( markup_bold bold_content markup_bold | markup_italic italic_content markup_italic ) 
             $alt12=2;
             $LA12_0 = $this->input->LA(1);
 
@@ -1440,7 +1511,7 @@ class SubWikiParser extends AntlrParser {
             }
             switch ($alt12) {
                 case 1 :
-                    // SubWiki.g:442:4: markup_bold bold_content markup_bold 
+                    // SubWiki.g:513:4: markup_bold bold_content markup_bold 
                     {
                     $this->pushFollow(self::$FOLLOW_markup_bold_in_text_formatted310);
                     $this->markup_bold();
@@ -1462,7 +1533,7 @@ class SubWikiParser extends AntlrParser {
                     }
                     break;
                 case 2 :
-                    // SubWiki.g:444:4: markup_italic italic_content markup_italic 
+                    // SubWiki.g:515:4: markup_italic italic_content markup_italic 
                     {
                     $this->pushFollow(self::$FOLLOW_markup_italic_in_text_formatted323);
                     $this->markup_italic();
@@ -1500,11 +1571,11 @@ class SubWikiParser extends AntlrParser {
 
 
     // $ANTLR start "markup_bold"
-    // SubWiki.g:446:1: markup_bold : T_BOLD ; 
+    // SubWiki.g:517:1: markup_bold : T_BOLD ; 
     public function markup_bold(){
         try {
-            // SubWiki.g:447:2: ( T_BOLD ) 
-            // SubWiki.g:447:4: T_BOLD 
+            // SubWiki.g:518:2: ( T_BOLD ) 
+            // SubWiki.g:518:4: T_BOLD 
             {
             $this->match($this->input,$this->getToken('T_BOLD'),self::$FOLLOW_T_BOLD_in_markup_bold339); 
 
@@ -1525,11 +1596,11 @@ class SubWikiParser extends AntlrParser {
 
 
     // $ANTLR start "markup_italic"
-    // SubWiki.g:448:1: markup_italic : T_ITALIC ; 
+    // SubWiki.g:519:1: markup_italic : T_ITALIC ; 
     public function markup_italic(){
         try {
-            // SubWiki.g:449:2: ( T_ITALIC ) 
-            // SubWiki.g:449:4: T_ITALIC 
+            // SubWiki.g:520:2: ( T_ITALIC ) 
+            // SubWiki.g:520:4: T_ITALIC 
             {
             $this->match($this->input,$this->getToken('T_ITALIC'),self::$FOLLOW_T_ITALIC_in_markup_italic347); 
 
@@ -1556,14 +1627,14 @@ class SubWikiParser extends AntlrParser {
     }
 
     // $ANTLR start "bold_content"
-    // SubWiki.g:451:1: bold_content : text_unformatted ; 
+    // SubWiki.g:522:1: bold_content : text_unformatted ; 
     public function bold_content(){
         $retval = $this->bold_content_return();
         $retval->start = $this->input->LT(1);
 
         try {
-            // SubWiki.g:452:2: ( text_unformatted ) 
-            // SubWiki.g:452:4: text_unformatted 
+            // SubWiki.g:523:2: ( text_unformatted ) 
+            // SubWiki.g:523:4: text_unformatted 
             {
             $this->pushFollow(self::$FOLLOW_text_unformatted_in_bold_content356);
             $this->text_unformatted();
@@ -1596,14 +1667,14 @@ class SubWikiParser extends AntlrParser {
     }
 
     // $ANTLR start "italic_content"
-    // SubWiki.g:453:1: italic_content : text_unformatted ; 
+    // SubWiki.g:524:1: italic_content : text_unformatted ; 
     public function italic_content(){
         $retval = $this->italic_content_return();
         $retval->start = $this->input->LT(1);
 
         try {
-            // SubWiki.g:454:2: ( text_unformatted ) 
-            // SubWiki.g:454:4: text_unformatted 
+            // SubWiki.g:525:2: ( text_unformatted ) 
+            // SubWiki.g:525:4: text_unformatted 
             {
             $this->pushFollow(self::$FOLLOW_text_unformatted_in_italic_content364);
             $this->text_unformatted();
@@ -1630,11 +1701,11 @@ class SubWikiParser extends AntlrParser {
 
 
     // $ANTLR start "heading"
-    // SubWiki.g:458:1: heading : T_EQUAL heading_content T_EQUAL ; 
+    // SubWiki.g:529:1: heading : T_EQUAL heading_content T_EQUAL ; 
     public function heading(){
         try {
-            // SubWiki.g:459:2: ( T_EQUAL heading_content T_EQUAL ) 
-            // SubWiki.g:459:4: T_EQUAL heading_content T_EQUAL 
+            // SubWiki.g:530:2: ( T_EQUAL heading_content T_EQUAL ) 
+            // SubWiki.g:530:4: T_EQUAL heading_content T_EQUAL 
             {
             $this->match($this->input,$this->getToken('T_EQUAL'),self::$FOLLOW_T_EQUAL_in_heading375); 
             $this->pushFollow(self::$FOLLOW_heading_content_in_heading377);
@@ -1662,13 +1733,13 @@ class SubWikiParser extends AntlrParser {
 
 
     // $ANTLR start "heading_content"
-    // SubWiki.g:460:1: heading_content : ( T_EQUAL heading_content T_EQUAL | text_unformatted ); 
+    // SubWiki.g:531:1: heading_content : ( T_EQUAL heading_content T_EQUAL | text_unformatted ); 
     public function heading_content(){
         $text_unformatted5 = null;
 
 
         try {
-            // SubWiki.g:461:2: ( T_EQUAL heading_content T_EQUAL | text_unformatted ) 
+            // SubWiki.g:532:2: ( T_EQUAL heading_content T_EQUAL | text_unformatted ) 
             $alt13=2;
             $LA13_0 = $this->input->LA(1);
 
@@ -1685,7 +1756,7 @@ class SubWikiParser extends AntlrParser {
             }
             switch ($alt13) {
                 case 1 :
-                    // SubWiki.g:461:4: T_EQUAL heading_content T_EQUAL 
+                    // SubWiki.g:532:4: T_EQUAL heading_content T_EQUAL 
                     {
                     $this->match($this->input,$this->getToken('T_EQUAL'),self::$FOLLOW_T_EQUAL_in_heading_content389); 
                        $this->_addSectionLevel(1); 
@@ -1699,7 +1770,7 @@ class SubWikiParser extends AntlrParser {
                     }
                     break;
                 case 2 :
-                    // SubWiki.g:463:4: text_unformatted 
+                    // SubWiki.g:534:4: text_unformatted 
                     {
                     $this->pushFollow(self::$FOLLOW_text_unformatted_in_heading_content402);
                     $text_unformatted5=$this->text_unformatted();
@@ -1727,14 +1798,14 @@ class SubWikiParser extends AntlrParser {
 
 
     // $ANTLR start "headingref"
-    // SubWiki.g:467:1: headingref : T_POUND headingref_content ; 
+    // SubWiki.g:538:1: headingref : T_POUND headingref_content ; 
     public function headingref(){
         $headingref_content6 = null;
 
 
         try {
-            // SubWiki.g:468:2: ( T_POUND headingref_content ) 
-            // SubWiki.g:468:4: T_POUND headingref_content 
+            // SubWiki.g:539:2: ( T_POUND headingref_content ) 
+            // SubWiki.g:539:4: T_POUND headingref_content 
             {
             $this->match($this->input,$this->getToken('T_POUND'),self::$FOLLOW_T_POUND_in_headingref415); 
             $this->pushFollow(self::$FOLLOW_headingref_content_in_headingref417);
@@ -1767,16 +1838,16 @@ class SubWikiParser extends AntlrParser {
     }
 
     // $ANTLR start "headingref_content"
-    // SubWiki.g:470:1: headingref_content : (~ ( T_SPACE ) )+ ; 
+    // SubWiki.g:541:1: headingref_content : (~ ( T_SPACE ) )+ ; 
     public function headingref_content(){
         $retval = $this->headingref_content_return();
         $retval->start = $this->input->LT(1);
 
         try {
-            // SubWiki.g:471:2: ( (~ ( T_SPACE ) )+ ) 
-            // SubWiki.g:471:4: (~ ( T_SPACE ) )+ 
+            // SubWiki.g:542:2: ( (~ ( T_SPACE ) )+ ) 
+            // SubWiki.g:542:4: (~ ( T_SPACE ) )+ 
             {
-            // SubWiki.g:471:4: (~ ( T_SPACE ) )+ 
+            // SubWiki.g:542:4: (~ ( T_SPACE ) )+ 
             $cnt14=0;
             //loop14:
             do {
@@ -1784,7 +1855,7 @@ class SubWikiParser extends AntlrParser {
                 $alt14 = $this->dfa14->predict($this->input);
                 switch ($alt14) {
             	case 1 :
-            	    // SubWiki.g:471:4: ~ ( T_SPACE ) 
+            	    // SubWiki.g:542:4: ~ ( T_SPACE ) 
             	    {
             	    if ( ($this->input->LA(1)>=$this->getToken('T_NEWLINE') && $this->input->LA(1)<=$this->getToken('T_EQUAL'))||($this->input->LA(1)>=$this->getToken('T_CITE_OPEN') && $this->input->LA(1)<=$this->getToken('T_OTHER')) ) {
             	        $this->input->consume();
@@ -1834,16 +1905,16 @@ class SubWikiParser extends AntlrParser {
     }
 
     // $ANTLR start "text_unformatted"
-    // SubWiki.g:475:1: text_unformatted : (~ ( T_NEWLINE | T_STAR | T_EQUAL | T_POUND | T_BOLD | T_ITALIC | T_CITE_OPEN | T_CITE_CLOSE | T_IMAGE_OPEN | T_IMAGE_CLOSE | T_NOWIKI_OPEN | T_NOWIKI_CLOSE | EOF ) )+ ; 
+    // SubWiki.g:546:1: text_unformatted : (~ ( T_NEWLINE | T_STAR | T_EQUAL | T_POUND | T_BOLD | T_ITALIC | T_CITE_OPEN | T_CITE_CLOSE | T_IMAGE_OPEN | T_IMAGE_CLOSE | T_NOWIKI_OPEN | T_NOWIKI_CLOSE | EOF ) )+ ; 
     public function text_unformatted(){
         $retval = $this->text_unformatted_return();
         $retval->start = $this->input->LT(1);
 
         try {
-            // SubWiki.g:476:2: ( (~ ( T_NEWLINE | T_STAR | T_EQUAL | T_POUND | T_BOLD | T_ITALIC | T_CITE_OPEN | T_CITE_CLOSE | T_IMAGE_OPEN | T_IMAGE_CLOSE | T_NOWIKI_OPEN | T_NOWIKI_CLOSE | EOF ) )+ ) 
-            // SubWiki.g:476:4: (~ ( T_NEWLINE | T_STAR | T_EQUAL | T_POUND | T_BOLD | T_ITALIC | T_CITE_OPEN | T_CITE_CLOSE | T_IMAGE_OPEN | T_IMAGE_CLOSE | T_NOWIKI_OPEN | T_NOWIKI_CLOSE | EOF ) )+ 
+            // SubWiki.g:547:2: ( (~ ( T_NEWLINE | T_STAR | T_EQUAL | T_POUND | T_BOLD | T_ITALIC | T_CITE_OPEN | T_CITE_CLOSE | T_IMAGE_OPEN | T_IMAGE_CLOSE | T_NOWIKI_OPEN | T_NOWIKI_CLOSE | EOF ) )+ ) 
+            // SubWiki.g:547:4: (~ ( T_NEWLINE | T_STAR | T_EQUAL | T_POUND | T_BOLD | T_ITALIC | T_CITE_OPEN | T_CITE_CLOSE | T_IMAGE_OPEN | T_IMAGE_CLOSE | T_NOWIKI_OPEN | T_NOWIKI_CLOSE | EOF ) )+ 
             {
-            // SubWiki.g:476:4: (~ ( T_NEWLINE | T_STAR | T_EQUAL | T_POUND | T_BOLD | T_ITALIC | T_CITE_OPEN | T_CITE_CLOSE | T_IMAGE_OPEN | T_IMAGE_CLOSE | T_NOWIKI_OPEN | T_NOWIKI_CLOSE | EOF ) )+ 
+            // SubWiki.g:547:4: (~ ( T_NEWLINE | T_STAR | T_EQUAL | T_POUND | T_BOLD | T_ITALIC | T_CITE_OPEN | T_CITE_CLOSE | T_IMAGE_OPEN | T_IMAGE_CLOSE | T_NOWIKI_OPEN | T_NOWIKI_CLOSE | EOF ) )+ 
             $cnt15=0;
             //loop15:
             do {
@@ -1857,7 +1928,7 @@ class SubWikiParser extends AntlrParser {
 
                 switch ($alt15) {
             	case 1 :
-            	    // SubWiki.g:476:4: ~ ( T_NEWLINE | T_STAR | T_EQUAL | T_POUND | T_BOLD | T_ITALIC | T_CITE_OPEN | T_CITE_CLOSE | T_IMAGE_OPEN | T_IMAGE_CLOSE | T_NOWIKI_OPEN | T_NOWIKI_CLOSE | EOF ) 
+            	    // SubWiki.g:547:4: ~ ( T_NEWLINE | T_STAR | T_EQUAL | T_POUND | T_BOLD | T_ITALIC | T_CITE_OPEN | T_CITE_CLOSE | T_IMAGE_OPEN | T_IMAGE_CLOSE | T_NOWIKI_OPEN | T_NOWIKI_CLOSE | EOF ) 
             	    {
             	    if ( $this->input->LA(1)==$this->getToken('T_SPACE')||($this->input->LA(1)>=$this->getToken('T_CHAR') && $this->input->LA(1)<=$this->getToken('T_OTHER')) ) {
             	        $this->input->consume();
@@ -1901,14 +1972,14 @@ class SubWikiParser extends AntlrParser {
 
 
     // $ANTLR start "cite"
-    // SubWiki.g:482:1: cite : T_CITE_OPEN cite_content T_CITE_CLOSE ; 
+    // SubWiki.g:553:1: cite : T_CITE_OPEN cite_content T_CITE_CLOSE ; 
     public function cite(){
         $cite_content7 = null;
 
 
         try {
-            // SubWiki.g:483:2: ( T_CITE_OPEN cite_content T_CITE_CLOSE ) 
-            // SubWiki.g:483:4: T_CITE_OPEN cite_content T_CITE_CLOSE 
+            // SubWiki.g:554:2: ( T_CITE_OPEN cite_content T_CITE_CLOSE ) 
+            // SubWiki.g:554:4: T_CITE_OPEN cite_content T_CITE_CLOSE 
             {
             $this->match($this->input,$this->getToken('T_CITE_OPEN'),self::$FOLLOW_T_CITE_OPEN_in_cite515); 
             $this->pushFollow(self::$FOLLOW_cite_content_in_cite517);
@@ -1942,14 +2013,14 @@ class SubWikiParser extends AntlrParser {
     }
 
     // $ANTLR start "cite_content"
-    // SubWiki.g:485:1: cite_content : identifier ; 
+    // SubWiki.g:556:1: cite_content : identifier ; 
     public function cite_content(){
         $retval = $this->cite_content_return();
         $retval->start = $this->input->LT(1);
 
         try {
-            // SubWiki.g:486:2: ( identifier ) 
-            // SubWiki.g:486:4: identifier 
+            // SubWiki.g:557:2: ( identifier ) 
+            // SubWiki.g:557:4: identifier 
             {
             $this->pushFollow(self::$FOLLOW_identifier_in_cite_content531);
             $this->identifier();
@@ -1976,14 +2047,14 @@ class SubWikiParser extends AntlrParser {
 
 
     // $ANTLR start "image"
-    // SubWiki.g:490:1: image : T_IMAGE_OPEN image_content T_IMAGE_CLOSE ; 
+    // SubWiki.g:561:1: image : T_IMAGE_OPEN image_content T_IMAGE_CLOSE ; 
     public function image(){
         $image_content8 = null;
 
 
         try {
-            // SubWiki.g:491:2: ( T_IMAGE_OPEN image_content T_IMAGE_CLOSE ) 
-            // SubWiki.g:491:4: T_IMAGE_OPEN image_content T_IMAGE_CLOSE 
+            // SubWiki.g:562:2: ( T_IMAGE_OPEN image_content T_IMAGE_CLOSE ) 
+            // SubWiki.g:562:4: T_IMAGE_OPEN image_content T_IMAGE_CLOSE 
             {
             $this->match($this->input,$this->getToken('T_IMAGE_OPEN'),self::$FOLLOW_T_IMAGE_OPEN_in_image542); 
             $this->pushFollow(self::$FOLLOW_image_content_in_image544);
@@ -2017,14 +2088,14 @@ class SubWikiParser extends AntlrParser {
     }
 
     // $ANTLR start "image_content"
-    // SubWiki.g:493:1: image_content : identifier ; 
+    // SubWiki.g:564:1: image_content : identifier ; 
     public function image_content(){
         $retval = $this->image_content_return();
         $retval->start = $this->input->LT(1);
 
         try {
-            // SubWiki.g:494:2: ( identifier ) 
-            // SubWiki.g:494:4: identifier 
+            // SubWiki.g:565:2: ( identifier ) 
+            // SubWiki.g:565:4: identifier 
             {
             $this->pushFollow(self::$FOLLOW_identifier_in_image_content558);
             $this->identifier();
@@ -2051,13 +2122,13 @@ class SubWikiParser extends AntlrParser {
 
 
     // $ANTLR start "identifier"
-    // SubWiki.g:498:1: identifier : ( T_CHAR )+ ; 
+    // SubWiki.g:569:1: identifier : ( T_CHAR )+ ; 
     public function identifier(){
         try {
-            // SubWiki.g:499:2: ( ( T_CHAR )+ ) 
-            // SubWiki.g:499:4: ( T_CHAR )+ 
+            // SubWiki.g:570:2: ( ( T_CHAR )+ ) 
+            // SubWiki.g:570:4: ( T_CHAR )+ 
             {
-            // SubWiki.g:499:4: ( T_CHAR )+ 
+            // SubWiki.g:570:4: ( T_CHAR )+ 
             $cnt16=0;
             //loop16:
             do {
@@ -2071,7 +2142,7 @@ class SubWikiParser extends AntlrParser {
 
                 switch ($alt16) {
             	case 1 :
-            	    // SubWiki.g:499:6: T_CHAR 
+            	    // SubWiki.g:570:6: T_CHAR 
             	    {
             	    $this->match($this->input,$this->getToken('T_CHAR'),self::$FOLLOW_T_CHAR_in_identifier571); 
 
@@ -2105,11 +2176,11 @@ class SubWikiParser extends AntlrParser {
 
 
     // $ANTLR start "nowiki"
-    // SubWiki.g:503:1: nowiki : T_NOWIKI_OPEN nowiki_content T_NOWIKI_CLOSE ; 
+    // SubWiki.g:574:1: nowiki : T_NOWIKI_OPEN nowiki_content T_NOWIKI_CLOSE ; 
     public function nowiki(){
         try {
-            // SubWiki.g:504:2: ( T_NOWIKI_OPEN nowiki_content T_NOWIKI_CLOSE ) 
-            // SubWiki.g:504:4: T_NOWIKI_OPEN nowiki_content T_NOWIKI_CLOSE 
+            // SubWiki.g:575:2: ( T_NOWIKI_OPEN nowiki_content T_NOWIKI_CLOSE ) 
+            // SubWiki.g:575:4: T_NOWIKI_OPEN nowiki_content T_NOWIKI_CLOSE 
             {
             $this->match($this->input,$this->getToken('T_NOWIKI_OPEN'),self::$FOLLOW_T_NOWIKI_OPEN_in_nowiki585); 
             $this->pushFollow(self::$FOLLOW_nowiki_content_in_nowiki587);
@@ -2136,13 +2207,13 @@ class SubWikiParser extends AntlrParser {
 
 
     // $ANTLR start "nowiki_content"
-    // SubWiki.g:505:1: nowiki_content : (~ ( T_NOWIKI_CLOSE ) )+ ; 
+    // SubWiki.g:576:1: nowiki_content : (~ ( T_NOWIKI_CLOSE ) )+ ; 
     public function nowiki_content(){
         try {
-            // SubWiki.g:506:2: ( (~ ( T_NOWIKI_CLOSE ) )+ ) 
-            // SubWiki.g:506:4: (~ ( T_NOWIKI_CLOSE ) )+ 
+            // SubWiki.g:577:2: ( (~ ( T_NOWIKI_CLOSE ) )+ ) 
+            // SubWiki.g:577:4: (~ ( T_NOWIKI_CLOSE ) )+ 
             {
-            // SubWiki.g:506:4: (~ ( T_NOWIKI_CLOSE ) )+ 
+            // SubWiki.g:577:4: (~ ( T_NOWIKI_CLOSE ) )+ 
             $cnt17=0;
             //loop17:
             do {
@@ -2156,7 +2227,7 @@ class SubWikiParser extends AntlrParser {
 
                 switch ($alt17) {
             	case 1 :
-            	    // SubWiki.g:506:4: ~ ( T_NOWIKI_CLOSE ) 
+            	    // SubWiki.g:577:4: ~ ( T_NOWIKI_CLOSE ) 
             	    {
             	    if ( ($this->input->LA(1)>=$this->getToken('T_NEWLINE') && $this->input->LA(1)<=$this->getToken('T_NOWIKI_OPEN'))||($this->input->LA(1)>=$this->getToken('T_CHAR') && $this->input->LA(1)<=$this->getToken('T_OTHER')) ) {
             	        $this->input->consume();
@@ -2255,7 +2326,7 @@ class SubWikiParser_DFA6 extends DFA {
         $this->transition = $DFA['transition'];
     }
     public function getDescription() {
-        return "()* loopback of 398:14: ( text_eol text_line )*";
+        return "()* loopback of 469:14: ( text_eol text_line )*";
     }
 }
 function SubWikiParser_DFA14_static(){
@@ -2323,7 +2394,7 @@ class SubWikiParser_DFA14 extends DFA {
         $this->transition = $DFA['transition'];
     }
     public function getDescription() {
-        return "()+ loopback of 471:4: (~ ( T_SPACE ) )+";
+        return "()+ loopback of 542:4: (~ ( T_SPACE ) )+";
     }
 }
  

@@ -21,6 +21,12 @@ class ArtigoController extends Local_Controller_ActionAbstract
     protected $_formClass = 'Application_Form_Artigo';
 
     /**
+     * Tradutor de Artigos
+     * @var Local_Parser_WikiToLatex
+     */
+    protected $_parser;
+
+    /**
      * Index Action
      */
     public function indexAction()
@@ -174,27 +180,44 @@ class ArtigoController extends Local_Controller_ActionAbstract
             throw new Zend_Db_Exception('Invalid Element');
         }
 
-        // Tradução do Artigo
-        $result = $this->_parse($element);
+        // Dependências
+        Zend_Loader::loadFile('antlr.php', null, true);
+        Zend_Loader::loadClass('SubWikiParser');
+        Zend_Loader::loadClass('SubWikiLexer');
+
+        // Inicialização
+        $ass = new ANTLRStringStream($element->conteudo);
+        $lex = new SubWikiLexer($ass);
+        $cts = new CommonTokenStream($lex);
+
+        // Tradutor
+        $parser = new SubWikiParser($cts);
+
+        // Usuário Atual
+        $usuario = $element->findParentRow('Usuario');
+
+        // Preenchimento de Imagens Disponíveis
+        $figuras = $usuario->findDependentRowset('Figura');
+        foreach ($figuras as $figura) {
+            $identifier = $figura->identificador;
+            $filename   = $figura->arquivo;
+            $caption    = $figura->legenda;
+            $parser->addImageInfo($identifier, $filename, $caption);
+        }
+
+        // Preenchimento de Citações Disponíveis
+        $referencias = $usuario->findDependentRowset('Referencia');
+        foreach ($referencias as $referencia) {
+            $identifier = $referencia->identificador;
+            $parser->addCiteInfo($identifier);
+        }
+
+        // Processamento
+        $parser->wikipage();
 
         // Ignorar Renderização de Saída
         $renderer = $this->_helper->getHelper('ViewRenderer');
         $renderer->setNoRender(true);
         $this->view->layout()->disableLayout();
-
-        // Anexo de Conteúdo
-        $this->getResponse()->append('content', $result);
-    }
-
-    /**
-     * Tradução de Conteúdo
-     * @param Application_Model_DbTable_Row_Article Artigo para Tradução
-     * @return string Saída em LaTeX Esperada
-     */
-    protected function _parse(Application_Model_DbTable_Row_Artigo $article)
-    {
-        $parser = new Local_Parser_WikiToLatex();
-        $parser->setArticle($article);
-        return $parser->parse();
     }
 }
