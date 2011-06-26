@@ -64,7 +64,7 @@ protected \$_camelFilter = null;
  * @param \$content Conteúdo para Anexo
  * @return SubWikiParser Próprio Objeto para Encadeamento
  */
-protected function _append(\$content) {
+public function append(\$content) {
 	\$this->_content .= \$content;
 	return \$this;
 }
@@ -73,7 +73,7 @@ protected function _append(\$content) {
  * Renderização Final
  * @return string Conteúdo Solicitado
  */
-protected function _render() {
+public function render() {
 	return \$this->_content;
 }
 
@@ -89,12 +89,12 @@ protected function _section(\$content) {
 	\$level  = \$this->_getSectionLevel();
 	\$sub    = str_repeat('sub', (int) \$level);
 	\$result = '\\' . \$sub . 'section{' . \$content . '}' . PHP_EOL;
-	\$this->_append(\$result);
+	\$this->append(\$result);
 	// Criação da Etiqueta de Referência
 	\$filter = \$this->getSlugger();
 	\$slug   = \$filter->filter(\$content);
 	\$result = sprintf('\\label{sec:\%s}', \$slug);
-	\$this->_append(\$result);
+	\$this->append(\$result);
 	return \$this;
 }
 
@@ -110,7 +110,7 @@ protected function _sectionReference(\$content) {
 	\$content = \$filter->filter(\$content);
 	\$content = \$slugger->filter(\$content);
 	\$result  = sprintf('\\ref{sec:\%s}', \$content);
-	\$this->_append(\$result);
+	\$this->append(\$result);
 	return \$this;
 }
 
@@ -155,7 +155,7 @@ protected function _image(\$content) {
 	}
 	// Inclui Referência Cruzada
 	\$result = '\\ref{fig:' . \$content . '}';
-	\$this->_append(\$result);
+	\$this->append(\$result);
 	return \$this;
 }
 
@@ -167,8 +167,8 @@ protected function _appendImagesLast() {
 	// Seleciona as Últimas Imagens Inseridas
 	foreach (\$this->_imagesLast as \$identifier) {
 		\$result = \$this->_renderImage(\$identifier);
-		\$this->_append("\n\n"); // Duplo Espaçamento
-		\$this->_append(\$result);
+		\$this->append("\n\n"); // Duplo Espaçamento
+		\$this->append(\$result);
 		// Confirmar Inserção da Imagem
 		\$this->_images[] = \$identifier;
 	}
@@ -210,7 +210,7 @@ protected function _cite(\$content) {
 	\$content = trim(\$content);
 	\$this->_cites[] = \$content;
 	\$result = '\\cite{' . \$content . '}';
-	\$this->_append(\$result);
+	\$this->append(\$result);
 	return \$this;
 }
 
@@ -221,7 +221,7 @@ protected function _cite(\$content) {
  */
 protected function _bold(\$content) {
 	\$result = '\\textbf{' . \$content . '}';
-	\$this->_append(\$result);
+	\$this->append(\$result);
 	return \$this;
 }
 
@@ -232,7 +232,7 @@ protected function _bold(\$content) {
  */
 protected function _italic(\$content) {
 	\$result = '\\textit{' . \$content . '}';
-	\$this->_append(\$result);
+	\$this->append(\$result);
 	return \$this;
 }
 
@@ -246,7 +246,7 @@ protected function _listItem(\$content) {
 	\$level   = \$this->_getListLevel();
 	\$ident   = str_repeat("\t", \$level);
 	\$result  = \$ident . '\item ' . \$content;
-	\$this->_append(\$result);
+	\$this->append(\$result);
 	return \$this;
 }
 
@@ -310,7 +310,7 @@ protected function _list(\$type, \$location) {
 	\$ident  = str_repeat("\t", \$level);
 	\$env    = \$this->_environment(\$type, \$location);
 	\$result = \$ident . \$env;
-	\$this->_append(\$result);
+	\$this->append(\$result);
 	return \$this;
 }
 
@@ -378,10 +378,9 @@ public function getCamelFilter() {
 // Página ----------------------------------------------------------------------
 
 wikipage
-@after { echo \$this->_render(); }
 	: ( container | nowiki )+ EOF;
 container
-@after { \$this->_append("\n\n"); }
+@after { \$this->append("\n\n"); }
 	: ( heading | lists | paragraph ) container_end;
 container_end
 	: T_NEWLINE+
@@ -400,10 +399,10 @@ text_paragraph
 text_line
 	: ( text_element )+;
 text_eol
-	: T_NEWLINE { \$this->_append(' '); };
+	: T_NEWLINE { \$this->append(' '); };
 text_element
 	: text_formatted
-	| text_unformatted { \$this->_append($text_unformatted.text); }
+	| text_unformatted { \$this->append($text_unformatted.text); }
 	| cite
 	| image
 	| headingref;
@@ -416,13 +415,13 @@ lists
 list_eol
 	: T_NEWLINE;
 list_item
-@after { \$this->_append("\n"); }
+@after { \$this->append("\n"); }
 	: text_unformatted { \$this->_listItem($text_unformatted.text); };
 
 // Lista não Numerada ----------------------------------------------------------
 
 list_unord
-@init  { \$this->_list('itemize', 'begin'); \$this->_append("\n"); }
+@init  { \$this->_list('itemize', 'begin'); \$this->append("\n"); }
 @after { \$this->_list('itemize', 'end'); }
 	: list_unord_element ( list_eol list_unord_element )*;
 list_unord_element
@@ -431,7 +430,7 @@ list_unord_element
 // Lista Numerada --------------------------------------------------------------
 
 list_ord
-@init  { \$this->_list('enumerate', 'begin'); \$this->_append("\n"); }
+@init  { \$this->_list('enumerate', 'begin'); \$this->append("\n"); }
 @after { \$this->_list('enumerate', 'end'); }
 	: list_ord_element ( list_eol list_ord_element )*;
 list_ord_element
