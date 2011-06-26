@@ -6,6 +6,12 @@ options {
 
 @members {
 /**
+ * Erros Encontrados
+ * @var array
+ */
+protected \$_errors = array();
+
+/**
  * Conteúdo
  * @var string
  */
@@ -48,6 +54,12 @@ protected \$_imagesInfo = array();
 protected \$_cites = array();
 
 /**
+ * Informações de Citações
+ * @var array
+ */
+protected \$_citesInfo = array();
+
+/**
  * Filtro Slugger
  * @var Hazel_Filter_Slugger
  */
@@ -58,6 +70,26 @@ protected \$_slugger = null;
  * @var Zend_Filter_Word_CamelCaseToSeparator
  */
 protected \$_camelFilter = null;
+
+/**
+ * Sobrescrita para Manipulação de Erros
+ * @param string \$message Mensagem de Erro
+ * @return void
+ */
+public function emitErrorMessage(\$message) {
+	\$this->_errors[] = \$message;
+}
+
+/**
+ * Sobrescrita para Reinicialização de Erros e Armazenamentos
+ * @return void
+ */
+public function reset() {
+	parent::reset();
+	\$this->_errors = array();
+	\$this->_images = array();
+	\$this->_cites  = array();
+}
 
 /**
  * Adiciona ao Final do Conteúdo
@@ -102,7 +134,6 @@ protected function _section(\$content) {
  * Renderização de Referência Cruzada para Seções
  * @param string \$content Conteúdo para Renderização
  * @return string Valor Traduzido para Referência Cruzada
- * @throws Exception Referência Inválida
  */
 protected function _sectionReference(\$content) {
 	\$filter  = \$this->getCamelFilter();
@@ -167,8 +198,10 @@ protected function _appendImagesLast() {
 	// Seleciona as Últimas Imagens Inseridas
 	foreach (\$this->_imagesLast as \$identifier) {
 		\$result = \$this->_renderImage(\$identifier);
-		\$this->append("\n\n"); // Duplo Espaçamento
-		\$this->append(\$result);
+		if (\$result !== false) {
+			\$this->append("\n\n"); // Duplo Espaçamento
+			\$this->append(\$result);
+		}
 		// Confirmar Inserção da Imagem
 		\$this->_images[] = \$identifier;
 	}
@@ -180,12 +213,12 @@ protected function _appendImagesLast() {
  * Renderiza uma Imagem pelo Identificador
  * @param \$identifier Identificador da Imagem
  * @return string Conteúdo Resultante da Renderização
- * @throws Exception Identificador de Imagem Inválido
  */
 protected function _renderImage(\$identifier) {
 	// Imagem Registrada nas Informações?
 	if (!array_key_exists(\$identifier, \$this->_imagesInfo)) {
-		throw new Exception("Invalid Image: { img: '\$identifier' }");
+		\$this->emitErrorMessage("Invalid Image: '\$identifier'");
+		return false;
 	}
 	// Informações da Imagem
 	\$filename = \$this->_imagesInfo[\$identifier]['filename'];
@@ -208,7 +241,11 @@ protected function _renderImage(\$identifier) {
  */
 protected function _cite(\$content) {
 	\$content = trim(\$content);
-	\$this->_cites[] = \$content;
+	if (!in_array(\$content, \$this->_citesInfo)) {
+		\$this->emitErrorMessage("Invalid Citation: '\$content'");
+	} else {
+		\$this->_cites[] = \$content;
+	}
 	\$result = '\\cite{' . \$content . '}';
 	\$this->append(\$result);
 	return \$this;
@@ -330,6 +367,16 @@ public function addImageInfo(\$identifier, \$filename, \$caption) {
 }
 
 /**
+ * Adiciona Informações sobre Citações
+ * @param string \$identifier Identificador da Citação
+ * @return SubWikiParser Próprio Objeto para Encadeamento
+ */
+public function addCiteInfo(\$identifier) {
+	\$this->_citesInfo[] = \$identifier;
+	return \$this;
+}
+
+/**
  * Configura o Filtro de Slug
  * @param Hazel_Filter_Slugger \$slugger Elemento para Configuração
  * @return SubWikiParser Próprio Objeto para Encadeamento
@@ -371,6 +418,30 @@ public function getCamelFilter() {
 		\$this->setCamelFilter(\$filter);
 	}
 	return \$this->_camelFilter;
+}
+
+/**
+ * Informa os Identificadores de Imagens Utilizadas no Documento
+ * @return array Conjunto de Valores Solicitados
+ */
+public function getImages() {
+	return \$this->_images;
+}
+
+/**
+ * Informa os Identificadores de Citações Utilizadas no Documento
+ * @return array Conjunto de Valores Solicitados
+ */
+public function getCitations() {
+	return \$this->_cites;
+}
+
+/**
+ * Informa os Erros Encontrados
+ * @return array Valores Solicitados
+ */
+public function getErrors() {
+	return \$this->_errors;
 }
 
 }
