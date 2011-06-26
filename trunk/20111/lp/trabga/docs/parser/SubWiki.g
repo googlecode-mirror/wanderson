@@ -508,7 +508,7 @@ nowiki_content
 // Análise Léxica --------------------------------------------------------------
 
 T_SPACE : ' ';
-T_NEWLINE : '\n';
+T_NEWLINE : '\r'?'\n';
 
 T_EQUAL : '=';
 T_POUND : '#';

@@ -1,5 +1,5 @@
 <?php
-// $ANTLR 3.1.3 ìàé 06, 2009 18:28:01 SubWiki.g 2011-06-26 15:25:07
+// $ANTLR 3.1.3 ìàé 06, 2009 18:28:01 SubWiki.g 2011-06-26 17:51:43
 
 
 # for convenience in actions
@@ -2242,8 +2242,8 @@ $SubWikiParser_DFA6 = SubWikiParser_DFA6_static();
 class SubWikiParser_DFA6 extends DFA {
 
     public function __construct($recognizer) {
-        global $SubWikiParser_DFA6;
-        $DFA = $SubWikiParser_DFA6;
+        //global $SubWikiParser_DFA6;
+        $DFA = SubWikiParser_DFA6_static();
         $this->recognizer = $recognizer;
         $this->decisionNumber = 6;
         $this->eot = $DFA['eot'];
@@ -2310,8 +2310,8 @@ $SubWikiParser_DFA14 = SubWikiParser_DFA14_static();
 class SubWikiParser_DFA14 extends DFA {
 
     public function __construct($recognizer) {
-        global $SubWikiParser_DFA14;
-        $DFA = $SubWikiParser_DFA14;
+        //global $SubWikiParser_DFA14;
+        $DFA = SubWikiParser_DFA14_static();
         $this->recognizer = $recognizer;
         $this->decisionNumber = 14;
         $this->eot = $DFA['eot'];

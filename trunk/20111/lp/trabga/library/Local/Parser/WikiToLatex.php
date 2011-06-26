@@ -17,6 +17,12 @@ class Local_Parser_WikiToLatex
     protected $_article;
 
     /**
+     * Erros na Saída Padrão
+     * @var string
+     */
+    protected $_errors = '';
+
+    /**
      * Construtor Padrão
      */
     public function __construct()
@@ -46,6 +52,26 @@ class Local_Parser_WikiToLatex
             throw new Local_Parser_Exception('Invalid Element');
         }
         return $this->_article;
+    }
+
+    /**
+     * Configura os Erros Gerados pelo Tradutor
+     * @param string $errors Erros na Saída Padrão
+     * @return Local_Parser_WikiToLatex Próprio Objeto para Encadeamento
+     */
+    protected function _setErrors($errors)
+    {
+        $this->_errors = $errors;
+        return $this;
+    }
+
+    /**
+     * Informa os Erros Gerados pelo Tradutor
+     * @return string $errors Valores Solicitados
+     */
+    public function getErrors()
+    {
+        return $this->_errors;
     }
 
     /**
@@ -85,6 +111,10 @@ class Local_Parser_WikiToLatex
     public function parse()
     {
         $parser = $this->_getParser();
-        return '';
+        ob_start();
+        $parser->wikipage();
+        $output = ob_get_clean();
+        $this->_setErrors($output);
+        return $parser->render();
     }
 }
