@@ -6,3 +6,6 @@ subwiki:
 clean:
 	rm -rf SubWikiParser.php SubWikiLexer.php SubWiki.tokens
 
+install:
+	cp SubWikiParser.php ../../library/SubWikiParser.php && cp SubWikiLexer.php ../../library/SubWikiLexer.php
+

@@ -176,12 +176,14 @@ class ArtigoController extends Local_Controller_ActionAbstract
 
         // Tradução do Artigo
         $result = $this->_parse($element);
-        Zend_Debug::dump($result);
 
         // Ignorar Renderização de Saída
         $renderer = $this->_helper->getHelper('ViewRenderer');
         $renderer->setNoRender(true);
         $this->view->layout()->disableLayout();
+
+        // Anexo de Conteúdo
+        $this->getResponse()->append('content', $result);
     }
 
     /**

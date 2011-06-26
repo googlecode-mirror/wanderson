@@ -1,29 +1,31 @@
 <?php
-// $ANTLR 3.1.3 ìàé 06, 2009 18:28:01 SubWiki.g 2011-06-26 15:25:07
+// $ANTLR 3.1.3 ìàé 06, 2009 18:28:01 SubWiki.g 2011-06-26 17:51:44
 
 
 # for convenience in actions
 if (!defined('HIDDEN')) define('HIDDEN', BaseRecognizer::$HIDDEN);
 
  
-function SubWikiLexer_DFA1_static(){
-    $eot = array(5, 65535, 1, 18, 5, 12, 11, 65535, 1, 26, 1, 28, 5, 65535);
-    $eof = array(29, 65535);
-    $min = array(1, 0, 4, 65535, 1, 42, 1, 47, 1, 91, 1, 93, 1, 123, 1, 
-    125, 11, 65535, 1, 123, 1, 125, 5, 65535);
-    $max = array(1, 65535, 4, 65535, 1, 42, 1, 47, 1, 91, 1, 93, 1, 123, 
-    1, 125, 11, 65535, 1, 123, 1, 125, 5, 65535);
-    $accept = array(1, 65535, 1, 1, 1, 2, 1, 3, 1, 4, 6, 65535, 1, 14, 1, 
-    15, 1, 1, 1, 2, 1, 3, 1, 4, 1, 6, 1, 5, 1, 7, 1, 8, 1, 9, 2, 65535, 
-    1, 14, 1, 12, 1, 10, 1, 13, 1, 11);
-    $special = array(1, 0, 28, 65535);
-    $transitionS = array(array(10, 12, 1, 2, 21, 12, 1, 1, 2, 12, 1, 4, 
-    6, 12, 1, 5, 4, 12, 1, 6, 13, 12, 1, 3, 29, 12, 1, 7, 1, 12, 1, 8, 3, 
-    12, 26, 11, 1, 9, 1, 12, 1, 10, 65410, 12), array(), array(), array(
-    ), array(), array(1, 17), array(1, 19), array(1, 20), array(1, 21), 
-    array(1, 22), array(1, 23), array(), array(), array(), array(), array(
-    ), array(), array(), array(), array(), array(), array(), array(1, 25), 
-    array(1, 27), array(), array(), array(), array(), array());
+function SubWikiLexer_DFA2_static(){
+    $eot = array(2, 65535, 1, 13, 3, 65535, 1, 19, 5, 13, 11, 65535, 1, 
+    27, 1, 29, 5, 65535);
+    $eof = array(30, 65535);
+    $min = array(1, 0, 1, 65535, 1, 10, 3, 65535, 1, 42, 1, 47, 1, 91, 1, 
+    93, 1, 123, 1, 125, 11, 65535, 1, 123, 1, 125, 5, 65535);
+    $max = array(1, 65535, 1, 65535, 1, 10, 3, 65535, 1, 42, 1, 47, 1, 91, 
+    1, 93, 1, 123, 1, 125, 11, 65535, 1, 123, 1, 125, 5, 65535);
+    $accept = array(1, 65535, 1, 1, 1, 65535, 1, 2, 1, 3, 1, 4, 6, 65535, 
+    1, 14, 1, 15, 1, 1, 1, 2, 1, 3, 1, 4, 1, 6, 1, 5, 1, 7, 1, 8, 1, 9, 
+    2, 65535, 1, 14, 1, 12, 1, 10, 1, 13, 1, 11);
+    $special = array(1, 0, 29, 65535);
+    $transitionS = array(array(10, 13, 1, 3, 2, 13, 1, 2, 18, 13, 1, 1, 
+    2, 13, 1, 5, 6, 13, 1, 6, 4, 13, 1, 7, 13, 13, 1, 4, 29, 13, 1, 8, 1, 
+    13, 1, 9, 3, 13, 26, 12, 1, 10, 1, 13, 1, 11, 65410, 13), array(), array(
+    1, 15), array(), array(), array(), array(1, 18), array(1, 20), array(
+    1, 21), array(1, 22), array(1, 23), array(1, 24), array(), array(), 
+    array(), array(), array(), array(), array(), array(), array(), array(
+    ), array(), array(1, 26), array(1, 28), array(), array(), array(), array(
+    ), array());
 
     $arr = array();
     $arr['eot'] = DFA::unpackRLE($eot);
@@ -41,15 +43,15 @@ function SubWikiLexer_DFA1_static(){
     }
     return $arr;
 }
-$SubWikiLexer_DFA1 = SubWikiLexer_DFA1_static();
+$SubWikiLexer_DFA2 = SubWikiLexer_DFA2_static();
 
-class SubWikiLexer_DFA1 extends DFA {
+class SubWikiLexer_DFA2 extends DFA {
 
     public function __construct($recognizer) {
-        global $SubWikiLexer_DFA1;
-        $DFA = $SubWikiLexer_DFA1;
+        //global $SubWikiLexer_DFA2;
+        $DFA = SubWikiLexer_DFA2_static();
         $this->recognizer = $recognizer;
-        $this->decisionNumber = 1;
+        $this->decisionNumber = 2;
         $this->eot = $DFA['eot'];
         $this->eof = $DFA['eof'];
         $this->min = $DFA['min'];
@@ -66,38 +68,40 @@ class SubWikiLexer_DFA1 extends DFA {
     	$_s = $s;
         switch ( $s ) {
                 case 0 : 
-                    $LA1_0 = $input->LA(1);
+                    $LA2_0 = $input->LA(1);
 
                     $s = -1;
-                    if ( ($LA1_0==$this->getToken('32')) ) {$s = 1;}
+                    if ( ($LA2_0==$this->getToken('32')) ) {$s = 1;}
 
-                    else if ( ($LA1_0==$this->getToken('10')) ) {$s = 2;}
+                    else if ( ($LA2_0==$this->getToken('13')) ) {$s = 2;}
 
-                    else if ( ($LA1_0==$this->getToken('61')) ) {$s = 3;}
+                    else if ( ($LA2_0==$this->getToken('10')) ) {$s = 3;}
 
-                    else if ( ($LA1_0==$this->getToken('35')) ) {$s = 4;}
+                    else if ( ($LA2_0==$this->getToken('61')) ) {$s = 4;}
 
-                    else if ( ($LA1_0==$this->getToken('42')) ) {$s = 5;}
+                    else if ( ($LA2_0==$this->getToken('35')) ) {$s = 5;}
 
-                    else if ( ($LA1_0==$this->getToken('47')) ) {$s = 6;}
+                    else if ( ($LA2_0==$this->getToken('42')) ) {$s = 6;}
 
-                    else if ( ($LA1_0==$this->getToken('91')) ) {$s = 7;}
+                    else if ( ($LA2_0==$this->getToken('47')) ) {$s = 7;}
 
-                    else if ( ($LA1_0==$this->getToken('93')) ) {$s = 8;}
+                    else if ( ($LA2_0==$this->getToken('91')) ) {$s = 8;}
 
-                    else if ( ($LA1_0==$this->getToken('123')) ) {$s = 9;}
+                    else if ( ($LA2_0==$this->getToken('93')) ) {$s = 9;}
 
-                    else if ( ($LA1_0==$this->getToken('125')) ) {$s = 10;}
+                    else if ( ($LA2_0==$this->getToken('123')) ) {$s = 10;}
 
-                    else if ( (($LA1_0>=$this->getToken('97') && $LA1_0<=$this->getToken('122'))) ) {$s = 11;}
+                    else if ( ($LA2_0==$this->getToken('125')) ) {$s = 11;}
 
-                    else if ( (($LA1_0>=$this->getToken('0') && $LA1_0<=$this->getToken('9'))||($LA1_0>=$this->getToken('11') && $LA1_0<=$this->getToken('31'))||($LA1_0>=$this->getToken('33') && $LA1_0<=$this->getToken('34'))||($LA1_0>=$this->getToken('36') && $LA1_0<=$this->getToken('41'))||($LA1_0>=$this->getToken('43') && $LA1_0<=$this->getToken('46'))||($LA1_0>=$this->getToken('48') && $LA1_0<=$this->getToken('60'))||($LA1_0>=$this->getToken('62') && $LA1_0<=$this->getToken('90'))||$LA1_0==$this->getToken('92')||($LA1_0>=$this->getToken('94') && $LA1_0<=$this->getToken('96'))||$LA1_0==$this->getToken('124')||($LA1_0>=$this->getToken('126') && $LA1_0<=$this->getToken('65535'))) ) {$s = 12;}
+                    else if ( (($LA2_0>=$this->getToken('97') && $LA2_0<=$this->getToken('122'))) ) {$s = 12;}
+
+                    else if ( (($LA2_0>=$this->getToken('0') && $LA2_0<=$this->getToken('9'))||($LA2_0>=$this->getToken('11') && $LA2_0<=$this->getToken('12'))||($LA2_0>=$this->getToken('14') && $LA2_0<=$this->getToken('31'))||($LA2_0>=$this->getToken('33') && $LA2_0<=$this->getToken('34'))||($LA2_0>=$this->getToken('36') && $LA2_0<=$this->getToken('41'))||($LA2_0>=$this->getToken('43') && $LA2_0<=$this->getToken('46'))||($LA2_0>=$this->getToken('48') && $LA2_0<=$this->getToken('60'))||($LA2_0>=$this->getToken('62') && $LA2_0<=$this->getToken('90'))||$LA2_0==$this->getToken('92')||($LA2_0>=$this->getToken('94') && $LA2_0<=$this->getToken('96'))||$LA2_0==$this->getToken('124')||($LA2_0>=$this->getToken('126') && $LA2_0<=$this->getToken('65535'))) ) {$s = 13;}
 
                     if ( $s>=0 ) return $s;
                     break;
         }
         $nvae =
-            new NoViableAltException($this->getDescription(), 1, $_s, $input);
+            new NoViableAltException($this->getDescription(), 2, $_s, $input);
         $this->error($nvae);
         throw $nvae;        
     }
@@ -129,7 +133,7 @@ class SubWikiLexer extends AntlrLexer {
         parent::__construct($input,$state);
 
         
-            $this->dfa1 = new SubWikiLexer_DFA1($this);
+            $this->dfa2 = new SubWikiLexer_DFA2($this);
     }
     function getGrammarFileName() { return "SubWiki.g"; }
 
@@ -159,9 +163,27 @@ class SubWikiLexer extends AntlrLexer {
         try {
             $_type = SubWikiLexer::$T_NEWLINE;
             $_channel = SubWikiLexer::$DEFAULT_TOKEN_CHANNEL;
-            // SubWiki.g:511:11: ( '\\n' ) 
-            // SubWiki.g:511:13: '\\n' 
+            // SubWiki.g:511:11: ( ( '\\r' )? '\\n' ) 
+            // SubWiki.g:511:13: ( '\\r' )? '\\n' 
             {
+            // SubWiki.g:511:13: ( '\\r' )? 
+            $alt1=2;
+            $LA1_0 = $this->input->LA(1);
+
+            if ( ($LA1_0==$this->getToken('13')) ) {
+                $alt1=1;
+            }
+            switch ($alt1) {
+                case 1 :
+                    // SubWiki.g:511:13: '\\r' 
+                    {
+                    $this->matchChar(13); 
+
+                    }
+                    break;
+
+            }
+
             $this->matchChar(10); 
 
             }
@@ -458,9 +480,9 @@ class SubWikiLexer extends AntlrLexer {
 
     function mTokens(){
         // SubWiki.g:1:8: ( T_SPACE | T_NEWLINE | T_EQUAL | T_POUND | T_STAR | T_BOLD | T_ITALIC | T_CITE_OPEN | T_CITE_CLOSE | T_IMAGE_OPEN | T_IMAGE_CLOSE | T_NOWIKI_OPEN | T_NOWIKI_CLOSE | T_CHAR | T_OTHER ) 
-        $alt1=15;
-        $alt1 = $this->dfa1->predict($this->input);
-        switch ($alt1) {
+        $alt2=15;
+        $alt2 = $this->dfa2->predict($this->input);
+        switch ($alt2) {
             case 1 :
                 // SubWiki.g:1:10: T_SPACE 
                 {
