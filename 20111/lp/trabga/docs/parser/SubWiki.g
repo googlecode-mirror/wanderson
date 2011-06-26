@@ -48,6 +48,12 @@ protected \$_imagesInfo = array();
 protected \$_cites = array();
 
 /**
+ * Filtro Slugger
+ * @var Hazel_Filter_Slugger
+ */
+protected \$_slugger = null;
+
+/**
  * Adiciona ao Final do Conteúdo
  * @param \$content Conteúdo para Anexo
  * @return SubWikiParser Próprio Objeto para Encadeamento
@@ -71,9 +77,17 @@ protected function _render() {
  * @return SubWikiParser Próprio Objeto para Encadeamento
  */
 protected function _section(\$content) {
+	// Inicialização
+	\$content = trim(\$content);
+	// Construção da Seção
 	\$level  = \$this->_getSectionLevel();
 	\$sub    = str_repeat('sub', (int) \$level);
-	\$result = '\\' . \$sub . 'section{' . trim(\$content) . '}';
+	\$result = '\\' . \$sub . 'section{' . \$content . '}' . PHP_EOL;
+	\$this->_append(\$result);
+	// Criação da Etiqueta de Referência
+	\$filter = \$this->getSlugger();
+	\$slug   = \$filter->filter(\$content);
+	\$result = sprintf('\\label{sec:\%s}', \$slug);
 	\$this->_append(\$result);
 	return \$this;
 }
@@ -294,12 +308,25 @@ public function addImageInfo(\$identifier, \$filename, \$caption) {
 }
 
 /**
- * Criador de Referências Cruzadas
- * @param \$content Conteúdo para Filtragem
- * @return Valor Filtrado Resultante da Solicitação
+ * Configura o Filtro de Slug
+ * @param Hazel_Filter_Slugger \$slugger Elemento para Configuração
+ * @return SubWikiParser Próprio Objeto para Encadeamento
  */
-protected function slugger(\$content) {
-	
+public function setSlugger(Hazel_Filter_Slugger \$slugger) {
+	\$this->_slugger = \$slugger;
+	return \$this;
+}
+
+/**
+ * Informa o Filtro de Slug
+ * @return Hazel_Filter_Slugger Elemento Solicitado
+ */
+public function getSlugger() {
+	if (\$this->_slugger === null) {
+		\$slugger = new Hazel_Filter_Slugger();
+		\$this->setSlugger(\$slugger);
+	}
+	return \$this->_slugger;
 }
 
 }
@@ -359,7 +386,7 @@ list_unord_element
 // Lista Numerada --------------------------------------------------------------
 
 list_ord
-@init  { \$this->_list('enumerate', 'begin'); }
+@init  { \$this->_list('enumerate', 'begin'); \$this->_append("\n"); }
 @after { \$this->_list('enumerate', 'end'); }
 	: list_ord_element ( list_eol list_ord_element )*;
 list_ord_element
