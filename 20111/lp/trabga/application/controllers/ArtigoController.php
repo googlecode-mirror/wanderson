@@ -154,4 +154,45 @@ class ArtigoController extends Local_Controller_ActionAbstract
         $this->_helper->flashMessenger('delete');
         $this->_helper->redirector('index');
     }
+
+    /**
+     * Export Action
+     */
+    public function exportAction()
+    {
+        // Chave Primária
+        $primaries = $this->_getPrimaries(function($value){
+            return (int) $value;
+        });
+
+        // Recuperação de Elemento
+        $table = $this->_getDbTable();
+        $element = $table->find($primaries)->current();
+
+        // Verificação
+        if ($element === null) {
+            throw new Zend_Db_Exception('Invalid Element');
+        }
+
+        // Tradução do Artigo
+        $result = $this->_parse($element);
+        Zend_Debug::dump($result);
+
+        // Ignorar Renderização de Saída
+        $renderer = $this->_helper->getHelper('ViewRenderer');
+        $renderer->setNoRender(true);
+        $this->view->layout()->disableLayout();
+    }
+
+    /**
+     * Tradução de Conteúdo
+     * @param Application_Model_DbTable_Row_Article Artigo para Tradução
+     * @return string Saída em LaTeX Esperada
+     */
+    protected function _parse(Application_Model_DbTable_Row_Artigo $article)
+    {
+        $parser = new Local_Parser_WikiToLatex();
+        $parser->setArticle($article);
+        return $parser->parse();
+    }
 }

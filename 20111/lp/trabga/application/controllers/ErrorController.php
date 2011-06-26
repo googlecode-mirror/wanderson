@@ -44,10 +44,6 @@ class ErrorController extends Zend_Controller_Action
             $this->view->exception = $errors->exception;
         }
 
-        // Configuração da Migalha
-        $this->view->navigation()
-             ->findOneBy('active', true)->setVisible(true);
-
         $this->view->request   = $errors->request;
     }
 

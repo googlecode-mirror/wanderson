@@ -1,5 +1,5 @@
 <?php
-// $ANTLR 3.1.3 ìàé 06, 2009 18:28:01 SubWiki.g 2011-06-26 12:58:33
+// $ANTLR 3.1.3 ìàé 06, 2009 18:28:01 SubWiki.g 2011-06-26 15:25:07
 
 
 # for convenience in actions
@@ -138,8 +138,8 @@ class SubWikiLexer extends AntlrLexer {
         try {
             $_type = SubWikiLexer::$T_SPACE;
             $_channel = SubWikiLexer::$DEFAULT_TOKEN_CHANNEL;
-            // SubWiki.g:511:9: ( ' ' ) 
-            // SubWiki.g:511:11: ' ' 
+            // SubWiki.g:510:9: ( ' ' ) 
+            // SubWiki.g:510:11: ' ' 
             {
             $this->matchChar(32); 
 
@@ -159,8 +159,8 @@ class SubWikiLexer extends AntlrLexer {
         try {
             $_type = SubWikiLexer::$T_NEWLINE;
             $_channel = SubWikiLexer::$DEFAULT_TOKEN_CHANNEL;
-            // SubWiki.g:512:11: ( '\\n' ) 
-            // SubWiki.g:512:13: '\\n' 
+            // SubWiki.g:511:11: ( '\\n' ) 
+            // SubWiki.g:511:13: '\\n' 
             {
             $this->matchChar(10); 
 
@@ -180,8 +180,8 @@ class SubWikiLexer extends AntlrLexer {
         try {
             $_type = SubWikiLexer::$T_EQUAL;
             $_channel = SubWikiLexer::$DEFAULT_TOKEN_CHANNEL;
-            // SubWiki.g:514:9: ( '=' ) 
-            // SubWiki.g:514:11: '=' 
+            // SubWiki.g:513:9: ( '=' ) 
+            // SubWiki.g:513:11: '=' 
             {
             $this->matchChar(61); 
 
@@ -201,8 +201,8 @@ class SubWikiLexer extends AntlrLexer {
         try {
             $_type = SubWikiLexer::$T_POUND;
             $_channel = SubWikiLexer::$DEFAULT_TOKEN_CHANNEL;
-            // SubWiki.g:515:9: ( '#' ) 
-            // SubWiki.g:515:11: '#' 
+            // SubWiki.g:514:9: ( '#' ) 
+            // SubWiki.g:514:11: '#' 
             {
             $this->matchChar(35); 
 
@@ -222,8 +222,8 @@ class SubWikiLexer extends AntlrLexer {
         try {
             $_type = SubWikiLexer::$T_STAR;
             $_channel = SubWikiLexer::$DEFAULT_TOKEN_CHANNEL;
-            // SubWiki.g:516:9: ( '*' ) 
-            // SubWiki.g:516:11: '*' 
+            // SubWiki.g:515:9: ( '*' ) 
+            // SubWiki.g:515:11: '*' 
             {
             $this->matchChar(42); 
 
@@ -243,8 +243,8 @@ class SubWikiLexer extends AntlrLexer {
         try {
             $_type = SubWikiLexer::$T_BOLD;
             $_channel = SubWikiLexer::$DEFAULT_TOKEN_CHANNEL;
-            // SubWiki.g:518:10: ( '**' ) 
-            // SubWiki.g:518:12: '**' 
+            // SubWiki.g:517:10: ( '**' ) 
+            // SubWiki.g:517:12: '**' 
             {
             $this->matchString("**"); 
 
@@ -265,8 +265,8 @@ class SubWikiLexer extends AntlrLexer {
         try {
             $_type = SubWikiLexer::$T_ITALIC;
             $_channel = SubWikiLexer::$DEFAULT_TOKEN_CHANNEL;
-            // SubWiki.g:519:10: ( '//' ) 
-            // SubWiki.g:519:12: '//' 
+            // SubWiki.g:518:10: ( '//' ) 
+            // SubWiki.g:518:12: '//' 
             {
             $this->matchString("//"); 
 
@@ -287,8 +287,8 @@ class SubWikiLexer extends AntlrLexer {
         try {
             $_type = SubWikiLexer::$T_CITE_OPEN;
             $_channel = SubWikiLexer::$DEFAULT_TOKEN_CHANNEL;
-            // SubWiki.g:521:14: ( '[[' ) 
-            // SubWiki.g:521:16: '[[' 
+            // SubWiki.g:520:14: ( '[[' ) 
+            // SubWiki.g:520:16: '[[' 
             {
             $this->matchString("[["); 
 
@@ -309,8 +309,8 @@ class SubWikiLexer extends AntlrLexer {
         try {
             $_type = SubWikiLexer::$T_CITE_CLOSE;
             $_channel = SubWikiLexer::$DEFAULT_TOKEN_CHANNEL;
-            // SubWiki.g:522:14: ( ']]' ) 
-            // SubWiki.g:522:16: ']]' 
+            // SubWiki.g:521:14: ( ']]' ) 
+            // SubWiki.g:521:16: ']]' 
             {
             $this->matchString("]]"); 
 
@@ -331,8 +331,8 @@ class SubWikiLexer extends AntlrLexer {
         try {
             $_type = SubWikiLexer::$T_IMAGE_OPEN;
             $_channel = SubWikiLexer::$DEFAULT_TOKEN_CHANNEL;
-            // SubWiki.g:524:15: ( '{{' ) 
-            // SubWiki.g:524:17: '{{' 
+            // SubWiki.g:523:15: ( '{{' ) 
+            // SubWiki.g:523:17: '{{' 
             {
             $this->matchString("{{"); 
 
@@ -353,8 +353,8 @@ class SubWikiLexer extends AntlrLexer {
         try {
             $_type = SubWikiLexer::$T_IMAGE_CLOSE;
             $_channel = SubWikiLexer::$DEFAULT_TOKEN_CHANNEL;
-            // SubWiki.g:525:15: ( '}}' ) 
-            // SubWiki.g:525:17: '}}' 
+            // SubWiki.g:524:15: ( '}}' ) 
+            // SubWiki.g:524:17: '}}' 
             {
             $this->matchString("}}"); 
 
@@ -375,8 +375,8 @@ class SubWikiLexer extends AntlrLexer {
         try {
             $_type = SubWikiLexer::$T_NOWIKI_OPEN;
             $_channel = SubWikiLexer::$DEFAULT_TOKEN_CHANNEL;
-            // SubWiki.g:527:16: ( '{{{' ) 
-            // SubWiki.g:527:18: '{{{' 
+            // SubWiki.g:526:16: ( '{{{' ) 
+            // SubWiki.g:526:18: '{{{' 
             {
             $this->matchString("{{{"); 
 
@@ -397,8 +397,8 @@ class SubWikiLexer extends AntlrLexer {
         try {
             $_type = SubWikiLexer::$T_NOWIKI_CLOSE;
             $_channel = SubWikiLexer::$DEFAULT_TOKEN_CHANNEL;
-            // SubWiki.g:528:16: ( '}}}' ) 
-            // SubWiki.g:528:18: '}}}' 
+            // SubWiki.g:527:16: ( '}}}' ) 
+            // SubWiki.g:527:18: '}}}' 
             {
             $this->matchString("}}}"); 
 
@@ -419,8 +419,8 @@ class SubWikiLexer extends AntlrLexer {
         try {
             $_type = SubWikiLexer::$T_CHAR;
             $_channel = SubWikiLexer::$DEFAULT_TOKEN_CHANNEL;
-            // SubWiki.g:530:8: ( 'a' .. 'z' ) 
-            // SubWiki.g:530:10: 'a' .. 'z' 
+            // SubWiki.g:529:8: ( 'a' .. 'z' ) 
+            // SubWiki.g:529:10: 'a' .. 'z' 
             {
             $this->matchRange(97,122); 
 
@@ -440,8 +440,8 @@ class SubWikiLexer extends AntlrLexer {
         try {
             $_type = SubWikiLexer::$T_OTHER;
             $_channel = SubWikiLexer::$DEFAULT_TOKEN_CHANNEL;
-            // SubWiki.g:532:9: ( . ) 
-            // SubWiki.g:532:11: . 
+            // SubWiki.g:531:9: ( . ) 
+            // SubWiki.g:531:11: . 
             {
             $this->matchAny(); 
 
