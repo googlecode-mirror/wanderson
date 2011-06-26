@@ -7,15 +7,15 @@ ornare ornare, mauris mauris fermentum odio, vel porta
 purus lorem nec nisl.
 
 * consectetur
-*# neque
-*# fermentum
 * adipiscing
+# neque
+# fermentum
 
 Image test [[ident]] testing
 
 == Fusce mattis tincidunt sem ==
 
-Eu sollicitudin mi tempor sit amet. Nullam mi mauris,
+Eu #LoremIpsum sollicitudin mi tempor sit amet. Nullam mi mauris,
 gravida at fringilla vulputate, viverra tempor libero.
 Vivamus vitae mauris vel ante ultricies pretium ut in
 metus. Nulla facilisi.
