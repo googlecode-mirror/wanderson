@@ -1,0 +1,46 @@
+\documentclass{article}
+
+% -----------------------
+% Configurações Genéricas
+% -----------------------
+
+<?php if (count($this->packages > 0)) : ?>
+<?php foreach ($this->packages as $package => $options) : ?>
+<?php if (count($options) > 0 ) : ?>
+<?php $options = '['.implode(',', $options).']' ?>
+<?php else : ?>
+<?php $options = '' ?>
+<?php endif ?>
+\usepackage<?php echo $options ?>{<?php echo $package ?>}
+<?php endforeach ?>
+<?php endif ?>
+
+% --------------------
+% Informações Pessoais
+% --------------------
+
+\title{<?php echo $this->title ?>}
+\author{<?php echo $this->author ?>}
+\address{<?php echo $this->address ?>\email{<?php echo $this->email ?>}}
+
+% ---------
+% Documento
+% ---------
+
+\begin{document}
+
+\maketitle{}
+
+<?php echo $this->document ?>
+
+
+<?php if ($this->citations) : ?>
+% ------------
+% Bibliografia
+% ------------
+
+\bibliographystyle{sbc}
+\bibliography{document}
+<?php endif ?>
+
+\end{document}
