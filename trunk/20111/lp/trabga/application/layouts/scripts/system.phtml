@@ -9,13 +9,13 @@
     ->requireModule('dijit.layout.AccordionContainer')
     ->requireModule('dijit.Toolbar')
     ->requireModule('dijit.form.Button')
-    ->requireModule('dijit.layout.TabContainer') ?>
+    ->requireModule('dijit.layout.TabContainer')
+    ->addLayer($this->baseUrl('/scripts/app/app.js')) ?>
 <?php echo $this->headLink()->appendStylesheet($this->baseUrl('/styles/system.css')) ?>
 </head>
 <body class="claro">
 <div id="app" dojoType="dijit.layout.BorderContainer">
-    <div dojoType="dijit.layout.BorderContainer" region="leading" class="layout-leading">
-        <div dojoType="dijit.layout.ContentPane" region="top" class="layout-logo">&nbsp;</div>
+    <div id="layout-leading" dojoType="dijit.layout.BorderContainer" region="leading">
         <div dojoType="dijit.layout.AccordionContainer" region="center">
             <div dojoType="dijit.layout.ContentPane" title="Documentos">Documentos</div>
             <div dojoType="dijit.layout.ContentPane" title="Configurações">Configurações</div>
@@ -30,7 +30,7 @@
                 Seja bem vindo!
             </div>
         </div>
-        <div dojoType="dijit.layout.ContentPane" region="bottom" class="layout-console">&nbsp;</div>
+        <div id="layout-console" dojoType="dijit.layout.ContentPane" region="bottom">&nbsp;</div>
     </div>
 </div>
 </body>
