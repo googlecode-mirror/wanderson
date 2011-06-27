@@ -226,7 +226,7 @@ protected function _renderImage(\$identifier) {
 	// Montagem da Renderização
 	\$result = \$this->_environment('figure','begin') . PHP_EOL;
 	\$result.= "\t\\centering{}\n";
-	\$result.= sprintf("\t\\includegraphics[\\textwidth]{\%s}\n", \$filename);
+	\$result.= sprintf("\t\\includegraphics[width=\\textwidth]{\%s}\n", \$filename);
 	\$result.= sprintf("\t\\caption{\%s}\n", \$caption);
 	\$result.= sprintf("\t\\label{fig:\%s}\n", \$identifier);
 	\$result.= \$this->_environment('figure','end');
