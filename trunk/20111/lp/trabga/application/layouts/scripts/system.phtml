@@ -1,0 +1,37 @@
+<?php echo $this->doctype() . PHP_EOL ?>
+<html>
+<head>
+<?php echo $this->headMeta() ?>
+<?php echo $this->headTitle() ?>
+<?php echo $this->dojo()->enable()->setDjConfigOption('parseOnLoad', true)
+    ->requireModule('dijit.layout.BorderContainer')
+    ->requireModule('dijit.layout.ContentPane')
+    ->requireModule('dijit.layout.AccordionContainer')
+    ->requireModule('dijit.Toolbar')
+    ->requireModule('dijit.form.Button')
+    ->requireModule('dijit.layout.TabContainer') ?>
+<?php echo $this->headLink()->appendStylesheet($this->baseUrl('/styles/system.css')) ?>
+</head>
+<body class="claro">
+<div id="app" dojoType="dijit.layout.BorderContainer">
+    <div dojoType="dijit.layout.BorderContainer" region="leading" class="layout-leading">
+        <div dojoType="dijit.layout.ContentPane" region="top" class="layout-logo">&nbsp;</div>
+        <div dojoType="dijit.layout.AccordionContainer" region="center">
+            <div dojoType="dijit.layout.ContentPane" title="Documentos">Documentos</div>
+            <div dojoType="dijit.layout.ContentPane" title="Configurações">Configurações</div>
+        </div>
+    </div>
+    <div dojoType="dijit.layout.BorderContainer" region="center">
+        <div dojoType="dijit.Toolbar" region="top">
+            <div dojoType="dijit.form.Button">Arquivo</div>
+        </div>
+        <div dojoType="dijit.layout.TabContainer" region="center">
+            <div dojoType="dijit.layout.ContentPane" title="Sistema de Artigos">
+                Seja bem vindo!
+            </div>
+        </div>
+        <div dojoType="dijit.layout.ContentPane" region="bottom" class="layout-console">&nbsp;</div>
+    </div>
+</div>
+</body>
+</html>
