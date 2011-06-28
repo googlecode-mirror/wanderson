@@ -38,6 +38,16 @@ class ArtigoController extends Local_Controller_ActionAbstract
      */
     protected $_citations = array();
 
+    public function init()
+    {
+        // Requisição Ajax
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->view->layout()->disableLayout();
+            Zend_Dojo_View_Helper_Dojo::setUseDeclarative();
+            // @todo Modificar Identificadores de Componentes
+        }
+    }
+
     /**
      * Index Action
      */
@@ -48,17 +58,29 @@ class ArtigoController extends Local_Controller_ActionAbstract
         $select = $table->select()->order('idartigo');
         $result = $table->fetchAll($select);
 
-        // Requisição Ajax
-        if ($this->getRequest()->isXmlHttpRequest()) {
-            $this->_helper->json($result->toArray());
-        }
-
         // Mensagens
         $messages = $this->_helper->flashMessenger->getMessages();
 
         // Camada de Visualização
         $this->view->result = $result;
         $this->view->messages = $messages;
+    }
+
+    /**
+     * Store Action
+     */
+    public function storeAction()
+    {
+        // Banco de Dados
+        $table  = $this->_getDbTable();
+        $select = $table->select()->order('idartigo');
+        $result = $table->fetchAll($select);
+
+        // Dojo Envelopes
+        $data = new Zend_Dojo_Data();
+        $data->setIdentifier('idartigo')->setMetadata('label', 'titulo')
+             ->addItems($result);
+        $this->_helper->json($data);
     }
 
     /**
