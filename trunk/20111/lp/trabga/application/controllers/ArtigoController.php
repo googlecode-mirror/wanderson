@@ -140,17 +140,33 @@ class ArtigoController extends Local_Controller_ActionAbstract
         // Formulário
         $form = $this->_getForm();
 
+        // Requisição Ajax?
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $form->setElementsBelongTo('artigo' . $element->idartigo);
+        }
+
         if ($this->getRequest()->isPost()) {
             // Envio de Dados
             $data = $this->getRequest()->getPost();
             if ($form->isValid($data)) {
                 $data = $form->getValues();
 
+                // Requisição Ajax?
+                if ($this->getRequest()->isXmlHttpRequest()) {
+                    $belongs = $form->getElementsBelongTo();
+                    $data    = $data[$belongs];
+                }
+
                 $element->titulo = $data['cabecalho']['titulo'];
                 $element->conteudo = $data['conteudo'];
                 $element->save();
 
                 $messages[] = 'update';
+
+                // Requisição Ajax?
+                if ($this->getRequest()->isXmlHttpRequest()) {
+                    $this->_helper->json($messages);
+                }
 
             }
         } else {

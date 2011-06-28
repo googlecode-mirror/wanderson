@@ -1,5 +1,11 @@
 dojo.provide('app');
+// Pacotes
 dojo.require('dijit.layout.ContentPane');
+dojo.require('dijit.form.Form');
+dojo.require('dijit.form.Button');
+dojo.require('dijit.form.TextBox');
+dojo.require('dijit.form.Textarea');
+// Declaração
 dojo.declare('app', null, {
     _baseUrl : '/artigos',
     baseUrl : function(address) {
@@ -28,7 +34,15 @@ dojo.ready(function(){
                 content = new dijit.layout.ContentPane({
                     id : idartigo,
                     title : item.titulo,
-                    closable : true
+                    closable : true,
+                    onDownloadEnd : function(event) {
+                        dojo.query(dojo.byId(idartigo)).query('form').connect('onsubmit', function(event){
+                            dojo.stopEvent(event);
+                            dojo.xhrPost({
+                                form : this
+                            });
+                        });
+                    }
                 });
                 container.addChild(content);
             }
