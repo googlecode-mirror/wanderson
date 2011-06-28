@@ -33,6 +33,7 @@
           <actionMethod actionName="edit"/>
           <actionMethod actionName="remove"/>
           <actionMethod actionName="export"/>
+          <actionMethod actionName="store"/>
         </controllerFile>
       </controllersDirectory>
       <formsDirectory>
