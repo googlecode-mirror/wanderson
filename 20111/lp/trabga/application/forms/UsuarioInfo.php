@@ -6,7 +6,7 @@
  * @category Application
  * @package  Application_Form
  */
-class Application_Form_Usuario extends Local_Form_FormAbstract
+class Application_Form_UsuarioInfo extends Local_Form_FormAbstract
 {
     public function init()
     {
