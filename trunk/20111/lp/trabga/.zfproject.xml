@@ -35,6 +35,10 @@
           <actionMethod actionName="export"/>
           <actionMethod actionName="store"/>
         </controllerFile>
+        <controllerFile controllerName="Auth">
+          <actionMethod actionName="index"/>
+          <actionMethod actionName="login"/>
+        </controllerFile>
       </controllersDirectory>
       <formsDirectory>
         <formFile formName="Figura"/>
@@ -43,6 +47,7 @@
         <formFile formName="Referencia"/>
         <formFile formName="Artigo"/>
         <formFile formName="ArtigoTitulo"/>
+        <formFile formName="Auth"/>
       </formsDirectory>
       <layoutsDirectory enabled="false"/>
       <modelsDirectory>
@@ -95,6 +100,12 @@
           <viewControllerScriptsDirectory forControllerName="Artigo">
             <viewScriptFile forActionName="edit"/>
           </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Auth">
+            <viewScriptFile forActionName="index"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Auth">
+            <viewScriptFile forActionName="login"/>
+          </viewControllerScriptsDirectory>
         </viewScriptsDirectory>
         <viewHelpersDirectory/>
         <viewFiltersDirectory enabled="false"/>
@@ -133,6 +144,7 @@
           <testApplicationControllerFile filesystemName="UsuarioControllerTest.php"/>
           <testApplicationControllerFile filesystemName="ReferenciaControllerTest.php"/>
           <testApplicationControllerFile filesystemName="ArtigoControllerTest.php"/>
+          <testApplicationControllerFile filesystemName="AuthControllerTest.php"/>
         </testApplicationControllerDirectory>
       </testApplicationDirectory>
       <testLibraryDirectory>
