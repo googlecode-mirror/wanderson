@@ -15,6 +15,10 @@ class AuthController extends Local_Controller_ActionAbstract
      */
     protected $_formClass = 'Application_Form_Auth';
 
+    /**
+     * Login Action
+     * @return null
+     */
     public function loginAction()
     {
         // Formulário
@@ -45,6 +49,18 @@ class AuthController extends Local_Controller_ActionAbstract
 
         // Camada de Visualização
         $this->view->form = $form;
+    }
+
+    /**
+     * Logout Action
+     * @return null
+     */
+    public function logoutAction()
+    {
+        // Autenticador
+        Zend_Auth::getInstance()->clearIdentity();
+        // Redirecionamento
+        $this->_helper->redirector('login');
     }
 
     /**
