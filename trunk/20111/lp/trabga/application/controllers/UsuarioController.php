@@ -28,8 +28,9 @@ class UsuarioController extends Local_Controller_ActionAbstract
         // Formulário
         $form = $this->_getForm();
 
-        // @todo Fornecer o Identificador do Usuário
-        $idusuario = 1;
+        // Identificador do Usuário
+        $auth = Zend_Auth::getInstance();
+        $idusuario = $auth->getIdentity()->idusuario;
 
         // Pesquisa do Usuário
         $table   = $this->_getDbTable();

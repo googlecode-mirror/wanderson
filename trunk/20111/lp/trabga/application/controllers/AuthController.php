@@ -80,6 +80,8 @@ class AuthController extends Local_Controller_ActionAbstract
                 ->setCredentialColumn('credencial')
                 ->setTableName($table->getTableName())
                 ->setCredentialTreatment('MD5(?)');
+        // Somente Usuários Ativos
+        $adapter->getDbSelect()->where('ativado = ?', true);
         // Valores
         $adapter->setIdentity($username)
                 ->setCredential($password);
