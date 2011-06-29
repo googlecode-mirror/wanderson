@@ -38,15 +38,6 @@ class ArtigoController extends Local_Controller_ActionAbstract
      */
     protected $_citations = array();
 
-    public function init()
-    {
-        // Requisição Ajax
-        if ($this->getRequest()->isXmlHttpRequest()) {
-            $this->view->layout()->disableLayout();
-            Zend_Dojo_View_Helper_Dojo::setUseDeclarative();
-        }
-    }
-
     /**
      * Index Action
      */
@@ -63,23 +54,6 @@ class ArtigoController extends Local_Controller_ActionAbstract
         // Camada de Visualização
         $this->view->result = $result;
         $this->view->messages = $messages;
-    }
-
-    /**
-     * Store Action
-     */
-    public function storeAction()
-    {
-        // Banco de Dados
-        $table  = $this->_getDbTable();
-        $select = $table->select()->order('idartigo');
-        $result = $table->fetchAll($select);
-
-        // Dojo Envelopes
-        $data = new Zend_Dojo_Data();
-        $data->setIdentifier('idartigo')->setMetadata('label', 'titulo')
-             ->addItems($result);
-        $this->_helper->json($data);
     }
 
     /**
@@ -127,7 +101,7 @@ class ArtigoController extends Local_Controller_ActionAbstract
         // FlashMessenger sem Nova Requisição
         $messages = array();
 
-        // Banco de Dados$dest
+        // Banco de Dados
         $table   = $this->_getDbTable();
         $element = $table->find($primaries)->current();
 
@@ -139,37 +113,17 @@ class ArtigoController extends Local_Controller_ActionAbstract
         // Formulário
         $form = $this->_getForm();
 
-        // Requisição Ajax?
-        if ($this->getRequest()->isXmlHttpRequest()) {
-            $form->getSubForm('cabecalho')
-                 ->getElement('titulo')
-                     ->setAttrib('style', 'width: 100%;');
-            $form->removeElement('submit');
-            $form->setElementsBelongTo('artigo' . $element->idartigo);
-        }
-
         if ($this->getRequest()->isPost()) {
             // Envio de Dados
             $data = $this->getRequest()->getPost();
             if ($form->isValid($data)) {
                 $data = $form->getValues();
 
-                // Requisição Ajax?
-                if ($this->getRequest()->isXmlHttpRequest()) {
-                    $belongs = $form->getElementsBelongTo();
-                    $data    = $data[$belongs];
-                }
-
                 $element->titulo = $data['cabecalho']['titulo'];
                 $element->conteudo = $data['conteudo'];
                 $element->save();
 
                 $messages[] = 'update';
-
-                // Requisição Ajax?
-                if ($this->getRequest()->isXmlHttpRequest()) {
-                    $this->_helper->json($messages);
-                }
 
             }
         } else {
