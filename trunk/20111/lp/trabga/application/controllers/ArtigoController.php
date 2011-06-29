@@ -44,7 +44,6 @@ class ArtigoController extends Local_Controller_ActionAbstract
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->view->layout()->disableLayout();
             Zend_Dojo_View_Helper_Dojo::setUseDeclarative();
-            // @todo Modificar Identificadores de Componentes
         }
     }
 
@@ -142,6 +141,10 @@ class ArtigoController extends Local_Controller_ActionAbstract
 
         // Requisição Ajax?
         if ($this->getRequest()->isXmlHttpRequest()) {
+            $form->getSubForm('cabecalho')
+                 ->getElement('titulo')
+                     ->setAttrib('style', 'width: 100%;');
+            $form->removeElement('submit');
             $form->setElementsBelongTo('artigo' . $element->idartigo);
         }
 
@@ -181,6 +184,7 @@ class ArtigoController extends Local_Controller_ActionAbstract
 
         // Camada de Visualização
         $this->view->form = $form;
+        $this->view->element = $element;
         $this->view->messages = $messages;
     }
 

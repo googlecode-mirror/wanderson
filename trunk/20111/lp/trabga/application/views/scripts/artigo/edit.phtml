@@ -1,9 +1,4 @@
-<h2>Editar Artigo</h2>
-<?php if (count($this->messages) > 0) : ?>
-<ul>
-<?php foreach ($this->messages as $message) : ?>
-    <li><?php echo $message ?></li>
-<?php endforeach ?>
-</ul>
-<?php endif ?>
+<div dojoType="dijit.Toolbar" style="margin: -8px;">
+    <div id="artigo<?php echo $this->element->idartigo?>-save" dojoType="dijit.form.Button" iconClass="dijitIconSave" class="save">Salvar</div>
+</div>
 <?php echo $this->form ?>

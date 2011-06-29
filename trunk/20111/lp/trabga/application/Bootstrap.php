@@ -32,7 +32,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         // Dojo Toolkit
         Zend_Dojo::enableView($view);
         $view->dojo()
-             ->setLocalPath('/js/dojo/dojo.js')
+             ->setLocalPath('/js/dojo/dojo.js.uncompressed.js')
              ->addStylesheetModule('dijit.themes.claro');
     }
 

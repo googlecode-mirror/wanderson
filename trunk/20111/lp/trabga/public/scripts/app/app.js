@@ -5,11 +5,18 @@ dojo.require('dijit.form.Form');
 dojo.require('dijit.form.Button');
 dojo.require('dijit.form.TextBox');
 dojo.require('dijit.form.Textarea');
+dojo.require('dijit.Tooltip');
 // Declaração
 dojo.declare('app', null, {
     _baseUrl : '/artigos',
     baseUrl : function(address) {
         return this._baseUrl + address;
+    },
+    output : function(message) {
+        var console = dojo.byId('layout-console');
+        var node    = dojo.doc.createElement('pre');
+        dojo.attr(node, 'innerHTML', message);
+        dojo.place(node, console, 'last');
     }
 });
 
@@ -36,10 +43,23 @@ dojo.ready(function(){
                     title : item.titulo,
                     closable : true,
                     onDownloadEnd : function(event) {
-                        dojo.query(dojo.byId(idartigo)).query('form').connect('onsubmit', function(event){
+                        var artigo = dojo.query(dojo.byId(idartigo));
+                        var form   = dojo.query(artigo).query('form');
+                        form.connect('onsubmit', function(event){
                             dojo.stopEvent(event);
-                            dojo.xhrPost({
-                                form : this
+                        });
+                        dojo.connect(dijit.byId(idartigo+'-save'), 'onClick', function(event){
+                            dojo.stopEvent(event);
+                            form.forEach(function(element){
+                                dojo.xhrPost({
+                                    form : element,
+                                    load : function(data){
+                                        dojo.forEach(data, function(message){
+                                            sys.output(message);
+                                        });
+                                    },
+                                    handleAs : 'json'
+                                });
                             });
                         });
                     }
