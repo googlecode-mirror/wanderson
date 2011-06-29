@@ -12,6 +12,10 @@
                 <label>Erro</label>
                 <title>Erro Encontrado</title>
             </error>
+            <auth module="default" controller="auth" action="login">
+                <label>Autenticação</label>
+                <title>Entrar no Sistema Facilitador de Artigos</title>
+            </auth>
         </pages>
     </index>
     <artigo module="default" controller="artigo" action="index">

@@ -42,7 +42,8 @@ class AuthController extends Local_Controller_ActionAbstract
                     $auth->getStorage()->write($contents);
                     $this->_helper->redirector('index','index');
                 } else {
-                    $form->addErrors($result->getMessages());
+                    $form->getElement('identidade')
+                         ->addErrors($result->getMessages());
                 }
             }
         }
