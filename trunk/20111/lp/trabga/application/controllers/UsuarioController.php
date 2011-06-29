@@ -23,10 +23,10 @@ class UsuarioController extends Local_Controller_ActionAbstract
     /**
      * Index Action
      */
-    public function indexAction()
+    public function infoAction()
     {
         // Formulário
-        $form = $this->_getForm();
+        $form = new Application_Form_UsuarioInfo();
 
         // Identificador do Usuário
         $auth = Zend_Auth::getInstance();
@@ -82,7 +82,7 @@ class UsuarioController extends Local_Controller_ActionAbstract
                 }
 
                 $this->_helper->flashMessenger('success');
-                $this->_helper->redirector('index');
+                $this->_helper->redirector('info');
 
             }
         } else {

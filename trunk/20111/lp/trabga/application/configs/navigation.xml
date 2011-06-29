@@ -72,11 +72,11 @@
             </edit>
         </pages>
     </referencia>
-    <usuario module="default" controller="usuario" action="index">
+    <usuario module="default" controller="usuario" action="info">
         <label>Usuário</label>
         <title>Configurações Pessoais</title>
         <pages>
-            <index module="default" controller="usuario" action="index">
+            <index module="default" controller="usuario" action="info">
                 <label>Configurações</label>
                 <title>Configurações Pessoais</title>
             </index>
