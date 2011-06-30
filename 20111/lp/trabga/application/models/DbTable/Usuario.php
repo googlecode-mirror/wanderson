@@ -27,6 +27,9 @@ class Application_Model_DbTable_Usuario extends Local_Db_TableAbstract
      */
     protected $_primaries = array('idusuario');
 
+    /**
+     * Tabelas Dependentes
+     */
     protected $_dependentTables = array(
         'Artigo'     => 'Application_Model_DbTable_Artigo',
         'Figura'     => 'Application_Model_DbTable_Figura',
@@ -44,4 +47,11 @@ class Application_Model_DbTable_Usuario extends Local_Db_TableAbstract
             'refTableClass' => 'Application_Model_DbTable_Autor',
         ),
     );
+
+    /**
+     * Linha Padrão da Tabela
+     * Enter description here ...
+     * @var unknown_type
+     */
+    protected $_rowClass = 'Application_Model_DbTable_Row_Usuario';
 }
