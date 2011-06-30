@@ -127,6 +127,34 @@ class UsuarioController extends Local_Controller_ActionAbstract
     }
 
     /**
+     * Remove Action
+     * @return null
+     */
+    public function removeAction()
+    {
+        // Chaves Primárias
+        $primaries = $this->_getPrimaries(function($value){
+            return (int) $value;
+        });
+
+        // Recuperação do Elemento
+        $table = $this->_getDbTable();
+        $element = $table->find($primaries)->current();
+
+        // Elemento Inexistente
+        if ($element === null) {
+            throw new Zend_Db_Exception('Invalid Element');
+        }
+
+        // Remoção do Elemento no Banco
+        $element->delete();
+
+        // Mensagens
+        $this->_helper->flashMessenger('delete');
+        $this->_helper->redirector('index');
+    }
+
+    /**
      * Index Action
      */
     public function infoAction()

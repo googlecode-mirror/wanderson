@@ -21,4 +21,12 @@ class Application_Model_DbTable_Row_Usuario extends Local_Db_Table_Row
             }
         }
     }
+
+    protected function _delete()
+    {
+        // Alterações no Root
+        if ($this->identidade == 'root') {
+            throw new Zend_Db_Exception('Forbidden');
+        }
+    }
 }
