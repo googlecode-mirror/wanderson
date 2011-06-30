@@ -3,7 +3,9 @@
 /**
  * Verifica Autenticação no Sistem
  * 
- * @author Wanderson Henrique Camargo Rosa
+ * @category   Local
+ * @package    Local_Controller
+ * @subpackage Plugin
  */
 class Local_Controller_Plugin_Authentication
     extends Zend_Controller_Plugin_Abstract
@@ -18,7 +20,18 @@ class Local_Controller_Plugin_Authentication
             'action' => 'login',
             'controller' => 'auth',
         ),
+        'cadastro' => array(
+            'module' => 'default',
+            'action' => 'cadastro',
+            'controller' => 'index',
+        ),
     );
+
+    /**
+     * Endereço Público para Redirecionamento
+     * @var string
+     */
+    protected $_redirect = 'login';
 
     /**
      * Adiciona um Endereço Público
@@ -41,22 +54,38 @@ class Local_Controller_Plugin_Authentication
         return $this->_public;
     }
 
+    /**
+     * Informa a Página Públic Padrão para Redirecionamento
+     * @return array Conjunto de Roteamento para Página Pública
+     */
+    public function getRedirect()
+    {
+        $public   = $this->getPublic();
+        $redirect = $this->_redirect;
+        if (!array_key_exists($redirect, $public)) {
+            throw new Zend_Controller_Exception('Invalid Public');
+        }
+        return $public[$redirect];
+    }
+
     public function routeShutdown(Zend_Controller_Request_Abstract $request)
     {
         $auth = Zend_Auth::getInstance();
         if (!$auth->hasIdentity()) {
-            foreach ($this->getPublic() as $content) {
-                $current = array(
-                    'module' => $request->getModuleName(),
-                    'action' => $request->getActionName(),
-                    'controller' => $request->getControllerName(),
-                );
-                $diff = array_diff($current, $content);
-                if (!empty($diff)) {
-                    foreach ($content as $position => $value) {
-                        $method = sprintf('set%sName', ucfirst($position));
-                        $request->$method($value);
+            $params = array();
+            $keywords = array('module', 'controller', 'action');
+            foreach ($keywords as $keyword) {
+                $params[$keyword] = $request->getParam($keyword);
+            }
+            foreach ($this->getPublic() as $element) {
+                $result = array_diff($element, $params);
+                if (!empty($result)) {
+                    $redirect = $this->getRedirect();
+                    foreach ($keywords as $keyword) {
+                        $method = 'set' . ucfirst($keyword) . 'Name';
+                        $request->$method($redirect[$keyword]);
                     }
+                    break;
                 }
             }
         }
