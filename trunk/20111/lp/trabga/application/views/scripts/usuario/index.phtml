@@ -1,0 +1,35 @@
+<h2>Listar Usuários</h2>
+<?php if (count($this->messages) > 0) : ?>
+<ul>
+<?php foreach ($this->messages as $message) : ?>
+    <li><?php echo $this->escape($message) ?></li>
+<?php endforeach ?>
+</ul>
+<?php endif ?>
+<table>
+    <thead>
+        <tr>
+            <th>Usuário</th>
+            <th>Ativado</th>
+            <th><a href="<?php echo $this->url(array('action' => 'create')) ?>">Adicionar</a></th>
+        </tr>
+    </thead>
+    <tbody>
+<?php if (count($this->result) > 0) : ?>
+<?php foreach ($this->result as $element) : ?>
+        <tr>
+            <td><?php echo $this->escape($element->identidade) ?></td>
+            <td><?php echo $element->ativado ? 'Sim' : 'Não' ?></td>
+            <td>
+                <a href="<?php echo $this->url(array('action' => 'edit', 'idusuario' => $element->idusuario)) ?>">Editar</a>
+                <a href="<?php echo $this->url(array('action' => 'remove', 'idusuario' => $element->idusuario)) ?>">Remover</a>
+            </td>
+        </tr>
+<?php endforeach ?>
+<?php else : ?>
+        <tr>
+            <td colspan="3">Lista Vazia</td>
+        </tr>
+<?php endif ?>
+    </tbody>
+</table>
