@@ -52,7 +52,7 @@ void imprime_bytes_dec(char* input) {
     // Cálculo do Tamanho da String de Entrada
     size = strlen(input); // Necessidade de Cabeçalho
     for (int i = 0; i < size; i++) { // Laço de Repetição para Caracteres
-        printf("%x\n", input[i]);
+        printf("%d\n", input[i]);
     }
 }
 
