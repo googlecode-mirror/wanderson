@@ -25,5 +25,14 @@ fi
 # Chamada do Editor
 vim "$1.java" # Espera a Finalização do Processo
 
+# Chamada do Compilador Java
+if javac "$1.java"; then # Bloco Condicional
+    # Estado de Terminação com Sucesso (Igual a Zero)
+    echo "Compilação Finalizada"
+else
+    # Estado de Terminação com Falha (Diferente de Zero)
+    echo "Compilação Mal Sucedida"
+fi
+
 # Retorno Esperado
 exit 0 # Sucesso
