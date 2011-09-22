@@ -22,5 +22,8 @@ public class $1 {
 " > "$1.java" # Redirecionamento de Saída Padrão para Arquivo
 fi
 
+# Chamada do Editor
+vim "$1.java" # Espera a Finalização do Processo
+
 # Retorno Esperado
 exit 0 # Sucesso
