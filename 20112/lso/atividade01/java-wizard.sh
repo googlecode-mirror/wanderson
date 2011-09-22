@@ -25,10 +25,15 @@ fi
 # Laço de Repetição
 # Chamada do Editor
 # Chamada do Compilador Java
-until vim "$1.java" && javac "$1.java"; do
+# Redirecionamento de Erros para Arquivo
+until vim "$1.java" && javac "$1.java" 2> errors.log ; do
     # Estado de Terminação com Falha (Diferente de Zero)
-    echo "Compilação Mal Sucedida"
+    # Espera Usuário Sair do Paginador
+    cat errors.log | head -n 1 | less # Exibição da Primeira Linha de Erro
 done
+
+# Remover Arquivo de Log
+rm -f errors.log
 
 # Retorno Esperado
 exit 0 # Sucesso
