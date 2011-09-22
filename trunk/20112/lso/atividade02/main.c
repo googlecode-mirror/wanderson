@@ -42,7 +42,7 @@ void imprime_caracteres(char* input) {
 
 /**
  * Impressão de Caracteres de Entrada
- * Exibição dos Valores em Hexadecimal
+ * Exibição dos Valores em Números Decimais
  * @param char* input Sequência de Entrada
  * @return void
  */
