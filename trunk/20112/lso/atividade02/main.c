@@ -4,7 +4,7 @@
 // Assinatura de Funções
 void imprime_caracteres(char*);
 void imprime_bytes_dec(char*);
-void imprime_bytes_hex(char*);
+void imprime_bytes_hex(long);
 
 /**
  * Atividade 02
@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
     scanf("%s", input); // Armazenamento do Conteúdo
 
     // Execução de Função Encapsulada
-    imprime_bytes_hex(input);
+    imprime_bytes_dec(input);
 
     // Retorno de Resultados ao Sistema Operacional
     return 0; // Estado de Terminação com Sucesso
@@ -58,18 +58,20 @@ void imprime_bytes_dec(char* input) {
 }
 
 /**
- * Impressão de Caracteres de Entrada
+ * Impressão de Bytes para Inteiro Longo
  * Exibição dos Valores em Números Hexadecimais
- * @param char* input Sequência de Entrada
+ * @param long input Número para Impressão
  * @return void
  */
-void imprime_bytes_hex(char* input) {
-    // Contador do Tamanho da String de Entrada
+void imprime_bytes_hex(long input) {
+    // Contador do Tamanho do Inteiro Longo de Entrada
     int size; // Não Necessária Inicialização
-    // Cálculo do Tamanho da String de Entrada
-    size = strlen(input); // Necessidade de Cabeçalho
-    for (int i = 0; i < size; i++) { // Laço de Repetição para Caracteres
-        printf("%x\n", input[i]);
+    // Cálculo do Tamanho do Inteiro Longo
+    size = sizeof(long); // Tamanho em Bytes da Tipagem
+    for (int i = 0; i < size; i++) {
+        int offset = i * 8; // Deslocamento em Bits
+        // Apresentação do Valor conforme Deslocamento
+        printf("%.2x\n", (int) (input & (255 << offset)) >> offset);
     }
 }
 
