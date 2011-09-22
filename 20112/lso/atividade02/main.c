@@ -5,6 +5,7 @@
 void imprime_caracteres(char*);
 void imprime_bytes_dec(char*);
 void imprime_bytes_hex(long);
+void imprime_bytes_bin(long);
 
 /**
  * Atividade 02
@@ -72,6 +73,26 @@ void imprime_bytes_hex(long input) {
         int offset = i * 8; // Deslocamento em Bits
         // Apresentação do Valor conforme Deslocamento
         printf("%.2x\n", (int) (input & (255 << offset)) >> offset);
+    }
+}
+
+/**
+ * Impressão de Bytes para Inteiro Longo
+ * Exibição dos Valores em Números Binários
+ * @param long input Número para Impressão
+ * @return void
+ */
+void imprime_bytes_bin(long input) {
+    // Contador do Tamanho do Inteiro Longo de Entrada
+    int size; // Não Necessária Inicialização
+    // Cálculo do Tamanho do Inteiro Longo
+    size = sizeof(long); // Tamanho em Bytes da Tipagem
+    for (int i = 0; i < size; i++) { // Exibição por Bytes
+        for (int j = 7; j >= 0; j--) { // Exibição por Bits
+            // Apresentação do Valor conforme Deslocamento
+            printf("%d", (int) (input & (1 << (i * 8 + j))) >> (i * 8 + j));
+        }
+        printf("\n");
     }
 }
 
