@@ -1,0 +1,9 @@
+8) Ao utilizar um conector de saída padrão e saída de erro entre processos,
+caracterizado como um _pipe_, é impossível utilizá-lo na mesma sequência de
+comandos do laço de repetição, porque o último comando, paginador, irá
+apresentar um estado de terminação com sucesso, ignorando o erro do compilador.
+
+9) Impossível utilizar o laço de repetição _for_ para este problema porque este
+somente deve ser utilizado para elementos de quantidade específica, algo que é
+impossível de ser previsto na situação, porque o usuário pode gerar _n_
+problemas de sintaxe dentro do código-fonte.
