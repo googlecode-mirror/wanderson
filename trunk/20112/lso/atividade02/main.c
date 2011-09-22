@@ -6,6 +6,8 @@ void imprime_caracteres(char*);
 void imprime_bytes_dec(char*);
 void imprime_bytes_hex(long);
 void imprime_bytes_bin(long);
+void dump_mem_hex(int*);
+void aux_dump_mem_hex(int*);
 
 /**
  * Atividade 02
@@ -22,6 +24,10 @@ int main(int argc, char* argv[]) {
 
     // Execução de Função Encapsulada
     imprime_bytes_dec(input);
+
+    // Teste
+    int a = 2;
+    dump_mem_hex(&a);
 
     // Retorno de Resultados ao Sistema Operacional
     return 0; // Estado de Terminação com Sucesso
@@ -96,3 +102,33 @@ void imprime_bytes_bin(long input) {
     }
 }
 
+/**
+ * Impressão de Bytes Adjacentes ao Ponteiro de Entrada
+ * Exibição dos Valores conforme Bloco Condicional
+ * @param int* input Valor para Utilizar como Pivô
+ * @return void
+ */
+void dump_mem_hex(int* input) {
+    // Ponteiros Adjacentes
+    int* prev = input - 1; // Anterior
+    int* next = input + 1; // Próximo
+    // Utilização de Auxiliar
+    aux_dump_mem_hex(prev); printf("\n");
+    aux_dump_mem_hex(next); printf("\n");
+}
+
+/**
+ * Auxiliar para Impressão de Bytes Capturados
+ * @param int* input Valor para Exibição
+ * @return void
+ */
+void aux_dump_mem_hex(int* input) {
+    // Intervalo Fechado entre A..z
+    if (*input >= 'A' && *input <= 'z') {
+        // Impressão do Caractere ASCII
+        printf("'%4c'", *input);
+    } else {
+        // Impressão do Valor Hexadecimal
+        printf("%4x", *input); // 4 colunas
+    }
+}
