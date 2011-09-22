@@ -22,17 +22,13 @@ public class $1 {
 " > "$1.java" # Redirecionamento de Saída Padrão para Arquivo
 fi
 
+# Laço de Repetição
 # Chamada do Editor
-vim "$1.java" # Espera a Finalização do Processo
-
 # Chamada do Compilador Java
-if javac "$1.java"; then # Bloco Condicional
-    # Estado de Terminação com Sucesso (Igual a Zero)
-    echo "Compilação Finalizada"
-else
+until vim "$1.java" && javac "$1.java"; do
     # Estado de Terminação com Falha (Diferente de Zero)
     echo "Compilação Mal Sucedida"
-fi
+done
 
 # Retorno Esperado
 exit 0 # Sucesso
