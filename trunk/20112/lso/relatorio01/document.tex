@@ -1,0 +1,117 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{sbc-template}
+
+\title{Relatório de TGA sobre Shellscript}
+\author{Wanderson Henrique Camargo Rosa\inst{1}}
+\address{Laboratório de Sistemas Operacionais --- 2011/2\\Centro de Ciências
+Exatas e Tecnológicas\\Universidade do Vale do Rio dos Sinos --- UNISINOS}
+
+\begin{document}
+
+\maketitle{}
+
+\section{Introdução}
+
+Este documento visa apresentar anotações e criar um relatório parcial das
+atividades propostas pela disciplina de Laboratório de Sistemas Operacionais,
+semestre de 2011/2, sobre programação Shellscript.
+
+Na proposta do trabalho, foi apresentado um código-fonte de um programa descrito
+em Shellscript com alguns problemas de sintaxe e codificação, sendo que existe a
+necessidade de organização de código, refatoração e documentação em blocos de
+código, visando estudos sobre o algoritmo implementado.
+
+\section{Análise Geral}
+
+O \textit{script} atual busca criar um novo método para execução de
+\textit{downloads} sobre arquivos informados em linha de comando. Recebendo como
+parâmetro opcional \texttt{-t}, podemos esperar a cópia do arquivo remoto pela
+quantidade de segundos informada. Após este parâmetro, podemos fornecer uma
+lista de arquivos para download, processados pelo \textit{script}.
+
+Utilizando um laço de repetição, o bloco principal do programa desloca os
+parâmetros para esquerda, afim de fornecê-lo ao programa real que efetua o
+\textit{download} dos arquivos, neste caso, o \texttt{wget}. Este, é
+inicializado com o parâmetro \texttt{-c} que tenta continuar um
+\textit{download} pausado anteriormente.
+
+Ainda neste \textit{script}, existem duas funções implementadas, onde a primeira
+utiliza o programa para executar o \textit{download} sem tempo de término,
+chamado de \textit{timeout}. A segunda trabalha com \textit{timeout} simulado,
+utilizando uma espera de execução no sistema operacional do processo que é
+enviado ao \textit{background}. Quando este \textit{timeout} é finalizado, o
+programa de \textit{download} é finalizado através de um sinal \texttt{KILL}.
+
+Estas funções são chamadas para cada arquivo informado na linha de comando. A
+saída de erro do \texttt{KILL} é redirecionada para o escritor especial que
+ignora as informações enviadas \texttt{/dev/null}. Já o programa que executa o
+\textit{download} apresenta normalmente a sua saída. Ao final, são apresentados
+os resultados na saída padrão, efetuando a soma da quantidade de
+\textit{downloads} executados e quantos foram finalizados com sucesso.
+
+\section{Tópicos}
+
+Houve a necessidade de criação de um arquivo com o nome de
+\texttt{downloader.sh} para armazenar o código-fonte informado pela disciplina.
+Para que o arquivo receba credenciais para execução, houve a necessidade de
+execução do comando \texttt{chmod +x downloader.sh} ou chamar diretamente o
+interpretador de comandos com o comando \texttt{bash downloader.sh}.
+
+O programa atual não possui a linha de \textit{hashbang} completo, sendo
+necessária sua modificação para \texttt{\#!/bin/bash}.
+
+As variáveis devem ser inicializadas com o sinal de atribuição como sufixo e
+adjacente, sem espaços entre ambos os \textit{tokens}, caso contrário a
+atribuição desejada não irá funcionar. Também existe o caso em que variáveis
+recebem valores e o sinal de atribuição está sendo separado por um espaço, não
+categorizando somente as inicializações.
+
+O código de término de execução com falhas deve ser diferente de zero;
+necessário porque o sistema operacional espera um inteiro com valor 0 para que o
+processo informe sucesso em sua execução. Já o código de sucesso também deve ser
+alterado, buscando apresentar um valor conciso ao sistema operacional sobre o
+estado do processamento.
+
+O nome da variável de sucesso está sendo inicializado com identificador
+diferente de todos os outros pontos do código-fonte, gerando uma inconsistência
+na execução correta, onde outros pontos do programa irão utilizar variáveis não
+inicializadas. Isto também está acontecendo na apresentação de resultado com
+falha, onde o conteúdo da variável não é expandido.
+
+A função \texttt{print\_info} possui retorno que não está sendo acessado
+corretamente através da expansão de variável, não acessando o valor de sucesso
+armazenado no conteúdo.
+
+Necessária implementação da divisão entre os dois blocos condicionais do
+\texttt{case}, buscando não executar os dois comandos em cascata e saindo do
+bloco. Neste caso, precisamos que o \texttt{case} não execute os próximos
+comandos, portanto é preciso adicionar dois pontos-e-vírgula \texttt{(;;)}
+para escapar do bloco condicional.
+
+Quando existe a verificação da quantidade de parâmetros que foram informados ao
+\textit{script}, existe a necessidade de escapar o sinal de menor-que
+\texttt{(<)} porque o interpretador de comandos espera que o segundo parâmetro
+seja um arquivo para redirecionamento da entrada padrão.
+
+O número para acesso dos parâmetros dentro da função \texttt{print\_info} está
+errado, não informando corretamente o número de \textit{downloads} executados
+com sucesso, muito menos executando o somatório de \textit{downloads}. Aplicada
+documentação mais completa ao \textit{script}, com descrição de funcionalidades
+executadas.
+
+A primeira função efetua o \textit{download} dos arquivos sem \textit{timeout};
+logo o sistema operacional espera até que a cópia do arquivo remoto seja
+finalizada. Podemos utilizar o parâmetro opcional \texttt{-t} na primeira
+função, porém ela não é manipulada dentro de seu escopo. Para corrigir o seu
+problema de execução, somente foi adicionado o parâmetro de \textit{timeout} na
+chamada para execução, tendo em vista que outros pontos do sistema podem
+utilizar a mesma função.
+
+Finalizando, o último \texttt{shift} não aparenta ser necessário porque não
+existe manipulação de parâmetros após a sua chamada.
+
+\end{document}
