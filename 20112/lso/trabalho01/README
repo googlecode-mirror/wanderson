@@ -1,0 +1,81 @@
+README
+======
+
+* Necessidade de criação de um arquivo com o nome de 'downloader.sh' para
+caracterizar o elemento criado. Para que o arquivo seja executado, precisamos
+executar o comando 'chmod +x downloader.sh' ou chamar o interpretador de
+comandos diretamente com 'bash downloader.sh';
+
+* O programa atual não possui um _hashbang_ completo, sendo necessário completar
+o comando para o interpretador *bash*; Melhorias em comentários;
+
+* As variáveis devem ser inicializadas com o sinal de atribuição como sufixo,
+caso contrário o processamento desejado não irá funcionar. Também existe o caso
+em que variáveis recebem valores e o sinal de atribuição também está sendo
+separado por um espaço;
+
+* O código de falha deve ser diferente de zero; necessidade porque o sistema
+operacional espera um inteiro com valor 0 para que o processo informe sucesso em
+sua execução. Já o código de falha deve ser diferente de zero e conforme o
+código fonte apresentado, o valor pode ser considerado como 15;
+
+* Nome da variável de sucesso não está sendo utilizado como nos outros pontos do
+código fonte, gerando uma inconsistência de execução, onde outros pontos do
+programa irão utilizar variáveis não inicializadas. Isto também está acontecendo
+na apresentação de falha, onde o conteúdo da variável não é expandido;
+
+* O retorno da função *print_info* não está sendo acessado através da expansão
+da variável que possui o valor de sucesso esperado para término de execução;
+
+* O bloco condicional _case_ necessita de divisão entre pontos de condição para
+que estes não sejam executados em forma de cascata, saindo do bloco condicional.
+No nosso caso, precisamos que o _case_ descrito não execute os próximos
+comandos, portando precisamos adicionar dois pontos-e-vírgula (;;) para escapar
+do bloco condicional;
+
+* Quando existe a verificação da quantidade de parâmetros que foram informados
+ao script de execução, existe a necessidade de escape do sinal 'menor que' (<),
+porque o interpretador de comandos espera que o segundo parâmetro seja um
+arquivo para redirecionamento da entrada padrão;
+
+* O número para acesso dos parâmetros dentro da função *print_info* está errado,
+não informando corretamente o número de downloads executado com sucesso, muito
+menos executando o somatório de downloads executados;
+
+* O primeiro comando de download não possui uma documentação apropriada,
+necessidade de incluir uma informação sobre as funcionalidades executadas,
+efetuando o download do arquivo solicitado *sem* TIMEOUT;
+
+* O primeiro comando espera como primeiro parâmetro o TIMEOUT a ser utilizado.
+Neste caso, buscando utilizar o código já desenvolvido, incluiu-se como primeiro
+parâmetro da chamada o TIMEOUT necessário, mesmo que este seja excluído dentro
+da função;
+
+* O último shift não é necessário, tendo em vista que não há acesso a nenhum
+parâmetro na execução posterior a sua chamada.
+
+Resumo
+------
+
+O script atual busca criar um novo método de execução de download para arquivos
+informados. Recebendo como possível parâmetro prefixado com '-t', podemos
+esperar a cópia do arquivo remoto pela quantidade de segundos informada. Após,
+podemos fornecer uma lista de arquivos para download, que serão processados pelo
+script.
+
+Em um laço de repetição, ele desloca os parâmetros à esquerda, um por vez,
+buscando utilizar o elemento mais à esquerda e fornecê-lo ao programa real que
+executa o download do arquivo, neste caso, o 'wget'. Este, é inicializado com o
+parâmetro '-c' que busca continuar um download pausado.
+
+Existem duas funções implementadas, onde a primeira utiliza o programa para
+executar o download sem TIMEOUT e a segunda, com o TIMEOUT simulado, utilizando
+uma espera de execução do processo enviado para background. Quando este TIMEOUT
+é apresentado, o programa é finalizado pelo sinal KILL.
+
+Estas funções são chamadas para cada arquivo informado na linha de comando do
+script utilizado. A saída de erro do *kill* é redirecionada para o escritor
+especial que ignora as informações apresentadas. O downloader apresenta
+normalmente a sua saída. Ao final, são apresentados os resultados na saída
+padrão, efetuando uma soma da quantidade de downloads executados e quantos foram
+finalizados com sucesso.
