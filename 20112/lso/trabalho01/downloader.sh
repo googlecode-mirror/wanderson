@@ -29,7 +29,7 @@ function print_info() {
 function exec_dl1() {
     # t=$1; shift # Remoção de Linha Desnecessária
     # Modificações: Somente um Elemento é Necessário
-    $DOWNLOADER $DL_OPTIONS $1 # Execução do Downloader
+    $DOWNLOADER $DL_OPTIONS $2 # Execução do Downloader
     return $? # Resultado do Término do Último Comando Executado
 }
 
