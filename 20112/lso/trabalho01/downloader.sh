@@ -25,11 +25,11 @@ function print_info() {
 }
 
 # Execução de Comando de Downloader sem TIMEOUT
-# exec_cmd1 timeout url
+# exec_cmd1 url
 function exec_dl1() {
     # t=$1; shift # Remoção de Linha Desnecessária
     # Modificações: Somente um Elemento é Necessário
-    $DOWNLOADER $DL_OPTIONS $2 # Execução do Downloader
+    $DOWNLOADER $DL_OPTIONS $1 # Execução do Downloader
     return $? # Resultado do Término do Último Comando Executado
 }
 
@@ -68,21 +68,21 @@ fi
 # Número de Downloads com Sucesso: ns
 # Número de Downloads com Falha:   nf
 ns=0; nf=0;
-while true; do # Laço de Repetição Infinito
-    # Existem Downloads para Execução?
+# Execução de Código para Cada URL Informada
+for URL in $(seq 1 "$#"); do # Laço de Repetição Limitado
     # Capturar o Primeiro Parâmetro como URL
     # Deslocar 1 Parâmetro à Esquerda
-    if [ $# == 0 ]; then break; else URL=$1; shift; fi
+    URL=$1; shift;
     # Bloco Condicional
     case $TIMEOUT in # Verificar Tipo de TIMEOUT
-        # TIMEOUT 'no' Descartável na Função
-        no) EXEC_DL="exec_dl1 $TIMEOUT";;
+        # TIMEOUT 'no' Descartável na Função 1
+        no) EXEC_DL="exec_dl1";;
         *)  EXEC_DL="exec_dl2 $TIMEOUT"
     esac
     $EXEC_DL $URL
     if test $? -eq 0; then ns=$((ns+1)); else nf=$((nf+1)); fi
+    # shift # Execução de shift Desnecessária
 done
 
-shift # TODO Execução de shift Necessário?
 print_info $ns $nf # Apresentação de Resultados
 
