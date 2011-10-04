@@ -27,8 +27,9 @@ function print_info() {
 # Execução de Comando de Downloader sem TIMEOUT
 # exec_cmd1 timeout url
 function exec_dl1() {
-    t=$1; shift # Deslocamento de 1 Parâmetros Informado à Esquerda
-    $DOWNLOADER $DL_OPTIONS $* # Execução do Downloader
+    # t=$1; shift # Remoção de Linha Desnecessária
+    # Modificações: Somente um Elemento é Necessário
+    $DOWNLOADER $DL_OPTIONS $1 # Execução do Downloader
     return $? # Resultado do Término do Último Comando Executado
 }
 
@@ -37,22 +38,20 @@ function exec_dl1() {
 function exec_dl2() {
     t=$1; shift # Deslocamento de 1 Parâmetros Informado à Esquerda
     # Execução do Downloader em Background
-    $DOWNLOADER $DL_OPTIONS $* & # Envio para Background da Execução
-    # TODO Como Capturar o PID?
-    # TODO O que é '$!'?
+    # Modificações: Somente um Elemento é Necessário
+    $DOWNLOADER $DL_OPTIONS $1 & # Envio para Background da Execução
     # Capturar o PID e Esperar o Tempo Solicitado
     # Conectar a Saída de Erro na Saída Padrão
     # Terminar o Processo de Forma "Elegante"
     # Escritor Especial e Descartável
     pid=$!; sleep $t; kill -KILL $pid 2>/dev/null; # Saída de Erro para Vazio
-    # TODO Verificar como Esperar o PID
     # Esperar o PID e Conectar a Saída de Erro na Saída Padrão
     wait $pid 2>/dev/null # Enviar Saída de Erro para "Nada"
     return $? # Resultado do Término do Último Comando Executado
 }
 
 # Verifica a Quantidade de Parâmetros Informados
-if test $# \< 1; then # Nenhum Parâmetro Informado
+if test $# -lt 1; then # Nenhum Parâmetro Informado
     # Apresentação de Erros
     echo "$0: Parametros insuficientes"
     echo "Uso: $0 [ -t timeout ] urls..."
