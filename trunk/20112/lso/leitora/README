@@ -1,0 +1,71 @@
+README
+======
+
+Este documento visa apresentar anotações sobre o que está sendo executado sobre
+o desenvolvimento do Trabalho de Grau B para Laboratório de Sistemas
+Operacionais, segundo semestre de 2012. Neste trabalho, vamos criar um driver
+para um dispositivo de caractere como um módulo do kernel do Linux.
+
+Recursos Necessários
+--------------------
+
+Para inicializar o desenvolvimento, precisamos do código fonte do próprio kernel
+do Linux para utilização de seus headers. Em um sistema baseado em Debian,
+podemos instalar esta dependência através do comando abaixo, com permissões de
+superusuário.
+
+[shell]
+apt-get install linux-source
+[/shell]
+
+Como este é um metapacote, precisamos especificar qual código fonte do Linux
+será instalado, conforme saída do comando acima. Atualmente, estou trabalhando
+com a versão 2.6.32 do kernel. Logo, vamos instalar o código fonte com o comando
+abaixo.
+
+[shell]
+apt-get install linux-source-2.6.32
+[/shell]
+
+Compilação
+----------
+
+Para facilitar a geração do módulo, quando instalamos o código fonte do kernel,
+algumas ferramentas são instaladas. Porém, após uma pequena pesquisa na
+documentação disponível, não encontrei nenhum tipo de explicação sobre o porquê
+de utilizar os códigos descritos no Makefile. Após estudar o caso, encontrei
+algumas explicações em sites e com testes. Temos o seguinte código interno ao
+Makefile para utilizar o arquivo "main.c" como código fonte para geração do
+código objeto "main.o".
+
+[code file="Makefile"]
+KVERSION   = $(shell uname -r)
+KDIRECTORY = "/lib/modules/$(KVERSION)/build"
+
+obj-m = main.o
+
+all:
+	make -C "$(KDIRECTORY)" "M=$(PWD)" modules
+
+clean:
+	make -C "$(KDIRECTORY)" "M=$(PWD)" clean
+[/code]
+
+As duas primeiras linhas são configurações para melhorar a criação do Makefile,
+onde poderemos alterar diretamente estas opções caso necessário. A variável
+"KVERSION" armazena a versão atual do kernel e "KDIRECTORY" armazena o caminho
+dos arquivos necessários para criação do módulo e não dos arquivos de cabeçalho
+utilizados no código fonte.
+
+O conjunto de instruções com a etiqueta "all" constrói o código objeto do módulo
+solicitado. O parâmetro "-C" modifica o diretório atual do "make" para o
+"KDIRECTORY", que possui um outro "Makefile" configurado e especializado para
+criar módulos do kernel. O parâmetro "M=" apresenta o diretório atual para o
+"Makefile" interno ao "KDIRECTORY", que irá procurar pela opção "obj-m" para
+gerar código objeto do módulo esperado. Esta configuração deve possuir o mesmo
+nome do arquivo de código fonte com sufixo "*.o", representando a geração do
+código objeto para aquele arquivo.
+
+A opção *clean* limpa os arquivos gerados dentro do diretório atual,
+intermediários ou resultantes da criação do objeto módulo previamente
+construído.
