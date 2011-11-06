@@ -151,3 +151,30 @@ seu conteúdo é somente um "<1>".
 Por fim, a função *printk* é utilizada em ambas funções registradas,
 representando a inserção e remoção do módulo do Linux. Agora veremos como
 podemos gerenciar estes módulos diretamente no kernel.
+
+Gerenciamento
+-------------
+
+O módulo gerado como código objeto pode ser inserido e removido do kernel do
+Linux em tempo de execução. Para isto, vamos utilizar comandos específicos de
+linha de comando como superusuário. Abaixo estão descritos os dois comandos que
+inserem e removem o módulo anteriormente desenvolvido. Precisamos executar o
+*make* e utilizar o arquivo *main.ko*, módulo gerado.
+
+[shell]
+insmod main.ko
+rmmod main.ko
+[/shell]
+
+Dependendo da configuração que estamos utilizando e o ambiente de execução, como
+janelas em ambientes gráficos, não vamos visualizar a saída esperada das funções
+*printk*. Neste caso, o conteúdo gerado é armazenado em arquivos de *log* do
+sistema. CORBET informa que este conteúdo é enviado para o arquivo
+"/var/logs/messages", porém no sistema Debian utilizado para desenvolver este
+documento o conteúdo foi enviado para "/var/logs/kern.log".
+
+Para fins de testes e verificar se a nossa saída está sendo enviada
+corretamente durante as execuções de inserção e remoção do módulo, podemos antes
+executar o comando "tail -f /var/logs/kern.log" para efetuar a leitura constante
+do conteúdo armazenado no arquivo. Sempre que algo é armazenado neste, o comando
+*tail* apresenta na saída padrão o conteúdo capturado.
