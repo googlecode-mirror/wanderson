@@ -40,7 +40,7 @@ código objeto "main.o".
 
 [code file="Makefile"]
 KVERSION   = $(shell uname -r)
-KDIRECTORY = "/lib/modules/$(KVERSION)/build"
+KDIRECTORY = /lib/modules/$(KVERSION)/build
 
 obj-m = main.o
 
@@ -69,3 +69,85 @@ código objeto para aquele arquivo.
 A opção *clean* limpa os arquivos gerados dentro do diretório atual,
 intermediários ou resultantes da criação do objeto módulo previamente
 construído.
+
+Os dois comandos de terminal abaixo descrevem como gerar o código objeto e
+limpar os arquivos gerados durante a execução desta tarefa, utilizando o comando
+"make".
+
+[shell]
+make
+make clean
+[/shell]
+
+A primeira linha apresenta a instrução que gera o código objeto "main.ko" que
+representa o nosso módulo que poderá ser aplicado no kernel do Linux. A segunda
+instrução limpa todos os arquivos gerados pela execução de criar o código
+objeto, incluindo o próprio módulo gerado.
+
+Exemplo Básico
+--------------
+
+Baseado em CORBET [2005], vamos construir um código fonte capaz de gerar um
+módulo simples do Linux. As duas instruções necessárias para criar um módulo são
+apresentadas: a que inicia o módulo junto ao kernel do Linux e a que é utilizada
+para remover o módulo e desregistrar algumas funcionalidades inicializadas
+anteriormente.
+
+[code file="main.c"]
+#include <linux/init.h>
+#include <linux/module.h>
+MODULE_LICENSE("Dual BSD/GPL");
+
+static int hello_init(void)
+{
+    printk(KERN_ALERT "Hello, World\n");
+    return 0;
+}
+
+static void hello_exit(void)
+{
+    printk(KERN_ALERT "Goodbye, Cruel World\n");
+}
+
+module_init(hello_init);
+module_exit(hello_exit);
+[/code]
+
+As duas primeiras linhas são necessárias para incluir os cabeçalhos de funções
+de inicialização e de módulo, respectivamente. Durante a geração do código
+objeto, os caminhos de inclusão são configurados pelo "Makefile" interno ao
+diretório "KDIRECTORY" especificado anteriormente.
+
+Após, a licença de utilização do módulo é apresentada. Esta chamada não é
+necessária mas o seu conteúdo é apresentado quando utilizado o programa
+*modinfo*, que exibe informações de um módulo ainda como um código objeto. A
+chamada *MODULE_LICENSE* é uma macro e pode receber outros parâmetros, definidos
+em "linux/module.h".
+
+Basicamente, qualquer função pode ser considerada como inicialização ou
+finalização de módulo, desde que obedeçam a sua assinatura. Funções de
+inicialização não devem receber parâmetros e retornar um inteiro que representa
+a execução com sucesso de sua inicialização. Da mesma forma, a função de
+finalização não recebe parâmetros, porém não retorna valores. Estas funções
+necessitam ser registradas utilizando as funções *module_init* e *module_exit*,
+conforme a necessidade. Utilizando testes locais, as funções não necessitam ser
+estáticas, conforme exemplo superior.
+
+A função *printk* trabalha da mesma maneira que a função *printf*, porém em
+espaço de kernel, já que as funções padrão do C não estão disponíveis. Podemos
+verificar que não há concatenação da constante *KERN_ALERT* e o texto que deve
+ser apresentado. Como uma *string* em C é uma cadeia de caracteres, o compilador
+entende que duas *strings* lado a lado devem ser consideradas como únicas. Se há
+uma separação por vírgula, a função *printk* recebe como primeiro parâmetro um
+padrão para formatar a saída e os seguintes são considerados cada um como um
+parâmetro deste padrão. Como não há nenhum padrão definido dentro de
+*KERN_ALERT*, teremos uma mensagem de aviso em tempo de construção do código
+objeto.
+
+A constante *KERN_ALERT* apenas é uma *string* que informa o nível de
+prioridade. Neste caso, o seu conteúdo representa o nível mais alto de aviso. O
+seu conteúdo é somente um "<1>".
+
+Por fim, a função *printk* é utilizada em ambas funções registradas,
+representando a inserção e remoção do módulo do Linux. Agora veremos como
+podemos gerenciar estes módulos diretamente no kernel.
