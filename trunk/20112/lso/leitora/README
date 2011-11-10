@@ -246,3 +246,98 @@ mknod "/dev/$DEVICE_NAME" c "$MAJOR" 0
 chmod 666 "/dev/$DEVICE_NAME"
 exit 0
 [/shell]
+
+Verificadora
+------------
+
+Vamos inicializar o desenvolvimento da verificadora de CPF/CNPJ, base da
+Proposta de Trabalho de Grau B para a disciplina de Laboratório de Sistemas
+Operacionais. Precisamos inicialmente criar um módulo que consiga gerar um
+"número maior" automaticamente, com base no código fonte apresentado por CORBET
+[2005].
+
+Logo nas primeiras linhas, vamos configurar as informações do módulo, acessíveis
+dentro do sistema operacional utilizando a função *modinfo*. Informamos uma
+pequena descrição do módulo e seus autores, bem como o número da versão atual e
+a licença de utilização do mesmo. Abaixo, apenas definimos algumas constantes
+para utilização dentro da programação do módulo, que serão resolvidas logo no
+início pelo pré-compilador.
+
+[code file="verifier.c"]
+MODULE_DESCRIPTION("Driver para Verificadora de CPF e CNPJ");
+MODULE_AUTHOR("Wanderson Henrique Camargo Rosa <wandersonwhcr@gmail.com>");
+MODULE_AUTHOR("Jeferson Souza <jeferson.s.souza@hotmail.com>");
+MODULE_AUTHOR("Bruno Fagundes <web@bfagundes.com>");
+MODULE_VERSION("0.1b");
+MODULE_LICENSE("Dual BSD/CPL");
+
+#define DRIVER_NAME "verifier"
+#define MINOR_NUMBER 0
+#define DEVICE_COUNTER 1
+[/code]
+
+Vamos adicionar as assinaturas das duas primeiras funções que serão
+desenvolvidas durante o processo. Logo abaixo, elas são registradas como
+inicialização e finalização de módulo. Conforme necessário, estas funções
+possuem assinaturas compatíveis com os registradores de funções.
+
+[code file="verifier.c"]
+int verifier_init(void);
+void verifier_exit(void);
+
+module_init(verifier_init);
+module_exit(verifier_exit);
+[/code]
+
+Para manipulação, vamos inicializar uma variável global e interna ao módulo para
+armazenar o número referente ao dispositivo alocado. Este dispositivo
+corresponde ao criado e anexado com o número maior dentro do instalador. No
+nosso caso, o dispositivo deverá se chamar "verifier" e será criado dentro do
+diretório de dispositivos padrão. Ele deve ser alocado dentro da função de
+inicialização do módulo. Adicionamos algumas mensagens que serão visualizadas
+somente no arquivo descrito na seção inicial deste documento.
+
+[code file="verifier.c"]
+dev_t device;
+
+int verifier_init(void) {
+    int result;
+    printk(KERN_INFO "Inicialização de Verificadora CPF/CNPJ");
+    result = alloc_chrdev_region(&device, MINOR_NUMBER, DEVICE_COUNTER, DRIVER_NAME);
+    if (result == 0) {
+        printk(KERN_INFO "Inicialização com Sucesso");
+    } else {
+        printk(KERN_ALERT "Inicialização com Problemas: Impossível Alocação de Dispositivo");
+    }
+    return result;
+}
+[/code]
+
+Buscando alocar o módulo, utilizamos a função específica para alocar um
+dispositivo sem a existência de um número maior sendo informado dentro do código
+fonte. Para outros elementos, utilizamos nossas definições descritas. Devemos
+também apresentar os resultados ao final de inicializar o módulo.
+
+Já a função de finalização é desenvolvida de maneira mais simples, solicitando
+uma retirada do registro de dispositivos alocados o nosso alocado na
+inicialização. Para isto, somente precimos informar o próprio valor do
+dispositivo e a quantidade de elementos que devem sofrer esta ação; definido
+anteriormente, o número de dispositivos é 1 (um).
+
+[code file="verifier.c"]
+void verifier_exit(void) {
+    printk(KERN_INFO "Finalização de Verificadora CPF/CNPJ");
+    unregister_chrdev_region(device, DEVICE_COUNTER);
+    printk(KERN_INFO "Finalização com Sucesso");
+}
+[/code]
+
+Com isto, temos um módulo que aloca um dispositivo para manipulação, anexando-se
+ao elemento através de um número maior. No nosso caso, o instalador captura o
+número variado criado.
+
+Temos então um pequeno módulo de kernel do Linux que aloca um determinado
+dispositivo. Este módulo trabalha como um _driver_. Como vamos criar uma leitora
+de dados, precisamos adicionar funções de abertura, leitura, escrita e
+fechamento deste dispositivo de caracteres, gerando assim nosso módulo de
+verificação de CPF e CNPJ.
