@@ -178,3 +178,71 @@ corretamente durante as execuções de inserção e remoção do módulo, podemo
 executar o comando "tail -f /var/logs/kern.log" para efetuar a leitura constante
 do conteúdo armazenado no arquivo. Sempre que algo é armazenado neste, o comando
 *tail* apresenta na saída padrão o conteúdo capturado.
+
+Instalador Simples
+------------------
+
+Para auxiliar no desenvolvimento, deve ser criado um instalador simples que
+facilita na manipulação do módulo dentro do sistema. Vamos criar algumas linhas
+de configurações, inicializando variáveis num arquivo de código fonte no formato
+Shellscript.
+
+[shell file="install.sh"]
+USERID=$(id -u)
+DRIVER_NAME="verifier"
+DEVICE_NAME="verifier"
+[/shell]
+
+Após devemos verificar se o usuário atual é o que possui uid (identificador do
+usuário) igual a 0 (zero), ou seja, o usuário raiz do sistema.  Esta tarefa deve
+ser executada sobre o número identificador porque seu nome pode ser modificado,
+porém este valor não. Para auxiliar no tratamento de erro, criamos uma função
+que formata uma saída e possui encapsulados uma execução de finalização.
+
+[shell file="install.sh"]
+function verifier_error() {
+    echo ERROR: $1
+    if [ ! -z $2 ]; then
+        exit $2
+    fi
+}
+if [ $USERID -ne 0 ]; then
+    verifier_error "Necessário Usuário Raiz" 1
+fi
+[/shell]
+
+Posteriormente, vamos inserir o módulo no kernel do Linux utilizando o comando
+específico, esperando que sua execução tenha finalizado com sucesso. Caso
+contrário, vamos gerar um erro dentro da instalação.
+
+[shell file="install.sh"]
+insmod "$DRIVER_NAME.ko"
+if [ $? -ne 0 ]; then
+    verifier_error "Impossível Instalar Módulo" 2
+fi
+[/shell]
+
+Como o nosso módulo possui uma criação dinâmica de número maior, devemos
+capturar este valor do conteúdo armazenado no arquivo com dispositivos do
+sistema. Se ele não existir ou não estiver sido encontrado, também vamos gerar
+um erro e finalizar a execução com uma saída diferente de zero.
+
+[shell file="install.sh"]
+MAJOR=$(grep "$DRIVER_NAME" /proc/devices | cut -d' ' -f1)
+if [ -z $MAJOR ]; then
+    verifier_error "Impossível Encontrar Número Maior" 3
+fi
+[/shell]
+
+Finalizando, vamos remover qualquer tipo de dispositivo com o mesmo nome,
+previamente criado e adicionar o nosso dispositivo de caractere com o mesmo
+número maior do módulo adicionado anteriormente. No nosso caso, o número menor
+não é significativo, portanto vamos configurá-lo com valor zero. Finalizamos o
+instalador com uma saída igual a zero, demonstrando sucesso de execução.
+
+[shell file="install.sh"]
+rm -f "/dev/$DEVICE_NAME"
+mknod "/dev/$DEVICE_NAME" c "$MAJOR" 0
+chmod 666 "/dev/$DEVICE_NAME"
+exit 0
+[/shell]
