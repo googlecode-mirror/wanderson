@@ -39,10 +39,12 @@ dev_t device;
  * @return Execução com Sucesso
  */
 int verifier_init(void) {
+    // Variáveis
+    int result; // Resultado de Alocação
     // Inicialização
     printk(KERN_INFO "Inicialização de Verificadora CPF/CNPJ");
     // Alocar Dispositivo com Número Maior Dinâmico
-    int result = alloc_chrdev_region(&device, MINOR_NUMBER, DEVICE_COUNTER, DRIVER_NAME);
+    result = alloc_chrdev_region(&device, MINOR_NUMBER, DEVICE_COUNTER, DRIVER_NAME);
     // Verificar Resultado
     if (result == 0) {
         // Inicialização com Sucesso
