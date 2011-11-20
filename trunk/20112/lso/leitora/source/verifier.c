@@ -228,7 +228,7 @@ ssize_t verifier_write(struct file* filp, const char __user* buffer, size_t coun
     // Entrada
     printk(KERN_DEBUG "Escrita em Arquivo");
     // Tipo CPF
-    if (count == 12) { // CPF + 1
+    if (count == 12 || count == 15) { // (CPF|CNPJ) + 1
         // Alocar Memória para Documento
         kfree(memory);
         memory = kmalloc(count, GFP_KERNEL);
