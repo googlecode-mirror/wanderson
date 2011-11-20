@@ -307,7 +307,7 @@ int verifier_init(void) {
     if (result == 0) {
         printk(KERN_INFO "Inicialização com Sucesso");
     } else {
-        printk(KERN_ALERT "Inicialização com Problemas: Impossível Alocação de Dispositivo");
+        printk(KERN_ALERT "Impossível Alocação de Dispositivo");
     }
     return result;
 }
@@ -341,3 +341,61 @@ dispositivo. Este módulo trabalha como um _driver_. Como vamos criar uma leitor
 de dados, precisamos adicionar funções de abertura, leitura, escrita e
 fechamento deste dispositivo de caracteres, gerando assim nosso módulo de
 verificação de CPF e CNPJ.
+
+Alocação no Sistema Operacional
+-------------------------------
+
+Neste momento, vamos inicializar um dispositivo de caractere dentro do sistema
+operacional, fornecendo as operações que devem ser executadas quando o
+dispositivo é acessado.
+
+Neste momento, precisamos implementar 4 tipos de operações básicas: abertura,
+leitura, escrita e fechamento do dispositivo de caracteres. Portanto, precisamos
+implementar 4 funções que executam esta tarefa e fornecer a uma estrutura com
+esta responsabilidade dentro da programação. Na área de assinaturas de funções,
+vamos fornecer os seguintes protótipos.
+
+[code file="verifier.c"]
+int verifier_open(struct inode*, struct file*);
+ssize_t verifier_read(struct file*, char __user*, size_t, loff_t*);
+ssize_t verifier_write(struct file*, const char __user*, size_t, loff_t*);
+int verifier_release(struct inode*, struct file*);
+[/code]
+
+Cada uma destas inicializações possui as suas características. A função para
+leitura recebe como primeiro parâmetro um ponteiro para estrutura do
+representante do arquivo dentro do sistema operacional; o segundo parâmetro
+identifica o mesmo arquivo, porém com informações de sua abertura. Logo, temos
+que o *inode* apresenta informações sobre a estrutura física do arquivo e o
+parâmetro *file* apresenta informações sobre os descritores inicializados para
+este arquivo.
+
+Para executar a leitura, a segunda função armazena todas as execuções para esta
+finalidade. O primeiro parâmetro *file*, assim como durante a abertura,
+representa o arquivo aberto dentro do sistema, com informações sobre os
+descritores inicializados. Já o segundo parâmetro *__user* representa um
+ponteiro do tipo caractere para região de memória em espaço de usuário. O
+parâmetro *size_t* indica a quantidade de _bytes_ que devem ser fornecidos para
+a leitura. O último parâmetro *loff_t* fornece a posição atual da leitura no
+arquivo apresentado. Como retorno, temos a quantidade de caracteres processados
+com sucesso.
+
+Com base na estrutura de leitura, a escrita recebe as mesmas quantidades de
+parâmetros com funcionalidades semelhantes, porém o terceiro parâmetro *__user*
+define um ponteiro para a região de memória em espaço de usuário que armazena os
+valores para processamento.
+
+As funções de leitura e escrita possuem uma peculiaridade, o valor de retorno
+que representa a quantidade de caracteres processados. Se a função retorna o
+mesmo valor solicitado para o utilização, então toda a quantidade de elementos
+apresentada foi processada. Já se o valor retornado é menor do que o solicitado,
+então uma quantidade menor foi processada. Se o valor retornado é igual a zero,
+o final do arquivo foi alcançado. Por último, se o valor retornado é negativo,
+então houve um erro durante o processamento. Estes erros estão definidos em
+*linux/errno.h".
+
+A última função representa o fechamento do arquivo pelo sistema operacional.
+Esta somente é utilizada se todos os descritores de todos os processos foram
+finalizados com sucesso. Caso seja necessário algum processamento quando um
+descritor somente é fechado, temos que utilizar a função *flush*, não definida
+no escopo acima.

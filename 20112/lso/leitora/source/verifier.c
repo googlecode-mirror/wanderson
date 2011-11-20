@@ -87,11 +87,11 @@ int verifier_init(void) {
             printk(KERN_INFO "Alocação com Sucesso");
         } else {
             // Alocação com Erros
-            printk(KERN_ALERT "Inicialização com Problemas: Impossível Alocar Dispositivo no Sistema");
+            printk(KERN_ALERT "Impossível Alocar Dispositivo no Sistema");
         }
     } else {
         // Inicialização com Erros
-        printk(KERN_ALERT "Inicialização com Problemas: Impossível Inicializar Dispositivo");
+        printk(KERN_ALERT "Impossível Inicializar Dispositivo");
     }
     return result;
 }
