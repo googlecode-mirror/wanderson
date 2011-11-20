@@ -130,6 +130,8 @@ int verifier_init(void) {
 void verifier_exit(void) {
     // Finalização
     printk(KERN_INFO "Finalização de Verificadora CPF/CNPJ");
+    // Limpar Possível Dados Alocados
+    kfree(memory);
     // Desalocar Dispositivo de Caractere
     cdev_del(cdevice);
     // Liberar Dispositivo Inicializado
