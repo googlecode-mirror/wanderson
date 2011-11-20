@@ -479,3 +479,41 @@ cdev_del(cdevice);
 Assim, temos o nosso dispositivo de caractere devidamente inicializado, bastando
 escrever as funções com operações de arquivos que somente foram definidas como
 protótipos.
+
+Escrita de Operações
+--------------------
+
+As operações iniciais para arquivos devem ser definidas de forma bem simples,
+somente para fornecer ao sistema operacional as devidas entradas. As próximas
+seções do documento deverão discutir cada uma delas. Por hora, as funções de
+abertura e fechamento retornam sucesso para qualquer solicitação; já as
+responsáveis pela leitura e escrita somente apresentam a quantidade de _bytes_
+processados e final de arquivo, respectivamente.
+
+[code file="verifier.c"]
+// Abertura
+int verifier_open(struct inode* inode, struct file* filp) {
+    printk(KERN_DEBUG "Abertura de Arquivo");
+    return 0;
+}
+// Leitura
+size_t verifier_read(struct file* filp, char __user* buffer, size_t count, loff_t* offp) {
+    printk(KERN_DEBUG "Leitura em Arquivo");
+    return count;
+}
+// Escrita
+ssize_t verifier_write(struct file* filp, const char __user* buffer, size_t count, loff_t* offp) {
+    printk(KERN_DEBUG "Escrita em Arquivo");
+    return count;
+}
+// Fechamento
+int verifier_release(struct inode* inode, struct file* filp) {
+    printk(KERN_DEBUG "Fechamento de Arquivo");
+    return 0;
+}
+[/code]
+
+Como temos todas as inicializações para operações com arquivos devidamente
+inicializadas, podemos começar o desenvolvimento da implementação da
+verificadora de documentos do tipo CPF e CNPJ, proposta do Trabalho de Grau B
+desta disciplina.
