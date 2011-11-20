@@ -1,8 +1,10 @@
+#include <asm/uaccess.h>
 #include <linux/module.h>
 #include <linux/init.h>
 #include <linux/kdev_t.h>
 #include <linux/fs.h>
 #include <linux/cdev.h>
+#include <linux/slab.h>
 
 // Informações
 MODULE_DESCRIPTION("Driver para Verificadora de CPF e CNPJ");
@@ -16,6 +18,9 @@ MODULE_LICENSE("Dual BSD/CPL");
 #define DRIVER_NAME "verifier"
 #define MINOR_NUMBER 0
 #define DEVICE_COUNTER 1
+#define VERIFIER_SUCCESS '0'
+#define VERIFIER_FAIL '1'
+#define VERIFIER_WAIT '2'
 
 // Assinaturas
 int verifier_init(void);
@@ -55,6 +60,17 @@ struct file_operations verifier_fops = {
     .write   = verifier_write,
     .release = verifier_release,
 };
+
+/**
+ * Armazenamento do Conteúdo para Manipulação
+ * Código do Documento CPF e CNPJ para Verificação
+ */
+char *memory;
+
+/**
+ * Última Verificação do Processamento
+ */
+char lastcheck;
 
 /**
  * Inicialização do Módulo
@@ -148,8 +164,39 @@ int verifier_open(struct inode* inode, struct file* filp) {
  * @return Quantidade de bytes processados com sucesso pela leitura
  */
 ssize_t verifier_read(struct file* filp, char __user* buffer, size_t count, loff_t* offp) {
+    // Variáveis
+    int result = -EIO; // Erro de Entrada e Saída
+    // Entrada
     printk(KERN_DEBUG "Leitura em Arquivo");
-    return 0;
+    // Verificar Alocação de Memória
+    if (memory != NULL) {
+        // Processar Resultado
+        lastcheck = VERIFIER_SUCCESS;
+        printk(KERN_INFO "Resultado de Verificação: %c", lastcheck);
+        // Apresentar Resposta
+        if (copy_to_user(buffer, &lastcheck, 1) == 0) {
+            printk(KERN_INFO "Conteúdo Lido: %c", lastcheck);
+            // Limpar Memória
+            kfree(memory);
+            memory = NULL;
+            // Quantidade de Leitura
+            result = 1; // Somente 1 Caractere
+        } else {
+            // Quantidade de Bytes Prcoessados Inválida
+            printk(KERN_ALERT "Erro ao Copiar o Conteúdo de Resposta");
+        }
+    } else {
+        // Verificar Última Leitura
+        if (lastcheck == VERIFIER_SUCCESS || lastcheck == VERIFIER_FAIL) {
+            // Quantidade de Leitura
+            lastcheck = VERIFIER_WAIT; // Estado em Espera
+            result = 0; // Sinalização de Final do Arquivo
+            printk(KERN_ALERT "Final do Arquivo Encontrado");
+        } else {
+            printk(KERN_ALERT "Conteúdo não Inicializado Anteriormente");
+        }
+    }
+    return result;
 }
 
 /**
@@ -168,8 +215,35 @@ ssize_t verifier_read(struct file* filp, char __user* buffer, size_t count, loff
  * @return Quantidade de bytes processados com sucesso pela escrita
  */
 ssize_t verifier_write(struct file* filp, const char __user* buffer, size_t count, loff_t* offp) {
+    // Variáveis
+    int result = -EIO; // Erro de Entrada e Saída
+    // Entrada
     printk(KERN_DEBUG "Escrita em Arquivo");
-    return count; 
+    // Tipo CPF
+    if (count == 12) { // CPF + 1
+        // Alocar Memória para Documento
+        kfree(memory);
+        memory = kmalloc(count, GFP_KERNEL);
+        // Verificar Alocação de Memória
+        if (memory != NULL) {
+            // Limpeza de Memória
+            memset(memory, 0, count);
+            if (copy_from_user(memory, buffer, count - 1) == 0) {
+                printk(KERN_INFO "Conteúdo Escrito: %s", memory);
+                result = count; // Sucesso no Processamento
+            } else {
+                // Quantidade de Bytes Processados Inválida
+                printk(KERN_ALERT "Erro ao Copiar Conteúdo do Documento");
+            }
+        } else {
+            // Impossível Alocar Memória para Buffer
+            printk(KERN_ALERT "Problema na Alocação de Memória");
+        }
+    } else {
+        // Tamanho do Documento Inválido
+        printk(KERN_ALERT "Documento não Reconhecido");
+    }
+    return result; 
 }
 
 /**
