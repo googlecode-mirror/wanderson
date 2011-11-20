@@ -343,11 +343,14 @@ fechamento deste dispositivo de caracteres, gerando assim nosso módulo de
 verificação de CPF e CNPJ.
 
 Alocação no Sistema Operacional
--------------------------------
+===============================
 
 Neste momento, vamos inicializar um dispositivo de caractere dentro do sistema
 operacional, fornecendo as operações que devem ser executadas quando o
 dispositivo é acessado.
+
+Operações Sobre Arquivos
+------------------------
 
 Neste momento, precisamos implementar 4 tipos de operações básicas: abertura,
 leitura, escrita e fechamento do dispositivo de caracteres. Portanto, precisamos
@@ -399,3 +402,80 @@ Esta somente é utilizada se todos os descritores de todos os processos foram
 finalizados com sucesso. Caso seja necessário algum processamento quando um
 descritor somente é fechado, temos que utilizar a função *flush*, não definida
 no escopo acima.
+
+Definição de Operações
+----------------------
+
+Para que as operações sejam apresentadas ao dispositivo de caractere que será
+alocado no sistema operacional, precisamos armazená-las em uma estrutura com
+esta finalidade. Esta estrutura do tipo *file_operations* recebe ponteiros para
+as funções definidas nos protótipos.
+
+[code file="verifier.c"]
+struct file_operations verifier_fops = {
+    .read    = verifier_read,
+    .write   = verifier_write,
+    .open    = verifier_open,
+    .release = verifier_release,
+};
+[/code]
+
+Assim, temos uma estrutura de nome *verifier_fops* com os ponteiros devidamente
+inicializados com as funções para manipulação de arquivos. Vale lembrar que
+estas funções necessitam possuir os parâmetros necessários, característica de
+sua tipagem. Este tipo de inicialização de estrutura corresponde ao formato C99.
+
+Alocação do Dispositivo
+-----------------------
+
+Agora vamos alocar o dispositivo de caractere no sistema operacional, fornecendo
+a estrutura de operações em arquivos definida anteriormente. Logo após a
+confirmação de inicialização com sucesso do _driver_, vamos solicitar ao sistema
+a alocação de um novo dispositivo de caractere.
+
+[code file="verifier.c"]
+// Definido como Global
+struct cdev *cdevice;
+// Estrutura de Inicialização
+cdevice = cdev_alloc();
+cdevice->ops = &verifier_fops;
+result = cdev_add(cdevice, device, DEVICE_COUNTER);
+[/code]
+
+Com a devida alocação do dispositivo, apresentamos como operadores o endereço
+para a estrutura com os operadores de arquivos definida anteriormente.  A
+terceira linha tenta adicionar o dispositivo no sistema operacional, utilizando
+como primeiro parâmetro o dispositivo alocado e segundo o dispositivo físico
+inicializado com o _driver_. O último parâmetro representa a quantidade de
+dispositivos que irão ser utilizados com esta alocação.
+
+Vale lembrar que *cdevice* é uma variável global que está definida fora do
+escopo das funções e pode ser acessada por qualquer uma delas, inclusive na
+finalização do módulo, que precisa desalocar o recurso. Já a variável *device* e
+a definição DEVICE_COUNTER foram criadas anteriormente, durante a inicialização
+básica do módulo.
+
+Novamente, vamos armazenar o resultado do processamento em *result* e criar um
+tratamento de possível erro de alocação.
+
+[code file="verifier.c"]
+if (result == 0) {
+    // Alocação com Sucesso
+    printk(KERN_INFO "Alocação com Sucesso");
+} else {
+    // Alocação com Erros
+    printk(KERN_ALERT "Impossível Alocar Dispositivo no Sistema");
+}
+[/code]
+
+Agora precisamos desalocar a inicialização do dispositivo de caractere no
+sistema operacional. Durante a finalização do módulo, antes de remover a região
+disponibilizada para o dispositivo, vamos desalocar o dispositivo de caractere.
+
+[code file="verifier.c"]
+cdev_del(cdevice);
+[/code]
+
+Assim, temos o nosso dispositivo de caractere devidamente inicializado, bastando
+escrever as funções com operações de arquivos que somente foram definidas como
+protótipos.
