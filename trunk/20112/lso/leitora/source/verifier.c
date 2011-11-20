@@ -29,6 +29,7 @@ ssize_t verifier_read(struct file*, char __user*, size_t, loff_t*);
 ssize_t verifier_write(struct file*, const char __user*, size_t, loff_t*);
 int verifier_open(struct inode*, struct file*);
 int verifier_release(struct inode*, struct file*);
+char verifier_document(char*,int);
 
 // Registros
 module_init(verifier_init);
@@ -66,6 +67,12 @@ struct file_operations verifier_fops = {
  * Código do Documento CPF e CNPJ para Verificação
  */
 char *memory;
+
+/**
+ * Tamanho da Memória Inicializada
+ * Utilizado para Processamento Durante Leitura
+ */
+int memorysize;
 
 /**
  * Última Verificação do Processamento
@@ -171,7 +178,7 @@ ssize_t verifier_read(struct file* filp, char __user* buffer, size_t count, loff
     // Verificar Alocação de Memória
     if (memory != NULL) {
         // Processar Resultado
-        lastcheck = VERIFIER_SUCCESS;
+        lastcheck = verifier_document(memory, memorysize); // @todo Retirar Tamanho Fixo
         printk(KERN_INFO "Resultado de Verificação: %c", lastcheck);
         // Apresentar Resposta
         if (copy_to_user(buffer, &lastcheck, 1) == 0) {
@@ -179,6 +186,7 @@ ssize_t verifier_read(struct file* filp, char __user* buffer, size_t count, loff
             // Limpar Memória
             kfree(memory);
             memory = NULL;
+            memorysize = 0;
             // Quantidade de Leitura
             result = 1; // Somente 1 Caractere
         } else {
@@ -228,7 +236,8 @@ ssize_t verifier_write(struct file* filp, const char __user* buffer, size_t coun
         if (memory != NULL) {
             // Limpeza de Memória
             memset(memory, 0, count);
-            if (copy_from_user(memory, buffer, count - 1) == 0) {
+            memorysize = count - 1; // Tamanho da Memória
+            if (copy_from_user(memory, buffer, memorysize) == 0) {
                 printk(KERN_INFO "Conteúdo Escrito: %s", memory);
                 result = count; // Sucesso no Processamento
             } else {
@@ -263,3 +272,85 @@ int verifier_release(struct inode* inode, struct file* filp) {
     return 0;
 }
 
+/**
+ * Verificação de Documento
+ *
+ * Executa o algoritmo de verificação para documentos do tipo CPF e CNPJ,
+ * utilizando o conteúdo apresentado como parâmetro.
+ *
+ * @param content Conteúdo do Documento para Verificação
+ * @param size    Tamanho do Campo para Processamento
+ *
+ * @return Confirmação da Validade
+ */
+char verifier_document(char* content, int size) {
+    // Variáveis
+    int index; // Chave para Iterações
+    int comparison; // Comparações Variadas
+    // Modificadores
+    int* modifiers;
+    int modifiers_cpf[]  = {11,10,9,8,7,6,5,4,3,2};
+    int modifiers_cnpj[] = {6,5,4,3,2,9,8,7,6,5,4,3,2};
+
+    // Verificar Tamanho CPF ou CNPJ
+    if (size == 11) {
+        // Modificadores para CPF
+        modifiers = modifiers_cpf;
+    } else if (size == 14) {
+        // Modificadores para CNPJ
+        modifiers = modifiers_cnpj;
+    } else {
+        // Tamanho Inválido
+        printk(KERN_ALERT "Tamanho do Documento Inválido");
+        return VERIFIER_FAIL;
+    }
+
+    // Verificar Conteúdo com Números Somente
+    for (index = 0; index < size; index = index + 1) {
+        // Buscar no Intervalo [0-9]
+        if (content[index] < '0' || content[index] > '9') {
+            printk(KERN_ALERT "Documento Necessita Somente Números");
+            return VERIFIER_FAIL;
+        }
+    }
+
+    // Verificar Dígitos Expandidos
+    comparison = 1; // Confirmação Inicial
+    for (index = 0; index < size; index = index + 1) {
+        comparison = comparison && (content[0] == content[index]);
+    }
+    if (comparison) {
+        // Todos Dígitos Idênticos
+        printk(KERN_ALERT "Documento com Dígitos Idênticos");
+        return VERIFIER_FAIL;
+    }
+
+    // Verificação com Modificadores Nível 1
+    comparison = 0;
+    for (index = 1; index < size - 1; index = index + 1) {
+        comparison = comparison + modifiers[index] * (content[index - 1] - 48); // Conversão ATOI
+    }
+    printk(KERN_DEBUG "Comparação Nível 1 Somatório: %d", comparison);
+    comparison = comparison % 11;
+    comparison = (comparison < 2 ? 0 : 11 - comparison) + 48; // Conversão ITOA
+    if (comparison != content[size - 2]) {
+        printk(KERN_ALERT "Verificação de Primeiro Nível Inválida");
+        return VERIFIER_FAIL;
+    }
+
+    // Verificação com Modificadores Nível 2
+    comparison = 0;
+    for (index = 0; index < size - 1; index = index + 1) {
+        comparison = comparison + modifiers[index] * (content[index] - 48); // Conversão ATOI
+    }
+    printk(KERN_DEBUG "Comparação Nível 2 Somatório: %d", comparison);
+    comparison = comparison % 11;
+    comparison = (comparison < 2 ? 0 : 11 - comparison) + 48; // Conversão ITOA
+    if (comparison != content[size - 1]) {
+        printk(KERN_ALERT "Verificação de Segundo Nível Inválida");
+        return VERIFIER_FAIL;
+    }
+
+    printk(KERN_INFO "Verificação do Documento com Sucesso");
+    return VERIFIER_SUCCESS;
+}

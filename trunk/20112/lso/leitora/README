@@ -513,6 +513,11 @@ int verifier_release(struct inode* inode, struct file* filp) {
 }
 [/code]
 
+As exibições do tipo *KERN_DEBUG* não são armazenadas no arquivo de mensagens,
+mas somente no arquivo */var/log/kern.log*. Como todas as mensagens podem ser
+acessdas neste local, podemos utilizar o comando *tail -f* neste arquivo para
+visualizar as saídas em *printk* apresentadas no programa.
+
 Como temos todas as inicializações para operações com arquivos devidamente
 inicializadas, podemos começar o desenvolvimento da implementação da
 verificadora de documentos do tipo CPF e CNPJ, proposta do Trabalho de Grau B
