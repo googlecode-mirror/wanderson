@@ -80,7 +80,7 @@ int verifier_init(void) {
         // Alocação em Memória do Dispositivo
         cdevice = cdev_alloc();
         cdevice->ops = &verifier_fops;
-        result = cdev_add(cdevice, device, 1);
+        result = cdev_add(cdevice, device, DEVICE_COUNTER);
         // Verificar Resultado
         if (result == 0) {
             // Alocação com Sucesso
