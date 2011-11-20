@@ -50,9 +50,9 @@ struct cdev *cdevice;
  * Estrutura com Operadores de Arquivos
  */
 struct file_operations verifier_fops = {
+    .open    = verifier_open,
     .read    = verifier_read,
     .write   = verifier_write,
-    .open    = verifier_open,
     .release = verifier_release,
 };
 
@@ -116,6 +116,23 @@ void verifier_exit(void) {
 }
 
 /**
+ * Abertura de Arquivo
+ *
+ * Execução para abertura do arquivo solicitado pelo sistema operacional para o
+ * dispositivo. Neste caso, como não vamos trabalhar com nenhum dispositivo
+ * físico, somente precisamos confirmar a execução da função.
+ *
+ * @param inode Representante do Arquivo no Sistema
+ * @param filp  Ponteiro ao Representante de Arquivo Aberto no Sistema
+ *
+ * @return Confirmação de sucesso para execuções internas
+ */
+int verifier_open(struct inode* inode, struct file* filp) {
+    printk(KERN_DEBUG "Abertura de Arquivo");
+    return 0;
+}
+
+/**
  * Leitura no Dispositivo
  * 
  * Executa uma leitura no dispositivo, apresentando informações armazenadas em
@@ -132,7 +149,7 @@ void verifier_exit(void) {
  */
 ssize_t verifier_read(struct file* filp, char __user* buffer, size_t count, loff_t* offp) {
     printk(KERN_DEBUG "Leitura em Arquivo");
-    return count;
+    return 0;
 }
 
 /**
@@ -152,23 +169,7 @@ ssize_t verifier_read(struct file* filp, char __user* buffer, size_t count, loff
  */
 ssize_t verifier_write(struct file* filp, const char __user* buffer, size_t count, loff_t* offp) {
     printk(KERN_DEBUG "Escrita em Arquivo");
-    return count;
-}
-
-/**
- * Abertura de Arquivo
- *
- * Execução para abertura do arquivo solicitado pelo sistema operacional para o
- * dispositivo. Neste caso, como não vamos trabalhar com nenhum dispositivo
- * físico, somente precisamos confirmar a execução da função.
- *
- * @param inode Representante do Arquivo no Sistema
- * @param filp  Ponteiro ao Representante de Arquivo Aberto no Sistema
- *
- * @return Confirmação de sucesso para execuções internas
- */
-int verifier_open(struct inode* inode, struct file* filp) {
-    return 0;
+    return count; 
 }
 
 /**
@@ -184,6 +185,7 @@ int verifier_open(struct inode* inode, struct file* filp) {
  * @return Confirmação de sucesso para execuções internas
  */
 int verifier_release(struct inode* inode, struct file* filp) {
+    printk(KERN_DEBUG "Fechamento de Arquivo");
     return 0;
 }
 
