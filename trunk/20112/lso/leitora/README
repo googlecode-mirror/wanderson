@@ -522,3 +522,172 @@ Como temos todas as inicializações para operações com arquivos devidamente
 inicializadas, podemos começar o desenvolvimento da implementação da
 verificadora de documentos do tipo CPF e CNPJ, proposta do Trabalho de Grau B
 desta disciplina.
+
+Abertura e Liberação de Arquivo
+-------------------------------
+
+Durante a abertura e fechamento de arquivos, precisamos desenvolver duas funções
+para que saibamos quando estas duas execuções estão sendo chamadas. Porém, como
+não estaremos utilizando realmente arquivos, podemos somente confirmar ao
+sistema operacional a abertura e fechamento dos recursos, retornando o valor de
+sucesso.
+
+Somente para auxiliar o desenvolvimento, exibimos mensagens sempre que estas
+funções são executadas, exibindo o tempo de abertura e fechamento do arquivo.
+
+[code file="verifier.c"]
+int verifier_open(struct inode* inode, struct file* filp) {
+    printk(KERN_DEBUG "Abertura de Arquivo");
+    return 0;
+}
+int verifier_release(struct inode* inode, struct file* filp) {
+    printk(KERN_DEBUG "Fechamento de Arquivo");
+    return 0;
+}
+[/code]
+
+A abertura é feita sempre que um processo solicita a abertura do arquivo pela
+primeira vez. Porém, se outro processo já executou esta solicitação, teremos a
+função não será executada novamente, tendo em vista que o *inode* já foi aberto
+pelo sistema operacional. Da mesma forma, a liberação do recurso pela função de
+fechamento do arquivo somente é executada quando todos os descritores daquele
+arquivo foram finalizados. Se precisamos chamar algum recurso quando um único
+descritor é finalizado, devemos utilizar a função *flush*, não utilizada neste
+trabalho.
+
+Escrita de Arquivo
+------------------
+
+A função para escrita em arquivo sempre é chamada quando algum processo executa
+a chamada de sistema para escrita em descritor representante. Portando, sempre
+que existe uma escrita, a função de abertura de arquivo já foi executada
+anteriormente. Primeiramente, vamos desenvolver uma estruturação simples que
+busca apresentar um erro de entrada e saída sempre que um processo tenta
+executar uma escrita na leitora.
+
+[code file="verifier.c"]
+ssize_t verifier_write(struct file* filp, const char __user* buffer, size_t count, loff_t* offp) {
+    int result = -EIO; // Problema de Entrada e Saída
+    printk(KERN_DEBUG "Escrita em Arquivo");
+    if (count == 12 || count == 15) { // (CPF|CNPJ) + 1
+        // Tamanho Válido do Documento
+    } else {
+        // Tamanho do Documento Inválido
+        printk(KERN_ALERT "Documento não Reconhecido");
+    }
+    return result;
+}
+[/code]
+
+Neste bloco de código também colocamos a verificação da quantidade de caracteres
+que foi informada para escrita. Sem os caracteres de máscara, um documento do
+tipo CPF possui 11 caracteres e um CNPJ possui 14 caracteres. Porém, devemos
+considerar o caractere identificador de final de string, portando sempre
+verificamos se existe a quantidade solicitada adicionada de uma unidade.
+
+Agora podemos iniciar a captura dos caracteres apresentados. Vamos então salvar
+em memória no espaço de Kernel a informação passada durante a chamada da função.
+Para isto, precisamos alocar um espaço de memória com a mesma quantidade de
+bytes que foi apresentada durante a escrita. Vamos então criar uma variável
+global do tipo ponteiro de caractere. Para facilitar a contabilização do tamanho
+de memória alocada, também vamos criar uma variável global para armazenar esta
+informação.
+
+[code file="verifier.c"]
+char *memory;
+int memorysize;
+[/code]
+
+Agora vamos liberar o espaço de memória, porque ele pode ter sido alocado em
+situações anteriores de escrita. Logo após, alocamos um espaço de memória do
+mesmo tamanho da quantidade de caracteres apresentada, utilizando uma alocação
+normal de Kernel.
+
+[code file="verifier.c"]
+kfree(memory);
+memory = kmalloc(count, GFP_KERNEL);
+[/code]
+
+Caso esta alocação não tenha sido executada com sucesso, o valor da posição em
+memória retornada será nula. Caso isto aconteça, vamos informar sobre o
+problema.
+
+[code file="verifier.c"]
+if (memory != NULL) {
+    // Alocação com Sucesso
+} else {
+    printk(KERN_ALERT "Problema na Alocação de Memória");
+}
+[/code]
+
+Com sucesso durante a alocação de memória, somente vamos limpar o espaço de
+memória fornecido conforme a quantidade de espaço alocada. Portanto, vamos
+preencher o espaço de memória com valores iniciais.
+
+[code file="verifier.c"]
+memset(memory, 0, count);
+[/code]
+
+Agora precisamos copiar os caracteres que foram apresentados durante a chamada
+de sistema para escrita em arquivo. Estes caracteres estão armazenados em espaço
+de usuário e devem ser copiados para espaço de Kernel para manipulação.
+Precisamos contabilizar a quantidade de caracteres necessários e armazenar este
+valor na variável global para tamanho de memória.
+
+Utilizando uma função específica para cópia de conteúdo do espaço de usuário
+para espaço de Kernel, precisamos apresentar a posição de memória destino da
+cópia, ou seja, a memória alocada inicialmente. Também vamos apresentar o local
+onde o conteúdo origem está armazenado em espaço de usuário e a quantidade de
+caracteres que será copiada.
+
+Esta chamada para cópia retorna a quantidade de bytes que não foram processados.
+Caso a função apresente valor igual a zero, temos todos os bytes copiados com
+sucesso; caso contrário teremos um erro ao copiar os caracteres do documento. Em
+sucesso, vamos apresentar a quantidade de caracteres processados no resultado da
+função, não mais informando problema de entrada e saída.
+
+[code file="verifier.c"]
+memorysize = count - 1; // Tamanho da Memória
+if (copy_from_user(memory, buffer, memorysize) == 0) {
+    printk(KERN_INFO "Conteúdo Escrito: %s", memory);
+    result = count; // Sucesso no Processamento
+} else {
+    printk(KERN_ALERT "Erro ao Copiar Conteúdo do Documento");
+}
+[/code]
+
+O código para escrita em arquivo para a verificadora foi finalizado com sucesso.
+Esta função exige que a quantidade de caracteres escrita esteja do mesmo tamanho
+que um documento do tipo CPF ou CNPJ sem máscara. Qualquer erro encontrado
+apresenta um problema de entrada e saída. Abaixo temos o código completo com
+todos os passos para processamento de escrita ao dispositivo de caractere.
+
+[code file="verifier.c"]
+char *memory;
+int memorysize;
+ssize_t verifier_write(struct file* filp, const char __user* buffer, size_t count, loff_t* offp) {
+    int result = -EIO; // Problema de Entrada e Saída
+    printk(KERN_DEBUG "Escrita em Arquivo");
+    if (count == 12 || count == 15) { // (CPF|CNPJ) + 1
+        kfree(memory);
+        memory = kmalloc(count, GFP_KERNEL);
+        if (memory != NULL) {
+            memset(memory, 0, count);
+            memorysize = count - 1; // Tamanho da Memória
+            if (copy_from_user(memory, buffer, memorysize) == 0) {
+                printk(KERN_INFO "Conteúdo Escrito: %s", memory);
+                result = count; // Sucesso no Processamento
+            } else {
+                printk(KERN_ALERT "Erro ao Copiar Conteúdo do Documento");
+            }
+        } else {
+            printk(KERN_ALERT "Problema na Alocação de Memória");
+        }
+    } else {
+        // Tamanho do Documento Inválido
+        printk(KERN_ALERT "Documento não Reconhecido");
+    }
+    return result;
+}
+[/code]
+
