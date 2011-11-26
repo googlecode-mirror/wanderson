@@ -254,7 +254,7 @@ ssize_t verifier_write(struct file* filp, const char __user* buffer, size_t coun
         // Tamanho do Documento Inválido
         printk(KERN_ALERT "Documento não Reconhecido");
     }
-    return result; 
+    return result;
 }
 
 /**
