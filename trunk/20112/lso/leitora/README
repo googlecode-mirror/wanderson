@@ -663,8 +663,11 @@ apresenta um problema de entrada e saída. Abaixo temos o código completo com
 todos os passos para processamento de escrita ao dispositivo de caractere.
 
 [code file="verifier.c"]
+// Variáveis Globais
 char *memory;
 int memorysize;
+
+// Função de Escrita
 ssize_t verifier_write(struct file* filp, const char __user* buffer, size_t count, loff_t* offp) {
     int result = -EIO; // Problema de Entrada e Saída
     printk(KERN_DEBUG "Escrita em Arquivo");
@@ -690,4 +693,178 @@ ssize_t verifier_write(struct file* filp, const char __user* buffer, size_t coun
     return result;
 }
 [/code]
+
+Leitura em Arquivo
+------------------
+
+A leitura do arquivo necessita de que o número de documento CPF e CNPJ seja
+anteriormente apresentado com uma escrita em arquivo. Logo, precisamos armazenar
+na leitora o número do documento antes de efetuar a chamada de sistema para
+leitura do arquivo, caso contrário teremos um problema de entrada e saída,
+apresentado caso este erro seja encontrado.
+
+[code file="verifier.c"]
+ssize_t verifier_read(struct file* filp, char __user* buffer, size_t count, loff_t* offp) {
+    int result = -EIO; // Erro de Entrada e Saída
+    printk(KERN_DEBUG "Leitura em Arquivo");
+    return result;
+}
+[/code]
+
+Precisamos saber se a posição de memória que contém informações sobre o número
+de documento para verificação foi inicializada corretamente ou se ela já foi
+utilizada em algum momento do processamento. Se a posição já foi utilizada,
+vamos armazenar o valor nulo posteriormente. Agora, precisamos saber qual é o
+conteúdo deste ponteiro de memória e se ele já foi processado.
+
+[code file="verifier.c"]
+// Verificar Alocação de Memória
+if (memory != NULL) {
+    // Inicializada e Não Utilizada
+} else {
+    // Não Inicializada ou Utilizada Anteriormente
+}
+[/code]
+
+Se a posição de memória foi inicializada e não utilizada, devemos utilizar o seu
+conteúdo e verificar o valor armazenado, fazendo uma confirmação de documento
+CPF ou CNPJ com valor correto. Isto será desenvolvido posteriormente, porém
+vamos efetuar a chamada da função responsável e adicionar o seu protótipo no
+topo do documento. O seu retorno será armazenado em uma variável global que
+apresenta a última verificação. O código abaixo apresenta o conteúdo a ser
+armazenado como global.
+
+[code file="verifier.c"]
+// Protótipo
+char verifier_document(char*,int);
+// Variável Global para Última Verificação
+char lastcheck;
+[/code]
+
+A execução da verificação será encapsulada na função, porém como temos o
+protótipo adicionado, poderemos utilizar a função normalmente neste local. A
+função de verificação recebe como primeiro parâmetro a posição de memória para
+verificação e como segundo a quantidade de caracteres que devem ser verificados,
+identificando assim um documento do tipo CPF ou CNPJ.
+
+[code file="verifier.c"]
+// Processar Resultado
+lastcheck = verifier_document(memory, memorysize);
+printk(KERN_INFO "Resultado de Verificação: %c", lastcheck);
+[/code]
+
+Este retorno será apresentado à chamada de sistema como único caractere
+resultado da leitura, identificando assim o resultado da verificação do
+documento. Este caractere deve ser copiado para o espaço de usuário como
+resultado da leitura. Em caso de sucesso, teremos que desalocar a memória
+inicializada anteriormente durante a escrita, limpar o ponteiro deste local e
+reduzir o tamanho da memória a zero, identificando assim o final da verificação
+do documento. O retorno será marcado como 1, confirmando a leitura do único
+caractere apresentado ao espaço de usuário.
+
+A função de cópia para espaço de usuário retorna a quantidade de caracteres que
+não foram processados. Caso o único caractere não tenha sido copiado, vamos
+apresentar uma mensagem de alerta.
+
+[code file="verifier.c"]
+if (copy_to_user(buffer, &lastcheck, 1) == 0) {
+    printk(KERN_INFO "Conteúdo Lido: %c", lastcheck);
+    // Limpar Memória
+    kfree(memory);
+    memory = NULL;
+    memorysize = 0;
+    // Quantidade de Leitura
+    result = 1; // Somente 1 Caractere
+} else {
+    printk(KERN_ALERT "Erro ao Copiar o Conteúdo de Resposta");
+}
+[/code]
+
+Por outro lado, se a posição de memória está com valor nulo, ou seu
+processamento não foi inicializado corretamente ou sua verificação já foi
+executada. Devemos consultar a variável que armazena a última verificação. Em
+caso de sucesso ou falha, o conteúdo foi processado. Caso contrário, vamos
+apresentar uma mensagem de alerta informando que a posição não foi inicializada
+corretamente.
+
+[code file="verifier.c"]
+// Verificar Última Leitura
+if (lastcheck == VERIFIER_SUCCESS || lastcheck == VERIFIER_FAIL) {
+    // Quantidade de Leitura
+    lastcheck = VERIFIER_WAIT; // Estado em Espera
+    result = 0; // Sinalização de Final do Arquivo
+    printk(KERN_ALERT "Final do Arquivo Encontrado");
+} else {
+    printk(KERN_ALERT "Conteúdo não Inicializado Anteriormente");
+}
+[/code]
+
+Ainda em caso de sucesso ou falha na verificação do conteúdo, temos o resultado
+que será apresentado no retorno da função de leitura marcado como nenhum
+caractere lido. Isto sinaliza o final do arquivo. Precisamos executar esta
+marcação porque muitos programas executam a leitura sobre o conteúdo de todo o
+arquivo; caso este valor não seja apresentado, teremos gerado uma leitura que
+nunca será finalizada.
+
+Este código também apresenta algumas constantes, utilizadas como retorno da
+verificadora do conteúdo do documento. Estas constantes estão definidas fora do
+escopo da função de leitura e são utilizadas internamente como marcadores de
+documento com conteúdo processado com sucesso, falha no processamento ou que a
+leitora está em estado de espera de conteúdo para escrita.
+
+[code file="verifier.c"]
+// Definições
+#define VERIFIER_SUCCESS '0'
+#define VERIFIER_FAIL '1'
+#define VERIFIER_WAIT '2'
+[/code]
+
+Estes valores também são os conteúdo apresentados para a leitura da
+verificadora, sinalizando sucesso ou falha na verificação do conteúdo do
+documento solicitado.
+
+O bloco de código para leitura do arquivo é apresentado de forma completa. Temos
+a verificação do conteúdo somente se uma escrita na verificadora foi executada
+anteriormente, caso contrário apresentamos um erro de entrada e saída. Este
+conteúdo é apresentado para a função de verificação, que apresenta um resultado
+de sucesso ou falha no resultado da checagem. Este conteúdo também é enviado
+para o espaço de usuário informando, trabalhando como caracteres resultados da
+leitura. Na próxima requisição de leitura, apresentamos um resultado zerado,
+sinalizando o final do arquivo.
+
+[code file="verifier.c"]
+ssize_t verifier_read(struct file* filp, char __user* buffer, size_t count, loff_t* offp) {
+    int result = -EIO; // Erro de Entrada e Saída
+    printk(KERN_DEBUG "Leitura em Arquivo");
+    // Verificar Alocação de Memória
+    if (memory != NULL) {
+        lastcheck = verifier_document(memory, memorysize);
+        printk(KERN_INFO "Resultado de Verificação: %c", lastcheck);
+        if (copy_to_user(buffer, &lastcheck, 1) == 0) {
+            printk(KERN_INFO "Conteúdo Lido: %c", lastcheck);
+            // Limpar Memória
+            kfree(memory);
+            memory = NULL;
+            memorysize = 0;
+            // Quantidade de Leitura
+            result = 1; // Somente 1 Caractere
+        } else {
+            printk(KERN_ALERT "Erro ao Copiar o Conteúdo de Resposta");
+        }
+    } else {
+        // Verificar Última Leitura
+        if (lastcheck == VERIFIER_SUCCESS || lastcheck == VERIFIER_FAIL) {
+            // Quantidade de Leitura
+            lastcheck = VERIFIER_WAIT; // Estado em Espera
+            result = 0; // Sinalização de Final do Arquivo
+            printk(KERN_ALERT "Final do Arquivo Encontrado");
+        } else {
+            printk(KERN_ALERT "Conteúdo não Inicializado Anteriormente");
+        }
+    }
+    return result;
+}
+
+Agora podemos apresentar a função que efetua a verificação de um CPF ou CNPJ
+conforme a quantidade de caracteres apresentados.
 
