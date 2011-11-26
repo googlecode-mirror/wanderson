@@ -180,7 +180,7 @@ ssize_t verifier_read(struct file* filp, char __user* buffer, size_t count, loff
     // Verificar Alocação de Memória
     if (memory != NULL) {
         // Processar Resultado
-        lastcheck = verifier_document(memory, memorysize); // @todo Retirar Tamanho Fixo
+        lastcheck = verifier_document(memory, memorysize);
         printk(KERN_INFO "Resultado de Verificação: %c", lastcheck);
         // Apresentar Resposta
         if (copy_to_user(buffer, &lastcheck, 1) == 0) {
@@ -192,7 +192,7 @@ ssize_t verifier_read(struct file* filp, char __user* buffer, size_t count, loff
             // Quantidade de Leitura
             result = 1; // Somente 1 Caractere
         } else {
-            // Quantidade de Bytes Prcoessados Inválida
+            // Quantidade de Bytes Processados Inválida
             printk(KERN_ALERT "Erro ao Copiar o Conteúdo de Resposta");
         }
     } else {
