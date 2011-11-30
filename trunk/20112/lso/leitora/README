@@ -868,3 +868,159 @@ ssize_t verifier_read(struct file* filp, char __user* buffer, size_t count, loff
 Agora podemos apresentar a função que efetua a verificação de um CPF ou CNPJ
 conforme a quantidade de caracteres apresentados.
 
+Algoritmo de Verificação
+------------------------
+
+O Cadastro de Pessoa Física (CPF) e o Cadastro Nacional de Pessoa Jurídica
+(CNPJ) são documentos que identificam pessoas junto à Receita Federal
+brasileira. Estes documentos são formados por dígitos que podem ser validados
+através da execução de um algoritmo posicional com pesos.
+
+Para fins computacionais, podemos criar uma função que receba como entrada uma
+sequência de caracteres e retorne uma confirmação se o valor é considerado um
+documento do tipo CPF ou CNPJ válido. Estar válido não quer dizer existente,
+somente que o documento informado passou sobre os testes de validação.
+
+A função anteriormente definida deve ser acrescentada aos protótipos do
+programa. Adicionando ao final do documento, vamos criar uma função que crie
+esta validação sobre os dados apresentados. Como não temos como contar o tamanho
+da entrada, vamos também apresentar esta informação como parâmetro, facilitando
+inclusive na verificação do tipo de documento.
+
+[code file="verifier.c"]
+// Protótipos
+char verifier_document(char*,int);
+
+// Função Inicializada
+char verifier_document(char* content, int size) {
+    return VERIFIER_SUCCESS;
+}
+[/code]
+
+Podemos conferir a utilização de definições anteriormente apresentadas,
+fornecendo o caso de sucesso no início deste desenvolvimento. Outras definições
+vão ser utilizadas no decorrer do desenvolvimento desta função. Um CNPJ possui
+tamanho fixo de 14 caracteres numéricos retirando a máscara de formatação. Já o
+CPF possui apenas 11 caracteres.
+
+Primeiramente vamos inicializar as variáveis utilizadas no escopo da função.
+Podemos conferir que existe uma variável que armazena os modificadores de
+execução. Estes valores são os pesos que devem ser aplicados às posições do
+número do documento. 
+
+[code file="verifier.c"]
+// Variáveis
+int index; // Chave para Iterações
+int comparison; // Comparações Variadas
+// Modificadores
+int* modifiers;
+int modifiers_cpf[]  = {11,10,9,8,7,6,5,4,3,2};
+int modifiers_cnpj[] = {6,5,4,3,2,9,8,7,6,5,4,3,2};
+[/code]
+
+Logo no início da programação, verificamos se o conteúdo apresentado possui
+tamanho fixo de 11 ou 14 caracteres, atribuindo os modificadores à variável
+correta para processamento. Caso estes dois primeiros requisitos não são
+válidos, vamos retornar uma falha de verificação.
+
+[code file="verifier.c"]
+// Verificar Tamanho CPF ou CNPJ
+if (size == 11) {
+    // Modificadores para CPF
+    modifiers = modifiers_cpf;
+} else if (size == 14) {
+    // Modificadores para CNPJ
+    modifiers = modifiers_cnpj;
+} else {
+    // Tamanho Inválido
+    printk(KERN_ALERT "Tamanho do Documento Inválido");
+    return VERIFIER_FAIL;
+}
+[/code]
+
+Logo após vamos executar um laço de repetição para o conteúdo apresentado,
+verificando se existem somente caracteres númericos. Logo após, executamos uma
+tarefa considerada como expansão de caracteres, checando se todos os caracteres
+são idênticos. O algoritmo fornece como correto todo documento que possui todos
+os dígitos iguais, portanto precisamos executar esta tarefa separadamente.
+
+[code file="verifier.c"]
+// Verificar Conteúdo com Números Somente
+for (index = 0; index < size; index = index + 1) {
+    // Buscar no Intervalo [0-9]
+    if (content[index] < '0' || content[index] > '9') {
+        printk(KERN_ALERT "Documento Necessita Somente Números");
+        return VERIFIER_FAIL;
+    }
+}
+
+// Verificar Dígitos Expandidos
+comparison = 1; // Confirmação Inicial
+for (index = 0; index < size; index = index + 1) {
+    comparison = comparison && (content[0] == content[index]);
+}
+if (comparison) {
+    // Todos Dígitos Idênticos
+    printk(KERN_ALERT "Documento com Dígitos Idênticos");
+    return VERIFIER_FAIL;
+}
+[/code]
+
+Agora podemos executar o algoritmo de verificação de posicionamento com pesos.
+A execução da tarefa é idêntica para ambos os números de documento, porém a
+quantidade de pesos e seus valores são diferentes.
+
+Cada posição recebe um peso até o antepenúltimo número, sendo que efetuamos o
+somatório da multiplicação dos pesos com a posição. Se o resto da divisão por 11
+neste somatório for inferior a 2, devemos apresentar 0 como resultado; caso
+contrário, devemos apresentar o complemento deste resto sobre 11. Para
+comparação, vamos adicionar 48 unidades ao conteúdo da posição para fins de
+verificação, manipulando o resultado como uma conversão alfanumérica para
+inteiro, utilizando a tabela ASCII. O caractere encontrado deve ser idêntico ao
+penúltimo caractere, finalizando a verificação de primeiro nível.
+
+A verificação de segundo nível é executada da mesma maneira, porém até a
+penúltima posição do conteúdo. O resultado encontrado deve ser conferido com o
+último caractere.
+
+[code file="verifier.c"]
+// Verificação com Modificadores Nível 1
+comparison = 0;
+for (index = 1; index < size - 1; index = index + 1) {
+    comparison = comparison + modifiers[index] * (content[index - 1] - 48); // Conversão ATOI
+}
+printk(KERN_DEBUG "Comparação Nível 1 Somatório: %d", comparison);
+comparison = comparison % 11;
+comparison = (comparison < 2 ? 0 : 11 - comparison) + 48; // Conversão ITOA
+if (comparison != content[size - 2]) {
+    printk(KERN_ALERT "Verificação de Primeiro Nível Inválida");
+    return VERIFIER_FAIL;
+}
+
+// Verificação com Modificadores Nível 2
+comparison = 0;
+for (index = 0; index < size - 1; index = index + 1) {
+    comparison = comparison + modifiers[index] * (content[index] - 48); // Conversão ATOI
+}
+printk(KERN_DEBUG "Comparação Nível 2 Somatório: %d", comparison);
+comparison = comparison % 11;
+comparison = (comparison < 2 ? 0 : 11 - comparison) + 48; // Conversão ITOA
+if (comparison != content[size - 1]) {
+    printk(KERN_ALERT "Verificação de Segundo Nível Inválida");
+    return VERIFIER_FAIL;
+}
+[/code]
+
+Se tudo ocorrer corretamente, podemos considerar o conteúdo do documento como um
+CPF ou CNPJ válido, apresentando a definição de sucesso como retorno da função.
+
+[code file="verifier.c"]
+printk(KERN_INFO "Verificação do Documento com Sucesso");
+return VERIFIER_SUCCESS;
+[/code]
+
+Após o término do desenvolvimento desta função, podemos instalar o módulo no
+Sistema Operacional utilizando o _script_ de instalação anteriormente
+desenvolvido. Este executável irá adicionar um dispositivo de caractere e irá
+instalar o módulo como um _driver_ para o mesmo. Agora podemos criar um caso de
+teste para utilização.
