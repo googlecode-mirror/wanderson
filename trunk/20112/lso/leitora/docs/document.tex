@@ -167,7 +167,7 @@ código objeto, incluindo o próprio módulo gerado.
 \section{Exemplo Básico}
 \label{sec:exemplo-basico}
 
-Baseado em CORBET [2005], vamos construir um código fonte capaz de gerar um
+Baseado em \cite{corbet2005}, vamos construir um código fonte capaz de gerar um
 módulo simples do Linux. As duas instruções necessárias para criar um módulo são
 apresentadas: a que inicia o módulo junto ao Kernel do Linux e a que é utilizada
 para remover o módulo e desregistrar algumas funcionalidades inicializadas
@@ -250,9 +250,9 @@ rmmod main.ko
 Dependendo da configuração que estamos utilizando e o ambiente de execução, como
 janelas em ambientes gráficos, não vamos visualizar a saída esperada das funções
 \texttt{printk}. Neste caso, o conteúdo gerado é armazenado em arquivos de
-\texttt{log} do sistema. CORBET informa que este conteúdo é enviado para o
-arquivo \texttt{/var/logs/messages}, porém no sistema Debian utilizado para
-desenvolver este documento o conteúdo foi enviado para
+\texttt{log} do sistema. Em \cite{corbet2005}, é informado que este conteúdo é
+enviado para o arquivo \texttt{/var/logs/messages}, porém no sistema Debian
+utilizado para desenvolver este documento o conteúdo foi enviado para
 \texttt{/var/logs/kern.log}.
 
 Para fins de testes e verificar se a nossa saída está sendo enviada corretamente
@@ -339,7 +339,7 @@ Vamos inicializar o desenvolvimento da verificadora de CPF/CNPJ, base da
 Proposta de Trabalho de Grau B para a disciplina de Laboratório de Sistemas
 Operacionais. Precisamos inicialmente criar um módulo que consiga gerar um
 \textit{número maior} automaticamente, com base no código fonte apresentado por
-CORBET [2005].
+\cite{corbet2005}.
 
 Logo nas primeiras linhas, vamos configurar as informações do módulo, acessíveis
 dentro do sistema operacional utilizando a função \texttt{modinfo}. Informamos
@@ -1198,5 +1198,8 @@ CPF ou CNPJ é válido pode trazer início ao desenvolvimento de um \textit{driver}
 real para leitoras destes tipos de documento. Também poderão ser criados
 \textit{drivers} para dispositivos verificadores de boleto ou catracas
 eletrônicas, por exemplo.
+
+\bibliographystyle{sbc}
+\bibliography{document}
 
 \end{document}
