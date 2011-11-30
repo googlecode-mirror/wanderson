@@ -864,6 +864,7 @@ ssize_t verifier_read(struct file* filp, char __user* buffer, size_t count, loff
     }
     return result;
 }
+[/code]
 
 Agora podemos apresentar a função que efetua a verificação de um CPF ou CNPJ
 conforme a quantidade de caracteres apresentados.
