@@ -1024,3 +1024,89 @@ Sistema Operacional utilizando o _script_ de instalação anteriormente
 desenvolvido. Este executável irá adicionar um dispositivo de caractere e irá
 instalar o módulo como um _driver_ para o mesmo. Agora podemos criar um caso de
 teste para utilização.
+
+Testando o Módulo
+-----------------
+
+Como anteriormente descrito, o módulo para verificação de documentos do tipo CPF
+e CNPJ trabalha com dois passos distintos, escrita de determinado conteúdo no
+dispositivo de caractere que identifica o documento. Após, durante a leitura,
+receberemos como resposta um caractere 0 se o resultado esperado estiver
+correto, caso contrário será retornado o caractere 1.
+
+[code]
+echo 72875866818 > /dev/verifier # Escrita com Sucesso
+cat /dev/verifier # Resultado Esperado: 0
+[/code]
+
+Isto tambem pode ser executado com dígitos que simbolizam documentos do tipo
+CNPJ da mesma forma. O tipo de documento é verificado pela quantidade de
+caracteres apresentados para verificação.
+
+[code]
+echo 29656444000161 > /dev/verifier # Escrita com Suceso
+cat /dev/verifier # Resultado Esperado: 0
+[/code]
+
+Podemos forçar o erro ao informar um número de documento inválido para o
+algoritmo, como quantidade de caracteres diferente, números expandidos,
+caracteres inválidos ou documento não reconhecido.
+
+[code]
+echo 12345 > /dev/verifier # Quantidade de Caracteres
+cat /dev/verifier # Resultado Esperado: 1
+echo 11111111111 > /dev/verifier # Expansão Numérica
+cat /dev/verifier # Resultado Esperado: 1
+echo abcd > /dev/verifier # Caracteres Inválidos
+cat /dev/verifier # Resultado Esperado: 1
+echo 72875866817 > /dev/verifier # Não Reconhecido
+cat /dev/verifier # Resultado Esperado: 1
+[/code]
+
+Caso alguma verificação seja solicitada se não existe um conteúdo para
+manipulação no dispositivo de caractere, um erro de entrada e saída é
+apresentado durante a leitura.
+
+[code]
+cat /dev/verifier # Erro de Entrada e Saída
+cat: /dev/verifier: Input/output error
+[/code]
+
+Problemas Encontrados
+---------------------
+
+O _driver_ para o dispositivo de caractere não trabalha de alguma forma com
+prevenção de solicitações paralelas. Dois processos podem concorrentemente
+acessar o dispositivo e causar um problema de entrada e saída, onde o primeiro
+irá fornecer um conteúdo e o segundo logo após. Quando o primeiro solicitar a
+verificação, a resposta será do segundo processo. Já quando o segundo processo
+efetuar a leitura, teremos um problema de entrada e saída.
+
+Isto pode ser executado com algum tipo de verificação atômica ou com
+fornecimento de algum tipo de verificador que pode ser apresentado durante a
+leitura, como tabela _hash_ para o identificador do processo que está
+solicitando a verificação.
+
+Outro problema é que dois dispositivos não podem acessar ao mesmo tempo a
+verificadora, causando problemas desconhecidos. Se um processo executou a tarefa
+de abertura de descritor para o dispositivo, outro processo não pode ter esta
+tarefa. Isto poderia ser resolvido marcando o dispositivo como arquivo
+previamente aberto, apresentando algum aviso quando houver tentativa de leitura
+ou escrita.
+
+Conclusões
+----------
+
+O desenvolvimento de um módulo para o Kernel do Linux parece ser complicado logo
+no início, principalmente por não fornecer as bibliotecas padrão da linguagem C.
+Muitas execuções necessitam ser processadas de uma forma mais baixo nível do que
+já conhecemos.
+
+Também temos que ter o cuidado de retirar todas as alocações de recursos de
+forma correta, como posições de memória inicializadas e reservadas para o
+Kernel.
+
+A criação de um dispositivo virtual capaz de verificar se um documento do tipo
+CPF ou CNPJ é válido pode trazer início ao desenvolvimento de um _driver_ real
+para leitoras destes tipos de documento. Também poderão ser criados _drivers_
+para dispositivos verificadores de boleto ou catracas eletrônicas, por exemplo.
