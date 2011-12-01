@@ -16,4 +16,282 @@
 \label{sec:definicoes}
 
 \begin{frame}{Definições}{Módulo de Kernel}
+    Apesar de ser monolítico, no senso de que todo o Kernel é executado sobre um
+    único espaço de memória, ele é modular ao ponto de suportar inserção e
+    remoção dinâmica de código. Módulos são considerados este tipo de mecanismo
+    que o Kernel utiliza para carregar e descarregar objetos em tempo de
+    execução \cite{love2010}.
+\end{frame}
+
+\begin{frame}{Definições}{\emph{Driver}}
+    \emph{Drivers} de dispositivo são elementos que fazem uma peça particular de
+    \emph{hardware} responder a uma bem definida \emph{interface} de
+    comunicação, escondendo completamente os detalhes de como o dispositivo
+    funciona \cite{corbet2005}.
+\end{frame}
+
+% Tecnologias ------------------------------------------------------------------
+\section{Tecnologias}
+\label{sec:tecnologias}
+
+\begin{frame}{Tecnologias}
+    \begin{itemize}
+        \item GNU/Linux Debian 6 Squeeze 2.6.32-5-686
+        \item Linguagem de Programação C
+        \item Versionamento Subversion
+    \end{itemize}
+\end{frame}
+
+% Introdução ao Desenvolvimento ------------------------------------------------
+\section{Introdução ao Desenvolvimento}
+\label{sec:introducao}
+
+\begin{frame}[fragile]{Introdução}{Desenvolvimento}
+    \begin{itemize}
+        \item Módulo Básico
+
+\begin{lstlisting}
+#include <linux/init.h>
+#include <linux/module.h>
+MODULE_LICENSE("Dual BSD/GPL");
+static int hello_init(void) {
+    printk(KERN_ALERT "Hello, World\n");
+    return 0;
+}
+static void hello_exit(void) {
+    printk(KERN_ALERT "Goodbye, Cruel World\n");
+}
+module_init(hello_init);
+module_exit(hello_exit);
+\end{lstlisting}
+
+    \end{itemize}
+\end{frame}
+
+% Verificadora -----------------------------------------------------------------
+\section{Verificadora}
+\label{sec:verificadora}
+
+\subsection{Definições}
+
+\begin{frame}{Verificadora de CPF e CNPJ}{Definições}
+    Existe a necessidade de criar um dispositivo de caractere virtual que receba
+    uma sequência de caracteres no momento da escrita. Durante a leitura, este
+    conteúdo deve ser processado e o retorno apresentado deverá informar se a
+    sequência é um documento de CPF ou CNPJ válido.
+\end{frame}
+
+\begin{frame}{Diagrama de Estados}
+    \begin{figure}
+        \centering{}
+        \input{diagram}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Dispositivo de Caractere}
+    \begin{enumerate}
+        \item Instalação do Módulo
+        \item Remoção de Arquivo
+        \item Criação de Arquivo Especial de Caracteres
+        \item Permissão de Leitura e Escrita para Todos
+    \end{enumerate}
+
+\begin{lstlisting}[language=sh]
+insmod "$DRIVER_NAME.ko"
+MAJOR=$(grep "$DRIVER_NAME" /proc/devices | cut -d' ' -f1)
+rm -f "/dev/$DEVICE_NAME"
+mknod "/dev/$DEVICE_NAME" c "$MAJOR" 0
+chmod 666 "/dev/$DEVICE_NAME"
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Inicialização do Módulo}
+    \begin{itemize}
+        \item Alocação Dinâmica de Número Maior
+    \end{itemize}
+
+\begin{lstlisting}
+int verifier_init(void) {
+    int result;
+    result = alloc_chrdev_region(&device, MINOR_NUMBER,
+        DEVICE_COUNTER, DRIVER_NAME);
+    // Verificar Resultado
+    struct cdev *cdevice;
+    cdevice = cdev_alloc();
+    cdevice->ops = &verifier_fops;
+    result = cdev_add(cdevice, device, DEVICE_COUNTER);
+    return result;
+}
+void verifier_exit(void) {
+    unregister_chrdev_region(device, DEVICE_COUNTER);
+    cdev_del(cdevice);
+}
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Operações Sobre Arquivos}
+    \begin{itemize}
+        \item Definição de funções que são utilizadas quando o dispositivo de
+        caractere sofre uma chamada de sistema para manipulação de arquivos.
+    \end{itemize}
+
+\begin{lstlisting}
+struct file_operations verifier_fops = {
+    .read    = verifier_read,
+    .write   = verifier_write,
+    .open    = verifier_open,
+    .release = verifier_release,
+};
+\end{lstlisting}
+
+\end{frame}
+
+\subsection{Abertura e Fechamento de Arquivo}
+
+\begin{frame}[fragile]{Abertura e Fechamento de Arquivos}
+    \begin{itemize}
+        \item Chamada para abertura quando um processo solicita o arquivo e abre
+        o descritor para o recurso;
+        \item Fechamento do arquivo somente quando todos os processos finalizam
+        os recursos de descritores abertos; e
+        \item Somente confirmação com sucesso.
+    \end{itemize}
+
+\begin{lstlisting}
+int verifier_open(
+    struct inode* inode,
+    struct file* filp) {
+        return 0;
+}
+int verifier_release(
+    struct inode* inode,
+    struct file* filp) {
+        return 0;
+}
+\end{lstlisting}
+\end{frame}
+
+\subsection{Escrita em Arquivo}
+
+\begin{frame}[fragile]{Escrita em Arquivo}{Captura do Conteúdo do Documento}
+\begin{lstlisting}
+ssize_t verifier_write(
+ struct file* filp,
+ const char __user* buffer,
+ size_t count,
+ loff_t* offp) {
+  int result = -EIO;
+  if (count == 12 || count == 15) {
+   kfree(memory);
+   memory = kmalloc(count, GFP_KERNEL);
+   if (memory != NULL) {
+    memset(memory, 0, count);
+    memorysize = count - 1;
+    if (copy_from_user(memory, buffer, memorysize) == 0) {
+     result = count;
+    }
+  }
+  return result;
+}
+\end{lstlisting}
+\end{frame}
+
+\subsection{Leitura em Arquivo}
+
+\begin{frame}[fragile]{Leitura em Arquivo}{Validação e Resultados}
+\begin{lstlisting}
+ssize_t verifier_read(
+ struct file* filp,
+ char __user* buffer,
+ size_t count,
+ loff_t* offp) {
+  int result = -EIO;
+  if (memory != NULL) {
+   lastcheck = verifier_document(memory, memorysize);
+   if (copy_to_user(buffer, &lastcheck, 1) == 0) {
+    kfree(memory);
+    memory = NULL;
+    memorysize = 0;
+    result = 1;
+   }
+  } else {
+   if (lastcheck == VERIFIER_SUCCESS
+       || lastcheck == VERIFIER_FAIL) {
+    lastcheck = VERIFIER_WAIT;
+    result = 0;
+   }
+  }
+  return result;
+ }
+\end{lstlisting}
+\end{frame}
+
+\subsection{Algoritmo de Verificação}
+
+\begin{frame}{Algoritmo de Verificação}{Documentos CPF e CNPJ}
+    \begin{enumerate}
+        \item Contabilizar tamanho do conteúdo;
+        \item Capturar pesos para comparações;
+        \item Cálculo do somatório dos pesos;
+        \item Comparação com o dígito verificador;
+    \end{enumerate}
+\end{frame}
+
+% Testes -----------------------------------------------------------------------
+\section{Testes}
+\label{sec:testes}
+
+\begin{frame}[fragile]{Casos de Testes}
+\begin{lstlisting}
+echo 72875866818 > /dev/verifier # Escrita
+cat /dev/verifier # Resultado: 0
+echo 29656444000161 > /dev/verifier # Escrita
+cat /dev/verifier # Resultado: 0
+echo 12345 > /dev/verifier # Tamanho Inválido
+cat /dev/verifier # Resultado: 1
+echo 11111111111 > /dev/verifier # Expansão
+cat /dev/verifier # Resultado: 1
+echo abcd > /dev/verifier # Caracteres Inválidos
+cat /dev/verifier # Resultado: 1
+echo 72875866817 > /dev/verifier # Inválido
+cat /dev/verifier # Resultado: 1
+\end{lstlisting}
+\end{frame}
+
+% Problemas Encontrados --------------------------------------------------------
+\section{Problemas Encontrados}
+\label{sec:problemas}
+
+\begin{frame}{Problemas Encontrados}
+    \begin{itemize}
+        \item Não trabalha com prevenção de solicitações paralelas, como
+        processos efetuando leitura e escrita concorrentemente;
+        \item Pode ser contornado com algum tipo de verificação atômica ou
+        bloqueio quando o dispositivo está sendo acessado, ou ainda suportar a
+        execução com múltiplas requisições.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Conclusões}
+    \begin{itemize}
+        \item O desenvolvimento pode ser complicado no início, porém o
+        desenvolvimento de módulos é isolado, facilitando testes;
+        \item Dificuldades sem biblioteca padrão C;
+        \item Cuidar ao alocar e desalocar recursos, já que o espaço de Kernel
+        não sofre nenhum tipo de paginação ou gerenciamento de memória mais
+        avançado; e
+        \item Próximo passo poderia considerar o desenvolvimento de um
+        dispositivo real de leitura de cartões magnéticos para verificar a
+        validação, como catracas de escola.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Código Completo}
+    \begin{figure}
+        \centering{}
+        \Huge{}
+        http://goo.gl/eWkLD
+    \end{figure}
 \end{frame}

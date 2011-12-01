@@ -1,18 +1,22 @@
-\documentclass[hyperref={pdfpagelabels=false}]{beamer}
+\documentclass[hyperref={pdfpagelabels=false},xcolor=pst,dvips]{beamer}
 
 % Pacotes ----------------------------------------------------------------------
 \usepackage[latin1]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[brazil]{babel}
+\usepackage{listings}
+\usepackage{vaucanson-g}
 
 % Configurações Especializadas -------------------------------------------------
 \setbeamertemplate{navigation symbols}{}
 \let\Tiny=\tiny
+\lstset{language=c,basicstyle=\scriptsize\ttfamily,captionpos=b,frame=leftline,
+framexleftmargin=2pt}
 
 % Dados Pessoais ---------------------------------------------------------------
-\title{Título}
-\subtitle{Subtítulo}
-\author{Wanderson Henrique Camargo Rosa}
+\title{\emph{Driver} para Dispositivo de Caractere}
+\subtitle{Verificação de Documentos do Tipo CPF e CNPJ}
+\author{Wanderson Camargo \and{} Bruno Fagundes \and{} Jeferson Souza}
 \institute[UNISINOS]{Centro de Ciências Exatas e Tecnológicas\\Universidade do
 Vale do Rio dos Sinos --- UNISINOS}
 \date{\today{}}
@@ -40,6 +44,12 @@ Vale do Rio dos Sinos --- UNISINOS}
 
 % Corpo do Documento -----------------------------------------------------------
 \input{content}
+
+% Bibliografia -----------------------------------------------------------------
+\begin{frame}{Bibliografia}
+    \bibliographystyle{plain}
+    \bibliography{document}
+\end{frame}
 
 % Finalização ------------------------------------------------------------------
 \begin{frame}

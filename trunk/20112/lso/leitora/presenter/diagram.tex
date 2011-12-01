@@ -1,0 +1,11 @@
+\begin{VCPicture}{(0,0)(4,2)}
+    \FinalState[0]{(0,2)}{MemoriaVazia}
+    \State[1]{(4,2)}{MemoriaCheia}
+    \State[2]{(0,0)}{EIO}
+    \Initial{MemoriaVazia}
+    \ArcR{MemoriaVazia}{MemoriaCheia}{w}
+    \ArcR{MemoriaCheia}{MemoriaVazia}{r}
+    \ArcR{MemoriaVazia}{EIO}{r}
+    \ArcR{EIO}{MemoriaVazia}{\epsilon{}}
+    \LoopS{MemoriaCheia}{w}
+\end{VCPicture}
