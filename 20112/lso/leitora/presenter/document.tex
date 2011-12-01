@@ -1,0 +1,41 @@
+\documentclass[hyperref={pdfpagelabels=false}]{beamer}
+
+% Pacotes ----------------------------------------------------------------------
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+
+% Configurações Especializadas -------------------------------------------------
+\setbeamertemplate{navigation symbols}{}
+\let\Tiny=\tiny
+
+% Dados Pessoais ---------------------------------------------------------------
+\title{Título}
+\subtitle{Subtítulo}
+\author{Wanderson Henrique Camargo Rosa}
+\institute[UNISINOS]{Centro de Ciências Exatas e Tecnológicas\\Universidade do
+Vale do Rio dos Sinos --- UNISINOS}
+\date{\today{}}
+
+% Agenda -----------------------------------------------------------------------
+\AtBeginSubsection[]
+{
+\begin{frame}{Agenda}
+    \tableofcontents[currentsection,currentsubsection]
+\end{frame}
+}
+
+% Início do Documento ----------------------------------------------------------
+\begin{document}
+
+% Página Inicial ---------------------------------------------------------------
+\begin{frame}
+    \maketitle{}
+\end{frame}
+
+% Agenda -----------------------------------------------------------------------
+\begin{frame}{Agenda}
+    \tableofcontents{}
+\end{frame}
+
+\end{document}
