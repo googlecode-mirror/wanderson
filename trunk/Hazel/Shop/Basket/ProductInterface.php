@@ -3,6 +3,8 @@
  * Hazel Zend Framework Extended Library
  */
 
+namespace \Hazel\Shop\Basket;
+
 /**
  * Interface de Produtos
  *
@@ -17,7 +19,7 @@
  * @package    Hazel_Shop
  * @subpackage Basket
  */
-interface Hazel_Shop_Basket_ProductInterface
+interface ProductInterface
 {
     /**
      * Código do Produtos
