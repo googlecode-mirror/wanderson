@@ -44,6 +44,13 @@ class Basket
     protected $_storage;
 
     /**
+     * Calculadora de Itens
+     * Padrão de Projeto Strategy
+     * @var ItemStrategy
+     */
+    protected $_itemStrategy;
+
+    /**
      * Padrão de Projeto Factory
      *
      * Produção de Carrinho de Compras utilizando como base um identificador o
@@ -416,6 +423,43 @@ class Basket
     {
         // Apresentação
         return $this->_storage;
+    }
+
+    /**
+     * Configura a Calculadora de Itens
+     *
+     * Utilizando o Padrão de Projeto Strategy, existe a possibilidade de
+     * injeção de código para efetuar cálculos aos itens adicionados no Carrinho
+     * de Compras.
+     *
+     * @param  ItemStrategy $strategy Elemento para Cálculos sobre Itens
+     * @return Basket       Próprio Objeto para Encadeamento
+     */
+    public function setItemStrategy(ItemStrategy $strategy)
+    {
+        $this->_itemStrategy = $strategy;
+        return $this;
+    }
+
+    /**
+     * Apresenta a Calculadora de Itens
+     *
+     * A calculadora de itens é um objeto que trabalha sob o Padrão de Projeto
+     * Strategy e visa processar um determinado valor que é solicitado ao item
+     * de Carrinho de Compras. Quando nenhuma calculadora de valores foi
+     * configurada para utilização, o Carrinho de Compras apresenta a sua
+     * calculadora padrão, que somente efetua o somatório dos valores gravados
+     * no item com o valor do produto.
+     *
+     * @return ItemStrategy Elemento para Cálculo sobre Itens
+     */
+    public function getItemStrategy()
+    {
+        if ($this->_itemStrategy === null) {
+            $strategy = new ItemCalculator();
+            $this->setItemStrategy($strategy);
+        }
+        return $this->_itemStrategy;
     }
 
 }
