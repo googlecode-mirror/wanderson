@@ -38,6 +38,70 @@ class Basket
     protected $_attribs = array();
 
     /**
+     * Camada de Persistência
+     * @var StorageInterface
+     */
+    protected $_storage;
+
+    /**
+     * Padrão de Projeto Factory
+     *
+     * Produção de Carrinho de Compras utilizando como base um identificador o
+     * nome da classe da camada de persistência, onde os parâmetros apresentados
+     * serão utilizados durante a sua construção. Os parâmetros variam de acordo
+     * com a classe de persistência utilizada.
+     *
+     * @param  string $storage Nome da Classe de Persistência
+     * @param  array  $params  Parâmetros de Configuração
+     * @return Basket|null Resultado Solicitado
+     */
+    public static function factory($storage, array $params = array()) {
+        // Conversão
+        $storage = (string) $storage;
+        // Verificação de Armazenamento
+        if (!class_exists($storage)) {
+            throw new Exception("Invalid Storage Class: '$storage'");
+        }
+        // Criação do Armazenador
+        $persistence = new $storage($params);
+        // Captura do Carrinho de Compras
+        $basket = $persistence->read();
+        // Analisar Tipo do Objeto
+        if (!($basket instanceof self)) {
+            $basket = null;
+        }
+        // Existência de Elemento
+        if ($basket === null) {
+            $basket = new self();
+            $basket->_setStorage($persistence);
+        }
+        // Resultados
+        return $basket;
+    }
+
+    /**
+     * Construtor Básico
+     */
+    protected function __construct()
+    {
+        // Construtor
+    }
+
+    /**
+     * Destruidor
+     *
+     * Busca armazenar o carrinho de compras quando o objeto estiver em tempo
+     * de destruição, mantendo os dados persistidos.
+     */
+    public function __destruct()
+    {
+        // Persistência
+        try {
+            $this->_getStorage()->write($this);
+        } catch (Exception $e) {}
+    }
+
+    /**
      * Verificação de Existência de Item
      *
      * Apresentando um código de item de Carrinho de Compras, podemos verificar
@@ -311,6 +375,39 @@ class Basket
         $this->_attribs = array();
         // Encadeamento
         return $this;
+    }
+
+    /**
+     * Configuração da Camada de Persistência
+     *
+     * A camada de persistência é adicionada durante a inicialização do objeto
+     * de Carrinho de Compras e acessada ao final da vida deste, durante a sua
+     * destruição.
+     *
+     * @param  StorageInterface $storage Camada de Persistência para Configuração
+     * @return Basket           Próprio Objeto para Encadeamento
+     */
+    protected function _setStorage(StorageInterface $storage)
+    {
+        // Configuração
+        $this->_storage = $storage;
+        // Encadeamento
+        return $this;
+    }
+
+    /**
+     * Apresentação da Camada de Persistência
+     *
+     * A camada de persistência corresponde a um objeto necessário para
+     * armazenamento do Carrinho de Compras para que este esteja disponível
+     * entre diferentes requisições.
+     *
+     * @return StorageInterface Camada de Persistência Solicitada
+     */
+    protected function _getStorage()
+    {
+        // Apresentação
+        return $this->_storage;
     }
 
 }
