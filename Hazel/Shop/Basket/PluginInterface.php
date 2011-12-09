@@ -3,8 +3,6 @@
  * Hazel Zend Framework Extended Library
  */
 
-namespace Hazel\Shop\Basket;
-
 /**
  * Plugin para Carrinho de Compras
  *
@@ -20,7 +18,7 @@ namespace Hazel\Shop\Basket;
  * @package    Hazel_Shop
  * @subpackage Basket
  */
-interface PluginInterface
+interface Hazel_Shop_Basket_PluginInterface
 {
     /**
      * Execução do Plugin
@@ -29,9 +27,9 @@ interface PluginInterface
      * assim uma referência deste. Caso seja necessário, o Plugin pode solicitar
      * o processamento de outro Plugin diretamente pelo Carrinho de Compras.
      *
-     * @param  Basket          $basket Carrinho de Compras Utilizado
-     * @return PluginInterface Próprio Objeto para Encadeamento
+     * @param  Hazel_Shop_Basket_Basket $basket Carrinho de Compras Utilizado
+     * @return Hazel_Shop_Basket_PluginInterface Próprio Objeto para Encadeamento
      */
-    public function execute(Basket $basket);
+    public function execute(Hazel_Shop_Basket_Basket $basket);
 
 }
