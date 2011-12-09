@@ -234,7 +234,7 @@ class Basket
         // Criação do Item
         $item = new Item($this, $product);
         // Inclusão de Elemento
-        return $this->setItem($item);
+        return $this->addItem($item);
     }
 
     /**
@@ -512,7 +512,7 @@ class Basket
     public function setPluginPath($path, $prefix = null)
     {
         // Configuração do Caminho
-        $this->_pluginPath = (string) $path;
+        $this->_pluginPath = rtrim($path, DIRECTORY_SEPARATOR);
         // Configuração do Prefixo
         if ($prefix === null) {
             $prefix = $this->_getPluginPrefix();
@@ -536,7 +536,7 @@ class Basket
         // Caminho Configurado
         if ($this->_pluginPath === null) {
             // Diretório Adjacente
-            $path = realpath(dirname(__FILE__) . '/Plugins');
+            $path = realpath(dirname(__FILE__) . '/Plugin');
             // Configuração do Diretório
             $this->setPluginPath($path);
         }
@@ -556,9 +556,79 @@ class Basket
     protected function _getPluginPrefix()
     {
         if ($this->_pluginPrefix === null) {
-            return preg_replace('/[:alpha:]+$/U', '', get_class($this));
+            return preg_replace('/(.)[a-zA-Z]+$/U', '$1Plugin$1', get_class($this));
         }
         return $this->_pluginPrefix;
+    }
+
+    /**
+     * Carregamento de Plugin
+     *
+     * Caso o Plugin solicitado não tenha sido carregado anteriormente no
+     * Carrinho de Compras na requisição atual, conforme as configurações de
+     * inclusão de Plugins este será carregado.
+     *
+     * @param  string    $name Nome do Plugin para Carregamento
+     * @throws Exception Plugin Inválido
+     * @return PluginInterface Elemento Solicitado
+     */
+    protected function _load($name)
+    {
+        // Carregamento de Plugin
+        if (!array_key_exists($name, $this->_plugins)) {
+            // Caminho Completo do Arquivo
+            $filepath = $this->getPluginPath() . DIRECTORY_SEPARATOR . $name . '.php';
+            // Nome da Classe
+            $classname = $this->_getPluginPrefix() . $name;
+            // Carregar Arquivo
+            require_once $filepath;
+            // Construção do Plugin
+            $element = new $classname();
+            // Verificação de Tipagem
+            if (!($element instanceof PluginInterface)) {
+                throw new Exception("Invalid Plugin Interface: '$name'");
+            }
+            // Inclusão do Plugin no Carrinho
+            $this->_plugins[$name] = $element;
+        }
+        // Resultado
+        return $this->_plugins[$name];
+    }
+
+    /**
+     * Execução de Plugin
+     *
+     * Podemos solicitar ao Carrinho de Compras a execução de determinado Plugin
+     * conforme necessário. Este Plugin irá receber o objeto atual do Carrinho
+     * de Compras e poderá manipular todos os valores dos itens adicionados.
+     *
+     * @param  string $name Nome do Plugin para Execução
+     * @return Basket Próprio Objeto para Encadeamento
+     */
+    public function execute($name)
+    {
+        // Conversão
+        $name = (string) $name;
+        // Captura de Plugin
+        $plugin = $this->_load($name);
+        // Execução
+        $plugin->execute($this);
+        // Encadeamento
+        return $this;
+    }
+
+    /**
+     * Valores para Serialização
+     *
+     * Durante a serialização do objeto, somente devemos apresentar os itens
+     * adicionados ao Carrinho de Compras e os atributos cadastrados, evitando
+     * alguns erros de processamento em classes.
+     *
+     * @return array Atributor para Serialização
+     */
+    public function __sleep()
+    {
+        return array('_attribs', '_items');
     }
 
 }
