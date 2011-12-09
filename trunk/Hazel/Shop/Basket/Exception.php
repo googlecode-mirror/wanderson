@@ -3,8 +3,6 @@
  * Hazel Zend Framework Extended Library
  */
 
-namespace Hazel\Shop\Basket;
-
 /**
  * Exceção do Pacote
  *
@@ -18,4 +16,4 @@ namespace Hazel\Shop\Basket;
  * @package    Hazel_Shop
  * @subpackage Basket
  */
-class Exception extends \Exception {}
+class Hazel_Shop_Basket_Exception extends Exception {}

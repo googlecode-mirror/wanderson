@@ -3,8 +3,6 @@
  * Hazel Zend Framework Extended Library
  */
 
-namespace Hazel\Shop\Basket;
-
 /**
  * Armazenador de Carrinho de Compras
  *
@@ -20,7 +18,7 @@ namespace Hazel\Shop\Basket;
  * @package    Hazel_Shop
  * @subpackage Basket
  */
-interface StorageInterface
+interface Hazel_Shop_Basket_StorageInterface
 {
     /**
      * Construtor do Elemento
@@ -42,7 +40,7 @@ interface StorageInterface
      * valor nulo, a classe Carrinho de Comprar irá criar um novo objeto para
      * ser manipulado.
      *
-     * @return Basket|null Carrinho de Compras Persistido ou Carrinho Inexistênte
+     * @return Hazel_Shop_Basket_Basket|null Carrinho de Compras Persistido ou Carrinho Inexistênte
      */
     public function read();
 
@@ -54,9 +52,9 @@ interface StorageInterface
      * Compras acessa o armazenador e solicita a gravação do mesmo. O método
      * deve apresentar a confirmação de sucesso durante o salvamento.
      *
-     * @param  Basket $basket Carrinho de Compras para Persistência
-     * @return bool   Confirmação da Persistência Concluída com Sucesso
+     * @param  Hazel_Shop_Basket_Basket $basket Carrinho de Compras para Persistência
+     * @return bool Confirmação da Persistência Concluída com Sucesso
      */
-    public function write(Basket $basket);
+    public function write(Hazel_Shop_Basket_Basket $basket);
 
 }

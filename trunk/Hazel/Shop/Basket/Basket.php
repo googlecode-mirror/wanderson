@@ -3,8 +3,6 @@
  * Hazel Zend Framework Extended Library
  */
 
-namespace Hazel\Shop\Basket;
-
 /**
  * Carrinho de Compras
  *
@@ -23,7 +21,7 @@ namespace Hazel\Shop\Basket;
  * @package    Hazel_Shop
  * @subpackage Basket
  */
-class Basket
+class Hazel_Shop_Basket_Basket
 {
     /**
      * Conjunto de Itens Armazenados
@@ -39,14 +37,14 @@ class Basket
 
     /**
      * Camada de Persistência
-     * @var StorageInterface
+     * @var Hazel_Shop_Basket_StorageInterface
      */
     protected $_storage = null;
 
     /**
      * Calculadora de Itens
      * Padrão de Projeto Strategy
-     * @var ItemStrategy
+     * @var Hazel_Shop_Basket_ItemStrategy
      */
     protected $_itemStrategy = null;
 
@@ -78,14 +76,14 @@ class Basket
      *
      * @param  string $storage Nome da Classe de Persistência
      * @param  array  $params  Parâmetros de Configuração
-     * @return Basket|null Resultado Solicitado
+     * @return Hazel_Shop_Basket_Basket|null Resultado Solicitado
      */
     public static function factory($storage, array $params = array()) {
         // Conversão
         $storage = (string) $storage;
         // Verificação de Armazenamento
         if (!class_exists($storage)) {
-            throw new Exception("Invalid Storage Class: '$storage'");
+            throw new Hazel_Shop_Basket_Exception("Invalid Storage Class: '$storage'");
         }
         // Criação do Armazenador
         $persistence = new $storage($params);
@@ -161,7 +159,7 @@ class Basket
      * dentro da estrutura.
      *
      * @param  string $code Código do Produto para Captura
-     * @return Item   Elemento Solicitado
+     * @return Hazel_Shop_Basket_Item Elemento Solicitado
      */
     public function getItem($code)
     {
@@ -200,10 +198,10 @@ class Basket
      * armazenamento. Caso o Carrinho já possua um item com o mesmo código de
      * produto, a instância adiciona uma unidade ao elemento existente.
      *
-     * @param  Item   $item Elemento para Inclusão
-     * @return Basket Próprio Objeto para Encadeamento
+     * @param  Item $item Elemento para Inclusão
+     * @return Hazel_Shop_Basket_Basket Próprio Objeto para Encadeamento
      */
-    public function addItem(Item $item)
+    public function addItem(Hazel_Shop_Basket_Item $item)
     {
         // Código do Produto
         $code = $item->getProductCode();
@@ -226,13 +224,13 @@ class Basket
      * será armazenado numa classe de item de Carrinho primeiramente e após será
      * incluso na estrutura.
      *
-     * @param  ProductInterface $product Produto para Inclusão
-     * @return Basket           Próprio Objeto para Encadeamento
+     * @param  Hazel_Shop_Basket_ProductInterface $product Produto para Inclusão
+     * @return Basket Próprio Objeto para Encadeamento
      */
-    public function addProduct(ProductInterface $product)
+    public function addProduct(Hazel_Shop_Basket_ProductInterface $product)
     {
         // Criação do Item
-        $item = new Item($this, $product);
+        $item = new Hazel_Shop_Basket_Item($this, $product);
         // Inclusão de Elemento
         return $this->addItem($item);
     }
@@ -245,7 +243,7 @@ class Basket
      * apresentado.
      *
      * @param  string $code Código do Produto
-     * @return Basket Próprio Objeto para Encadeamento
+     * @return Hazel_Shop_Basket_Basket Próprio Objeto para Encadeamento
      */
     public function clearItem($code)
     {
@@ -264,7 +262,7 @@ class Basket
      * estrutura utilizando o método de limpeza. Não existe como retornar esta
      * execução.
      *
-     * @return Basket Próprio Objeto para Encadeamento
+     * @return Hazel_Shop_Basket_Basket Próprio Objeto para Encadeamento
      */
     public function clearItems()
     {
@@ -318,7 +316,7 @@ class Basket
      *
      * @param  string $name  Nome do Atributo para Configuração
      * @param  mixed  $value Valor para Configuração
-     * @return Basket Próprio Objeto para Encadeamento
+     * @return Hazel_Shop_Basket_Basket Próprio Objeto para Encadeamento
      */
     public function setAttrib($name, $value)
     {
@@ -382,7 +380,7 @@ class Basket
      * apresentado. Este valor será removido completamente da estrutura.
      *
      * @param  string $name Nome do Atributo para Remoção
-     * @return Basket Próprio Objeto para Encadeamento
+     * @return Hazel_Shop_Basket_Basket Próprio Objeto para Encadeamento
      */
     public function clearAttrib($name)
     {
@@ -400,7 +398,7 @@ class Basket
      * A remoção de todos os atributos pode ser executada através deste método.
      * Não existe como retornar os valores configurados anteriormente.
      *
-     * @return Basket Próprio Objeto para Encadeamento
+     * @return Hazel_Shop_Basket_Basket Próprio Objeto para Encadeamento
      */
     public function clearAttribs()
     {
@@ -417,10 +415,10 @@ class Basket
      * de Carrinho de Compras e acessada ao final da vida deste, durante a sua
      * destruição.
      *
-     * @param  StorageInterface $storage Camada de Persistência para Configuração
-     * @return Basket           Próprio Objeto para Encadeamento
+     * @param  Hazel_Shop_Basket_StorageInterface $storage Camada de Persistência para Configuração
+     * @return Hazel_Shop_Basket_Basket Próprio Objeto para Encadeamento
      */
-    protected function _setStorage(StorageInterface $storage)
+    protected function _setStorage(Hazel_Shop_Basket_StorageInterface $storage)
     {
         // Configuração
         $this->_storage = $storage;
@@ -435,7 +433,7 @@ class Basket
      * armazenamento do Carrinho de Compras para que este esteja disponível
      * entre diferentes requisições.
      *
-     * @return StorageInterface Camada de Persistência Solicitada
+     * @return Hazel_Shop_Basket_StorageInterface Camada de Persistência Solicitada
      */
     protected function _getStorage()
     {
@@ -450,10 +448,10 @@ class Basket
      * injeção de código para efetuar cálculos aos itens adicionados no Carrinho
      * de Compras.
      *
-     * @param  ItemStrategy $strategy Elemento para Cálculos sobre Itens
-     * @return Basket       Próprio Objeto para Encadeamento
+     * @param  Hazel_Shop_Basket_ItemStrategy $strategy Elemento para Cálculos sobre Itens
+     * @return Hazel_Shop_Basket_Basket Próprio Objeto para Encadeamento
      */
-    public function setItemStrategy(ItemStrategy $strategy)
+    public function setItemStrategy(Hazel_Shop_Basket_ItemStrategy $strategy)
     {
         $this->_itemStrategy = $strategy;
         return $this;
@@ -469,12 +467,12 @@ class Basket
      * calculadora padrão, que somente efetua o somatório dos valores gravados
      * no item com o valor do produto.
      *
-     * @return ItemStrategy Elemento para Cálculo sobre Itens
+     * @return Hazel_Shop_Basket_ItemStrategy Elemento para Cálculo sobre Itens
      */
     public function getItemStrategy()
     {
         if ($this->_itemStrategy === null) {
-            $strategy = new ItemCalculator();
+            $strategy = new Hazel_Shop_Basket_ItemCalculator();
             $this->setItemStrategy($strategy);
         }
         return $this->_itemStrategy;
@@ -488,8 +486,8 @@ class Basket
      * sobre sua modificação, trabalhando com uma pequena aplicação no estilo do
      * Padrão de Projeto Observer.
      *
-     * @param  Item   $item Elemento Adicionado que Solicita Atualização
-     * @return Basket Próprio Objeto para Encadeamento
+     * @param  Hazel_Shop_Basket_Item $item Elemento Adicionado que Solicita Atualização
+     * @return Hazel_Shop_Basket_Basket Próprio Objeto para Encadeamento
      */
     public function update(Item $item)
     {
@@ -507,7 +505,7 @@ class Basket
      *
      * @param  string $path   Diretório para Pesquisa do Plugin
      * @param  string $prefix Prefixo das Classes Apresentadas
-     * @return Basket Próprio Objeto para Encadeamento
+     * @return Hazel_Shop_Basket_Basket Próprio Objeto para Encadeamento
      */
     public function setPluginPath($path, $prefix = null)
     {
@@ -568,9 +566,9 @@ class Basket
      * Carrinho de Compras na requisição atual, conforme as configurações de
      * inclusão de Plugins este será carregado.
      *
-     * @param  string    $name Nome do Plugin para Carregamento
-     * @throws Exception Plugin Inválido
-     * @return PluginInterface Elemento Solicitado
+     * @param  string $name Nome do Plugin para Carregamento
+     * @throws Hazel_Shop_Basket_Exception Plugin Inválido
+     * @return Hazel_Shop_Basket_PluginInterface Elemento Solicitado
      */
     protected function _load($name)
     {
@@ -585,8 +583,8 @@ class Basket
             // Construção do Plugin
             $element = new $classname();
             // Verificação de Tipagem
-            if (!($element instanceof PluginInterface)) {
-                throw new Exception("Invalid Plugin Interface: '$name'");
+            if (!($element instanceof Hazel_Shop_Basket_PluginInterface)) {
+                throw new Hazel_Shop_Basket_Exception("Invalid Plugin Interface: '$name'");
             }
             // Inclusão do Plugin no Carrinho
             $this->_plugins[$name] = $element;
@@ -603,7 +601,7 @@ class Basket
      * de Compras e poderá manipular todos os valores dos itens adicionados.
      *
      * @param  string $name Nome do Plugin para Execução
-     * @return Basket Próprio Objeto para Encadeamento
+     * @return Hazel_Shop_Basket_Basket Próprio Objeto para Encadeamento
      */
     public function execute($name)
     {

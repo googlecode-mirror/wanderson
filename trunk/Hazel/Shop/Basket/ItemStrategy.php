@@ -3,8 +3,6 @@
  * Hazel Zend Framework Extended Library
  */
 
-namespace Hazel\Shop\Basket;
-
 /**
  * Informações de Item de Carrinho de Compras
  *
@@ -19,7 +17,7 @@ namespace Hazel\Shop\Basket;
  * @package    Hazel_Shop
  * @subpackage Basket
  */
-interface ItemStrategy
+interface Hazel_Shop_Basket_ItemStrategy
 {
     /**
      * Captura de Valores
@@ -29,7 +27,7 @@ interface ItemStrategy
      * apresentar o resultado conforme o identificador solicitado.
      *
      * @param string $identifier Identificador do Cálculo
-     * @param Item   $item       Item de Carrinho de Compras
+     * @param Hazel_Shop_Basket_Item   $item Item de Carrinho de Compras
      * @return float Valor Resultante do Cálculo Solicitado
      */
     public function get($identifier, Item $item);

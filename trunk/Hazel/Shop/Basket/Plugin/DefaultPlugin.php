@@ -3,8 +3,6 @@
  * Hazel Zend Framework Extended Library
  */
 
-namespace Hazel\Shop\Basket\Plugin;
-
 /**
  * Plugin de Teste
  *
@@ -18,9 +16,9 @@ namespace Hazel\Shop\Basket\Plugin;
  * @package    Hazel_Shop
  * @subpackage Basket
  */
-class DefaultPlugin implements PluginInterface
+class Hazel_Shop_Basket_Plugin_DefaultPlugin implements Hazel_Shop_Basket_PluginInterface
 {
-    public function execute(Basket $basket)
+    public function execute(Hazel_Shop_Basket_Basket $basket)
     {
         // Processamento sobre Itens
         foreach ($basket->getItems() as $item) {

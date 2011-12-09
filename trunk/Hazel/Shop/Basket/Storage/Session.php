@@ -3,11 +3,6 @@
  * Hazel Zend Framework Extended Library
  */
 
-namespace Hazel\Shop\Basket\Storage;
-use Hazel\Shop\Basket\StorageInterface;
-use Hazel\Shop\Basket\Basket;
-use Zend_Session_Namespace as SessionNamespace;
-
 /**
  * Camada de Persistência para Sessão
  *
@@ -21,7 +16,7 @@ use Zend_Session_Namespace as SessionNamespace;
  * @package    Hazel_Shop
  * @subpackage Basket
  */
-class Session implements StorageInterface {
+class Hazel_Shop_Basket_Storage_Session implements Hazel_Shop_Basket_StorageInterface {
 
     /**
      * Parâmetros
@@ -42,7 +37,7 @@ class Session implements StorageInterface {
      * informações importantes para o carregamento do Carrinho de Compras.
      *
      * @param  array   $params Valores para Configuração
-     * @return Session Próprio Objeto para Encadeamento
+     * @return Hazel_Shop_Basket_Session Próprio Objeto para Encadeamento
      */
     protected function _setParams(array $params = array())
     {
@@ -56,10 +51,10 @@ class Session implements StorageInterface {
      * A camada de persistência atual utiliza um espaço nomeado na sessão para o
      * cliente centralizando as informações.
      *
-     * @param  SessionNamespace $session Local de Configuração
-     * @return Session Próprio Objeto para Encadeamento
+     * @param  Zend_Session_Namespace $session Local de Configuração
+     * @return Hazel_Shop_Basket_Session Próprio Objeto para Encadeamento
      */
-    protected function _setSession(SessionNamespace $session)
+    protected function _setSession(Zend_Session_Namespace $session)
     {
         $this->_session = $session;
         return $this;
@@ -71,7 +66,7 @@ class Session implements StorageInterface {
      * A camada de persistência utiliza um espaço nomeado na sessão para
      * armazenar as informações do Carrinho de Compras.
      *
-     * @return SessionNamespace Elemento Solicitado
+     * @return Zend_Session_Namespace Elemento Solicitado
      */
     protected function _getSession()
     {
@@ -81,7 +76,7 @@ class Session implements StorageInterface {
     public function __construct(array $params = array())
     {
         // Inicializar Sessão
-        $session = new SessionNamespace(get_class($this), true);
+        $session = new Zend_Session_Namespace(get_class($this), true);
         // Configurar Parâmetros
         $this->_setParams($params)->_setSession($session);
     }
@@ -92,7 +87,7 @@ class Session implements StorageInterface {
         return $this->_getSession()->basket;
     }
 
-    public function write(Basket $basket)
+    public function write(Hazel_Shop_Basket_Basket $basket)
     {
         // Armazenar Carrinho de Compras
         $this->_getSession()->basket = $basket;

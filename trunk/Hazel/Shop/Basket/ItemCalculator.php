@@ -3,8 +3,6 @@
  * Hazel Zend Framework Extended Library
  */
 
-namespace Hazel\Shop\Basket;
-
 /**
  * Calculadora Padrão de Item
  *
@@ -18,9 +16,9 @@ namespace Hazel\Shop\Basket;
  * @package    Hazel_Shop
  * @subpackage Basket
  */
-class ItemCalculator implements ItemStrategy
+class Hazel_Shop_Basket_ItemCalculator implements Hazel_Shop_Basket_ItemStrategy
 {
-    public function get($identifier, Item $item)
+    public function get($identifier, Hazel_Shop_Basket_Item $item)
     {
         // Valor do Produto
         $value = $item->getProductValue() + array_sum($item->getValues());

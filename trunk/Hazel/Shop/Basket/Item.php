@@ -3,8 +3,6 @@
  * Hazel Zend Framework Extended Library
  */
 
-namespace Hazel\Shop\Basket;
-
 /**
  * Item de Carrinho
  *
@@ -18,17 +16,17 @@ namespace Hazel\Shop\Basket;
  * @package    Hazel_Shop
  * @subpackage Basket
  */
-class Item
+class Hazel_Shop_Basket_Item
 {
     /**
      * Carrinho de Compras
-     * @var Basket
+     * @var Hazel_Shop_Basket_Basket
      */
     protected $_basket;
 
     /**
      * Produto Referenciado
-     * @var ProductInterface
+     * @var Hazel_Shop_Basket_ProductInterface
      */
     protected $_product;
 
@@ -51,9 +49,10 @@ class Item
      * produto que deve ser armazenado e este não pode receber uma modificação
      * na referência do produto posteriormente.
      *
-     * @param ProductInterface $product Produto para Configuração
+     * @param Hazel_Shop_Basket_Basket Carrinho de Compras
+     * @param Hazel_Shop_Basket_ProductInterface $product Produto para Configuração
      */
-    public function __construct(Basket $basket, ProductInterface $product)
+    public function __construct(Hazel_Shop_Basket_Basket $basket, ProductInterface $product)
     {
         // Configuração Inicial
         $this->_setBasket($basket)->_setProduct($product);
@@ -62,10 +61,10 @@ class Item
     /**
      * Configuração do Carrinho de Compras
      *
-     * @param  Basket $basket Elemento para Configuração
-     * @return Item   Próprio Objeto para Encadeamento
+     * @param  Hazel_Shop_Basket_Basket $basket Elemento para Configuração
+     * @return Hazel_Shop_Basket_Item   Próprio Objeto para Encadeamento
      */
-    protected function _setBasket(Basket $basket)
+    protected function _setBasket(Hazel_Shop_Basket_Basket $basket)
     {
         $this->_basket = $basket;
         return $this;
@@ -74,7 +73,7 @@ class Item
     /**
      * Apresentação do Carrinho de Compras
      *
-     * @return Basket Elemento Solicitado
+     * @return Hazel_Shop_Basket_Basket Elemento Solicitado
      */
     public function getBasket()
     {
@@ -84,10 +83,10 @@ class Item
     /**
      * Configuração do Produto Referenciado
      *
-     * @param ProductInterface $product Elemento para Configuração
-     * @return Item Próprio Objeto para Encadeamento
+     * @param Hazel_Shop_Basket_ProductInterface $product Elemento para Configuração
+     * @return Hazel_Shop_Basket_Item Próprio Objeto para Encadeamento
      */
-    protected function _setProduct(ProductInterface $product)
+    protected function _setProduct(Hazel_Shop_Basket_ProductInterface $product)
     {
         $this->_product = $product;
         return $this;
@@ -96,7 +95,7 @@ class Item
     /**
      * Informação do Produto Referenciado
      *
-     * @return ProductInterface Elemento Solicitado
+     * @return Hazel_Shop_Basket_ProductInterface Elemento Solicitado
      */
     public function getProduct()
     {
@@ -141,7 +140,7 @@ class Item
      * remoção.
      *
      * @param int $quantity Valor para Configuração
-     * @return Item Próprio Objeto para Encadeamento
+     * @return Hazel_Shop_Basket_Item Próprio Objeto para Encadeamento
      */
     public function setQuantity($quantity)
     {
@@ -185,7 +184,7 @@ class Item
      * considerado pelo seu valor absoluto.
      *
      * @param int $quantity Valor para Configuração
-     * @return Item Próprio Objeto para Encadeamento
+     * @return Hazel_Shop_Basket_Item Próprio Objeto para Encadeamento
      */
     public function addQuantity($quantity)
     {
@@ -212,7 +211,7 @@ class Item
      * considerado pelo seu valor absoluto inverso.
      *
      * @param int $quantity Valor para Configuração
-     * @return Item Próprio Objeto para Encadeamento
+     * @return Hazel_Shop_Basket_Item Próprio Objeto para Encadeamento
      */
     public function subQuantity($quantity)
     {
@@ -258,7 +257,7 @@ class Item
      * somente anulando seu conteúdo.
      *
      * @param string $name Nome do Tipo de Valor Configurado
-     * @return Item Próprio Objeto para Encadeamento
+     * @return Hazel_Shop_Basket_Item Próprio Objeto para Encadeamento
      */
     public function clearValue($name)
     {
@@ -279,7 +278,7 @@ class Item
      * reinício dos cálculos para os Plugins. Caso estes valores recebam o
      * comando de limpeza, não há como retornar os valores.
      *
-     * @return Item Próprio Objeto para Encadeamento
+     * @return Hazel_Shop_Basket_Item Próprio Objeto para Encadeamento
      */
     public function clearValues()
     {
@@ -301,7 +300,7 @@ class Item
      *
      * @param string $name  Nome do Tipo de Valor para Configuração
      * @param float  $value Valor para Configuração
-     * @return Item Próprio Objeto para Encadeamento
+     * @return Hazel_Shop_Basket_Item Próprio Objeto para Encadeamento
      */
     public function setValue($name, $value)
     {
