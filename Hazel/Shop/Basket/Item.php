@@ -36,7 +36,22 @@ class Item
      * Valores para Manipulação
      * @var array
      */
-    protected $_values;
+    protected $_values = array();
+
+    /**
+     * Construtor Padrão
+     *
+     * O construtor de item de Carrinho de Compras recebe por parâmetro um
+     * produto que deve ser armazenado e este não pode receber uma modificação
+     * na referência do produto posteriormente.
+     *
+     * @param ProductInterface $product Produto para Configuração
+     */
+    public function __construct(ProductInterface $product)
+    {
+        // Configuração Inicial
+        $this->_setProduct($product)->clearValues();
+    }
 
     /**
      * Configuração do Produto Referenciado
@@ -181,6 +196,133 @@ class Item
         $this->setQuantity($result);
         // Encadeamento
         return $this;
+    }
+
+    /**
+     * Verificação de Tipo de Valor Configurado
+     *
+     * Busca no conjunto de valores armazenados para o produto a existência de
+     * determinado nome armazenado dentro da estrutura. Este valor pode ser
+     * utilizado pelos Plugins para efetuar cálculos. Preferencialmente, cada
+     * Plugin deve salvar uma informação com seu nome dentro do item de Carrinho
+     * de Compras.
+     *
+     * @param string $name Nome do Tipo de Valor Configurado
+     * @return bool Confirmação da Existência do Valor
+     */
+    public function isValue($name)
+    {
+        // Conversão
+        $name = (string) $name;
+        // Verificação
+        return array_key_exists($this->_values[$name]);
+    }
+
+    /**
+     * Limpeza de Tipo de Valor Configurado
+     *
+     * Efetua a remoção de determinado valor do conjunto interno do item de
+     * Carrinho de Compras. Este método remove completamente o valor, não
+     * somente anulando seu conteúdo.
+     *
+     * @param string $name Nome do Tipo de Valor Configurado
+     * @return Item Próprio Objeto para Encadeamento
+     */
+    public function clearValue($name)
+    {
+        // Conversão
+        $name = (string) $name;
+        // Desconfiguração
+        unset($this->_values[$name]);
+        // Encadeamento
+        return $this;
+    }
+
+    /**
+     * Limpeza Completa de Valores
+     *
+     * Remove todos os valores do item de carrinho de compras, facilitando o
+     * reinício dos cálculos para os Plugins. Caso estes valores recebam o
+     * comando de limpeza, não há como retornar os valores.
+     *
+     * @return Item Próprio Objeto para Encadeamento
+     */
+    public function clearValues()
+    {
+        $this->_values = array();
+        return $this;
+    }
+
+    /**
+     * Configura um Valor para Tipo Configurado
+     *
+     * O tipo solicitado é armazenado com o valor informado dentro do item de
+     * Carrinho de Compras para que este seja consultado pelos Plugins. Cada
+     * Plugin pode gravar a informação desejada dentro dos itens e manipular
+     * estas informações, buscando manipular os dados conforme necessário.
+     *
+     * @param string $name  Nome do Tipo de Valor para Configuração
+     * @param float  $value Valor para Configuração
+     * @return Item Próprio Objeto para Encadeamento
+     */
+    public function setValue($name, $value)
+    {
+        // Conversão
+        $name  = (string) $name;
+        // Verificação do Valor
+        if ($value === null) {
+            // Desconfigurar
+            $this->clearValue($name);
+        } else {
+            // Conversão
+            $value = (float) $value;
+            // Configuração
+            $this->_values[$name] = $value;
+        }
+        // Encadeamento
+        return $this;
+    }
+
+    /**
+     * Informação de Valor para Tipo Configurado
+     *
+     * Um tipo configurado pode ser solicitado ao item. Um Plugin de Carrinho de
+     * Compras possui livre acesso a todos os valores armazenados no item e este
+     * deve ser desenvolvido para configurar o valor com o nome de sua própria
+     * classe para evitar conflitos.
+     *
+     * @param string $name Nome do Tipo de Valor Configurado
+     * @return float|null Valor Configurado ou Nulo para Inexistente
+     */
+    public function getValue($name)
+    {
+        // Conversão
+        $name = (string) $name;
+        // Resultado Inicial
+        $result = null;
+        // Valor Existente
+        if ($this->isValue($name)) {
+            // Valor Resultante
+            $result = $this->_values[$name];
+        }
+        // Resultado
+        return $result;
+    }
+
+    /**
+     * Informação de Todos os Valores Configurados
+     *
+     * A lista de valores configurados pode ser acessada diretamente solicitando
+     * todos os valores armazenados no item de Carrinho de Compras. Estes
+     * valores estão armazenados utilizando um mapeamento, onde a chave
+     * representa o nome do tipo a ser utilizado e o conteúdo o valor
+     * configurado para aquele tipo.
+     *
+     * @return array Conjunto de Valores de Tipo Configurados
+     */
+    public function getValues()
+    {
+        return $this->_values;
     }
 
 }
