@@ -41,14 +41,32 @@ class Basket
      * Camada de Persistência
      * @var StorageInterface
      */
-    protected $_storage;
+    protected $_storage = null;
 
     /**
      * Calculadora de Itens
      * Padrão de Projeto Strategy
      * @var ItemStrategy
      */
-    protected $_itemStrategy;
+    protected $_itemStrategy = null;
+
+    /**
+     * Plugins de Carrinho de Compras
+     * @var array
+     */
+    protected $_plugins = array();
+
+    /**
+     * Caminho para Carregamento de Plugins
+     * @var string
+     */
+    protected $_pluginPath = null;
+
+    /**
+     * Configuração do Prefixo de Classes de Plugin
+     * @var string
+     */
+    protected $_pluginPrefix = null;
 
     /**
      * Padrão de Projeto Factory
@@ -477,6 +495,70 @@ class Basket
     {
         // @todo Construção de Processamento
         return $this;
+    }
+
+    /**
+     * Configura o Caminho para Captura de Plugins
+     *
+     * Apresenta ao Carrinho de Compras o diretório de pesquisa para Plugins.
+     * Este diretório deve conter classes com a mesma estrutura de diretórios
+     * utilizada pelo autocarregamento. Também existe a necessidade de fornecer
+     * o prefixo da classe a ser carregada como Plugin.
+     *
+     * @param  string $path   Diretório para Pesquisa do Plugin
+     * @param  string $prefix Prefixo das Classes Apresentadas
+     * @return Basket Próprio Objeto para Encadeamento
+     */
+    public function setPluginPath($path, $prefix = null)
+    {
+        // Configuração do Caminho
+        $this->_pluginPath = (string) $path;
+        // Configuração do Prefixo
+        if ($prefix === null) {
+            $prefix = $this->_getPluginPrefix();
+        }
+        $this->_pluginPrefix = $prefix;
+        // Encadeamento
+        return $this;
+    }
+
+    /**
+     * Informação sobre o Caminho para Captura de Plugins
+     *
+     * O diretório será utilizado para capturar os Plugins solicitados ao
+     * Carrinho de Compras. Este diretório pode ser modificado, juntamente com o
+     * prefixo das classes que devem ser carregadas como Plugin.
+     *
+     * @return string Caminho Completo para Carregar Plugins
+     */
+    public function getPluginPath()
+    {
+        // Caminho Configurado
+        if ($this->_pluginPath === null) {
+            // Diretório Adjacente
+            $path = realpath(dirname(__FILE__) . '/Plugins');
+            // Configuração do Diretório
+            $this->setPluginPath($path);
+        }
+        // Resultado
+        return $this->_pluginPath;
+    }
+
+    /**
+     * Prefixo de Classes de Plugin
+     *
+     * Apresenta o valor configurado como prefixo para classes de Plugin,
+     * carregadas em diretório específico. Estes Plugins podem iniciar com um
+     * prefixo padrão caso o valor não esteja configurado.
+     *
+     * @return string Prefixo para Carregamento de Plugins
+     */
+    protected function _getPluginPrefix()
+    {
+        if ($this->_pluginPrefix === null) {
+            return preg_replace('/[:alpha:]+$/U', '', get_class($this));
+        }
+        return $this->_pluginPrefix;
     }
 
 }
