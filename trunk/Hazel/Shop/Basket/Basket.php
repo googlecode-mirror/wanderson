@@ -462,4 +462,21 @@ class Basket
         return $this->_itemStrategy;
     }
 
+    /**
+     * Atualização do Carrinho de Compras
+     *
+     * Quando um item adicionado ao Carrinho de Compras efetual alguma
+     * modificação em seu estado, este deve informar ao objeto que o contém
+     * sobre sua modificação, trabalhando com uma pequena aplicação no estilo do
+     * Padrão de Projeto Observer.
+     *
+     * @param  Item   $item Elemento Adicionado que Solicita Atualização
+     * @return Basket Próprio Objeto para Encadeamento
+     */
+    public function update(Item $item)
+    {
+        // @todo Construção de Processamento
+        return $this;
+    }
+
 }
