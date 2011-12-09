@@ -56,7 +56,7 @@ class Item
     public function __construct(Basket $basket, ProductInterface $product)
     {
         // Configuração Inicial
-        $this->_setBasket($basket)->_setProduct($product)->clearValues();
+        $this->_setBasket($basket)->_setProduct($product);
     }
 
     /**
@@ -149,11 +149,15 @@ class Item
         $quantity = (int) $quantity;
         // Verificar Valor Inválido
         if ($quantity <= 0) {
+            // Quantidade Zerada
+            $quantity = 0;
             // Solicitar ao Carrinho a Remoção
-            // @todo Capturar o Carrinho e Remover o Produto
+            $this->getBasket()->clearItem($this->getProductCode());
         }
         // Configurar a Quantidade
         $this->_quantity = $quantity;
+        // Informar Carrinho
+        $this->getBasket()->update($this);
         // Encadeamento
         return $this;
     }
@@ -262,6 +266,8 @@ class Item
         $name = (string) $name;
         // Desconfiguração
         unset($this->_values[$name]);
+        // Informar Carrinho
+        $this->getBasket()->update($this);
         // Encadeamento
         return $this;
     }
@@ -279,6 +285,8 @@ class Item
     {
         // Limpeza
         $this->_values = array();
+        // Informar Carrinho
+        $this->getBasket()->update($this);
         // Encadeamento
         return $this;
     }
@@ -309,6 +317,8 @@ class Item
             // Configuração
             $this->_values[$name] = $value;
         }
+        // Informar Carrinho
+        $this->getBasket()->update($this);
         // Encadeamento
         return $this;
     }
