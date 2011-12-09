@@ -21,6 +21,12 @@ namespace Hazel\Shop\Basket;
 class Item
 {
     /**
+     * Carrinho de Compras
+     * @var Basket
+     */
+    protected $_basket;
+
+    /**
      * Produto Referenciado
      * @var ProductInterface
      */
@@ -47,10 +53,32 @@ class Item
      *
      * @param ProductInterface $product Produto para Configuração
      */
-    public function __construct(ProductInterface $product)
+    public function __construct(Basket $basket, ProductInterface $product)
     {
         // Configuração Inicial
-        $this->_setProduct($product)->clearValues();
+        $this->_setBasket($basket)->_setProduct($product)->clearValues();
+    }
+
+    /**
+     * Configuração do Carrinho de Compras
+     *
+     * @param  Basket $basket Elemento para Configuração
+     * @return Item   Próprio Objeto para Encadeamento
+     */
+    protected function _setBasket(Basket $basket)
+    {
+        $this->_basket = $basket;
+        return $this;
+    }
+
+    /**
+     * Apresentação do Carrinho de Compras
+     *
+     * @return Basket Elemento Solicitado
+     */
+    public function getBasket()
+    {
+        return $this->_basket;
     }
 
     /**
