@@ -27,7 +27,7 @@ class ItemCalculator implements ItemStrategy
         // Valor Negativo
         if ($value < 0) {
             // Valor Zerado
-            $value = 0;
+            $value = 0.0;
         }
         // Resultados
         return $value;
