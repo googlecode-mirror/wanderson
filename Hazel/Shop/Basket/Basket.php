@@ -106,6 +106,18 @@ class Hazel_Shop_Basket_Basket
     protected $_pluginPrefix = null;
 
     /**
+     * Manipulador de Erros
+     * @var Hazel_Shop_Basket_ExceptionHandler
+     */
+    protected $_handler = null;
+
+    /**
+     * Pilha de Execução
+     * @var array
+     */
+    protected $_executionStack = array();
+
+    /**
      * Padrão de Projeto Factory
      *
      * Produção de Carrinho de Compras utilizando como base um identificador o
@@ -648,8 +660,30 @@ class Hazel_Shop_Basket_Basket
         $name = (string) $name;
         // Captura de Plugin
         $plugin = $this->_load($name);
-        // Execução
-        $plugin->execute($this);
+        // Processo de Execução
+        try {
+            // Verificar Execução Cíclica
+            if (in_array($name, $this->_executionStack)) {
+                throw new Hazel_Shop_Basket_Exception("Deadlocked Plugin: '$name'");
+            }
+            // Enpilhar Processamento
+            array_push($this->_executionStack, $name);
+            // Execução
+            $plugin->execute($this);
+            // Remover Entrada de Pilha
+            array_pop($this->_executionStack);
+        } catch (Hazel_Shop_Basket_Exception $e) {
+            // Captura do Manipulador
+            $handler = $this->getExceptionHandler();
+            // Existência
+            if ($handler !== null) {
+                // Tratamento
+                $handler->handle($this, $e);
+            } else {
+                // Continuar Pilha
+                throw $e;
+            }
+        }
         // Encadeamento
         return $this;
     }
@@ -666,6 +700,37 @@ class Hazel_Shop_Basket_Basket
     public function __sleep()
     {
         return array('_attribs', '_items');
+    }
+
+    /**
+     * Configuração do Manipulador de Erros
+     *
+     * Buscando aplicar regras de negócio específica para erros encontrados
+     * durante o processamento de produtos adicionados ao Carrinho de Compras
+     * pelos Plugins, devemos configurar um manipulador de exceções para este
+     * caso.
+     *
+     * @param Hazel_Shop_Basket_ExceptionHandler $handler Manipulador para Configuração
+     * @return Hazel_Shop_Basket_Basket Próprio Objeto para Encadeamento
+     */
+    public function setExceptionHandler(Hazel_Shop_Basket_ExceptionHandler $handler)
+    {
+        $this->_handler = $handler;
+        return $this;
+    }
+
+    /**
+     * Informar Manipulador de Erros
+     *
+     * Apresenta o manipulador de erros configurado anteriormente para processar
+     * erros gerados em tempo de execução dos Plugins. Caso o manipulador não
+     * exista, a exceção continua o processamento em pilha.
+     *
+     * @return Hazel_Shop_Basket_ExceptionHandler Elemento Solicitado
+     */
+    public function getExceptionHandler()
+    {
+        return $this->_handler;
     }
 
 }
