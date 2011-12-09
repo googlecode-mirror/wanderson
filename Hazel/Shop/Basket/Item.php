@@ -3,7 +3,7 @@
  * Hazel Zend Framework Extended Library
  */
 
-namespace \Hazel\Shop\Basket;
+namespace Hazel\Shop\Basket;
 
 /**
  * Item de Carrinho

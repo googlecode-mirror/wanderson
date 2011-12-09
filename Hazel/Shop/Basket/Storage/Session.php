@@ -3,7 +3,10 @@
  * Hazel Zend Framework Extended Library
  */
 
-namespace \Hazel\Shop\Basket\Storage;
+namespace Hazel\Shop\Basket\Storage;
+use Hazel\Shop\Basket\StorageInterface;
+use Hazel\Shop\Basket\Basket;
+use Zend_Session_Namespace as SessionNamespace;
 
 /**
  * Camada de Persistência para Sessão
@@ -53,10 +56,10 @@ class Session implements StorageInterface {
      * A camada de persistência atual utiliza um espaço nomeado na sessão para o
      * cliente centralizando as informações.
      *
-     * @param  Zend_Session_Namespace $session Local de Configuração
+     * @param  SessionNamespace $session Local de Configuração
      * @return Session Próprio Objeto para Encadeamento
      */
-    protected function _setSession(Zend_Session_Namespace $session)
+    protected function _setSession(SessionNamespace $session)
     {
         $this->_session = $session;
         return $this;
@@ -68,7 +71,7 @@ class Session implements StorageInterface {
      * A camada de persistência utiliza um espaço nomeado na sessão para
      * armazenar as informações do Carrinho de Compras.
      *
-     * @return Zend_Session_Namespace Elemento Solicitado
+     * @return SessionNamespace Elemento Solicitado
      */
     protected function _getSession()
     {
@@ -78,7 +81,7 @@ class Session implements StorageInterface {
     public function __construct(array $params = array())
     {
         // Inicializar Sessão
-        $session = new Zend_Session_Namespace(get_class($this), true);
+        $session = new SessionNamespace(get_class($this), true);
         // Configurar Parâmetros
         $this->_setParams($params)->_setSession($session);
     }
