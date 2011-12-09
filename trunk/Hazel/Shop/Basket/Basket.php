@@ -214,7 +214,7 @@ class Basket
     public function addProduct(ProductInterface $product)
     {
         // Criação do Item
-        $item = new Item($product);
+        $item = new Item($this, $product);
         // Inclusão de Elemento
         return $this->setItem($item);
     }
