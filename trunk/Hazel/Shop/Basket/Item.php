@@ -249,7 +249,9 @@ class Item
      */
     public function clearValues()
     {
+        // Limpeza
         $this->_values = array();
+        // Encadeamento
         return $this;
     }
 
