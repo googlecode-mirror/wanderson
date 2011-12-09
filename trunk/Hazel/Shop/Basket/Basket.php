@@ -32,6 +32,12 @@ class Basket
     protected $_items = array();
 
     /**
+     * Atributos
+     * @var array
+     */
+    protected $_attribs = array();
+
+    /**
      * Verificação de Existência de Item
      *
      * Apresentando um código de item de Carrinho de Compras, podemos verificar
@@ -167,6 +173,142 @@ class Basket
     {
         // Limpeza
         $this->_items = array();
+        // Encadeamento
+        return $this;
+    }
+
+    /**
+     * Verificação de Carrinho sem Itens Adicionados
+     *
+     * A verificação consulta a estrutura de itens adicionados e apresenta uma
+     * confirmação de existência de elementos inclusos.
+     *
+     * @return bool Confirmação de Elementos Adiconados
+     */
+    public function isEmpty()
+    {
+        return empty($this->_items);
+    }
+
+    /**
+     * Verifica a Existência de Atributo
+     *
+     * Um atributo de carrinho de compras é uma informação que pode ser
+     * adicionada para que os Plugins consigam efetuar uma comunicação entre si,
+     * já que estes não podem acessar informações paralelamente. Este apresenta
+     * uma confirmação da existência do atributo com o nome solicitado.
+     *
+     * @param  string $name Nome do Atributo para Verificação
+     * @return bool   Confirmação da Existência do Atributo
+     */
+    public function isAttrib($name)
+    {
+        // Conversão
+        $name = (string) $name;
+        // Verificação
+        return array_key_exists($name, $this->_attribs);
+    }
+
+    /**
+     * Configuração de Atributo
+     *
+     * O atributo solicitado pode ser gravado na estrutura do Carrinho de
+     * Compras, melhorando a comunicação entre Plugins, tendo em vista que eles
+     * não podem efetuar uma consulta direta entre si. Estes valores são
+     * armazenados em conjunto de atributos e podem ser consultados quando
+     * necessário. Caso o valor apresentado seja nulo, o atributo será removido
+     * completamente da estrutura.
+     *
+     * @param  string $name  Nome do Atributo para Configuração
+     * @param  mixed  $value Valor para Configuração
+     * @return Basket Próprio Objeto para Encadeamento
+     */
+    public function setAttrib($name, $value)
+    {
+        // Conversão
+        $name = (string) $name;
+        // Valor Nulo
+        if ($value === null) {
+            // Desconfiguração
+            $this->clearAttrib($name);
+        } else {
+            // Configurar Valor
+            $this->_attribs[$name] = $value;
+        }
+        // Encadeamento
+        return $this;
+    }
+
+    /**
+     * Consulta de Atributo Configurado
+     *
+     * Um atributo pode ser configurado na estrutura do Carrinho de Compras para
+     * facilitar a comunicação entre Plugins. Caso o atributo não exista dentro
+     * da estrutura, um valor nulo é apresentado.
+     *
+     * @param string      $name Nome do Atributo Solicitado
+     * @return mixed|null Valor para o Nome do Atributo
+     */
+    public function getAttrib($name)
+    {
+        // Conversão
+        $name = (string) $name;
+        // Resultado Inicial
+        $result = null;
+        // Existência
+        if ($this->isAttrib($name)) {
+            $result = $this->getAttrib($name);
+        }
+        // Resultado
+        return $result;
+    }
+
+    /**
+     * Consulta de Atributos Configurados
+     *
+     * Todos os atributos configurados até o momento para o Carrinho de Compras
+     * é apresentado em conjunto onde a chave representa o nome do atributo e
+     * conteúdo o valor deste.
+     *
+     * @return array Conjunto de Valores de Atributos
+     */
+    public function getAttribs()
+    {
+        // Resultado
+        return $this->_attribs;
+    }
+
+    /**
+     * Remoção de Atributo
+     *
+     * Um atributo pode ser removido do Carrinho de Compras através do método
+     * apresentado. Este valor será removido completamente da estrutura.
+     *
+     * @param  string $name Nome do Atributo para Remoção
+     * @return Basket Próprio Objeto para Encadeamento
+     */
+    public function clearAttrib($name)
+    {
+        // Conversão
+        $name = (string) $name;
+        // Desconfiguração
+        unset($this->_attribs[$name]);
+        // Encadeamento
+        return $this;
+    }
+
+    /**
+     * Remoção de Todos Atributos
+     *
+     * A remoção de todos os atributos pode ser executada através deste método.
+     * Não existe como retornar os valores configurados anteriormente.
+     *
+     * @return Basket Próprio Objeto para Encadeamento
+     */
+    public function clearAttribs()
+    {
+        // Remoção
+        $this->_attribs = array();
         // Encadeamento
         return $this;
     }
