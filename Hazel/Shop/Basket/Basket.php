@@ -65,7 +65,14 @@ class Basket
         // Criação do Armazenador
         $persistence = new $storage($params);
         // Captura do Carrinho de Compras
-        $basket = $persistence->read();
+        $basket = null;
+        try {
+            // Camada de Persistência
+            $basket = $persistence->read();
+        } catch (Exception $e) {
+            // Erro Encontrado
+            $basket = null;
+        }
         // Analisar Tipo do Objeto
         if (!($basket instanceof self)) {
             $basket = null;
