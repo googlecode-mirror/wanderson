@@ -73,8 +73,9 @@ class Basket
         // Existência de Elemento
         if ($basket === null) {
             $basket = new self();
-            $basket->_setStorage($persistence);
         }
+        // Configurar Persistência
+        $basket->_setStorage($persistence);
         // Resultados
         return $basket;
     }
