@@ -57,10 +57,31 @@
  */
 class Hazel_Shop_Basket_ItemCalculator implements Hazel_Shop_Basket_ItemStrategy
 {
+    // Valor Total Unitário do Produto
+    const CALCULATE_VALUE = 'CALCULATE_VALUE';
+
+    // Valor Total da Quantidade * Valor Unitário
+    const CALCULATE_TOTAL = 'CALCULATE_TOTAL';
+
+    // Cálculo Centralizado
     public function get($identifier, Hazel_Shop_Basket_Item $item)
     {
-        // Valor do Produto
-        $value = $item->getProductValue() + array_sum($item->getValues());
+        // Valor Inicial
+        $value = 0.0;
+        // Identificador do Pedido
+        switch ($identifier) {
+            case self::CALCULATE_VALUE:
+                // Valor do Produto
+                $value = $item->getProductValue() + array_sum($item->getValues());
+                break;
+            case self::CALCULATE_TOTAL:
+                // Valor pela Quantidade
+                $value = $this->get(self::CALCULATE_VALUE, $item) * $item->getQuantity();
+                break;
+            default:
+                // Valor Padrão
+                $value = 0.0;
+        }
         // Valor Negativo
         if ($value < 0) {
             // Valor Zerado
