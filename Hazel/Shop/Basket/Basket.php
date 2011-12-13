@@ -177,9 +177,14 @@ class Hazel_Shop_Basket_Basket
      */
     public function __destruct()
     {
-        // Persistência
         try {
-            $this->_getStorage()->write($this);
+            // Persistência
+            $storage = $this->_getStorage();
+            // Inicializado
+            if (!empty($storage)) {
+                // Serialização
+                $storage->write($this);
+            }
         } catch (Exception $e) {}
     }
 
