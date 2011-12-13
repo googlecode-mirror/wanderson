@@ -94,7 +94,7 @@ class Hazel_Shop_Basket_Item
     public function __construct(Hazel_Shop_Basket_Basket $basket, ProductInterface $product)
     {
         // Configuração Inicial
-        $this->_setBasket($basket)->_setProduct($product);
+        $this->_setBasket($basket)->_setProduct($product)->setQuantity(1);
     }
 
     /**
