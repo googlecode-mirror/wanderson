@@ -106,6 +106,12 @@ class Hazel_Shop_Basket_Basket
     protected $_pluginPrefix = null;
 
     /**
+     * Configuração do Plugin Padrão
+     * @var string
+     */
+    protected $_pluginDefault = null;
+
+    /**
      * Manipulador de Erros
      * @var Hazel_Shop_Basket_ExceptionHandler
      */
@@ -547,7 +553,13 @@ class Hazel_Shop_Basket_Basket
      */
     public function update(Item $item)
     {
-        // @todo Construção de Processamento
+        // Plugin Padrão
+        $default = $this->getPluginDefault();
+        // Execução se Existência
+        if (!empty($default)) {
+            $this->execute($default);
+        }
+        // Encadeamento
         return $this;
     }
 
@@ -613,6 +625,40 @@ class Hazel_Shop_Basket_Basket
             return preg_replace('/(.)[a-zA-Z]+$/U', '$1Plugin$1', get_class($this));
         }
         return $this->_pluginPrefix;
+    }
+
+    /**
+     * Configura o Nome do Plugin Padrão
+     *
+     * Sempre que um item modifica alguma informação interna como quantidade,
+     * este solicita uma atualização do Carrinho de Compras. Quando esta
+     * atualização é executada, existe uma verificação para o nome do Plugin
+     * padrão a ser executado.
+     *
+     * @param string $default Valor para Configuração
+     * @return Hazel_Shop_Basket_Basket Próprio Objeto para Encadeamento
+     */
+    public function setPluginDefault($default)
+    {
+        // Conversão
+        $default = (string) $default;
+        // Configuração
+        $this->_pluginDefault = $default;
+        // Encadeamento
+        return $this;
+    }
+
+    /**
+     * Informa o Nome do Plugin Padrão
+     *
+     * Quando o nome de um Plugin padrão é informado, este é utilizado sempre
+     * que um item de Carrinho de Compras solicita a atualização da estrutura.
+     *
+     * @return string Valor Solicitado
+     */
+    public function getPluginDefault()
+    {
+        return $this->_pluginDefault;
     }
 
     /**
