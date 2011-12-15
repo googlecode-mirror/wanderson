@@ -139,7 +139,7 @@ class Hazel_Shop_Basket_Basket
         // Conversão
         $storage = (string) $storage;
         // Verificação de Armazenamento e Comportamento
-        if ((!class_exists($storage)) || array_search('F1S_Shop_Basket_StorageInterface', class_implements($storage)) === false) {
+        if ((!class_exists($storage)) || in_array('F1S_Shop_Basket_StorageInterface', class_implements($storage))) {
             throw new F1S_Shop_Basket_Exception("Invalid Storage Class: '$storage'");
         }
         // Criação do Armazenador
