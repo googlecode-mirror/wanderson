@@ -11,7 +11,7 @@
  * @package    Hazel_View
  * @subpackage Helper
  */
-class Hazel_View_Helper_StringLimit extends Zend_View_Helper_Abstract {
+class Hazel_View_Helper_Limit extends Zend_View_Helper_Abstract {
 
     /**
      * Método Principal Limitador de Conteúdo
@@ -26,7 +26,7 @@ class Hazel_View_Helper_StringLimit extends Zend_View_Helper_Abstract {
      * @param  string $suffix  Sufixo para Preenchimento
      * @return string Conteúdo Limitado conforme Solicitado
      */
-    public function stringLimit($content, $limit = 255, $suffix = '...') {
+    public function limit($content, $limit = 255, $suffix = '...') {
         // Conversão
         $content = (string) $this->view->escape($content);
         $limit   = (int) $limit;
