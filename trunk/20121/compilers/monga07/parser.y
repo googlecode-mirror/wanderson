@@ -9,6 +9,9 @@ extern FILE *yyin;
 %token T_TYPE
 %token T_SEMICOLON
 %token T_UNKNOWN
+%token T_COMMA
+%token T_OVB
+%token T_CVB
 
 %%
 
@@ -18,10 +21,21 @@ program
 
 declaration
     : variable
+    | variable declaration
     ;
 
 variable
-    : T_TYPE T_IDENTIFIER T_SEMICOLON
+    : type list_identifier T_SEMICOLON
+    ;
+
+type
+    : T_TYPE
+    | T_TYPE T_OVB T_CVB
+    ;
+
+list_identifier
+    : T_IDENTIFIER
+    | T_IDENTIFIER T_COMMA list_identifier
     ;
 
 %%
