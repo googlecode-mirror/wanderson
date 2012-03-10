@@ -5,13 +5,15 @@
 #include "parser.tab.h"
 %}
 
-T_ID [a-zA-Z0-9][a-zA-Z0-9_]*
+ID [_a-zA-Z][_a-zA-Z0-9]*
 
 %%
 
-T_ID { return T_ID; }
+";" { return T_SEMICOLON; }
+"int" { return T_TYPE; }
+{ID} { return T_IDENTIFIER; }
 
-[\t\n\r]
-.
+[ \t\n\r]
+. { return T_UNKNOWN; }
 
 %%
