@@ -36,7 +36,7 @@ class Musics {
             // Recurso de Banco de Dados
             $resource = DbAdapter::getInstance()->getResource();
             // Criação de Statement
-            $stmt = $resource->prepare('INSERT INTO `musics`(`name`) VALUES (:filename)');
+            $stmt = $resource->prepare('INSERT INTO `musics`(`filename`) VALUES (:filename)');
             // Passagem de Parâmetros
             $stmt->bindParam(':filename', $filename, SQLITE3_TEXT);
             // Execução
