@@ -41,7 +41,7 @@ class Autoloader {
      */
     private function __construct() {
         // Registro em Autocarregamento
-        spl_autoload_register(array($this, 'loadClass'));
+        spl_autoload_register(array($this, 'load'));
         // Configuração de Mapeamento
         $this->setMapper('Pokeflute', dirname(__FILE__))
              ->setMapper('Model', APPLICATION_PATH . '/models');
@@ -93,14 +93,14 @@ class Autoloader {
     }
 
     /**
-     * Carregar Classe
+     * Carregar Classe ou Interface
      *
      * Pesquisando pelo nome de classe, podemos carregar um arquivo conforme
      * estrutura padrão do sistema a partir de prefixo da nomenclatura.
      *
      * @return bool Confirmação de Execução com Sucesso ou Falha
      */
-    public function loadClass($classname) {
+    public function load($classname) {
         // Captura de Prefixo
         $counter = preg_match('/^(?<prefix>[[:alnum:]]+)\\\\(?<suffix>.+)$/', $classname, $match);
         // Contabilização de Resultados
