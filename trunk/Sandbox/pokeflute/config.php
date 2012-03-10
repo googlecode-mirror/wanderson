@@ -12,4 +12,5 @@ require_once 'Pokeflute/Autoloader.php';
 \Pokeflute\Autoloader::getInstance();
 // Configurações
 $config = \Pokeflute\Multiton::getInstance('Pokeflute\\Config');
-$config->set('music.directory', APPLICATION_PATH . '/../data/musics');
+$config->set('music.directory', APPLICATION_PATH . '/../data/musics')
+       ->set('music.server', 'http://localhost:7999');
