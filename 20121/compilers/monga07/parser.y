@@ -5,34 +5,23 @@ extern int yylineno;
 extern FILE *yyin;
 %}
 
-%token T_ID
+%token T_IDENTIFIER
+%token T_TYPE
+%token T_SEMICOLON
+%token T_UNKNOWN
+
 %%
 
-program :
-      declaration
+program
+    : declaration
     ;
 
-declaration :
-      variable_declaration
+declaration
+    : variable
     ;
 
-variable_declaration :
-      type identifier_list ';'
-    ;
-
-identifier_list :
-      T_ID
-    | T_ID ',' identifier_list
-    ;
-
-type :
-      type_base
-    | type '[' ']'
-
-type_base :
-      "int"
-    | "char"
-    | "float"
+variable
+    : T_TYPE T_IDENTIFIER T_SEMICOLON
     ;
 
 %%
@@ -48,3 +37,4 @@ int main(int argc, char *argv[])
 yyerror(char *s) {
     fprintf(stderr, "error: %s\n", s);
 }
+
