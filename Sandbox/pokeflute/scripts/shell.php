@@ -11,7 +11,7 @@ $mMusics = new \Model\Musics();
 // Bloco de Comandos
 switch (@$argv[1]) {
     // Adicionar Arquivo
-    case 'add':
+    case 'CREATE':
         // Verificar Arquivo
         if (!empty($argv[2]) && is_file($argv[2])) {
             // Adicionar Arquivo
@@ -22,7 +22,7 @@ switch (@$argv[1]) {
         }
         break;
     // Remover Arquivo
-    case 'remove':
+    case 'DELETE':
         // Verificar Arquivo
         if (!empty($argv[2])) {
             // Remover Arquivo
