@@ -89,20 +89,32 @@ class Musics {
      * pode ser selecionado, conforme o nome do arquivo que foi informado. Este
      * arquivo não será apresentado na consulta randômica.
      *
-     * @param  string $filename Nome do Arquivo para Modificação
+     * @param  string|int $identifier Nome do Arquivo para Modificação
      * @param  bool   $flag     Habilitar ou Desabilitar o Conteúdo Selecionado
      * @return Musics Próprio Objeto para Encadeamento
      */
-    public function setEnabled($filename, $flag) {
+    public function setEnabled($identifier, $flag) {
+        // Verificar Tipagem
+        if (is_int($identifier)) {
+            // Consulta
+            $element = $this->find($identifier);
+            // Elemento não Encontrado
+            if (empty($element)) {
+                // Encadeamento
+                return $this;
+            }
+            // Configuração
+            $identifier = $element['filename'];
+        }
         // Conversão
-        $filename = (string) $filename;
+        $filename = (string) $identifier;
         $flag     = (bool)   $flag;
         // Recurso de Banco de Dados
         $resource = DbAdapter::getInstance()->getResource();
         // Criação de Statement
         $stmt = $resource->prepare('UPDATE `musics` SET `enabled` = :enabled WHERE `filename` = :filename');
         // Passagem de Parâmetros
-        $stmt->bindParam(':enabled', intval($flag), SQLITE3_INTEGER);
+        $stmt->bindParam(':enabled', $flag, SQLITE3_INTEGER);
         $stmt->bindParam(':filename', $filename, SQLITE3_TEXT);
         // Execução
         $stmt->execute();
@@ -212,14 +224,14 @@ SELECT
     `m`.`id` AS `id`,
     `m`.`filename` AS `filename`,
     `m`.`priority` AS `priority`,
-    `m`.`counter` AS `counter,
+    `m`.`counter` AS `counter`,
     `m`.`enabled` AS `enabled`
 FROM `musics` AS `m`
 ORDER BY
     `m`.`enabled` DESC,
     `m`.`priority` DESC,
     `m`.`counter` ASC,
-    `m`.`filename ASC
+    `m`.`filename` ASC
 QUERY;
         // Consulta
         $result = $resource->query($query);
@@ -231,6 +243,37 @@ QUERY;
         }
         // Apresentação
         return $elements;
+    }
+
+    /**
+     * Consulta de Arquivo
+     *
+     * Efetua a pesquisa de arquivo no banco de dados utilizando o seu
+     * identificador, evitando que elementos com o mesmo nome sejam tratados
+     * como semelhantes dentro do sistema. Caso não seja encontrado um valor
+     * nulo é apresentado como resposta
+     *
+     * @param  int        $id Identificador do Arquivo
+     * @return array|null Conjunto de Informações Sobre o Elemento ou Valor Nulo
+     */
+    public function find($id) {
+        // Conversão
+        $id = (int) $id;
+        // Recurso de Banco de Dados
+        $resource = DbAdapter::getInstance()->getResource();
+        // Criação de Statement
+        $stmt = $resource->prepare('SELECT `m`.* FROM `musics` AS `m` WHERE `m`.`id` = :id LIMIT 1');
+        // Passagem de Parâmetros
+        $stmt->bindParam(':id', $id, SQLITE3_INTEGER);
+        // Consulta ao Banco de Dados
+        $element = $stmt->execute()->fetchArray(SQLITE3_ASSOC);
+        // Verificar Resultado
+        if (empty($element)) {
+            // Valor Vazio
+            $element = null;
+        }
+        // Apresentação
+        return $element;
     }
 
 }

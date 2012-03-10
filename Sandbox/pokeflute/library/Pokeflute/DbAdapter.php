@@ -43,7 +43,7 @@ class DbAdapter {
         // Nome do Arquivo para Abertura
         $filename = APPLICATION_PATH . '/../data/pokeflute.sqlite';
         // Criação de Recurso para Conexão
-        $this->_resource = new \SQLite3($filename);
+        $this->_resource = new \SQLite3($filename, SQLITE3_OPEN_READWRITE);
     }
 
     /**
