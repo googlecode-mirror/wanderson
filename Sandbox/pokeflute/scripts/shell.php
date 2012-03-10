@@ -15,7 +15,7 @@ switch (@$argv[1]) {
         // Verificar Arquivo
         if (!empty($argv[2]) && is_file($argv[2])) {
             // Adicionar Arquivo
-            $mMusics->addFilename($filename);
+            $mMusics->addFilename($argv[2]);
         } else {
             // Erro Encontrado
             exit(POKEFLUTE_FILENOTFOUND);
