@@ -1,21 +1,53 @@
 #gameoflife table {
     border-collapse: collapse;
     cursor: pointer;
-    margin-bottom: 10px;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 10px;
 }
 #gameoflife td {
-    background-color: #DDD;
+    background-color: #FFF;
     border: 1px #CCC solid;
     empty-cells: show;
     height: 12px;
     width: 12px;
 }
 #gameoflife .alive {
-    background-color: #F00;
+    background-color: #A0A0A0;
+}
+.columns2 {
+    overflow: hidden;
+}
+.columns2 form {
+    width: 48%;
+    margin: 1%;
+    float: left;
+}
+body {
+    background-color: #EFEFEF;
+    font-size: 15px;
 }
 textarea {
+    height: 100px;
+}
+fieldset {
+    border: 1px #CCC solid;
+    background-color: #DDD;
+    margin: 10px 0;
+}
+legend {
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    padding: 5px 10px;
+}
+button {
+    padding: 4px 20px;
+    margin: 1px;
+}
+pre {
+    cursor: pointer;
+}
+input[type="text"],textarea {
+    background-color: #FFFFCC;
+    border: 1px #BBBBBB solid;
     width: 100%;
 }
