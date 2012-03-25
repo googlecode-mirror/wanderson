@@ -121,10 +121,10 @@
             try {
                 input = JSON.parse(params.content);
                 iterator(mapper, function(i, j){
-                    if (input[i][j] == 0) {
-                        this.change(0);
-                    } else {
+                    if (input[i][j] == 1) {
                         this.change(1);
+                    } else {
+                        this.change(0);
                     }
                 });
             } catch (e) {
@@ -229,7 +229,7 @@
                 field.append(row);
             }
             // Aplicação de Campo
-            container.append(field);
+            container.append($('<table>').append(field));
             // Callbacks
             $('td', container).bind('click', function(event){
                 this.cell.change();
