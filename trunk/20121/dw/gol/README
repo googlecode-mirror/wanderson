@@ -1,0 +1,44 @@
+README
+======
+
+Este documento visa apresentar um resumo sobre o desenvolvimento do primeiro
+aplicativo solicitado pela disciplina de Desenvolvimento Web, semestre 2012/1,
+da Universidade do Vale do Rio dos Sinos (Unisinos).
+
+Conforme solicitado, foi desenvolvido um aplicativo utilizando os conceitos
+observados em aula, utilizando técnicas de manipulação HTML, CSS, DOM e
+Javascript. Este ilustra como resultado o famoso "Game of Life", criado pelo
+Matemático John Conway na década de 70. Este jogo apresenta um autômato celular
+baseado na Máquina de Turing, que possui regras básicas para produção dos átomos
+gerados num campo bidimensional.
+
+Estruturas
+----------
+
+Para construção do projeto, foi-se utilizado como manipulador Javascript a
+biblioteca jQuery, que facilita as manipulações DOM. Buscando melhorar o código
+e separar as regras de negócio da estrutura, desenvolveu-se um plugin capaz de
+gerar uma estrutura do tipo "Game of Life". Para alinhamento, buscou-se utilizar
+pequenas modificações CSS no documento. Todas as regras estão descritas no
+próprio aplicativo.
+
+Arquivos
+--------
+
+index.php
+    Documento principal renderizador do jogo, que possui toda a estrutura DOM
+    que deve ser manipulada pelo Javascript.
+gameoflife.css
+    Formatações necessárias para alinhamento de componentes e estilização de
+    campo do "Game of Life". Todas as regras de formatação são encontradas neste
+    local, nenhuma foi implementada diretamente no documento principal.
+jquery.gameoflife.js
+    Plugin do jQuery capaz de gerar um campo manipulável do "Game of Life". Esta
+    estrutura foi desenvolvida para buscar uma centralização das regras
+    necessárias para construção do campo e encapsulamento das regras matemáticas
+    que são aplicadas ao autômato celular.
+gameoflife.js
+    Processamentos Javascript necessários ao documento, unindo as regras de
+    negócio encapsuladas no plugin de jQuery e o aplicativo, manipulando os
+    eventos necessários da _interface_ para que estes executem métodos do "Game
+    of Life".
