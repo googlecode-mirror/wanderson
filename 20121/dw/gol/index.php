@@ -20,7 +20,7 @@
                     <dt><label for="config_rows">Número de Linhas</label></dt>
                     <dd><input id="config_rows" type="text" name="config_rows" class="integer" value="20"/></dd>
                     <dt><label for="config_rows">Tempo em Milissegundos</label></dt>
-                    <dd><input id="config_rows" type="text" name="config_interval" class="integer" value="100"/></dd>
+                    <dd><input id="config_interval" type="text" name="config_interval" class="integer" value="100"/></dd>
                     <dt>Ações</dt>
                     <dd><button type="submit">Gerar Mapa</button></dd>
                     <dd><button type="button" id="config_random">Randômico</button></dd>
