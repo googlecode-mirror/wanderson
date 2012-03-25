@@ -45,7 +45,7 @@ $(function(){
         // Cancelar Evento
         return false;
     });
-    // Memória
+    // Importar Memória
     $('#memory_import').bind('click', function(event){
         // Capturar Conteúdo
         var content = $('#memory_content').val();
@@ -56,6 +56,7 @@ $(function(){
         // Cancelar Evento
         return false;
     });
+    // Exportar Memória
     $('#memory_export').bind('click', function(event){
         // Exportar Conteúdo
         var content = gol.gameoflife('export');
@@ -63,6 +64,15 @@ $(function(){
         $('#memory_content').val(content);
         // Cancelar Evento
         return this;
+    });
+    // Aplicar Padrões
+    $('pre').bind('dblclick', function(event){
+        // Copiar para Memória
+        var content = $(this).html();
+        // Aplicar Conteúdo
+        $('#memory_content').val(content);
+        // Cancelar Evento
+        return false;
     });
 });
 

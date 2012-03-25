@@ -127,9 +127,7 @@
                         this.change(0);
                     }
                 });
-            } catch (e) {
-                console.warn(e);
-            }
+            } catch (e) {}
             // Encadeamento
             return this;
         };

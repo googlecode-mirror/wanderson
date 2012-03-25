@@ -70,46 +70,61 @@
             conteúdo. Para importar, basta colocar uma estrutura exportada no
             campo de conteúdo e utilizar o botão importar.
         </p>
-        <form name="config" action="#" method="get">
-            <fieldset>
-                <legend>Configurações</legend>
-                <dl>
-                    <dt><label for="config_columns">Número de Colunas</label></dt>
-                    <dd><input id="config_columns" type="text" name="config_columns" class="integer" value="50"/></dd>
-                    <dt><label for="config_rows">Número de Linhas</label></dt>
-                    <dd><input id="config_rows" type="text" name="config_rows" class="integer" value="20"/></dd>
-                    <dt><label for="config_rows">Tempo em Milissegundos</label></dt>
-                    <dd><input id="config_interval" type="text" name="config_interval" class="integer" value="100"/></dd>
-                    <dt>Ações</dt>
-                    <dd><button type="submit">Gerar Campo</button></dd>
-                </dl>
-            </fieldset>
-        </form>
+        <div class="columns2">
+            <form name="config" action="#" method="get">
+                <fieldset>
+                    <legend>Configurações</legend>
+                    <dl>
+                        <dt><label for="config_columns">Número de Colunas</label></dt>
+                        <dd><input id="config_columns" type="text" name="config_columns" class="integer" value="50"/></dd>
+                        <dt><label for="config_rows">Número de Linhas</label></dt>
+                        <dd><input id="config_rows" type="text" name="config_rows" class="integer" value="20"/></dd>
+                        <dt><label for="config_rows">Tempo em Milissegundos</label></dt>
+                        <dd><input id="config_interval" type="text" name="config_interval" class="integer" value="100"/></dd>
+                        <dt>Ações</dt>
+                        <dd>
+                            <button type="submit">Gerar Campo</button>
+                        </dd>
+                    </dl>
+                </fieldset>
+            </form>
+            <form name="memory" action="#" method="get">
+                <fieldset>
+                    <legend>Memória</legend>
+                    <dl>
+                        <dt><label for="memory_content">Conteúdo</label></dt>
+                        <dd><textarea id="memory_content" name="memory_content"></textarea></dd>
+                        <dt>Ações</dt>
+                        <dd>
+                            <button id="memory_import" type="button">Importar</button>
+                            <button id="memory_export" type="button">Exportar</button>
+                        </dd>
+                    </dl>
+                </fieldset>
+            </form>
+        </div>
         <form name="field">
             <fieldset>
                 <legend>Campo</legend>
                 <dl>
                     <dt>Ações</dt>
-                    <dd><button type="button" id="config_run">Iniciar</button></dd>
-                    <dd><button type="button" id="config_stop">Parar</button></dd>
-                    <dd><button type="button" id="config_random">Randômico</button></dd>
+                    <dd>
+                        <button type="button" id="config_run">Iniciar</button>
+                        <button type="button" id="config_stop">Parar</button>
+                        <button type="button" id="config_random">Randômico</button>
+                    </dd>
                 </dl>
                 <div id="gameoflife">&nbsp;</div>
             </fieldset>
         </form>
-        <form name="memory" action="#" method="get">
-            <fieldset>
-                <legend>Memória</legend>
-                <dl>
-                    <dt><label for="memory_content">Conteúdo</label></dt>
-                    <dd><textarea id="memory_content" name="memory_content"></textarea></dd>
-                    <dt>Ações</dt>
-                    <dd><button id="memory_import" type="button">Importar</button></dd>
-                    <dd><button id="memory_export" type="button">Exportar</button></dd>
-                </dl>
-            </fieldset>
-        </form>
         <h2>Padrões Básicos</h2>
+        <p>
+            Para aplicar os padrões básicos, você pode efetuar um duplo clique
+            nos conteúdos abaixo e estes serão copiados para a área de memória.
+            Após, basta selecionar a opção importar. Os padrões são pequenas
+            estruturas consideradas vivas dentro do campo, que permanecem em
+            laço de repetição até que encontrem outras formas de vida.
+        </p>
         <dl>
             <dt>Glider</dt>
             <dd>
@@ -141,6 +156,20 @@
 </pre>
             </dd>
         </dl>
+        <h3>Notas</h3>
+        <p>
+            Este aplicativo foi testado em ambientes Linux, nos navegadores
+            Mozilla Firefox 11 e Google Chromium 17. Nenhum teste foi executado
+            sobre o Microsoft Internet Explorer; nem queremos que seja testado
+            nele ;)
+        </p>
+        <h3>Referências</h3>
+        <ul>
+            <li><a href="http://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">Conway's Game of Life</a> na Wikipédia;</li>
+            <li><a href="http://www.bitstorm.org/gameoflife/">John Conway's Game of Life</a> na Bitstorm;</li>
+            <li><a href="http://www.youtube.com/watch?v=XcuBvj0pw-E">Amazing Game of Life Demo</a> no Youtube; e</li>
+            <li><a href="http://rendell-attic.org/gol/tm.htm">A Turing Machine in Conway's Game of Life</a> por Paul Rendell.</li>
+        </ul>
     </body>
 </html>
 
