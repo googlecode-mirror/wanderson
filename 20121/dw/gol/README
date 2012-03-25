@@ -1,6 +1,15 @@
 README
 ======
 
+Autores
+-------
+
+Wanderson Henrique Camargo Rosa
+http://code.google.com/p/wanderson/source/browse/trunk/20121/dw/gol/
+
+Resumo
+------
+
 Este documento visa apresentar um resumo sobre o desenvolvimento do primeiro
 aplicativo solicitado pela disciplina de Desenvolvimento Web, semestre 2012/1,
 da Universidade do Vale do Rio dos Sinos (Unisinos).
@@ -42,3 +51,4 @@ gameoflife.js
     negócio encapsuladas no plugin de jQuery e o aplicativo, manipulando os
     eventos necessários da _interface_ para que estes executem métodos do "Game
     of Life".
+
