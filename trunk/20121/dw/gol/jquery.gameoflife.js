@@ -130,6 +130,8 @@
             } catch (e) {
                 console.warn(e);
             }
+            // Encadeamento
+            return this;
         };
     };
 
@@ -179,12 +181,13 @@
     $.fn.gameoflife = function(config, params){
         // Chamada de Método?
         if (typeof(config) == 'string') {
+            var output = null;
             this.each(function(){
                 // Executar Método no Elemento
-                return this['gameoflife'][config](params);
+                output = this['gameoflife'][config](params);
             });
             // Encadeamento
-            return this;
+            return output;
         }
         // Configurações
         config = $.extend({
@@ -194,9 +197,16 @@
         }, config);
         // Processamento
         this.each(function(){
+            // Verificar Jogo Existente
+            if (typeof(this.gameoflife) == 'function') {
+                // Parar Execução!
+                this.gameoflife.stop();
+            }
             // Construção
             var container = $(this);
             // Limpeza de Filhos
+            container.empty();
+            // Inicializar Campo
             var field = $('<tbody>');
             // Mapeamento de Memória
             var mapper = new Array(config.height);
