@@ -4,6 +4,7 @@
         <meta charset="UTF-8"/>
         <title>Game of Life - John Conway | Wanderson Camargo</title>
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.js"></script>
+        <script type="text/javascript" src="jquery.gameoflife.js"></script>
         <script type="text/javascript" src="gameoflife.js"></script>
         <link type="text/css" rel="stylesheet" href="gameoflife.css"/>
     </head>
@@ -17,7 +18,9 @@
                     <dt><label for="config_columns">Número de Colunas</label></dt>
                     <dd><input id="config_columns" type="text" name="config_columns" class="integer" value="50"/></dd>
                     <dt><label for="config_rows">Número de Linhas</label></dt>
-                    <dd><input id="config_rows" type="text" name="config_rows" class="integer" value="50"/></dd>
+                    <dd><input id="config_rows" type="text" name="config_rows" class="integer" value="20"/></dd>
+                    <dt><label for="config_rows">Tempo em Milissegundos</label></dt>
+                    <dd><input id="config_rows" type="text" name="config_interval" class="integer" value="100"/></dd>
                     <dt>Ações</dt>
                     <dd><button type="submit">Gerar Mapa</button></dd>
                     <dd><button type="button" id="config_random">Randômico</button></dd>
