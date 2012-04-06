@@ -1,6 +1,7 @@
 #ifndef AST_OPERATOR
 #define AST_OPERATOR
 #include "node.h"
+
 namespace AST {
 
     /**
@@ -19,21 +20,23 @@ namespace AST {
         /**
          * Expressão à Esquerda
          */
-        Node* left;
+        Node* _left;
 
         /**
          * Expressão à Direita
          */
-        Node* right;
+        Node* _right;
 
         /**
          * Configuração de Expressão à Esquerda
+         * @param  Node* Elemento para Configuração
          * @return Próprio Objeto para Encadeamento
          */
         Operator* _setLeft(Node*);
 
         /**
          * Configuração de Expressão à Direita
+         * @param  Node* Elemento para Configuração
          * @return Próprio Objeto para Encadeamento
          */
         Operator* _setRight(Node*);
@@ -42,6 +45,10 @@ namespace AST {
 
         /**
          * Construtor
+         * @param int Número do Token Utilizado
+         * @param std::string Conteúdo Capturado pelo Token
+         * @param Node* Elemento Esquerdo para Configuração
+         * @param Node* Elemento Direito para Configuração
          */
         Operator(int, std::string, Node*, Node*);
 
@@ -63,5 +70,6 @@ namespace AST {
     };
 
 };
+
 #endif
 

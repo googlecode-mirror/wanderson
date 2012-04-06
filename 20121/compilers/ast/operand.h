@@ -1,6 +1,7 @@
 #ifndef AST_OPERAND
 #define AST_OPERAND
 #include "node.h"
+
 namespace AST {
 
     /**
@@ -19,6 +20,8 @@ namespace AST {
 
         /**
          * Construtor
+         * @param int Número do Token Utilizado
+         * @param std::string Conteúdo Capturado pelo Token
          */
         Operand(int, std::string);
 
@@ -28,5 +31,6 @@ namespace AST {
     };
 
 };
+
 #endif
 

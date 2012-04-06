@@ -1,5 +1,6 @@
 #ifndef AST_NODE
 #define AST_NODE
+
 namespace AST {
 
     /**
@@ -22,12 +23,12 @@ namespace AST {
         /**
          * Token Utilizado
          */
-        int token;
+        int _token;
 
         /**
          * Conteúdo Capturado pelo Token
          */
-        std::string content;
+        std::string _content;
 
         /**
          * Configuração do Token Utilizado
@@ -88,5 +89,6 @@ namespace AST {
 
     };
 };
+
 #endif
 

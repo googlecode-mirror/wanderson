@@ -3,6 +3,7 @@
 
 namespace AST {
 
+    // Construtor
     Node::Node(int token, std::string content) {
         this->_setToken(token)->_setContent(content);
     };
@@ -10,7 +11,7 @@ namespace AST {
     // Configuração
     Node* Node::_setToken(int token) {
         // Atribuição
-        this->token = token;
+        this->_token = token;
         // Encadeamento
         return this;
     };
@@ -18,7 +19,7 @@ namespace AST {
     // Configuração
     Node* Node::_setContent(std::string content) {
         // Atribuição
-        this->content = content;
+        this->_content = content;
         // Encadeamento
         return this;
     }
@@ -26,12 +27,12 @@ namespace AST {
     // Captura
     int Node::getToken() {
         // Apresentação
-        return this->token;
+        return this->_token;
     };
 
     // Captura
     std::string Node::getContent() {
-        return this->content;
+        return this->_content;
     }
 
 };

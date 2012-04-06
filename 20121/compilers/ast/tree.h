@@ -1,6 +1,7 @@
 #ifndef AST_TREE
 #define AST_TREE
 #include "node.h"
+
 namespace AST {
 
     /**
@@ -55,5 +56,6 @@ namespace AST {
     };
 
 };
+
 #endif
 
