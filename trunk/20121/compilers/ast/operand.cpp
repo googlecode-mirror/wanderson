@@ -1,5 +1,6 @@
 #include <string>
 #include "operand.h"
+
 namespace AST {
 
     // Construtor
@@ -13,3 +14,4 @@ namespace AST {
     };
 
 };
+

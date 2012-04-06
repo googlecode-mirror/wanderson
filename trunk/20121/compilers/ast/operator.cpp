@@ -12,7 +12,7 @@ namespace AST {
     // Configuração de Expressão à Esquerda
     Operator* Operator::_setLeft(Node* left) {
         // Configuração
-        this->left = left;
+        this->_left = left;
         // Encadeamento
         return this;
     };
@@ -20,7 +20,7 @@ namespace AST {
     // Configuração de Expressão à Direita
     Operator* Operator::_setRight(Node* right) {
         // Configuração
-        this->right = right;
+        this->_right = right;
         // Encadeamento
         return this;
     };
@@ -28,13 +28,13 @@ namespace AST {
     // Captura de Expressão à Esquerda
     Node* Operator::getLeft() {
         // Captura
-        return this->left;
+        return this->_left;
     };
 
     // Captura de Expressão à Direita
     Node* Operator::getRight() {
         // Captura
-        return this->right;
+        return this->_right;
     };
 
     // Sobrescrita
