@@ -31,12 +31,24 @@ namespace AST {
 
         /**
          * Configuração do Token Utilizado
+         *
+         * Durante a análise léxica são inicializados os Tokens, identificados
+         * por um número inteiro único dentro da verificação.
+         *
+         * @param  int Número do Token Utilizado
          * @return Próprio Objeto para Encadeamento
          */
         Node* _setToken(int);
 
         /**
          * Configuração do Conteúdo do Token
+         *
+         * Durante a etapa léxica de captura de conteúdos e divisão de Tokens, o
+         * analisador armazena o conteúdo processado. Este conteúdo pode ser
+         * armazenado para utilização posterior no construtor, que utiliza este
+         * encapsulamento para configuração.
+         *
+         * @param  std::string Conteúdo Capturado pelo Token
          * @return Próprio Objeto para Encadeamento
          */
         Node* _setContent(std::string);
@@ -45,6 +57,13 @@ namespace AST {
 
         /**
          * Construtor Padrão
+         *
+         * Construtor que deve ser utilizado como base para nós que são
+         * especializados. Recebe na etapa inicial o valor do Token utilizado e
+         * o conteúdo capturado pelo mesmo.
+         *
+         * @param int Número do Token Utilizado
+         * @param std::string Conteúdo Capturado pelo Token
          */
         Node(int, std::string);
 
