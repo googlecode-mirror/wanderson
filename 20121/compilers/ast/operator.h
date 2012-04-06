@@ -46,7 +46,7 @@ namespace AST {
         Operator(int, std::string, Node*, Node*);
 
         // Sobrescrita
-        std::string toString();
+        std::string toString(int);
 
         /**
          * Captura de Expressão à Esquerda
