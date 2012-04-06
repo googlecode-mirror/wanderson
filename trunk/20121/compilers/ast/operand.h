@@ -23,7 +23,7 @@ namespace AST {
         Operand(int, std::string);
 
         // Sobrescrita
-        std::string toString();
+        std::string toString(int);
 
     };
 

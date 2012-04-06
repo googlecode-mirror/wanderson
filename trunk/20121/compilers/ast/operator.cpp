@@ -38,9 +38,12 @@ namespace AST {
     };
 
     // Sobrescrita
-    std::string Operator::toString() {
+    std::string Operator::toString(int indent) {
         // Apresentação
-        return "Operator: '" + this->getContent() + "'";
+        return std::string(indent, ' ')
+            + "Operator '" + this->getContent() + "'\n"
+            + this->getLeft()->toString(indent + 1) + "\n"
+            + this->getRight()->toString(indent + 1);
     };
 
 };

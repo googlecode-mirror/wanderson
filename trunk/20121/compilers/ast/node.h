@@ -81,9 +81,10 @@ namespace AST {
 
         /**
          * Renderização do Conteúdo
+         * @param  int Posição Atual de Indentação
          * @return Conteúdo para Apresentação
          */
-        virtual std::string toString() = 0;
+        virtual std::string toString(int) = 0;
 
     };
 };

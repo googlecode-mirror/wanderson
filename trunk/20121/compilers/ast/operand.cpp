@@ -7,8 +7,9 @@ namespace AST {
         : Node::Node(token, content) {};
 
     // Conversão
-    std::string Operand::toString() {
-        return "Operand '" + this->getContent() + "'";
+    std::string Operand::toString(int indent) {
+        return std::string(indent, ' ')
+            + "Operand '" + this->getContent() + "'";
     };
 
 };
