@@ -1,23 +1,9 @@
 # Variáveis
-CFLAGS = -Wall
-CC     = g++ ${CFLAGS}
-
-# Diretivas
-
-all: main.o node.o operand.o operator.o
+CC = g++
+CPPFLAGS += -Wall
+# Construção
+all: main.o tree.o node.o operand.o operator.o
 	${CC} $? -o main
-
-node.o:
-	${CC} -c node.cpp
-
-operand.o:
-	${CC} -c operand.cpp
-
-operator.o:
-	${CC} -c operator.cpp
-
-main.o:
-	${CC} -c main.cpp
-
+# Limpeza
 clean:
-	rm -rf main main.o node.o operand.o operator.o
+	rm -rf main main.o tree.o node.o operand.o operator.o
