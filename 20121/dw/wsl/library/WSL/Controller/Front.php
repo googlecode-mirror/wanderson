@@ -86,13 +86,18 @@ class WSL_Controller_Front {
             // Controladora não Encontrada
             throw new Exception("Invalid Controller: '$classname'");
         }
+        // Verificar Tipagem Correta
+        if (!in_array('WSL_Controller_ActionAbstract', class_parents($classname))) {
+            // Controladora Inválida
+            throw new Exception("Invalid Controller Type; '$classname'");
+        }
         // Existe Ação Solicitada?
         if (!in_array($methodname, get_class_methods($classname))) {
             // Ação não Encontrada
             throw new Exception("Invalid Action: '$methodname'");
         }
         // Criação do Elemento
-        $element = new $classname();
+        $element = new $classname($request, $response);
         // Executar Ação da Controladora
         $element->$methodname();
         // Encadeamento
