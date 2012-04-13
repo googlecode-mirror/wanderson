@@ -18,6 +18,16 @@ $front = WSL_Controller_Front::getInstance();
 $autoloader
     ->setMapper('Controller', realpath(APPLICATION_PATH . '/controllers'))
     ->setMapper('Model', realpath(APPLICATION_PATH) . '/models');
+// Elementos de Fluxo
+$request  = new WSL_Controller_Request();
+$response = new WSL_Controller_Response();
 // Execução
-$front->dispatch();
+try {
+    $front->dispatch($request, $response);
+    // Exibição de Saída
+    echo $response;
+} catch (Exception $e) {
+    // Erro Encontrado
+    echo "<pre>$e</pre>";
+}
 
