@@ -1,0 +1,22 @@
+README
+======
+
+Este documento visa descrever o projeto criado na disciplina de Desenvolvimento
+Web da Unisinos no semestre de 2012/1. Será desenvolvido um aplicativo capaz de
+receber conexões HTTP com arquivos contendo documentos LaTeX e como saída
+forneça um documento compilado neste formato. Portanto, será desenvolvido um
+Webservice de Compilação de Documentos LaTeX.
+
+Primeiramente, precisamos desenvolver uma camada de modelo que armazene
+informações sobre os usuários que podem utilizar o serviço. Para tanto,
+precisamos criar um local onde estes usuários consigam ser gerenciados. Como
+nenhuma camada de visualização será criada no sistema, estes usuários devem ser
+gerenciados utilizando um limite do sistema para criar, editar e remover
+usuários. Cada usuário deverá possuir um email de cadastro e um hash
+identificador único dentro do sistema, considerado como chave de integração.
+
+Após, para registrar todas as ações do usuário dentro do sistema, podemos
+adicionar uma camada de persistência que registra todas as ações tomadas pelo
+usuário no WS. Para isto, precisamos registrar os horários que cada ação foi
+tomada, juntamente com um relacionamento com este usuário e uma mensagem
+contendo informações e registros sobre a execução.
