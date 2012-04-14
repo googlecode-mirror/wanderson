@@ -29,7 +29,7 @@ $front->getConfig()->setParam('Layout.enabled', true);
 try {
     $front->dispatch($request, $response);
     // Exibição de Saída
-    echo $response;
+    $response->send();
 } catch (Exception $e) {
     // Erro Encontrado
     echo "<pre>$e</pre>";

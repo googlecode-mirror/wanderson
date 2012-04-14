@@ -72,7 +72,7 @@ class WSL_View_View {
             // Conversão
             $name   = (string) $name;
             // Captura de Resultado
-            $result = $this->_param[$name];
+            $result = $this->_params[$name];
         }
         // Resultado
         return $result;
