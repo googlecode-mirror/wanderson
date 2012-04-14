@@ -15,6 +15,15 @@ class WSL_View_View {
     protected $_params = array();
 
     /**
+     * Caminhos de Visualização
+     * @var array
+     */
+    protected $_paths = array(
+        'script' => array(),
+        'helper' => array(),
+    );
+
+    /**
      * Configuração de Parâmetro
      *
      * @param  string $name  Nome do Parâmetro
@@ -93,6 +102,64 @@ class WSL_View_View {
     public function getParams() {
         // Apresentação
         return $this->_params;
+    }
+
+    /**
+     * Adicionar Caminho de Visualização
+     *
+     * @param  string $path Caminho para Inclusão
+     * @return WSL_View_View Próprio Objeto para Encadeamento
+     */
+    public function addScriptPath($path) {
+        // Conversão
+        $path = (string) $path;
+        // Inclusão de Caminho
+        array_unshift($this->_paths['script'], $path);
+        // Encadeamento
+        return $this;
+    }
+
+    /**
+     * Captura de Caminhos de Visualização
+     *
+     * @return array Conjunto de Caminhos Configurados
+     */
+    public function getScriptPaths() {
+        // Apresentação
+        return $this->_paths['script'];
+    }
+
+    /**
+     * Renderização de Conteúdo para Visualização
+     *
+     * @param  string $script Nome do Arquivo para Renderização
+     * @return string|bool Resultado do Processamento ou Erro Encontrado
+     */
+    public function render($script) {
+        // Conteúdo Inicial
+        $result = false;
+        // Conversão
+        $script = (string) $script;
+        // Arquivo Encontrado
+        $filename = false;
+        // Processamento
+        foreach ($this->getScriptPaths() as $path) {
+            // Arquivo Existe no Diretório?
+            $filename = realpath($path . DIRECTORY_SEPARATOR . $script);
+            // Arquivo Encontrado?
+            if (!empty($filename)) break;
+        }
+        // Arquivo Encontrado?
+        if (!empty($filename)) {
+            // Renderização
+            ob_start();
+            // Inclusão de Conteúdo
+            include $filename;
+            // Captura do Resultado
+            $result = ob_get_clean();
+        }
+        // Apresentação
+        return $result;
     }
 
 // Métodos Mágicos -------------------------------------------------------------

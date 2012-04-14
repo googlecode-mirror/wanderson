@@ -2,6 +2,7 @@
 abstract class WSL_Controller_ActionAbstract {
     protected $_request;
     protected $_response;
+    public $view;
     public function __construct($request, $response) {
         $this->_setRequest($request)->_setResponse($response);
     }

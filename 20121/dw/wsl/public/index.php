@@ -21,6 +21,10 @@ $autoloader
 // Elementos de Fluxo
 $request  = new WSL_Controller_Request();
 $response = new WSL_Controller_Response();
+// Caminhos de Renderização
+$front->getView()->addScriptPath(realpath(APPLICATION_PATH . '/views'));
+// Configurações
+$front->getConfig()->setParam('Layout.enabled', true);
 // Execução
 try {
     $front->dispatch($request, $response);
