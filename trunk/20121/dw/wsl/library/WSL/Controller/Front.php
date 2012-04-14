@@ -15,6 +15,18 @@ class WSL_Controller_Front {
     private static $_instance = null;
 
     /**
+     * Camada de Visualização
+     * @var WSL_View_View
+     */
+    private $_view;
+
+    /**
+     * Configurações
+     * @var WSL_Model_Config
+     */
+    private $_config;
+
+    /**
      * Acesso Singleton
      *
      * @return WSL_Controller_Front Elemento Solicitado
@@ -29,7 +41,57 @@ class WSL_Controller_Front {
     /**
      * Construtor Singleton
      */
-    private function __construct() {}
+    private function __construct() {
+        // Configuração
+        $this->setView(new WSL_View_View())
+             ->setConfig(new WSL_Model_Config());
+    }
+
+    /**
+     * Configuração de Visualização
+     *
+     * @param  WSL_View_View $view Elemento para Configuração
+     * @return WSL_Controller_Front Próprio Objeto para Encadeamento
+     */
+    public function setView(WSL_View_View $view) {
+        // Configuração
+        $this->_view = $view;
+        // Encadeamento
+        return $this;
+    }
+
+    /**
+     * Captura de Camada de Visualização
+     *
+     * @return WSL_View_View Elemento Solicitado
+     */
+    public function getView() {
+        // Apresentação
+        return $this->_view;
+    }
+
+    /**
+     * Configuração de Modelo para Configurações
+     *
+     * @param  WSL_Model_Config $config Elemento para Configuração
+     * @return WSL_Controller_Front Próprio Objeto para Encadeamento
+     */
+    public function setConfig(WSL_Model_Config $config) {
+        // Configuração
+        $this->_config = $config;
+        // Encadeamento
+        return $this;
+    }
+
+    /**
+     * Captura de Configurações
+     *
+     * @return WSL_Model_Config Elemento Solicitado
+     */
+    public function getConfig() {
+        // Apresentação
+        return $this->_config;
+    }
 
     /**
      * Execução de Controladora Frontal
@@ -56,6 +118,17 @@ class WSL_Controller_Front {
             $response->clear();
             // Recuperação de Erro
             $this->_execute($request, $response);
+        }
+        // Renderizar Layout?
+        if ($this->getConfig()->getParam('Layout.enabled')) {
+            // Camada de Visualização
+            $view = $this->getView();
+            // Conteúdo em Passo 1
+            $view->content = $response->getContent();
+            // Renderização em Passo 2
+            $content = $view->render('layout/layout.phtml');
+            // Configurar Conteúdo
+            $response->setContent($content);
         }
         // Encadeamento
         return $this;
@@ -98,8 +171,14 @@ class WSL_Controller_Front {
         }
         // Criação do Elemento
         $element = new $classname($request, $response);
+        // Camada de Visualização
+        $element->view = $this->getView();
         // Executar Ação da Controladora
         $element->$methodname();
+        // Renderizar Visualização
+        $content = $this->getView()->render("$controller/$action.phtml");
+        // Aplicar em Resposta
+        $response->setContent($content);
         // Encadeamento
         return $this;
     }
