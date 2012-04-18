@@ -19,14 +19,15 @@ class WSL_Soap_AutoDiscover {
      * Recebe como conteúdo um formato de documentação com parâmetros e
      * apresenta um conjunto de informações capturadas da classe.
      *
-     * @param  string   $param Parâmetro para Captura
+     * @param  string   $param   Parâmetro para Captura
+     * @param  string   $content Conteúdo para Processamento
      * @return string[] Valores Capturados para o Conteúdo Apresentado
      */
     protected static function _parse($param, $content) {
         // Resultado Inicial
         $result = array();
         // Capturar Informações
-        $counter = preg_match_all(sprintf('/@%s\s+([[:alpha:]]+)(?:[ \t]+(.*))*/', $param), $content, $matches);
+        $counter = preg_match_all(sprintf('/@%s\s+([[:alpha:]]+)(?:[ \t]+(?:(\$[[:alpha:]]+)[ \t]+)?(.*))?/', $param), $content, $matches);
         // Processamento
         for ($i = 0; $i < $counter; $i++) {
             // Construção
@@ -57,6 +58,8 @@ class WSL_Soap_AutoDiscover {
             if (preg_match('/^([[:alpha:]])+Action$/', $method->getName(), $match) === 1) {
                 // Parâmetros de Requisição
                 $request = self::_parse('request', $method->getDocComment());
+                // Parâmetros de Resposta
+                $response = self::_parse('response', $method->getDocComment());
             }
         }
     }
