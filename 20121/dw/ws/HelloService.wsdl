@@ -9,10 +9,12 @@
 
 	<message name="SayHelloRequest">
 		<part name="firstname" type="xsd:string"/>
+		<part name="year" type="xsd:integer"/>
 	</message>
 
 	<message name="SayHelloResponse">
 		<part name="greetings" type="xsd:string"/>
+		<part name="teste" type="xsd:string"/>
 	</message>
 
 	<portType name="HelloPortType">
@@ -24,15 +26,7 @@
 
 	<binding name="HelloBinding" type="tns:HelloPortType">
 		<soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
-		<operation name="SayHello">
-			<soap:operation soapAction="SayHello"/>
-			<input>
-				<soap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:examples:helloservice" use="encoded"/>
-			</input>
-			<output>
-				<soap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:examples:helloservice" use="encoded"/>
-			</output>
-		</operation>
+		<operation name="SayHello"/>
 	</binding>
 
 	<service name="HelloService">
@@ -43,3 +37,4 @@
 	</service>
 
 </definitions>
+
