@@ -17,7 +17,8 @@ $front = WSL_Controller_Front::getInstance();
 // Mapeamento de Camadas
 $autoloader
     ->setMapper('Controller', realpath(APPLICATION_PATH . '/controllers'))
-    ->setMapper('Model', realpath(APPLICATION_PATH) . '/models');
+    ->setMapper('Model', realpath(APPLICATION_PATH . '/models'))
+    ->setMapper('Service', realpath(APPLICATION_PATH . '/services'));
 // Elementos de Fluxo
 $request  = new WSL_Controller_Request();
 $response = new WSL_Controller_Response();

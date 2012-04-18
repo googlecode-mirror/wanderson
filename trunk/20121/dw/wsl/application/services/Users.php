@@ -4,6 +4,7 @@
  * Serviço de Usuários
  *
  * @category Application
+ * @service  Users
  * @package  Application_Service
  */
 class Service_Users {
