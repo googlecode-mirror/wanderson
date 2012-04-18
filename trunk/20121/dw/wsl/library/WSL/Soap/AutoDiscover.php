@@ -51,6 +51,14 @@ class WSL_Soap_AutoDiscover {
         $contents = current(self::_parse('service', $reflected->getDocComment()));
         // Configurar Nome do Serviço
         $this->setName($contents['identifier']);
+        // Capturar Métodos Públicos com Action
+        foreach ($reflected->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
+            // Análise do Nome do Método
+            if (preg_match('/^([[:alpha:]])+Action$/', $method->getName(), $match) === 1) {
+                // Parâmetros de Requisição
+                $request = self::_parse('request', $method->getDocComment());
+            }
+        }
     }
 
     /**
