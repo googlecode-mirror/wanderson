@@ -14,6 +14,12 @@ class WSL_Soap_AutoDiscover {
     protected $_name = null;
 
     /**
+     * Configuração de Portas
+     * @var array
+     */
+    protected $_ports = array();
+
+    /**
      * Tradução de Parâmetro no Conteúdo
      *
      * Recebe como conteúdo um formato de documentação com parâmetros e
@@ -55,11 +61,15 @@ class WSL_Soap_AutoDiscover {
         // Capturar Métodos Públicos com Action
         foreach ($reflected->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
             // Análise do Nome do Método
-            if (preg_match('/^([[:alpha:]])+Action$/', $method->getName(), $match) === 1) {
+            if (preg_match('/^([[:alpha:]]+)Action$/', $method->getName(), $match) === 1) {
+                // Captura de Nome
+                $name = $match[1];
                 // Parâmetros de Requisição
                 $request = self::_parse('request', $method->getDocComment());
                 // Parâmetros de Resposta
                 $response = self::_parse('response', $method->getDocComment());
+                // Configuração
+                $this->setPort($name, $request, $response);
             }
         }
     }
@@ -87,6 +97,79 @@ class WSL_Soap_AutoDiscover {
     public function getName() {
         // Apresentação
         return $this->_name;
+    }
+
+    public function setPort($method, $request, $response) {
+        // Configuração
+        $this->_ports[$method] = array(
+            'request'  => $request,
+            'response' => $response,
+        );
+        // Encadeamento
+        return $this;
+    }
+
+    public function getPorts() {
+        return $this->_ports;
+    }
+
+    /**
+     * Renderização do WSDL
+     *
+     * @return string Conteúdo WSDL do Serviço Apresentado
+     */
+    public function __toString() {
+        // Inicialização
+        $uri     = 'http://localhost/ws/server.php?WSDL';
+        $ports   = $this->getPorts();
+        $service = $this->getName();
+        // Iniciar Captura
+        ob_start();
+?>
+<definitions name="<?php echo $service ?>Service"
+	targetNamespace="<?php echo $uri ?>"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="<?php echo $uri ?>"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+>
+<?php foreach ($ports as $name => $methods) : ?>
+<?php foreach ($methods as $method => $parts) : ?>
+    <message name="<?php echo ucfirst($name) ?><?php echo ucfirst($method) ?>">
+<?php foreach ($parts as $part) : ?>
+        <part name="<?php echo substr($part['content'], 1) ?>" type="xsd:<?php echo $part['identifier'] ?>"/>
+<?php endforeach ?>
+    </message>
+<?php endforeach ?>
+<?php endforeach ?>
+    <portType>
+<?php foreach ($ports as $name => $methods) : ?>
+        <operation name="<?php echo ucfirst($name) ?>PortType">
+            <input message="tns:<?php echo ucfirst($name) ?>Request"/>
+            <output message="tns:<?php echo ucfirst($name) ?>Response"/>
+        </operation>
+<?php endforeach ?>
+    </portType>
+    <binding name="<?php echo ucfirst($name) ?>Binding" type="tns:<?php echo ucfirst($name) ?>PortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+<?php foreach ($ports as $name => $methods) : ?>
+        <operation name="<?php echo ucfirst($name) ?>">
+            <soap:operation soapAction="<?php echo $name ?>"/>
+        </operation>
+<?php endforeach ?>
+    </binding>
+    <service name="<?php echo $service ?>">
+<?php foreach ($ports as $name => $methods) : ?>
+        <port binding="tns:<?php echo ucfirst($name) ?>Binding" name="<?php echo ucfirst($name) ?>Port">
+            <soap:address location="<?php echo $uri ?>"/>
+        </port>
+<?php endforeach ?>
+    </service>
+</definitions>
+<?php
+        $content = ob_get_clean();
+        // Apresentação
+        return $content;
     }
 
 }
