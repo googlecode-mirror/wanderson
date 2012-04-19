@@ -111,6 +111,11 @@ class WSL_Controller_Front {
             // Execução
             $this->_execute($request, $response);
         } catch (Exception $e) {
+            // Tratamento de Exceção?
+            if (!$this->getConfig()->getParam('Error.enabled')) {
+                // Apresentar Exceção
+                throw $e;
+            }
             // Controladora de Erros
             $request->setParam('controller', 'error')
                     ->setParam('action', 'error');
@@ -119,17 +124,19 @@ class WSL_Controller_Front {
             // Recuperação de Erro
             $this->_execute($request, $response);
         }
+        // Conteúdo Renderizado
+        $content = $response->getContent();
         // Renderizar Layout?
         if ($this->getConfig()->getParam('Layout.enabled')) {
             // Camada de Visualização
             $view = $this->getView();
             // Conteúdo em Passo 1
-            $view->content = $response->getContent();
+            $view->content = $content;
             // Renderização em Passo 2
             $content = $view->render('layout/layout.phtml');
-            // Configurar Conteúdo
-            $response->setContent($content);
         }
+        // Configurar Conteúdo
+        $response->setContent($content);
         // Encadeamento
         return $this;
     }

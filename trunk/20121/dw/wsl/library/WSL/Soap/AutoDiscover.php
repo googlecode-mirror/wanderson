@@ -11,7 +11,7 @@ class WSL_Soap_AutoDiscover {
      * Endereço do Serviço
      * @var string
      */
-    protected $_uri;
+    protected $_uri = null;
 
     /**
      * Nome do Serviço
@@ -202,14 +202,14 @@ class WSL_Soap_AutoDiscover {
         </operation>
 <?php endforeach ?>
     </portType>
+<?php foreach ($ports as $name => $methods) : ?>
     <binding name="<?php echo ucfirst($name) ?>Binding" type="tns:<?php echo ucfirst($name) ?>PortType">
         <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
-<?php foreach ($ports as $name => $methods) : ?>
         <operation name="<?php echo ucfirst($name) ?>">
             <soap:operation soapAction="<?php echo $name ?>"/>
         </operation>
-<?php endforeach ?>
     </binding>
+<?php endforeach ?>
     <service name="<?php echo $service ?>">
 <?php foreach ($ports as $name => $methods) : ?>
         <port binding="tns:<?php echo ucfirst($name) ?>Binding" name="<?php echo ucfirst($name) ?>Port">
