@@ -8,6 +8,12 @@
 class WSL_Soap_AutoDiscover {
 
     /**
+     * Endereço do Serviço
+     * @var string
+     */
+    protected $_uri;
+
+    /**
      * Nome do Serviço
      * @var string
      */
@@ -75,6 +81,37 @@ class WSL_Soap_AutoDiscover {
     }
 
     /**
+     * Configuração de Endereço do Serviço
+     *
+     * @param  string $uri Valor para Configuração
+     * @return WSL_Soap_AutoDiscover Próprio Objeto para Encadeamento
+     */
+    public function setUri($uri) {
+        // Configuração
+        $this->_uri = $uri;
+        // Encadeamento
+        return $this;
+    }
+
+    /**
+     * Captura de Endereço do Serviço
+     *
+     * @return string Conteúdo Configurado
+     */
+    public function getUri() {
+        // Valor Inicializado?
+        if ($this->_uri === null) {
+            // Capturar Uri
+            $uri = (empty($_SERVER['HTTPS']) ? 'http' : 'https')
+                   . '://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+            // Configuração
+            $this->setUri($uri);
+        }
+        // Encadeamento
+        return $this->_uri;
+    }
+
+    /**
      * Configura o Nome do Serviço Utilizado
      *
      * @param  string $name Valor para Configuração
@@ -99,6 +136,14 @@ class WSL_Soap_AutoDiscover {
         return $this->_name;
     }
 
+    /**
+     * Configuração de Porta
+     *
+     * @param  string $method Método Utilizado
+     * @param  array  $request Informações sobre Requisição
+     * @param  array  $response Informações sobre Resposta
+     * @return WSL_Soap_AutoDiscover Próprio Objeto para Encadeamento
+     */
     public function setPort($method, $request, $response) {
         // Configuração
         $this->_ports[$method] = array(
@@ -109,7 +154,13 @@ class WSL_Soap_AutoDiscover {
         return $this;
     }
 
+    /**
+     * Captura de Portas Configuradas
+     *
+     * @return array Conjunto de Informações
+     */
     public function getPorts() {
+        // Apresentação
         return $this->_ports;
     }
 
@@ -120,18 +171,19 @@ class WSL_Soap_AutoDiscover {
      */
     public function __toString() {
         // Inicialização
-        $uri     = 'http://localhost/ws/server.php?WSDL';
+        $uri     = $this->getUri();
         $ports   = $this->getPorts();
         $service = $this->getName();
         // Iniciar Captura
         ob_start();
+        echo '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
 ?>
 <definitions name="<?php echo $service ?>Service"
-	targetNamespace="<?php echo $uri ?>"
-	xmlns="http://schemas.xmlsoap.org/wsdl/"
-	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-	xmlns:tns="<?php echo $uri ?>"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="<?php echo $uri ?>"
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:tns="<?php echo $uri ?>"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 >
 <?php foreach ($ports as $name => $methods) : ?>
 <?php foreach ($methods as $method => $parts) : ?>
