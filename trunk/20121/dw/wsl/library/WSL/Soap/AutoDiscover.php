@@ -103,7 +103,7 @@ class WSL_Soap_AutoDiscover {
         if ($this->_uri === null) {
             // Capturar Uri
             $uri = (empty($_SERVER['HTTPS']) ? 'http' : 'https')
-                   . '://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+                   . '://' . $_SERVER['SERVER_NAME'] . $_SERVER['SCRIPT_NAME'];
             // Configuração
             $this->setUri($uri);
         }
@@ -179,10 +179,10 @@ class WSL_Soap_AutoDiscover {
         echo '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
 ?>
 <definitions name="<?php echo $service ?>Service"
-    targetNamespace="<?php echo $uri ?>"
+    targetNamespace="<?php echo $uri ?>?WSDL"
     xmlns="http://schemas.xmlsoap.org/wsdl/"
     xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-    xmlns:tns="<?php echo $uri ?>"
+    xmlns:tns="<?php echo $uri ?>?WSDL"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 >
 <?php foreach ($ports as $name => $methods) : ?>
