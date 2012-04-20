@@ -26,6 +26,12 @@ class WSL_Soap_AutoDiscover {
     protected $_ports = array();
 
     /**
+     * Nome da Classe Utilizada
+     * @var string
+     */
+    protected $_class = null;
+
+    /**
      * Tradução de Parâmetro no Conteúdo
      *
      * Recebe como conteúdo um formato de documentação com parâmetros e
@@ -75,6 +81,8 @@ class WSL_Soap_AutoDiscover {
             // Configuração
             $this->setPort($name, $request, $response);
         }
+        // Configurar Nome de Classe
+        $this->_setClass($element);
     }
 
     /**
@@ -106,6 +114,29 @@ class WSL_Soap_AutoDiscover {
         }
         // Encadeamento
         return $this->_uri;
+    }
+
+    /**
+     * Configurar Nome de Classe
+     *
+     * @param  string $class Valor para Configuração
+     * @return WSL_Soap_AutoDiscover Próprio Objeto para Encadeamento
+     */
+    public function _setClass($class) {
+        // Configuração
+        $this->_class = $class;
+        // Encadeamento
+        return $this;
+    }
+
+    /**
+     * Apresenta o Nome da Classe
+     *
+     * @return string Valor Configurado
+     */
+    public function getClass() {
+        // Apresentação
+        return $this->_class;
     }
 
     /**
@@ -159,6 +190,37 @@ class WSL_Soap_AutoDiscover {
     public function getPorts() {
         // Apresentação
         return $this->_ports;
+    }
+
+    /**
+     * Manipular Requisição
+     *
+     * Verifica se na requisição está sendo solicitada a especificação WSDL do
+     * conteúdo do serviço que deve ser apresentado, enviando as configurações
+     * solicitadas para o cliente. Caso contrário, executa o servidor com a
+     * classe configurada no momento da inicialização do objeto.
+     *
+     * @return WSL_Soap_AutoDiscover Próprio Objeto para Encadeamento
+     */
+    public function handle() {
+        // Existe parâmetro WSDL?
+        if (array_key_exists('WSDL', $_GET)) {
+            // Exibir Configurações
+            if (!headers_sent()) {
+                header('Content-Type: text/xml');
+            }
+            // Conteúdo na Saída Padrão
+            file_put_contents('php://output', $this);
+        } else {
+            // Capturar Conteúdo de Entrada
+            $content = file_get_contents('php://input');
+            // Construção do Servidor
+            $server = new SoapServer($this->getUri() . '?WSDL');
+            $server->setClass($this->getClass());
+            $server->handle($content);
+        }
+        // Encadeamento
+        return $this;
     }
 
     /**
