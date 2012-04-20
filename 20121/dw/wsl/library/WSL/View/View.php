@@ -55,7 +55,7 @@ class WSL_View_View {
         // Conversão
         $name = (string) $name;
         // Confirmação
-        return isset($name, $this->_params);
+        return array_key_exists($name, $this->_params);
     }
 
     /**
