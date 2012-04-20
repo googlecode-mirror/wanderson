@@ -66,17 +66,14 @@ class WSL_Soap_AutoDiscover {
         $this->setName($contents['identifier']);
         // Capturar Métodos Públicos com Action
         foreach ($reflected->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
-            // Análise do Nome do Método
-            if (preg_match('/^([[:alpha:]]+)Action$/', $method->getName(), $match) === 1) {
-                // Captura de Nome
-                $name = $match[1];
-                // Parâmetros de Requisição
-                $request = self::_parse('request', $method->getDocComment());
-                // Parâmetros de Resposta
-                $response = self::_parse('response', $method->getDocComment());
-                // Configuração
-                $this->setPort($name, $request, $response);
-            }
+            // Captura de Nome
+            $name = $method->getName();
+            // Parâmetros de Requisição
+            $request = self::_parse('request', $method->getDocComment());
+            // Parâmetros de Resposta
+            $response = self::_parse('response', $method->getDocComment());
+            // Configuração
+            $this->setPort($name, $request, $response);
         }
     }
 
@@ -185,34 +182,30 @@ class WSL_Soap_AutoDiscover {
     xmlns:tns="<?php echo $uri ?>?WSDL"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 >
-<?php foreach ($ports as $name => $methods) : ?>
+<?php foreach ($ports as $name => $methods) : $name = ucfirst($name) ?>
 <?php foreach ($methods as $method => $parts) : ?>
-    <message name="<?php echo ucfirst($name) ?><?php echo ucfirst($method) ?>">
+    <message name="<?php echo $name ?><?php echo ucfirst($method) ?>">
 <?php foreach ($parts as $part) : ?>
         <part name="<?php echo substr($part['content'], 1) ?>" type="xsd:<?php echo $part['identifier'] ?>"/>
 <?php endforeach ?>
     </message>
 <?php endforeach ?>
-<?php endforeach ?>
-    <portType>
-<?php foreach ($ports as $name => $methods) : ?>
-        <operation name="<?php echo ucfirst($name) ?>PortType">
-            <input message="tns:<?php echo ucfirst($name) ?>Request"/>
-            <output message="tns:<?php echo ucfirst($name) ?>Response"/>
+    <portType name="<?php echo $name ?>PortType">
+        <operation name="<?php echo $name ?>">
+            <input message="tns:<?php echo $name ?>Request"/>
+            <output message="tns:<?php echo $name ?>Response"/>
         </operation>
-<?php endforeach ?>
     </portType>
-<?php foreach ($ports as $name => $methods) : ?>
-    <binding name="<?php echo ucfirst($name) ?>Binding" type="tns:<?php echo ucfirst($name) ?>PortType">
+    <binding name="<?php echo $name ?>Binding" type="tns:<?php echo $name ?>PortType">
         <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
-        <operation name="<?php echo ucfirst($name) ?>">
+        <operation name="<?php echo $name ?>">
             <soap:operation soapAction="<?php echo $name ?>"/>
         </operation>
     </binding>
 <?php endforeach ?>
     <service name="<?php echo $service ?>">
-<?php foreach ($ports as $name => $methods) : ?>
-        <port binding="tns:<?php echo ucfirst($name) ?>Binding" name="<?php echo ucfirst($name) ?>Port">
+<?php foreach ($ports as $name => $methods) : $name = ucfirst($name) ?>
+        <port binding="tns:<?php echo $name ?>Binding" name="<?php echo $name ?>Port">
             <soap:address location="<?php echo $uri ?>"/>
         </port>
 <?php endforeach ?>
