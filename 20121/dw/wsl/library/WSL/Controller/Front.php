@@ -21,6 +21,12 @@ class WSL_Controller_Front {
     private $_view;
 
     /**
+     * Roteadora de Requisição
+     * @var WSL_Controller_Router
+     */
+    private $_router;
+
+    /**
      * Configurações
      * @var WSL_Model_Config
      */
@@ -44,7 +50,8 @@ class WSL_Controller_Front {
     private function __construct() {
         // Configuração
         $this->setView(new WSL_View_View())
-             ->setConfig(new WSL_Model_Config());
+             ->setConfig(new WSL_Model_Config())
+             ->setRouter(new WSL_Controller_Router());
     }
 
     /**
@@ -91,6 +98,38 @@ class WSL_Controller_Front {
     public function getConfig() {
         // Apresentação
         return $this->_config;
+    }
+
+    /**
+     * Roteadora de Requisição
+     *
+     * Busca capturar informações da requisição e construir parâmetros que serão
+     * utilizados para construir as classes necessárias, processando o fluxo de
+     * solicitação do cliente no sistema.
+     *
+     * @param  WSL_Controller_Router $router Elemento para Configuração
+     * @return WSL_Controller_Front  Próprio Objeto para Encadeamento
+     */
+    public function setRouter(WSL_Controller_Router $router) {
+        // Configuração
+        $this->_router = $router;
+        // Encadeamento
+        return $this;
+    }
+
+    /**
+     * Roteadora de Requisição
+     *
+     * Apresenta o objeto responsável pela captura e construção de rotas e
+     * endereços no sistema. Este é utilizado para processar os parâmetros de
+     * requisição e configurar os parâmetros necessários para processamento do
+     * sistema.
+     *
+     * @return WSL_Controller_Router Elemento Solicitado
+     */
+    public function getRouter() {
+        // Apresentação
+        return $this->_router;
     }
 
     /**

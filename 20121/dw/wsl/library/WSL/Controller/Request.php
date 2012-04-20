@@ -31,22 +31,13 @@ class WSL_Controller_Request {
      * @return WSL_Controller_Request Próprio Objeto para Encadeamento
      */
     protected function _buildParams() {
-        // Endereço Base
-        $baseurl = dirname($_SERVER['SCRIPT_NAME']);
-        $content = preg_replace(sprintf('#^%s(?:/index.php|/)?|\?.*$#', $baseurl), '', $_SERVER['REQUEST_URI']);
-        preg_match_all('#(?<name>[^/]*)(?:/(?<value>[^/]*))?#', $content, $matches, PREG_SET_ORDER);
-        // Capturar Controladora e Ação
-        $router  = array_shift($matches);
-        if (!empty($router)) {
-            $this->setParam('controller', (empty($router['name']) ? null : $router['name']))
-                 ->setParam('action', (empty($router['value']) ? null : $router['value']));
+        // Parâmetros de Roteamento
+        $params = WSL_Controller_Front::getInstance()->getRouter()->getParams();
+        // Processamento
+        foreach ($params as $name => $value) {
+            // Configuração
+            $this->setParam($name, $value);
         }
-        // Processar Parâmetros
-        foreach ($matches as $match) {
-            // Configurar Parâmetros
-            $this->setParam($match['name'], (empty($match['value']) ? null : $router['value']));
-        }
-        // Encadeamento
         return $this;
     }
 
