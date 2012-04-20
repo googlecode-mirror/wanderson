@@ -217,7 +217,15 @@ class WSL_Soap_AutoDiscover {
             // Construção do Servidor
             $server = new SoapServer($this->getUri() . '?WSDL');
             $server->setClass($this->getClass());
-            $server->handle($content);
+
+            try {
+                // Execução
+                $server->handle($content);
+            } catch (Exception $e) {
+                // Apresentar Erro
+                $server->fault($e->getCode(), $e->getMessage());
+            }
+
         }
         // Encadeamento
         return $this;
