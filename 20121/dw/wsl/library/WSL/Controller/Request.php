@@ -33,9 +33,8 @@ class WSL_Controller_Request {
     protected function _buildParams() {
         // Endereço Base
         $baseurl = dirname($_SERVER['SCRIPT_NAME']);
-        $content = str_replace($baseurl, '', $_SERVER['REQUEST_URI']);
-        $content = str_replace('?' . $_SERVER['QUERY_STRING'], '', $content);
-        preg_match_all('#/(?<name>[^/]*)(?:/(?<value>[^/]*))?#', $content, $matches, PREG_SET_ORDER);
+        $content = preg_replace(sprintf('#^%s(?:/index.php|/)?|\?.*$#', $baseurl), '', $_SERVER['REQUEST_URI']);
+        preg_match_all('#(?<name>[^/]*)(?:/(?<value>[^/]*))?#', $content, $matches, PREG_SET_ORDER);
         // Capturar Controladora e Ação
         $router  = array_shift($matches);
         if (!empty($router)) {
