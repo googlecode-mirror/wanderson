@@ -5,7 +5,7 @@
  * @category WSL
  * @package  WSL_Soap
  */
-class WSL_Soap_AutoDiscover {
+class WSL_Soap_Server {
 
     /**
      * Endereço do Serviço
@@ -89,7 +89,7 @@ class WSL_Soap_AutoDiscover {
      * Configuração de Endereço do Serviço
      *
      * @param  string $uri Valor para Configuração
-     * @return WSL_Soap_AutoDiscover Próprio Objeto para Encadeamento
+     * @return WSL_Soap_Server Próprio Objeto para Encadeamento
      */
     public function setUri($uri) {
         // Configuração
@@ -120,7 +120,7 @@ class WSL_Soap_AutoDiscover {
      * Configurar Nome de Classe
      *
      * @param  string $class Valor para Configuração
-     * @return WSL_Soap_AutoDiscover Próprio Objeto para Encadeamento
+     * @return WSL_Soap_Server Próprio Objeto para Encadeamento
      */
     public function _setClass($class) {
         // Configuração
@@ -143,7 +143,7 @@ class WSL_Soap_AutoDiscover {
      * Configura o Nome do Serviço Utilizado
      *
      * @param  string $name Valor para Configuração
-     * @return WSL_Soap_AutoDiscover Próprio Objeto para Encadeamento
+     * @return WSL_Soap_Server Próprio Objeto para Encadeamento
      */
     public function setName($name) {
         // Conversão
@@ -170,7 +170,7 @@ class WSL_Soap_AutoDiscover {
      * @param  string $method Método Utilizado
      * @param  array  $request Informações sobre Requisição
      * @param  array  $response Informações sobre Resposta
-     * @return WSL_Soap_AutoDiscover Próprio Objeto para Encadeamento
+     * @return WSL_Soap_Server Próprio Objeto para Encadeamento
      */
     public function setPort($method, $request, $response) {
         // Configuração
@@ -200,7 +200,7 @@ class WSL_Soap_AutoDiscover {
      * solicitadas para o cliente. Caso contrário, executa o servidor com a
      * classe configurada no momento da inicialização do objeto.
      *
-     * @return WSL_Soap_AutoDiscover Próprio Objeto para Encadeamento
+     * @return WSL_Soap_Server Próprio Objeto para Encadeamento
      */
     public function handle() {
         // Existe parâmetro WSDL?
