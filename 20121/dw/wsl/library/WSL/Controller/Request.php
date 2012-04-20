@@ -34,17 +34,18 @@ class WSL_Controller_Request {
         // Endereço Base
         $baseurl = dirname($_SERVER['SCRIPT_NAME']);
         $content = str_replace($baseurl, '', $_SERVER['REQUEST_URI']);
-        preg_match_all('#/(?<name>[^/]*)/(?<value>[^/]*)#', $content, $matches, PREG_SET_ORDER);
+        $content = str_replace('?' . $_SERVER['QUERY_STRING'], '', $content);
+        preg_match_all('#/(?<name>[^/]*)(?:/(?<value>[^/]*))?#', $content, $matches, PREG_SET_ORDER);
         // Capturar Controladora e Ação
         $router  = array_shift($matches);
         if (!empty($router)) {
-            $this->setParam('controller', $router['name'])
-                 ->setParam('action', $router['value']);
+            $this->setParam('controller', (empty($router['name']) ? null : $router['name']))
+                 ->setParam('action', (empty($router['value']) ? null : $router['value']));
         }
         // Processar Parâmetros
         foreach ($matches as $match) {
             // Configurar Parâmetros
-            $this->setParam($match['name'], $match['value']);
+            $this->setParam($match['name'], (empty($match['value']) ? null : $router['value']));
         }
         // Encadeamento
         return $this;
