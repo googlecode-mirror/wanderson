@@ -5,7 +5,10 @@ class Controller_Index extends WSL_Controller_ActionAbstract {
         $discover->handle();
     }
     public function clientAction() {
-        $client = new SoapClient('http://localhost/wanderson/wsl/?WSDL');
+        $router = WSL_Controller_Front::getInstance()->getRouter();
+        $client = new SoapClient($router->getServerUrl() . $router->url(array(
+            'action' => 'index',
+        )) . '?WSDL');
         var_dump($client->save());
     }
 }
