@@ -19,7 +19,7 @@ class Service_Users {
      * @response string   $email E-mail Configurado
      * @return   string[] Confirmação de Salvamento
      */
-    public function saveAction() {
+    public function save() {
         // Apresentação
         return array(
             'id'    => 1,
