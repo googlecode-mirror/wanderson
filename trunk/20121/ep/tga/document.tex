@@ -7,9 +7,14 @@
 \usepackage{sbc-template}
 
 % Informações Pessoais ---------------------------------------------------------
-\title{Resumo}
+\title{Facilitador para Escrita de Artigos Científicos: Estado da Arte}
 \author{Wanderson Henrique Camargo Rosa\inst{1}}
-\address{Universidade do Vale do Rio dos Sinos --- UNISINOS}
+\address{
+Elaboração de Projetos --- 2012/1\\
+Centro de Ciências Exatas e Tecnológicas\\
+Universidade do Vale do Rio dos Sinos --- UNISINOS
+\email{wandersonwhcr@gmail.com}
+}
 
 % Início do Documento ----------------------------------------------------------
 \begin{document}
@@ -23,7 +28,81 @@
 
 Este documento visa apresentar uma etapa inicial para estado da arte, visando
 apresentar informações sobre a proposta para Trabalho de Conclusão de Curso do
-presente autor. Serão resumidos alguns trabalhos encontrados da área.
+autor. Serão resumidos alguns trabalhos encontrados da área de estudos sobre a
+linguagem de marcação \LaTeX{} e possíveis aplicações da linguagem Wiki Creole
+como fonte para tradução, criando assim artigos científicos de uma forma mais
+simples.
+
+A Seção \ref{sec:falha} dialoga sobre a curva de aprendizado inicial que a
+linguagem de marcação \LaTeX{} possui e as mensagens de erro obscuras
+apresentadas quando um documento não está bem escrito, referenciadas na Seção
+\ref{sec:erros}. Métodos de ensino e possíveis problemas encontrados durante um
+curso criado para aprendizado \LaTeX{} é descrito na Seção \ref{sec:ensin}. Um
+conversor de formato \LaTeX{} para Wiki Creole foi criado para que alunos
+comentem em páginas utilizando o formato alvo as anotações de aula que estão
+sendo anotadas naquele momento é descrito na Seção \ref{sec:conve}. Padronizando
+a Wiki Creole, temos sua proposta de definição dialogada na Seção
+\ref{sec:padro}. Ao final, apresenta-se uma conclusão sobre os artigos aqui
+apresentados na Seção \ref{sec:concl}.
+
+% Falhas -----------------------------------------------------------------------
+\section{Falhas}
+\label{sec:falha}
+
+Segundo \cite{salzberg2005}, o Microsoft Word\texttrademark{} pode ser utilizado
+na produção de documentos numa variedade de necessidades, porém possui algumas
+limitações. Nestas ocasiões, o \TeX{} pode ser uma alternativa. Ele é um padrão
+de formato para algumas disciplinas acadêmicas, particularmente aquelas que
+utilizam matemática.
+
+Escrever um documento utilizando \TeX{} requer pensar sobre o conteúdo e
+formatação de forma separada, liberando o autor para somente escrever. \LaTeX{}
+é um conjunto de macros e programas que fazem a utilização do \TeX{} mais
+simples, gerando facilidades para documentos mais genéricos, como artigos e
+livros. Ainda segundo \cite{salzberg2005}, \TeX{} possui uma curva de
+aprendizado íngreme, facilitando a inicialização do uso se o usuário possui
+experiência em outros tipos de marcação de texto.
+
+% Erros ------------------------------------------------------------------------
+\section{Erros}
+\label{sec:erros}
+
+Conforme \cite{ha2007}, um erro de sistema ocorre quando o \textit{software} não
+pode completar uma ação requisitada, como um resultado de algum problema na
+entrada, configuração ou ambiente. Melhores informações sobre erros encontrados
+possibilita ao usuário entender e corrigir o problema, porém esta qualidade é
+inversamente proporcional à criação de \textit{softwares} mais complexos.
+
+Para aplicar uma tentativa de solução, o autor apresenta um sistema que melhora
+A apresentação de erros, classificando os comportamentos do aplicativo, chamado
+Clarify. Este usa um monitoramento invasivo mínimo para gerar um perfil de
+comportamento, que pode ser anexado ao histórico de execução do programa
+\cite{ha2007}.
+
+O sistema pode ser analisado em duas partes: um monitor em tempo de execução e
+um classificador que utiliza aprendizado de máquina e que interpreta a saída da
+execução. Clarify monitora o programa executando técnicas invasivas, como
+leitura de memória do programa ou contabilização de chamadas na pilha do
+processo.
+
+Conforme relatos do autor, o sistema foi executado sob mensagens ambíguas em
+muitos aplicativos, inclusive \LaTeX{}, com custo de desempenho de menos de 1\%
+o protótipo conseguiu melhor identificar as mensagens de erro em pelo menos 85\%
+dos comportamentos que resultaram como ambíguas.
+
+Utilizando o Clarify com \LaTeX{}, o autor descreve 26 casos de erro duplicados.
+Por exemplo quando uma tabela, vetor ou vetor de equações possui maior
+quantidade de separadores de células do que a quantidade definida de colunas, o
+\LaTeX{} apresenta um erro de alinhamento, onde o caractere de final de linha
+está numa posição inválida. Este mesmo erro é apresentado quando o usuário
+esquece de incluir um símbolo de quebra de linha ao final das colunas.
+
+Na descrição do sistema de tipografia, ele afirma que a exibição de erros é
+muito conhecida por ser obscura. Ele também apresenta um aplicativo chamado
+Rubber que filtra a saída padrão do \LaTeX{} para torná-la mais compreensível ao
+usuário. Todavia, muitas mensagens de erro são genéricas e podem ter muitas
+causas, dificultando ao usuário a compreensão dos acontecimentos e aplicar uma
+correção \cite{ha2007}.
 
 % Ensinamentos -----------------------------------------------------------------
 \section{Ensinamentos}
@@ -121,6 +200,87 @@ Concluindo as aplicações, apresentaram que o curso ministrado deveria ser
 considerado como extra curricular. Consultas posteriores informam que cerca de
 metade dos alunos que assistiram ao curso ainda continuam a utilizar a
 ferramenta, caracterizando assim um entusiasmo por parte deles.
+
+% Conversor --------------------------------------------------------------------
+\section{Conversor}
+\label{sec:conve}
+
+Buscando utilizar um sistema colaborativo para anotações em palestras e aulas
+expositivas, criou-se um conversor de conteúdo \LaTeX{} para Wiki
+\cite{oneill2005}. Utilizando uma plataforma \textit{web}, adiciona-se uma
+palestra em formato \LaTeX{} ao sistema e este pode gerar os \textit{slides} das
+apresentações e uma página que pode ser editada no formato Wiki pelos alunos,
+visando inclusão de anotações feitas pelos ministrados.
+
+Para facilitar o desenvolvimento dos \textit{slides} das palestras, criou-se um
+conjunto de macros em \LaTeX{} que facilitam a produção dos documentos, visando
+facilitar a tradução do conteúdo para o formato Wiki. O sistema então cria uma
+página no seu sistema que pode ser editada pelos alunos utilizando como entrada
+o formato Wiki.
+
+Esta técnica foi utilizada em muitas aulas na instituição, incluindo aulas de
+estruturas de dados, sistemas operacionais e linguagens de programação. O único
+problema encontrado é que os alunos necessitam possuir responsabilidades sobre o
+conteúdo e, em alguns casos, integrantes específicos da turma são selecionados
+para cuidar do conteúdo que está sendo modificado pelo grupo, trabalhando assim
+como moderadores. Outro problema encontrado durante a tradução é que a
+utilização de fórmulas para as páginas do sistema não podem ser tão bem
+apresentadas como nos \textit{slides}, porque estas são apresentadas utilizando
+HTML.
+
+Não foram encontrados relatos sobre aceitação dos alunos pelo formato Wiki
+apresentado e nem o porquê da utilização desta linguagem e não diretamente em
+\LaTeX{}.
+
+% Padronização -----------------------------------------------------------------
+\section{Padronização}
+\label{sec:padro}
+
+Os sistemas de conteúdo comunitário, onde uma pessoa pode alterar o seu conteúdo
+utilizando determinado tipo de marcação de texto, é chamado de Wiki
+\cite{junghans20081}. A padronização desta linguagem de marcação de textos é
+construída utilizando prosa, dificultando a construção e podendo gerar uma
+implementação do conteúdo de forma errada.
+
+Motores para renderização deste formato não possuem uma padronização de
+linguagem formalizado, onde usuários necessitam aprender marcações diferentes de
+texto dependendo do sistema utilizado. Para tanto, utilizando o formato Wiki
+Creole 1.0, definiu-se uma gramática BNF que busca especificar a estrutura da
+linguagem que deve ser utilizada \cite{junghans20081,junghans20082}.
+
+% Conclusão --------------------------------------------------------------------
+\section{Conclusão}
+\label{sec:concl}
+
+Utilizando as informações apresentadas por autores, podemos concluir que o
+sistema \LaTeX{} pode ser considerado ruim quando o assunto é o aprendizado,
+fazendo com que o aluno perca muitas horas resolvendo um simples problema
+inicial \cite{gray2003} ou a exibição de erros não descreve de forma clara os
+problemas gerados durante a tradução do arquivo de entrada \cite{ha2007}.
+
+Autor também afirma que a curva de aprendizado inicial é considerada íngreme
+para o \LaTeX{} \cite{salzberg2005}. Por outro lado, existe uma aplicação que
+busca apresentar uma linguagem de marcação de texto mais simples, como a Wiki
+Creole, para utilização de alunos e que é traduzida para \LaTeX{}, gerando
+apresentações para palestras \cite{oneill2005}. Esta linguagem também possui um
+outro fator de utilização que ela possui uma padronização na gramática que a
+gera, facilitando ainda mais o desenvolvimento de um tradutor entre a linguagem
+Wiki e \LaTeX{}.
+
+A pesquisa de assuntos sobre facilitar a escrita de documentos no formato
+\LaTeX{} utilizando uma linguagem de programação mais simples pode ser
+considerada difícil, pois não foram encontrados nenhum estudo na área mais
+aprofundado. Esta busca de estudos relacionados pode estar sendo executada
+utilizando informações erradas, porém este é um fator que ainda será dialogado.
+
+A construção de um sistema que recebe como parâmetro um conteúdo representante
+para artigos científicos numa linguagem de mais alto nível se comparada com
+\LaTeX{}, como a Wiki Creole, pode ser utilizada como linguagem fonte para
+geração de saída alvo \LaTeX{} e posterior compilação deste como artigo
+científico, facilitando o desenvolvimento destes documentos pelo usuário, alunos
+da graduação; verificar o porquê da não utilização da linguagem alvo também é um
+ponto interessante de estudo, principalmente para facilitar a construção do
+sistema gerador de artigos científicos.
 
 % Bibliografia -----------------------------------------------------------------
 \bibliographystyle{sbc}
