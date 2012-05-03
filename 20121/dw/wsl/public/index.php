@@ -28,10 +28,10 @@ $front->getView()->addScriptPath(realpath(APPLICATION_PATH . '/views'));
 $front->getConfig()->setParam('Layout.enabled', true);
 // Banco de Dados
 $adapter = new WSL_Db_Adapter_MySQL(array(
-    'host'     => 'localhost',
+    'host'     => '10.250.31.213',
     'dbname'   => 'wsl',
     'username' => 'root',
-    'password' => '123456',
+    'password' => '102030',
 ));
 // Registrar Adaptador
 $front->getConfig()->setParam('Db.adapter', $adapter);

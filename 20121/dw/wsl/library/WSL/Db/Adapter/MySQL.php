@@ -176,6 +176,8 @@ class WSL_Db_Adapter_MySQL {
             // Valor Nulo? Converter!
             if ($value === null) {
                 $value = 'NULL';
+            } else if (is_string($value)) {
+                $value = "'$value'";
             }
             // Armazenar
             $columns[] = $column;
@@ -229,7 +231,64 @@ SQL;
     public function update(array $data, $name, array $where = array()) {
         // Filtrar Dados
         $data = $this->_filter($data);
-        // 
+        // Atribuições
+        $assignments = array();
+        foreach ($data['columns'] as $position => $column) {
+            // Capturar Valor
+            $value = $data['values'][$position];
+            // Criar Atribuição
+            $assignments[] = "$column = $value";
+        }
+        // Seleções
+        $selector = array();
+        foreach ($where as $position => $column) {
+            $selector[] = (is_int($position) ? $column : "$position = $column");
+        }
+        // Implosões
+        $assignments = implode(', ', $assignments);
+        $selector    = implode(' AND ', $selector);
+        $selector    = empty($selector) ? null : 'WHERE ' . $selector;
+        // Construção de Comando
+        $sql = <<<SQL
+UPDATE `$name` SET $assignments $selector
+SQL;
+        // Execução
+        $result = $this->query($sql);
+        // Capturar Conexão
+        $connection = $this->_getConnection();
+        // Apresentar Quantidade de Linhas Afetadas
+        return (int) mysql_affected_rows($connection);
+    }
+
+    /**
+     * Remoção de Elementos
+     *
+     * Apaga entradas na tabela do Banco de Dados, construindo comando
+     * apropriado. Apresenta como retorno o número de linhas afetadas durante a
+     * execução do comando.
+     *
+     * @param  string $name Nome da Tabela para Remoção dos Dados
+     * @return int    Quantidade de Linhas Removidas do Banco de Dados
+     */
+    public function delete($name, array $where = array()) {
+        // Seleções
+        $selector = array();
+        foreach ($where as $position => $column) {
+            $selector[] = (is_int($position) ? $column : "$position = $column");
+        }
+        // Implosões
+        $selector    = implode(' AND ', $selector);
+        $selector    = empty($selector) ? null : 'WHERE ' . $selector;
+        // Construção de Comando
+        $sql = <<<SQL
+DELETE FROM `$name` $selector
+SQL;
+        // Execução
+        $result = $this->query($sql);
+        // Capturar Conexão
+        $connection = $this->_getConnection();
+        // Apresentar Quantidade de Linhas Afetadas
+        return (int) mysql_affected_rows($connection);
     }
 
 }
