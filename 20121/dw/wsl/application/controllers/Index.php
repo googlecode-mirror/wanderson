@@ -1,15 +1,26 @@
 <?php
+
+/**
+ * Controladora Principal
+ *
+ * @category Application
+ * @package  Application_Controller
+ */
 class Controller_Index extends WSL_Controller_ActionAbstract {
+
+    /**
+     * Ação Principal
+     * @return null
+     */
     public function indexAction() {
-        $discover = new WSL_Soap_Server('Service_Users');
-        $discover->handle();
-    }
-    public function clientAction() {
-        $router = WSL_Controller_Front::getInstance()->getRouter();
-        $client = new SoapClient($router->getServerUrl() . $router->url(array(
-            'action' => 'index',
-        )) . '?WSDL');
-        var_dump($client->fetch());
+        // Inicialização
+        $client = new SoapClient(null, array(
+            'uri' => 'tns:UsersService',
+            'location' => 'http://localhost/wanderson/wsl/users/service/',
+        ));
+        $users = $client->fetch();
+        // Camada de Visualização
+        $this->view->users = $users;
     }
 }
 
