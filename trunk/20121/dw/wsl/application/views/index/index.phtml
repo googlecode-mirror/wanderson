@@ -1,1 +1,21 @@
-<?php echo $this->discover ?>
+<table>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>E-mail</th>
+            <th>Ativo?</th>
+            <th>Administrador?</th>
+        </tr>
+    </thead>
+    <tbody>
+<?php foreach ($this->users as $user) : ?>
+        <tr>
+            <td><?php echo $user['id'] ?></td>
+            <td><?php echo $user['email'] ?></td>
+            <td><?php echo ($user['active'] ? 'Sim' : 'Não') ?></td>
+            <td><?php echo ($user['admin'] ? 'Sim' : 'Não') ?></td>
+        </tr>
+<?php endforeach ?>
+    </tbody>
+</table>
+
