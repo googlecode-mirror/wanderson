@@ -16,7 +16,7 @@ class Controller_Index extends WSL_Controller_ActionAbstract {
         // Inicialização
         $client = new SoapClient(null, array(
             'uri'      => 'tns:UsersService',
-            'location' => 'http://localhost/wanderson/wsl/users/service/',
+            'location' => 'http://localhost/wanderson/wsl/services/users',
         ));
         $users = $client->fetch();
         // Camada de Visualização
