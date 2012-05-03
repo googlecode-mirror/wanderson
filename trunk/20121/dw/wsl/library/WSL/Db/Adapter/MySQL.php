@@ -157,5 +157,80 @@ class WSL_Db_Adapter_MySQL {
         return $result;
     }
 
+    /**
+     * Filtragem de Informações
+     *
+     * Processamento de valores para as colunas de forma encapsulada,
+     * possibilitando que os valores apresentados sejam tratados conforme suas
+     * necessidades.
+     *
+     * @param  mixed[] $data Dados para Filtragem
+     * @return mixed[] Dados Processados
+     */
+    protected function _filter(array $data) {
+        // Armazenamentos
+        $columns = array();
+        $values  = array();
+        // Tratamento de Dados
+        foreach ($data as $column => $value) {
+            // Valor Nulo? Converter!
+            if ($value === null) {
+                $value = 'NULL';
+            }
+            // Armazenar
+            $columns[] = $column;
+            $values[]  = $value;
+        }
+        // Apresentação
+        return compact('columns', 'values');
+    }
+
+    /**
+     * Inserir Informações no Banco de Dados
+     *
+     * Existe a necessidade de processamento de informações para inserção no
+     * banco de dados, principalmente pela questão de tipos de dados que devem
+     * ser considerados.
+     *
+     * @param  mixed[] $data Dados para Inserção
+     * @param  string  $name Nome da Tabela para Inserção de Dados
+     * @return int|array Informações de Chaves Primárias Utilizadas
+     */
+    public function insert(array $data, $name) {
+        // Filtrar Dados
+        $data = $this->_filter($data);
+        // Montar Valores
+        $columns = implode(',', $data['columns']);
+        $values  = implode(',', $data['values']);
+        // Construção de Comando
+        $sql = <<<SQL
+INSERT INTO `$name`($columns) VALUES ($values)
+SQL;
+        // Execução
+        $result = $this->query($sql);
+        // Capturar Conexão
+        $connection = $this->_getConnection();
+        // Apresentar Último Identificador
+        return (int) mysql_insert_id($connection);
+    }
+
+    /**
+     * Atualizar Informações no Banco de Dados
+     *
+     * Acesso ao atualizador de informações do banco de dados, recebendo como
+     * parâmetro os dados que devem ser atualizados, juntamente com o nome da
+     * tabela que deve ser modificada. O parâmetro adicional serve para
+     * selecionar as colunas que devem ser modificadas.
+     *
+     * @param  mixed[] $data Dados para Atualização
+     * @param  string  $name Nome da Tabela para Atualização de Dados
+     * @return int     Quantidade de Linhas Atualizadas no Banco de Dados
+     */
+    public function update(array $data, $name, array $where = array()) {
+        // Filtrar Dados
+        $data = $this->_filter($data);
+        // 
+    }
+
 }
 

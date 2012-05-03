@@ -18,6 +18,33 @@ class Model_Users {
         return sha1('3520e0dc3650aac' . md5($value) . '630c6ccebdd6867e8');
     }
 
+    public static function filter($identifier, $container, $default, $typed = 'string') {
+        $value = $default;
+        if (array_key_exists($identifier, $container)) {
+            $value = $container[$identifier];
+        }
+        eval("return ($typed) \$value;");
+    }
+
+    /**
+     * Salvar Usuário
+     *
+     * Para gerenciar usuários no sistema, precisamos informar alguns dados
+     * ao sistema. Todos os dados apresentados serão salvos no banco de dados e
+     * se a chave primária estiver sendo apresentada, será executada uma
+     * atualização do dado.
+     *
+     * @param  mixed[] $data Informações para Salvamento
+     * @return int Identificador do Usuário Salvo
+     */
+    public function save($data) {
+        // Adaptador de Conexão
+        $adapter = WSL_Controller_Front::getInstance()
+            ->getConfig()->getParam('Db.adapter');
+        // Filtro de Dados
+        $data['email'] = self::filter('email', $data, null, 'string');
+    }
+
     /**
      * Consulta de Usuários
      *
