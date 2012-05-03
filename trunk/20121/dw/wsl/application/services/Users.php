@@ -15,7 +15,7 @@ class Service_Users {
     public function fetch() {
         // Filtro de Parâmetros
         $args = func_get_args();
-        foreach (array('email', 'token') as $identifier) {
+        foreach (array('token') as $identifier) {
             $$identifier = array_shift($args);
         }
         // Camada de Modelo
@@ -23,7 +23,7 @@ class Service_Users {
         // Verificar Credenciais
         $result = array();
         // Habilitado?
-        if ($model->check($email, $token, true /* admin */)) {
+        if ($model->check($token, true /* admin */)) {
             // Consultar Informações
             $result = $model->fetch();
         }

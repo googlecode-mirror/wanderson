@@ -43,23 +43,22 @@ class Model_Users {
      * banco de dados e este método busca verificar se o usuário pode ou não
      * utilizar tais recursos.
      *
-     * @param  string $email E-mail do Usuário Atual
      * @param  string $token Valor do Token Apresentado ao Usuário
      * @param  bool   $admin Requisições Administradoras
      * @return bool   Resultado da Verificação de Possibilidade de Utilização
      */
-    public function check($email, $token, $admin = false) {
+    public function check($token, $admin = false) {
         // Adaptador de Conexão
         $adapter = WSL_Controller_Front::getInstance()
             ->getConfig()->getParam('Db.adapter');
         // Conversão
-        $email = (string) $email;
         $token = (string) $token;
         $admin = (int) $admin;
         // Consultar Usuário
         $sql = <<<SQL
-SELECT `u`.`session` FROM `wsl_users` AS `u`
-    WHERE `u`.`email` = '$email' AND `u`.`admin` <= $admin
+SELECT UNIX_TIMESTAMP(`u`.`session`) AS `timestamp`
+    FROM `wsl_users` AS `u`
+    WHERE `u`.`token` = '$token' AND `u`.`admin` <= $admin
 SQL;
         // Consulta
         $search = $adapter->query($sql);
@@ -70,7 +69,7 @@ SQL;
             // Construção de Elemento
             $element = current($search);
             // Verificação de Token
-            $result = (self::salt($element['session']) == $token);
+            $result = (time() <= ($element['timestamp'] + 300));
         }
         // Apresentar Resultado
         return $result;
@@ -101,10 +100,7 @@ SQL;
         // Consulta
         $sql = <<<SQL
 SELECT
-    `u`.`id`,
-    `u`.`email`,
-    `u`.`hash`,
-    (`u`.`hash` = '$hash') AS `compare`
+    `u`.`id`, `u`.`email`, `u`.`hash`, (`u`.`hash` = '$hash') AS `compare`
 FROM `wsl_users` AS `u` WHERE `u`.`email` = '$email'
 SQL;
         // Consulta de Informações
@@ -122,7 +118,7 @@ SQL;
                 $id = $element['id'];
                 // Sessão Utilizada
                 $sql = <<<SQL
-UPDATE `wsl_users` SET `session` = '$seed' WHERE `id` = $id
+UPDATE `wsl_users` SET `session` = '$seed', `token` = '$token' WHERE `id` = $id
 SQL;
                 // Salvar Informações
                 $adapter->query($sql);
