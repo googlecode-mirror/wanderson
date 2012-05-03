@@ -9,6 +9,16 @@
 class Model_Users {
 
     /**
+     * Ofuscar Valor
+     *
+     * @param  string $value Valor para Processamento
+     * @return string Conteúdo Processado
+     */
+    public static function salt($value) {
+        return sha1('3520e0dc3650aac' . md5($value) . '630c6ccebdd6867e8');
+    }
+
+    /**
      * Consulta de Usuários
      *
      * Acesso ao cadastro de usuários do sistema, utilizados para autenticação e
@@ -22,6 +32,48 @@ class Model_Users {
             ->getConfig()->getParam('Db.adapter');
         // Exibir Adaptador
         return $adapter->query('SELECT `id`, `email`, `active`, `admin` FROM `wsl_users`');
+    }
+
+    /**
+     * Verificação de Token
+     *
+     * Após uma autenticação, o usuário receberá um token que será apresentado
+     * junto aos outros elementos e que será considerado como o identificador de
+     * sessão do mesmo. Este token será comparado com informações armazenadas no
+     * banco de dados e este método busca verificar se o usuário pode ou não
+     * utilizar tais recursos.
+     *
+     * @param  string $email E-mail do Usuário Atual
+     * @param  string $token Valor do Token Apresentado ao Usuário
+     * @param  bool   $admin Requisições Administradoras
+     * @return bool   Resultado da Verificação de Possibilidade de Utilização
+     */
+    public function check($email, $token, $admin = false) {
+        // Adaptador de Conexão
+        $adapter = WSL_Controller_Front::getInstance()
+            ->getConfig()->getParam('Db.adapter');
+        // Conversão
+        $email = (string) $email;
+        $token = (string) $token;
+        $admin = (int) $admin;
+        // Consultar Usuário
+        $sql = <<<SQL
+SELECT `u`.`session` FROM `wsl_users` AS `u`
+    WHERE `u`.`email` = '$email' AND `u`.`admin` <= $admin
+SQL;
+        // Consulta
+        $search = $adapter->query($sql);
+        // Resultado Inicial
+        $result = false;
+        // Elemento Encontrado?
+        if (!empty($search)) {
+            // Construção de Elemento
+            $element = current($search);
+            // Verificação de Token
+            $result = (self::salt($element['session']) == $token);
+        }
+        // Apresentar Resultado
+        return $result;
     }
 
     /**
@@ -64,8 +116,8 @@ SQL;
             // Comparação de Senhas
             if ($element['compare']) {
                 // Credenciais Válidas
-                $seed  = date('c');
-                $token = sha1($element['hash'] . $seed . sha1('123456'));
+                $seed  = date('Y-m-d H:i:s');
+                $token = self::salt($seed);
                 // Identificador
                 $id = $element['id'];
                 // Sessão Utilizada

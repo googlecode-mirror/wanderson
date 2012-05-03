@@ -13,10 +13,20 @@ class Service_Users {
      * @return array[] Conjunto de Usuários Cadastrados
      */
     public function fetch() {
+        // Filtro de Parâmetros
+        $args = func_get_args();
+        foreach (array('email', 'token') as $identifier) {
+            $$identifier = array_shift($args);
+        }
         // Camada de Modelo
         $model = new Model_Users();
-        // Consultar Informações
-        $result = $model->fetch();
+        // Verificar Credenciais
+        $result = array();
+        // Habilitado?
+        if ($model->check($email, $token, true /* admin */)) {
+            // Consultar Informações
+            $result = $model->fetch();
+        }
         // Apresentar Resultados
         return $result;
     }
@@ -35,12 +45,10 @@ class Service_Users {
      */
     public function login() {
         // Filtro de Parâmetros
-        $params = array(); $args = func_get_args();
+        $args = func_get_args();
         foreach (array('email', 'hash') as $identifier) {
-            $params[$identifier] = array_shift($args);
+            $$identifier = array_shift($args);
         }
-        // Extração de Variáveis
-        extract($params);
         // Camada de Modelo
         $model = new Model_Users();
         // Autenticação
