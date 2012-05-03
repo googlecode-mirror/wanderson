@@ -15,7 +15,7 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_unicode_ci;
 
-INSERT INTO `users`(`hash`,`email`,`admin`) VALUES
+INSERT INTO `wsl_users`(`hash`,`email`,`admin`) VALUES
     ('7c4a8d09ca3762af61e59520943dc26494f8941b', 'root@localhost', 1);
 -- end
 

@@ -45,7 +45,7 @@ class WSL_Soap_Server {
         // Resultado Inicial
         $result = array();
         // Capturar Informações
-        $counter = preg_match_all(sprintf('/@%s\s+([[:alpha:]]+)(?:[ \t]+(?:(\$[[:alpha:]]+)[ \t]+)?(.*))?/', $param), $content, $matches);
+        $counter = preg_match_all(sprintf('/@%s\s+([[:alpha:]]+(?:\[\]))(?:[ \t]+(?:(\$[[:alpha:]]+)[ \t]+)?(.*))?/', $param), $content, $matches);
         // Processamento
         for ($i = 0; $i < $counter; $i++) {
             // Construção
