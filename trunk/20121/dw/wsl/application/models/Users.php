@@ -18,12 +18,31 @@ class Model_Users {
         return sha1('3520e0dc3650aac' . md5($value) . '630c6ccebdd6867e8');
     }
 
+    /**
+     * Filtro Básico de Informação
+     */
     public static function filter($identifier, $container, $default, $typed = 'string') {
         $value = $default;
         if (array_key_exists($identifier, $container)) {
             $value = $container[$identifier];
         }
-        eval("return ($typed) \$value;");
+        return eval("return ($typed) \$value;");
+    }
+
+    /**
+     * Consulta de Usuários
+     *
+     * Acesso ao cadastro de usuários do sistema, utilizados para autenticação e
+     * utilização deste, incluindo registro de sessões utilizadas.
+     *
+     * @return array[] Conjunto de Usuários Utilizados
+     */
+    public function fetch() {
+        // Adaptador de Conexão
+        $adapter = WSL_Controller_Front::getInstance()
+            ->getConfig()->getParam('Db.adapter');
+        // Exibir Adaptador
+        return $adapter->query('SELECT `id`, `email`, `active`, `admin` FROM `wsl_users`');
     }
 
     /**
@@ -42,23 +61,71 @@ class Model_Users {
         $adapter = WSL_Controller_Front::getInstance()
             ->getConfig()->getParam('Db.adapter');
         // Filtro de Dados
-        $data['email'] = self::filter('email', $data, null, 'string');
+        $data['email']  = self::filter('email', $data, null, 'string');
+        $data['active'] = (int) self::filter('active', $data, null, 'bool');
+        $data['admin']  = (int) self::filter('admin', $data, null, 'bool');
+        // Gerar Hash para Usuário
+        $data['hash']   = self::salt($data['email'] . time());
+        // Cadastrar no Banco de Dados
+        if (empty($data['id'])) {
+            $data['id'] = $adapter->insert($data, 'wsl_users');
+        } else {
+            $adapter->update($data, 'wsl_users', array('id' => $data['id']));
+        }
+        // Apresentar Identificador do Usuário
+        return $data['id'];
     }
 
     /**
-     * Consulta de Usuários
+     * Gerar Novo Hash para Usuário
      *
-     * Acesso ao cadastro de usuários do sistema, utilizados para autenticação e
-     * utilização deste, incluindo registro de sessões utilizadas.
+     * Recebe como parâmetro o identificador do usuário que necessita de
+     * alteração no conteúdo de Hash e modifica o valor no banco de dados,
+     * apresentando o novo valor como retorno de função.
      *
-     * @return array[] Conjunto de Usuários Utilizados
+     * @param  int $id Identificador do Usuário para Atualização
+     * @return string Conteúdo do Novo Hash Salvo no Banco de Dados
      */
-    public function fetch() {
+    public function hash($id) {
         // Adaptador de Conexão
         $adapter = WSL_Controller_Front::getInstance()
             ->getConfig()->getParam('Db.adapter');
-        // Exibir Adaptador
-        return $adapter->query('SELECT `id`, `email`, `active`, `admin` FROM `wsl_users`');
+        // Filtro de Dados
+        $id = (int) $id;
+        // Gerar Hash para Usuário
+        $hash = self::salt(time());
+        // Cadastrar no Banco de Dados
+        $adapter->update(array(
+            'hash' => $hash
+        ), 'wsl_users', array('id' => $id));
+        // Apresentar Novo Hash
+        return $hash;
+    }
+
+    /**
+     * Remover Usuário
+     *
+     * Apaga informações do usuário solicitado informando o seu identificador.
+     * Remove do banco de dados todas as entradas relacionadas ao usuário que
+     * possuem relacionamento.
+     *
+     * @param  int $identifier Identificador do Usuário para Remoção
+     * @return bool Confirmação de Usuário Removido com Sucesso
+     */
+    public function remove($id) {
+        // Adaptador de Conexão
+        $adapter = WSL_Controller_Front::getInstance()
+            ->getConfig()->getParam('Db.adapter');
+        // Filtro de Dados
+        $id = (int) $id;
+        // Verificar Usuário ROOT
+        if ($id === 1) {
+            throw new Exception('Invalid User', 404);
+        }
+        // Remover do Banco de Dados
+        $affected = $adapter->delete('wsl_users', array('id' => $id));
+        // Apresentar Resultados
+        return $affected === 1;
     }
 
     /**
