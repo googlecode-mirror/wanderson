@@ -4,41 +4,47 @@
  * Serviço de Usuários
  *
  * @category Application
- * @service  Users
  * @package  Application_Service
  */
 class Service_Users {
 
     /**
-     * Salvar Usuário
-     *
-     * @request  int      $id    Identificador do Usuário
-     * @request  string   $email E-mail para Configuração
-     * @response int      $id    Identificador do Usuário
-     * @response string   $hash  Código Hash do Usuário Atual
-     * @response string   $email E-mail Configurado
-     * @return   string[] Confirmação de Salvamento
-     */
-    public function save() {
-        // Apresentação
-        return array(
-            'id'    => 1,
-            'hash'  => '123456',
-            'email' => 'wandersonwhcr@gmail.com',
-        );
-    }
-
-    /**
      * Apresentar Usuários Cadastrados
-     *
-     * @response string[] $hash  Hash do Usuário
-     * @response string   $email E-mail Utilizado como Nome do Usuário
+     * @return array[] Conjunto de Usuários Cadastrados
      */
     public function fetch() {
         // Camada de Modelo
         $model = new Model_Users();
         // Consultar Informações
         $result = $model->fetch();
+        // Apresentar Resultados
+        return $result;
+    }
+
+    /**
+     * Autenticação no Sistema
+     *
+     * Para utilização do Webservice em determinados pontos, precisamos que o
+     * usuário efetue uma autenticação no sistema. Esta autenticação é feita
+     * informando o seu e-mail e hash. Comparados, será disponibilizado um token
+     * para utilização. Este token permanece ativo por tempo determinado.
+     *
+     * @param  string $email E-mail Cadastrado no Sistema
+     * @param  string $hash  Hash Utilizado pelo Usuário
+     * @return string Token Disponibilizado para Autenticação
+     */
+    public function login() {
+        // Filtro de Parâmetros
+        $params = array(); $args = func_get_args();
+        foreach (array('email', 'hash') as $identifier) {
+            $params[$identifier] = array_shift($args);
+        }
+        // Extração de Variáveis
+        extract($params);
+        // Camada de Modelo
+        $model = new Model_Users();
+        // Autenticação
+        $result = $model->login($email, $hash);
         // Apresentar Resultados
         return $result;
     }
