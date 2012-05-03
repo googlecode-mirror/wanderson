@@ -9,7 +9,7 @@ class Controller_Index extends WSL_Controller_ActionAbstract {
         $client = new SoapClient($router->getServerUrl() . $router->url(array(
             'action' => 'index',
         )) . '?WSDL');
-        var_dump($client->save());
+        var_dump($client->fetch());
     }
 }
 

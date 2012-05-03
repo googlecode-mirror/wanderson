@@ -20,3 +20,23 @@ adicionar uma camada de persistência que registra todas as ações tomadas pelo
 usuário no WS. Para isto, precisamos registrar os horários que cada ação foi
 tomada, juntamente com um relacionamento com este usuário e uma mensagem
 contendo informações e registros sobre a execução.
+
+Usuários
+--------
+
+Cada usuário possui um valor de hash único relacionado, um email para contato
+que servirá como nome do usuário, um booleano indicando se ele está ativo e pode
+utilizar o sistema e um booleano informando se este deve ser considerado como
+administrador.
+
+Para utilizar esta camada, precisamos enviar as credenciais do sistema,
+apresentando os valores de hash e email de algum usuário administrador. Somente
+usuários administradores podem utilizar este serviço.
+
+Para incluir um usuário no sistema, devemos apresentar o seu email para
+cadastro e um booleano informando se este pode ser considerado como
+administrador. Como resposta, serão apresentadas todas as informações do
+usuário, incluindo seu identificador registrado pelo sistema, seu hash único que
+deve ser utilizado para autenticação, o email cadastrado no sistema, booleano
+contendo informações se este usuário está ativo e um booleano informando se o
+usuário é um administrador.

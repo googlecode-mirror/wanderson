@@ -28,5 +28,20 @@ class Service_Users {
         );
     }
 
+    /**
+     * Apresentar Usuários Cadastrados
+     *
+     * @response string[] $hash  Hash do Usuário
+     * @response string   $email E-mail Utilizado como Nome do Usuário
+     */
+    public function fetch() {
+        // Camada de Modelo
+        $model = new Model_Users();
+        // Consultar Informações
+        $result = $model->fetch();
+        // Apresentar Resultados
+        return $result;
+    }
+
 }
 
