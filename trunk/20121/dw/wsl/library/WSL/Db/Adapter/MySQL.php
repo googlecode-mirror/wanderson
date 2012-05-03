@@ -35,12 +35,10 @@ class WSL_Db_Adapter_MySQL {
 
     // Destruidor
     public function __destruct() {
-        // Capturar Conexão
-        $connection = $this->_getConnection();
-        // Conexão Existente?
-        if ($connection !== null) {
+        // Conexão Efetuada?
+        if ($this->_connection !== null) {
             // Fechar Recurso MySQL
-            mysql_close($connection);
+            mysql_close($this->_connection);
         }
     }
 
