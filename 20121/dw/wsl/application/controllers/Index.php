@@ -20,7 +20,7 @@ class Controller_Index extends WSL_Controller_ActionAbstract {
         ));
         $email = 'root@localhost';
         $token = $client->login($email, '7c4a8d09ca3762af61e59520943dc26494f8941b');
-        $users = $client->fetch($email, $token);
+        $users = $client->fetch($token);
         // Camada de Visualização
         $this->view->users = $users;
     }
