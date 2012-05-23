@@ -13,106 +13,145 @@
 class WSL_Compiler_Context {
 
     /**
-     * Caminho do Diretório de Trabalho
-     * @var string
+     * Diretório de Trabalho
+     * @staticvar string
      */
-    protected $_workspacePath = null;
+    protected static $_workspacePath = null;
 
     /**
-     * Elementos de Documento
+     * Diretório de Contexto
+     * @var string
+     */
+    protected $_path = null;
+
+    /**
+     * Elementos
      * @var string[]
      */
     protected $_elements = array();
 
     /**
-     * Configuração do Caminho de Trabalho
+     * Construtor Padrão
+     */
+    public function __construct() {
+        // Inicialização
+        $this->_initPath();
+    }
+
+    /**
+     * Configuração do Diretório de Contexto
      *
-     * @param  string $path Valor para Configuração
      * @return WSL_Compiler_Context Próprio Objeto para Encadeamento
      */
-    public function setWorkspacePath($path) {
+    protected function _initPath() {
+        // Diretório Temporário
+        $pathname = self::$_workspacePath . DIRECTORY_SEPARATOR . time();
+        $result   = @mkdir($pathname, 0777, true);
+        if (!$result) {
+            throw new WSL_Compiler_PluginException('Invalid Directory');
+        }
         // Configuração
-        $this->_workspacePath = (string) $path;
+        $this->_path = $pathname;
         // Encadeamento
         return $this;
     }
 
     /**
-     * Apresentação do Caminho de Trabalho
+     * Apresentação do Diretório de Contexto
      *
-     * @return string Conteúdo Solicitado
+     * @param  string $element Possibilidade de Concatenação com Elemento
+     * @return string Valor Configurado
      */
-    public function getWorkspacePath() {
+    public function getPath($element = null) {
+        // Captura
+        $path = $this->_path;
+        // Elemento Informado?
+        if ($element !== null) {
+            $path = $this->_path . DIRECTORY_SEPARATOR . $element;
+        }
         // Apresentação
-        return $this->_workspacePath;
+        return $path;
     }
 
     /**
-     * Configuração de Elemento do Documento
+     * Cópia de Elemento para Diretório de Trabalho
      *
-     * Elementos de documento são os objetos responsáveis pela construção do
-     * elemento como um todo, possibilitando a divisão de responsabilidades
-     * dentro do sistema de compilação. Basicamente, os elementos são arquivos
-     * armazenados no sistema operacional utilizados pelos plugins para
-     * construção do conteúdo na saída.
+     * O fluxo de compilação é executado dentro do diretório de trabalho do
+     * contexto. Neste diretório, serão armazenados todos os arquivos
+     * necessários para a compilação do documento; porém nem todos os arquivos
+     * estão neste diretório e necessitam ser copiados.
      *
-     * @param  string $name Nome do Elemento
-     * @param  string $path Caminho no Sistema Operacional
+     * @param  string $element  Nome do Elemento
+     * @param  string $filename Caminho do Arquivo para Cópia
      * @return WSL_Compiler_Context Próprio Objeto para Encadeamento
      */
-    public function setElement($name, $path) {
-        // Conversão
-        $path = (string) $path;
-        // Caminho Nulo == Remoção do Elemento
-        if ($path === null) {
-            // Desconfiguração
-            unset($this->_elements[$name]);
-        } else {
-            // Configuração
-            $this->_elements[$name] = (string) $path;
+    public function copy($element, $filename) {
+        // Arquivo Existe?
+        if (!is_readable($filename)) {
+            throw new WSL_Compiler_PluginException('Invalid Filename');
         }
+        // Criar Hardlink
+        link($filename, $this->getPath($element));
+        // Registrar Elemento
+        $this->_elements[] = $element;
         // Encadeamento
         return $this;
     }
 
     /**
-     * Captura de Elemento do Documento
+     * Criação de Arquivo
      *
-     * Apresentação de informações sobre um elemento de documento, parte do
-     * conteúdo que deve ser utilizada no momento da compilação do código. Este
-     * elemento é um arquivo armazenado no sistema operacional e que deve ser
-     * utilizado para construção do documento.
+     * Registra o elemento no contexto, criando um arquivo localmente caso este
+     * não exista. Adiciona o elemento no conteúdo do objeto para posterior
+     * utilização.
      *
-     * @param  string $name Nome do Elemento
-     * @return string string Valor Solicitado
+     * @param  string $element Nome do Elemento
+     * @return WSL_Compiler_Context Próprio Objeto para Encadeamento
      */
-    public function getElement($name) {
-        // Conversão
-        $name = (string) $name;
-        // Existe Elemento?
-        if ($this->hasElement($name)) {
-            // Apresentação de Conteúdo
-            return $this->_elements[$name];
+    public function touch($element) {
+        // Criação de Elemento
+        $result = @touch($this->getPath($element));
+        if (!$result) {
+            throw new WSL_Compiler_PluginException('Invalid Element');
         }
-        // Valor não Encontrado
-        return null;
+        // Registrar Elemento
+        $this->_elements[] = $element;
+        // Encadeamento
+        return $this;
     }
 
     /**
-     * Existência de Elemento
+     * Configuração do Caminho para Diretório de Trabalho
      *
-     * Verifica se o elemento solicitado está configurado dentro do objeto de
-     * contexto. Este elemento é uma parte do documento que deve ser utilizada
-     * no momento da compilação, onde seu conteúdo é o caminho do elemento no
-     * sistema operacional.
+     * O diretório de trabalho é aquele que recebe todos os arquivos temporários
+     * para compilação do documento LaTeX. Para isto, será criado um
+     * subdiretório com nome randômico para que o contexto armazene seus
+     * arquivos necessários.
      *
-     * @param  string $name Nome do Elemento
-     * @return bool Confirmação de Existência
+     * @param string $path Valor para Configuração
      */
-    public function hasElement($name) {
-        // Conversão
-        $name = (string) $name;
-        // Existência
-        return array_key_exists($name, $this->_elements);
+    public static function setWorkspacePath($path) {
+        // Configuração
+        self::$_workspacePath = (string) $path;
     }
+
+    /**
+     * Captura do Caminho para Diretório de Trabalho
+     *
+     * O diretório de trabalho é aquele que recebe todos os subdiretórios
+     * temporários de contextos que servem para compilação do documento fonte no
+     * formato LaTeX para a saída desejada pelo cliente.
+     *
+     * @return string Valor Configurado
+     */
+    public static function getWorkspacePath() {
+        // Diretório Vazio?
+        if (empty(self::$_workspacePath)) {
+            // Diretório Temporário do Sistema
+            self::$_workspacePath = sys_get_temp_dir();
+        }
+        // Apresentação
+        return self::$_workspacePath;
+    }
+
 }
