@@ -107,7 +107,9 @@ class WSL_Compiler_Context {
         // Criar Hardlink
         link($filename, $this->getPath($element));
         // Registrar Elemento
-        $this->_elements[] = $element;
+        if (!$this->has($element)) {
+            $this->_elements[] = $element;
+        }
         // Encadeamento
         return $this;
     }
@@ -129,9 +131,22 @@ class WSL_Compiler_Context {
             throw new WSL_Compiler_PluginException('Invalid Element');
         }
         // Registrar Elemento
-        $this->_elements[] = $element;
+        if (!$this->has($element)) {
+            $this->_elements[] = $element;
+        }
         // Encadeamento
         return $this;
+    }
+
+    /**
+     * Verifica a Existência de Elemento
+     *
+     * @param  string $element Nome do Elemento
+     * @return bool Confirmação de Existência
+     */
+    public function has($element) {
+        // Consulta
+        return array_search($element, $this->_elements) !== false;
     }
 
     /**
