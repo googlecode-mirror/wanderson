@@ -233,7 +233,7 @@ class WSL_Compiler_Manager {
         try {
 
             // Área de Trabalho
-            chdir(WSL_Compiler_Context::getWorkspacePath());
+            chdir($this->getContext()->getPath());
 
             // Chamada de Plugins
             $name = $this->getBeforePlugin();
@@ -281,8 +281,25 @@ class WSL_Compiler_Manager {
      * @return WSL_Compiler_Manager Próprio Objeto para Encadeamento
      */
     protected function _compile() {
+        // Criação de Descritores
+        $descriptors = array(
+            0 => array('file', 'document.tex', 'r'), // Entrada Padrão
+            1 => array('pipe', 'w'),                 // Saída Padrão
+            2 => array('pipe', 'w'),                 // Saída de Erro
+        );
         // Chamada LaTeX
-        exec('latex document.tex', $output, $result);
+        $process = proc_open('latex', $descriptors, $pipes);
+        // Recurso Inicializado?
+        if (is_resource($process)) {
+            // Execução do Processo
+            $stdout = stream_get_contents($pipes[1]);
+            $stderr = stream_get_contents($pipes[2]);
+            // Finalizar Pipes
+            fclose($pipes[1]);
+            fclose($pipes[2]);
+            // Finalizar Processo
+            $result = proc_close($process);
+        }
         // Encadeamento
         return $this;
     }
