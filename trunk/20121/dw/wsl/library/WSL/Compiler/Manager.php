@@ -227,26 +227,39 @@ class WSL_Compiler_Manager {
      */
     public function compile() {
 
-        // Chamada de Plugins
-        $name = $this->getBeforePlugin();
-        // Configurar Estado
-        $this->_state = 'BEFORE';
-        // Executar Elemento
-        $this->execute($name);
+        try {
 
-        // Execução Interna
-        $this->_compile();
+            // Chamada de Plugins
+            $name = $this->getBeforePlugin();
+            // Configurar Estado
+            $this->_state = 'BEFORE';
+            // Executar Elemento
+            $this->execute($name);
 
-        // Chamada de Plugins
-        $name = $this->getAfterPlugin();
-        // Configurar Estado
-        $this->_state = 'AFTER';
-        // Executar Elemento
-        $this->execute($name);
+            // Execução Interna
+            $this->_compile();
 
-        // Configurar Estado
-        $this->_state = 'DISABLED';
+            // Chamada de Plugins
+            $name = $this->getAfterPlugin();
+            // Configurar Estado
+            $this->_state = 'AFTER';
+            // Executar Elemento
+            $this->execute($name);
 
+            // Configurar Estado
+            $this->_state = 'DISABLED';
+
+        } catch (WSL_Compiler_PluginException $e) {
+
+            // Configurar Estado
+            $this->_state = 'DISABLED';
+            // Apresentar Erro
+            throw $e;
+
+        }
+
+        // Encadeamento
+        return $this;
     }
 
     /**

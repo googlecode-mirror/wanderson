@@ -32,10 +32,24 @@ class WSL_Compiler_Context {
 
     /**
      * Construtor Padrão
+     *
+     * Inicializa o contexto para execução do processamento, incluindo um novo
+     * subdiretório temporário no caminho estático configurado para o sistema.
      */
     public function __construct() {
         // Inicialização
         $this->_initPath();
+    }
+
+    /**
+     * Destruidor Padrão
+     *
+     * Durante a finalização do objeto, existe a necessidade de remoção do
+     * diretório criado para o contexto de execução.
+     */
+    public function __destruct() {
+        // Finalização
+        self::clear($this->getPath());
     }
 
     /**
@@ -45,7 +59,7 @@ class WSL_Compiler_Context {
      */
     protected function _initPath() {
         // Diretório Temporário
-        $pathname = self::$_workspacePath . DIRECTORY_SEPARATOR . time();
+        $pathname = self::$_workspacePath . DIRECTORY_SEPARATOR . microtime(true);
         $result   = @mkdir($pathname, 0777, true);
         if (!$result) {
             throw new WSL_Compiler_PluginException('Invalid Directory');
@@ -152,6 +166,30 @@ class WSL_Compiler_Context {
         }
         // Apresentação
         return self::$_workspacePath;
+    }
+
+    /**
+     * Limpeza Recursiva de Arquivos
+     *
+     * Método padrão para limpeza recursiva de arquivos no sistema em diretórios
+     * que não estão vazios. Utilizado principalmente na destruição dos objetos.
+     *
+     * @return null
+     */
+    protected static function clear($path) {
+        // Captura de Elementos Internos
+        foreach (glob($path . DIRECTORY_SEPARATOR . '*') as $element) {
+            // Diretório?
+            if (is_dir($element)) {
+                // Limpeza Recursiva
+                self::clear($element);
+            } else {
+                // Remoção de Arquivo
+                unlink($element);
+            }
+        }
+        // Remoção de Diretório Local
+        rmdir($path);
     }
 
 }
