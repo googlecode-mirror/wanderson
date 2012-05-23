@@ -22,7 +22,7 @@ class WSL_Compiler_Context {
      * Elementos de Documento
      * @var string[]
      */
-    protected $_elements;
+    protected $_elements = array();
 
     /**
      * Configuração do Caminho de Trabalho
