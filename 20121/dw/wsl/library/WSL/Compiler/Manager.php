@@ -259,6 +259,13 @@ class WSL_Compiler_Manager {
      * @return WSL_Compiler_Manager Próprio Objeto para Encadeamento
      */
     protected function _compile() {
+
+        // Chamada LaTeX
+        $directory = getcwd();
+        chdir($this->getContext()->getWorkspacePath());
+        exec('latex document.tex', $output, $result);
+        chdir($directory);
+
         // Encadeamento
         return $this;
     }
