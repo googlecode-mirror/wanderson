@@ -9,8 +9,6 @@ $context
     ->copy('document.tex', '/home/wanderson/Desktop/README')
     ->touch('document.dvi');
 
-    die('here');
-
 $compiler = new WSL_Compiler_Manager($context);
 $compiler->setBeforePlugin('tex')->setAfterPlugin('dvi');
 

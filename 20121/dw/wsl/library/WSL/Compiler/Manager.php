@@ -227,7 +227,13 @@ class WSL_Compiler_Manager {
      */
     public function compile() {
 
+        // Diretório Atual
+        $current = getcwd();
+
         try {
+
+            // Área de Trabalho
+            chdir(WSL_Compiler_Context::getWorkspacePath());
 
             // Chamada de Plugins
             $name = $this->getBeforePlugin();
@@ -258,6 +264,9 @@ class WSL_Compiler_Manager {
 
         }
 
+        // Diretório Anterior
+        chdir($current);
+
         // Encadeamento
         return $this;
     }
@@ -272,13 +281,8 @@ class WSL_Compiler_Manager {
      * @return WSL_Compiler_Manager Próprio Objeto para Encadeamento
      */
     protected function _compile() {
-
         // Chamada LaTeX
-        $directory = getcwd();
-        chdir($this->getContext()->getWorkspacePath());
         exec('latex document.tex', $output, $result);
-        chdir($directory);
-
         // Encadeamento
         return $this;
     }
