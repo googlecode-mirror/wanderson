@@ -14,6 +14,12 @@
 class WSL_Compiler_Manager {
 
     /**
+     * Carregador de Plugins
+     * @var WSL_Loader_PluginLoader
+     */
+    protected $_loader = null;
+
+    /**
      * Contexto de Execução
      * @var WSL_Compiler_Context
      */
@@ -32,6 +38,12 @@ class WSL_Compiler_Manager {
     protected $_afterPlugin = null;
 
     /**
+     * Estado de Compilação
+     * @var string
+     */
+    protected $_state = 'DISABLED';
+
+    /**
      * Construtor Padrão
      *
      * @param WSL_Compiler_Context $context Contexto de Execução
@@ -39,6 +51,10 @@ class WSL_Compiler_Manager {
     public function __construct(WSL_Compiler_Context $context) {
         // Configurações
         $this->_setContext($context);
+        // Inicialização
+        $loader = new WSL_Loader_PluginLoader();
+        $loader->addPrefix('WSL_Compiler_Plugin');
+        $this->_loader = $loader;
     }
 
     /**
@@ -61,6 +77,22 @@ class WSL_Compiler_Manager {
     }
 
     /**
+     * Apresenta o Nome do Plugin de Execução Anterior
+     *
+     * Informa o nome do plugin que deve ser utilizado para processamento
+     * anterior ao compilador. Este plugin pode executar outros elementos
+     * conforme necessidade. O nome do plugin pode ser apresentado ao método de
+     * execução, onde este irá tratar o elemento conforme o estado do
+     * gerenciamento.
+     *
+     * @return string Valor Solicitado
+     */
+    public function getBeforePlugin() {
+        // Apresentação
+        return $this->_beforePlugin;
+    }
+
+    /**
      * Configuração do Plugin de Execução Posterior
      *
      * Nome do elemento que deve ser executado após o início da compilação do
@@ -79,8 +111,79 @@ class WSL_Compiler_Manager {
         return $this;
     }
 
-    public function execute($name) {}
-    public function compile() {}
+    /**
+     * Apresenta o Nome do Plugin de Execução Posterior
+     *
+     * Informa o nome do plugin que deve ser utilizado para processamento
+     * posterior ao compilador. Este plugin pode executar outros elementos
+     * conforme necessidade. O nome do plugin pode ser apresentado ao método de
+     * execução, onde este irá tratar o elemento conforme o estado do
+     * gerenciamento.
+     *
+     * @return string Valor Solicitado
+     */
+    public function getAfterPlugin() {
+        // Apresentação
+        return $this->_afterPlugin;
+    }
+
+    /**
+     * Execução de Plugin
+     *
+     * Durante o tempo de compilação, existem dois tempos que devem ser
+     * considerados: anterior e posterior à compilação. Para isto, o gerenciador
+     * deve armazenar estes tempos e, quando chamada a execução de um plugin,
+     * o gerenciador deve verificar se aquele objeto pode executar tal tarefa e
+     * executar o método solicitado. Quando esta execução é chamada fora desse
+     * fluxo, nada será executado pelos plugins.
+     *
+     * @param  string $name Nome do Plugin
+     * @return WSL_Compiler_Manager Próprio Objeto para Encadeamento
+     */
+    public function execute($name) {
+        // Verificação de Estado
+        switch ($this->_state) {
+
+            case 'BEFORE':
+                // Carregar Elemento
+                $plugin = $this->_loader->load($name);
+                if (empty($plugin)) {
+                    // Plugin não Encontrado
+                    throw new WSL_Compiler_PluginException('Invalid Element');
+                }
+                // Verificar Tipagem
+                if (!($plugin instanceof WSL_Compiler_PluginBeforeInterface)) {
+                    // Plugin Inválido
+                    throw new WSL_Compiler_PluginException('Invalid Element');
+                }
+                // Execução
+                $plugin->beforeAction($this);
+                break;
+
+            case 'AFTER':
+                // Carregar Elemento
+                $plugin = $this->_loader->load($name);
+                if (empty($plugin)) {
+                    // Plugin não Encontrado
+                    throw new WSL_Compiler_PluginException('Invalid Element');
+                }
+                // Verificar Tipagem
+                if (!($plugin instanceof WSL_Compiler_PluginAfterInterface)) {
+                    // Plugin Inválido
+                    throw new WSL_Compiler_PluginException('Invalid Element');
+                }
+                // Execução
+                $plugin->afterAction($this);
+                break;
+
+            case 'DISABLED':
+            default:
+                // Não Executar Tarefas
+
+        }
+        // Encadeamento
+        return $this;
+    }
 
     /**
      * Configuração do Contexto
@@ -112,4 +215,52 @@ class WSL_Compiler_Manager {
         // Apresentação
         return $this->_context;
     }
+
+    /**
+     * Compilação
+     *
+     * Executa toda a etapa de compilação do documento LaTeX dentro do sistema,
+     * chamando todos os plugins necessários para execução e gerenciando os
+     * contextos utilizados.
+     *
+     * @return WSL_Compiler_Manager Próprio Objeto para Encadeamento
+     */
+    public function compile() {
+
+        // Chamada de Plugins
+        $name = $this->getBeforePlugin();
+        // Configurar Estado
+        $this->_state = 'BEFORE';
+        // Executar Elemento
+        $this->execute($name);
+
+        // Execução Interna
+        $this->_compile();
+
+        // Chamada de Plugins
+        $name = $this->getAfterPlugin();
+        // Configurar Estado
+        $this->_state = 'AFTER';
+        // Executar Elemento
+        $this->execute($name);
+
+        // Configurar Estado
+        $this->_state = 'DISABLED';
+
+    }
+
+    /**
+     * Compilação do Documento
+     *
+     * Método responsável pela execução do compilador principal do sistema, onde
+     * serão criados todos os conteúdos de saída básica para criação do
+     * documento no formato principal de saída LaTeX.
+     *
+     * @return WSL_Compiler_Manager Próprio Objeto para Encadeamento
+     */
+    protected function _compile() {
+        // Encadeamento
+        return $this;
+    }
+
 }
