@@ -259,6 +259,8 @@ class WSL_Compiler_Manager {
 
             // Configurar Estado
             $this->_state = 'DISABLED';
+            // Diretório Anterior
+            chdir($current);
             // Apresentar Erro
             throw new WSL_Compiler_ManagerException('Internal Error', 500, $e);
 
