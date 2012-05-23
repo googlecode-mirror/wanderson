@@ -260,7 +260,7 @@ class WSL_Compiler_Manager {
             // Configurar Estado
             $this->_state = 'DISABLED';
             // Apresentar Erro
-            throw $e;
+            throw new WSL_Compiler_ManagerException('Internal Error', 500, $e);
 
         }
 
