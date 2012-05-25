@@ -33,6 +33,18 @@ class WSL_Model_File_File {
     protected $_order = 0;
 
     /**
+     * Caminho Base para Armazenamento
+     * @var string
+     */
+    protected static $_path = '';
+
+    /**
+     * Manipulador de Informações
+     * @var WSL_Model_File_InfoHandlerInterface
+     */
+    protected static $_handler = null;
+
+    /**
      * Configuração do Hash do Arquivo
      *
      * @param  string $hash Valor para Configuração
@@ -55,10 +67,53 @@ class WSL_Model_File_File {
         return $this->_hash;
     }
 
+    /**
+     * Apresentar Caminho Completo do Arquivo
+     *
+     * Informa o caminho completo do arquivo armazenado no sistema operacional,
+     * exibindo todos os diretórios superiores. O caminho base é utilizado e o
+     * hash é utilizado para construção do arquivo no sistema.
+     *
+     * @return string Valor Solicitado
+     */
     public function getRealPath() {}
+
     public function save() {}
-    public function delete() {}
-    public function equals(WSL_Model_File_File $file) {}
+
+    /**
+     * Remoção de Elemento
+     *
+     * Remove uma referência a arquivos armazenados no sistema. Estes arquivos
+     * nem sempre devem ser removidos do disco, somente quando há permissão do
+     * objeto manipulador das informações.
+     *
+     * @return WSL_Model_File_File Próprio Objeto para Encadeamento
+     */
+    public function delete() {
+        // Captura do Manipulador
+        $handler = self::getDefaultHandler();
+        // Remover Arquivo
+        if ($handler->delete($this)) {
+            // Remover Fisicamente o Arquivo
+            unlink($this->getRealPath());
+        }
+        // Encadeamento
+        return $this;
+    }
+
+    /**
+     * Executa a Comparação entre Arquivos
+     *
+     * Verifica se os códigos de Hash dos arquivos são idênticos, caracterizando
+     * assim os mesmos conteúdos que foram armazenados no sistema.
+     *
+     * @param  WSL_Model_File_File $file Arquivo para Comparação
+     * @return bool Confirmação Solicitada
+     */
+    public function equals(WSL_Model_File_File $file) {
+        // Comparação
+        return $this->getHash() == $file->getHash();
+    }
 
     /**
      * Configuração de Recipiente
@@ -152,7 +207,72 @@ class WSL_Model_File_File {
         return $this->_order;
     }
 
-    public static function factory($params) {}
+    /**
+     * Configura o Caminho Base para Arquivos
+     *
+     * @param string $basePath Valor para Configuração
+     */
+    public static function setBasePath($basePath) {
+        self::$_basePath = (string) $basePath;
+    }
+
+    /**
+     * Apresenta o Caminho Base para Arquivos
+     *
+     * @return string Valor Configurado
+     */
+    public static function getBasePath() {
+        return self::$_basePath;
+    }
+
+    /**
+     * Construção de Objetos de Arquivo
+     *
+     * O padrão de projeto Factory possibilita a criação de um conjunto de
+     * arquivos com base em parâmetros adicionados. Conforme as informações
+     * apresentadas, serão construídos objetos de arquivos com base nos
+     * parâmetros. Temos as seguintes opções:
+     *
+     * $params['content']
+     * $params['filename']
+     *     Conteúdo do arquivo para manipulação. Será criado um arquivo
+     *     temporário no diretório compartilhado do sistema operacional, com o
+     *     conteúdo informado. Este arquivo será marcado como temporário e não
+     *     estará disponível na árvore da estrutura padrão. Se o nome do arquivo
+     *     não estiver sendo apresentado, será criado um nome temporário.
+     *
+     * $params['filepath']
+     *     Caminho para o arquivo que deve ser utilizado para o objeto. Este
+     *     arquivo será marcado como temporário e não será salvo na árvore de
+     *     diretórios do sistema.
+     *
+     * $params['hash']
+     *     Valor de Hash do arquivo que já está armazenado dentro da estrutura
+     *     de árvore do sistema. Este será marcado como não temporário pois já
+     *     pertence ao sistema.
+     *
+     * $params['container']
+     * $params['category']
+     * $params['reference']
+     *     Valores para consulta em manipulador de arquivos, com os valores
+     *     básicos para mapeamento de arquivo em ambiente externos, como banco
+     *     de dados. Este arquivo será marcado como não temporário pois já deve
+     *     pertencer à estrutura de diretórios do sistema.
+     *
+     * $params['id']
+     *     Identificador do arquivo que deve ser apresentado ao manipulador de
+     *     informações em ambientes externos. Carrega os conteúdos necessários
+     *     para construção de objetos. Arquivo será marcado como não temporário
+     *     pois já deve estar salvo no sistema.
+     *
+     * Sempre será apresentado um conjunto de arquivos encontrados, mesmo se
+     * este conjunto possuir somente um elemento.
+     *
+     * @param  array $params Parâmetros para Construção
+     * @return array Conjunto de Arquivos Construídos
+     */
+    public static function factory(array $params) {}
+
     public static function findFromReference($container, $category, $reference) {}
     public static function findFromHashes(array $hashes) {}
 
@@ -197,7 +317,31 @@ class WSL_Model_File_File {
         }
     }
 
-    public static function setDefaultHandler(WSL_Model_File_InfoHandlerInterface $handler) {}
-    public static function getDefaultHandler() {}
+    /**
+     * Configuração do Manipulador de Informações
+     *
+     * Utilizado para salvar informações adicionais sobre o arquivo armazenado
+     * no sistema operacional e que precisa de registros adicionais, como
+     * categorias que estão relacionadas com o objeto.
+     *
+     * @param WSL_Model_File_InfoHandlerInterface $handler Elemento para Configuração
+     */
+    public static function setDefaultHandler(WSL_Model_File_InfoHandlerInterface $handler) {
+        // Configuração
+        self::$_handler = $handler;
+    }
+
+    /**
+     * Apresentação do Manipulador de Informações
+     *
+     * Elemento utilizado para gerenciamento de informações adicionais aos
+     * arquivos aplicados na árvore de diretórios do sistema.
+     *
+     * @return WSL_Model_File_InfoHandlerInterface
+     */
+    public static function getDefaultHandler() {
+        // Apresentação
+        return self::$_handler;
+    }
 
 }
