@@ -2,14 +2,20 @@
 require_once realpath(dirname(__FILE__) . '/../library/WSL/Loader/Autoloader.php');
 $autoloader = WSL_Loader_Autoloader::getInstance();
 
-WSL_Compiler_Context::setWorkspacePath(realpath(dirname(__FILE__) . '/../temp'));
-$context = new WSL_Compiler_Context();
+$adapter = new WSL_Db_Adapter_MySQL(array(
+    'host'     => '192.168.10.12',
+    'dbname'   => 'wsl',
+    'username' => 'root',
+    'password' => '102030',
+));
 
-$context
-    ->copy('document.tex', '/home/wanderson/Desktop/README')
-    ->touch('document.dvi');
+$handler = new WSL_Model_File_DbInfoHandler($adapter);
+$basedir = realpath(dirname(__FILE__) . '/../data/files');
+$tempdir = realpath(dirname(__FILE__) . '/../temp');
+WSL_Model_File_File::setDefaultHandler($handler);
+WSL_Model_File_File::setBasePath($basedir);
+WSL_Model_File_File::setTempPath($tempdir);
 
-$compiler = new WSL_Compiler_Manager($context);
-$compiler->setBeforePlugin('tex')->setAfterPlugin('dvi');
-
-$compiler->compile();
+$elements = WSL_Model_File_File::findFromReferences('documents', 'element', 1);
+$picture = reset($elements);
+var_dump($picture->save());

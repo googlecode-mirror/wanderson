@@ -56,6 +56,12 @@ class WSL_Model_File_File {
     protected $_fileName = '';
 
     /**
+     * Configurações Adicionais
+     * @var WSL_Model_Config
+     */
+    protected $_config = null;
+
+    /**
      * Caminho Base para Armazenamento
      * @var string
      */
@@ -85,6 +91,24 @@ class WSL_Model_File_File {
     private function __construct($realPath) {
         // Configuração
         $this->_setRealPath($realPath);
+    }
+
+    /**
+     * Captura de Configurações
+     *
+     * Apresenta o objeto de configurações adicionais utilizado para armazenar
+     * outros dados não relacionados no objeto, facilitando a adição de novos
+     * valores.
+     *
+     * @return WSL_Model_Config Valor Solicitado
+     */
+    public function getConfig() {
+        // Inicializado?
+        if (empty($this->_config)) {
+            $this->_config = new WSL_Model_Config();
+        }
+        // Apresentação
+        return $this->_config;
     }
 
     /**
@@ -312,7 +336,7 @@ class WSL_Model_File_File {
      */
     public function setFileName($fileName) {
         // Configuração
-        $this->_fileName = (string) $filename;
+        $this->_fileName = (string) $fileName;
         // Encadeamento
         return $this;
     }
@@ -475,7 +499,7 @@ class WSL_Model_File_File {
      * @param  int    $reference Referência Cruzada
      * @return array  Conjunto de Arquivos Encontrados
      */
-    public function findFromReferences($container, $category, $reference) {
+    public static function findFromReferences($container, $category, $reference) {
         // Captura de Hashes
         $hashes = self::getDefaultHandler()->find($container, $category, $reference);
         // Construção de Elementos
@@ -504,7 +528,7 @@ class WSL_Model_File_File {
      * @param  array $hashes Conjunto de Códigos para Busca
      * @return array Conjunto de Arquivos Encontrados
      */
-    public function findFromHashes(array $hashes) {
+    public static function findFromHashes(array $hashes) {
         // Inicialização
         $elements = array();
         // Consultar os Arquivos
@@ -519,7 +543,7 @@ class WSL_Model_File_File {
             // Construção de Elemento
             $element = new self($path);
             // Configurar Hash
-            $element->setHash($hash);
+            $element->_setHash($hash);
             // Adicionar ao Conjunto
             $elements[] = $element;
         }

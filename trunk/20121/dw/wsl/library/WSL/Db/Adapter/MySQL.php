@@ -194,11 +194,11 @@ class WSL_Db_Adapter_MySQL {
      * banco de dados, principalmente pela questão de tipos de dados que devem
      * ser considerados.
      *
-     * @param  mixed[] $data Dados para Inserção
      * @param  string  $name Nome da Tabela para Inserção de Dados
+     * @param  mixed[] $data Dados para Inserção
      * @return int|array Informações de Chaves Primárias Utilizadas
      */
-    public function insert(array $data, $name) {
+    public function insert($name, array $data) {
         // Filtrar Dados
         $data = $this->_filter($data);
         // Montar Valores
@@ -224,11 +224,11 @@ SQL;
      * tabela que deve ser modificada. O parâmetro adicional serve para
      * selecionar as colunas que devem ser modificadas.
      *
-     * @param  mixed[] $data Dados para Atualização
      * @param  string  $name Nome da Tabela para Atualização de Dados
+     * @param  mixed[] $data Dados para Atualização
      * @return int     Quantidade de Linhas Atualizadas no Banco de Dados
      */
-    public function update(array $data, $name, array $where = array()) {
+    public function update($name, array $data, array $where = array()) {
         // Filtrar Dados
         $data = $this->_filter($data);
         // Atribuições
