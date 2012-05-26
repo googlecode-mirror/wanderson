@@ -103,14 +103,8 @@ class WSL_Model_File_File {
      * @return WSL_Model_File_File Próprio Objeto para Encadeamento
      */
     protected function _setRealPath($realPath) {
-        // Existe Arquivo?
-        if (!is_readable($realPath)) {
-            throw new Exception("Invalid File: '$realPath'");
-        }
         // Configuração
-        $this->_realPath = $realPath;
-        // Configurar Hash do Arquivo
-        $this->_setHash(sha1_file($realPath));
+        $this->_realPath = (string) $realPath;
         // Encadeamento
         return $this;
     }
@@ -141,8 +135,11 @@ class WSL_Model_File_File {
     public function save() {
         // Salvar Arquivo
         if (self::getDefaultHandler()->save($this)) {
-            // Adicionar uma Cópia do Arquivo na Estrutura de Diretórios
-            copy($this->getRealPath(), self::_buildHashPath($this->getHash()));
+            // Arquivo Existe?
+            if ($this->exists()) {
+                // Adicionar uma Cópia do Arquivo na Estrutura de Diretórios
+                copy($this->getRealPath(), self::_buildHashPath($this->getHash()));
+            }
         }
         // Encadeamento
         return $this;
@@ -160,8 +157,11 @@ class WSL_Model_File_File {
     public function delete() {
         // Remover Arquivo
         if (self::getDefaultHandler()->delete($this)) {
-            // Remover Fisicamente o Arquivo
-            unlink($this->getRealPath());
+            // Arquivo Existe?
+            if ($this->exists()) {
+                // Remover Fisicamente o Arquivo
+                unlink($this->getRealPath());
+            }
         }
         // Encadeamento
         return $this;
@@ -179,6 +179,20 @@ class WSL_Model_File_File {
     public function equals(WSL_Model_File_File $file) {
         // Comparação
         return $this->getHash() == $file->getHash();
+    }
+
+    /**
+     * Informa se Arquivo Existe
+     *
+     * Durante alguns processamentos e principalmente divisão em ambientes de
+     * desenvolvimento, nas máquinas distribuídas não existirão os arquivos.
+     * Portanto, é possível a construção de um objeto do tipo arquivo, sem um
+     * conteúdo propriamente dito em disco.
+     *
+     * @return bool Confirmação Solicitada
+     */
+    public function exists() {
+        return is_file($this->getRealPath());
     }
 
     /**
@@ -406,6 +420,63 @@ class WSL_Model_File_File {
             . DIRECTORY_SEPARATOR . substr($hash, 0, 3)
             . DIRECTORY_SEPARATOR . substr($hash, 3, 3)
             . DIRECTORY_SEPARATOR . substr($hash, 6);
+    }
+
+    /**
+     * Construção de Arquivos por Referências
+     *
+     * Consulta o manipulador de arquivos com os parâmetros apresentados,
+     * fornecendo os hashes que devem ser utilizados na captura dos arquivos.
+     * Estes arquivos serão novamente apresentados ao manipulador para
+     * carregamento das informações adicionais.
+     *
+     * @param  string $container Recipiente de Armazenamento
+     * @param  string $category  Categoria Relacionada
+     * @param  int    $reference Referência Cruzada
+     * @return array  Conjunto de Arquivos Encontrados
+     */
+    public function findFromReferences($container, $category, $reference) {
+        // Captura de Hashes
+        $hashes = self::getDefaultHandler()->find($container, $category, $reference);
+        // Construção de Elementos
+        $elements = self::findFromHashes($hashes);
+        // Carregar Informações Adicionais
+        self::getDefaultHandler()->load($elements);
+        // Apresentar Elementos
+        return $elements;
+    }
+
+    /**
+     * Construção de Arquivos por Hash
+     *
+     * Efetua uma busca no diretório padrão de armazenamento pelo código de Hash
+     * apresentado, construindo o elemento. Caso não seja encontrado, será
+     * também consultado o diretório de armazenamento temporário de arquivos.
+     *
+     * @param  array $hashes Conjunto de Códigos para Busca
+     * @return array Conjunto de Arquivos Encontrados
+     */
+    public function findFromHashes(array $hashes) {
+        // Inicialização
+        $elements = array();
+        // Consultar os Arquivos
+        foreach ($hashes as $hash) {
+            // Captura de Arquivo em Árvore Local
+            $path = self::_buildHashPath($hash);
+            // Arquivo Existe?
+            if (!is_file($path)) {
+                // Captura de Arquivo em Diretório Temporário
+                $path = self::getTempPath() . DIRECTORY_SEPARATOR . $hash;
+            }
+            // Construção de Elemento
+            $element = new self($path);
+            // Configurar Hash
+            $element->setHash($hash);
+            // Adicionar ao Conjunto
+            $elements[] = $element;
+        }
+        // Apresentação
+        return $elements;
     }
 
 }
