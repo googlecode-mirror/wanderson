@@ -178,6 +178,12 @@ class WSL_Model_File_File {
         if (self::getDefaultHandler()->save($this)) {
             // Arquivo Existe?
             if ($this->exists()) {
+                // Adicionar Diretórios Necessários
+                $dirname = dirname(self::_buildHashPath($this->getHash()));
+                // Existe Diretório?
+                if (!is_dir($dirname)) {
+                    mkdir($dirname, 0777, true);
+                }
                 // Adicionar uma Cópia do Arquivo na Estrutura de Diretórios
                 copy($this->getRealPath(), self::_buildHashPath($this->getHash()));
             }

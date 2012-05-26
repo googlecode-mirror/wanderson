@@ -16,6 +16,10 @@ WSL_Model_File_File::setDefaultHandler($handler);
 WSL_Model_File_File::setBasePath($basedir);
 WSL_Model_File_File::setTempPath($tempdir);
 
-$elements = WSL_Model_File_File::findFromReferences('documents', 'element', 1);
+//$elements = WSL_Model_File_File::findFromReferences('documents', 'element', 1);
+//$picture = reset($elements);
+//var_dump($picture->save());
+
+$elements = WSL_Model_File_File::findFromHashes(array('308a08ba0c83909a7a435d256585b21310de27d4'));
 $picture = reset($elements);
 var_dump($picture->save());

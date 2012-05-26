@@ -177,10 +177,11 @@ class WSL_Db_Adapter_MySQL {
             if ($value === null) {
                 $value = 'NULL';
             } else if (is_string($value)) {
+                $value = addslashes($value);
                 $value = "'$value'";
             }
             // Armazenar
-            $columns[] = $column;
+            $columns[] = "`$column`";
             $values[]  = $value;
         }
         // Apresentação
@@ -202,8 +203,8 @@ class WSL_Db_Adapter_MySQL {
         // Filtrar Dados
         $data = $this->_filter($data);
         // Montar Valores
-        $columns = implode(',', $data['columns']);
-        $values  = implode(',', $data['values']);
+        $columns = implode(', ', $data['columns']);
+        $values  = implode(', ', $data['values']);
         // Construção de Comando
         $sql = <<<SQL
 INSERT INTO `$name`($columns) VALUES ($values)
