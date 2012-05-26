@@ -479,4 +479,54 @@ class WSL_Model_File_File {
         return $elements;
     }
 
+    /**
+     * Construção de Arquivo pelo Caminho
+     *
+     * Recebendo como parâmetro o caminho do arquivo, será criado um objeto
+     * relacionado, inicializando os parâmetros básicos. Verifica se o arquivo
+     * existe em disco, caso contrário será apresentado um erro.
+     *
+     * @param  string $realPath Caminho Completo do Arquivo
+     * @return WSL_Model_File_File Elemento Construído com os Parâmetros
+     * @throws Exception Arquivo não Existente em Disco
+     */
+    public static function buildFromRealPath($realPath) {
+        // Caminho Completo do Arquivo
+        $realPath = realpath($realPath);
+        // Arquivo Existe em Disco?
+        if (empty($realPath)) {
+            throw new Exception("Invalid RealPath: '$realPath'");
+        }
+        // Construção do Objeto Relacionado
+        $element = new self($realPath);
+        // Configurações Básicas
+        $element->setHash(sha1_file($realPath));
+        // Apresentação
+        return $element;
+    }
+
+    /**
+     * Construção de Arquivo por Conteúdo
+     *
+     * Informando um nome de arquivo e conteúdo para armazenamento, será criado
+     * em disco um arquivo com o conteúdo apresentado e o objeto relacionado
+     * receberá o nome do arquivo apresentado.
+     *
+     * @param  string $fileName Nome do Arquivo para Configuração
+     * @param  string $content  Conteúdo para Armazenamento
+     * @return WSL_Model_File_File Elemento Construído com os Parâmetros
+     */
+    public static function buildFromContent($fileName, $content) {
+        // Criação de Arquivo Temporário
+        $realPath = tempnam(sys_get_temp_dir(), 'wslmff');
+        // Armazenar Conteúdo em Disco
+        file_put_contents($realPath, $content);
+        // Criação de Elemento
+        $element = self::buildFromRealPath($realPath);
+        // Configurar Nome de Arquivo
+        $element->setFileName($fileName);
+        // Apresentar Elemento
+        return $element;
+    }
+
 }
