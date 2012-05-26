@@ -40,6 +40,32 @@ class WSL_Model_File_DbInfoHandler implements WSL_Model_File_InfoHandlerInterfac
     }
 
     /**
+     * Contabilização de Quantidades de Hash
+     *
+     * Efetua uma contabilização de quantos elementos salvos em banco de dados
+     * estão utilizando aquele valor de Hash para que o elemento em disco seja
+     * ou não salvo em disco.
+     *
+     * @param  string $hash Valor para Consulta
+     * @return int    Quantidade de Elementos Encontrados
+     */
+    protected function _count($hash) {
+        // Construção de Consulta
+        $sql = <<<SQL
+SELECT
+	COUNT(`f`.`id`) AS `counter`
+FROM `wsl_files` AS `f`
+WHERE
+	`f`.`hash` = '$hash'
+SQL;
+        // Execução
+        $result = $this->getAdapter()->query($sql);
+        // Resultado
+        $result = reset($result);
+        return $result['counter'];
+    }
+
+    /**
      * Configura o Adaptador de Conexão com Banco de Dados
      *
      * @param  WSL_Db_Adapter_MySQL $adapter Valor para Configuração
@@ -191,6 +217,8 @@ SQL;
             'reference' => $file->getReference(),
             'order'     => $file->getOrder(),
         );
+        // Contabilizar Hashes
+        $counter = $this->_count($data['hash']);
         // Identificador Informado?
         if ($file->getConfig()->hasParam('id')) {
             // Atualizar
@@ -201,6 +229,8 @@ SQL;
             // Inclusão
             $this->getAdapter()->insert('wsl_files', $data);
         }
+        // Adicionar Elemento?
+        return $counter == 0;
     }
 
     public function delete(WSL_Model_File_File $file) {}
