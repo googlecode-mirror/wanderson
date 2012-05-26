@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * Camada de Modelo para Arquivos
+ *
+ * Centralização de processamentos para arquivos que são enviados ao sistema,
+ * utilizando uma arquitetura básica de armazenamento. Utiliza um manipulador
+ * para salvar as informações adicionais do arquivo.
+ *
+ * @category WSL
+ * @package  WSL_Model
+ * @package  File
+ */
 class WSL_Model_File_File {
 
     /**
@@ -37,6 +48,12 @@ class WSL_Model_File_File {
      * @var int
      */
     protected $_order = 0;
+
+    /**
+     * Nome Original do Arquivo
+     * @var string
+     */
+    protected $_fileName = '';
 
     /**
      * Caminho Base para Armazenamento
@@ -288,6 +305,29 @@ class WSL_Model_File_File {
     }
 
     /**
+     * Configura o Nome Original do Arquivo
+     *
+     * @param  string $fileName Valor para Configuração
+     * @return WSL_Model_File_File Próprio Objeto para Encadeamento
+     */
+    public function setFileName($fileName) {
+        // Configuração
+        $this->_fileName = (string) $filename;
+        // Encadeamento
+        return $this;
+    }
+
+    /**
+     * Apresenta o Nome Original do Arquivo
+     *
+     * @return string Valor Solicitado
+     */
+    public function getFileName() {
+        // Apresentação
+        return $this->_fileName;
+    }
+
+    /**
      * Configura o Caminho Base para Arquivos
      *
      * @param string $basePath Valor para Configuração
@@ -440,6 +480,14 @@ class WSL_Model_File_File {
         $hashes = self::getDefaultHandler()->find($container, $category, $reference);
         // Construção de Elementos
         $elements = self::findFromHashes($hashes);
+        // Configurações Básicas
+        foreach ($elements as $order => $element) {
+            $element // Configuração
+                ->setContainer($container)
+                ->setCategory($category)
+                ->setReference($reference)
+                ->setOrder($order);
+        }
         // Carregar Informações Adicionais
         self::getDefaultHandler()->load($elements);
         // Apresentar Elementos
