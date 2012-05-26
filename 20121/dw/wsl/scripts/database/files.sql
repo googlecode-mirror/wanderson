@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS `wsl_files`(
 	`reference` BIGINT UNSIGNED NOT NULL,
 	`order` SMALLINT UNSIGNED NOT NULL DEFAULT 0,
 	PRIMARY KEY(`id`),
-	UNIQUE `hash`(`hash`),
+	INDEX `hash`(`hash`),
 	INDEX `search`(`container`, `category`, `reference`)
 )
 ENGINE = MyISAM
