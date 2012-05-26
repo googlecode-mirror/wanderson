@@ -181,7 +181,7 @@ SQL;
             return $this;
         }
         // Capturar Primeiro Elemento
-        $element = current($files);
+        $element = reset($files);
         // Informações
         $container = $element->getContainer();
         $category  = $element->getCategory();
@@ -227,12 +227,31 @@ SQL;
             ));
         } else {
             // Inclusão
-            $this->getAdapter()->insert('wsl_files', $data);
+            $id = $this->getAdapter()->insert('wsl_files', $data);
+            // Salvar Identificador
+            $file->getConfig()->setParam('id', $id);
         }
         // Adicionar Elemento?
         return $counter == 0;
     }
 
-    public function delete(WSL_Model_File_File $file) {}
+    // Remover Informações Adicionais
+    public function delete(WSL_Model_File_File $file) {
+        // Identificador Vazio?
+        if (!$file->getConfig()->hasParam('id')) {
+            // Confirmar Remoção
+            return true;
+        }
+        // Remover Conteúdo
+        $this->getAdapter()->delete('wsl_files', array(
+            'id' => $file->getConfig()->getParam('id')
+        ));
+        // Remover Parâmetro
+        $file->getConfig()->setParam('id', null);
+        // Contabilizar Hashes
+        $counter = $this->_count($file->getHash());
+        // Remover Elemento?
+        return $counter == 0;
+    }
 
 }

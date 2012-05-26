@@ -37,5 +37,16 @@ interface WSL_Model_File_InfoHandlerInterface {
      * @return bool Confirmar Salvamento em Disco do Arquivo
      */
     public function save(WSL_Model_File_File $file);
+
+    /**
+     * Remover Informações
+     *
+     * Utilizado para manter sincronizado o armazenamento de informações
+     * adicionais relacionadas com elemento em sistema de arquivos. Apresenta
+     * uma confirmação se o arquivo deve ser removido do disco.
+     *
+     * @param  WSL_Model_File_File $file Elemento Utilizado
+     * @return bool Confirmar Remoção em Disco do Arquivo
+     */
     public function delete(WSL_Model_File_File $file);
 }
