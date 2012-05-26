@@ -3,6 +3,12 @@
 class WSL_Model_File_File {
 
     /**
+     * Caminho Completo do Arquivo no Sistema
+     * @var string
+     */
+    protected $_realPath = null;
+
+    /**
      * Valor Hash do Arquivo
      * @var string
      */
@@ -36,13 +42,33 @@ class WSL_Model_File_File {
      * Caminho Base para Armazenamento
      * @var string
      */
-    protected static $_path = '';
+    protected static $_basePath = '';
+
+    /**
+     * Caminho Temporário para Armazenamento
+     * @var string
+     */
+    protected static $_tempPath = '';
 
     /**
      * Manipulador de Informações
      * @var WSL_Model_File_InfoHandlerInterface
      */
     protected static $_handler = null;
+
+    /**
+     * Construtor Padrão
+     *
+     * Reponsável pela inicialização de instâncias de classes para arquivos
+     * armazenados em disco. Método com visibilidade privada pois temos um
+     * padrão de projeto para construir determinado elemento.
+     *
+     * @param string $realPath Caminho Completo do Arquivo
+     */
+    private function __construct($realPath) {
+        // Configuração
+        $this->_setRealPath($realPath);
+    }
 
     /**
      * Configuração do Hash do Arquivo
@@ -68,6 +94,28 @@ class WSL_Model_File_File {
     }
 
     /**
+     * Configuração do Caminho Completo do Arquivo
+     *
+     * Configura o valor do caminho completo do arquivo dentro do sistema de
+     * arquivos utilizado para armazenar o conteúdo.
+     *
+     * @param  string $realPath Valor para Configuração
+     * @return WSL_Model_File_File Próprio Objeto para Encadeamento
+     */
+    protected function _setRealPath($realPath) {
+        // Existe Arquivo?
+        if (!is_readable($realPath)) {
+            throw new Exception("Invalid File: '$realPath'");
+        }
+        // Configuração
+        $this->_realPath = $realPath;
+        // Configurar Hash do Arquivo
+        $this->_setHash(sha1_file($realPath));
+        // Encadeamento
+        return $this;
+    }
+
+    /**
      * Apresentar Caminho Completo do Arquivo
      *
      * Informa o caminho completo do arquivo armazenado no sistema operacional,
@@ -76,9 +124,29 @@ class WSL_Model_File_File {
      *
      * @return string Valor Solicitado
      */
-    public function getRealPath() {}
+    public function getRealPath() {
+        // Apresentação
+        return $this->_realPath;
+    }
 
-    public function save() {}
+    /**
+     * Salvar Elementos
+     *
+     * Utilizado para sincronização de arquivos dentro do sistema, salvando as
+     * informações armazenadas no elemento na estrutura de armazenamento de
+     * arquivos e no manipulador de arquivos.
+     *
+     * @return WSL_Model_File_File Próprio Objeto para Encadeamento
+     */
+    public function save() {
+        // Salvar Arquivo
+        if (self::getDefaultHandler()->save($this)) {
+            // Adicionar uma Cópia do Arquivo na Estrutura de Diretórios
+            copy($this->getRealPath(), self::_buildHashPath($this->getHash()));
+        }
+        // Encadeamento
+        return $this;
+    }
 
     /**
      * Remoção de Elemento
@@ -90,10 +158,8 @@ class WSL_Model_File_File {
      * @return WSL_Model_File_File Próprio Objeto para Encadeamento
      */
     public function delete() {
-        // Captura do Manipulador
-        $handler = self::getDefaultHandler();
         // Remover Arquivo
-        if ($handler->delete($this)) {
+        if (self::getDefaultHandler()->delete($this)) {
             // Remover Fisicamente o Arquivo
             unlink($this->getRealPath());
         }
@@ -213,6 +279,7 @@ class WSL_Model_File_File {
      * @param string $basePath Valor para Configuração
      */
     public static function setBasePath($basePath) {
+        // Configuração
         self::$_basePath = (string) $basePath;
     }
 
@@ -222,59 +289,29 @@ class WSL_Model_File_File {
      * @return string Valor Configurado
      */
     public static function getBasePath() {
+        // Apresentação
         return self::$_basePath;
     }
 
     /**
-     * Construção de Objetos de Arquivo
+     * Configura o Caminho Temporário para Arquivos
      *
-     * O padrão de projeto Factory possibilita a criação de um conjunto de
-     * arquivos com base em parâmetros adicionados. Conforme as informações
-     * apresentadas, serão construídos objetos de arquivos com base nos
-     * parâmetros. Temos as seguintes opções:
-     *
-     * $params['content']
-     * $params['filename']
-     *     Conteúdo do arquivo para manipulação. Será criado um arquivo
-     *     temporário no diretório compartilhado do sistema operacional, com o
-     *     conteúdo informado. Este arquivo será marcado como temporário e não
-     *     estará disponível na árvore da estrutura padrão. Se o nome do arquivo
-     *     não estiver sendo apresentado, será criado um nome temporário.
-     *
-     * $params['filepath']
-     *     Caminho para o arquivo que deve ser utilizado para o objeto. Este
-     *     arquivo será marcado como temporário e não será salvo na árvore de
-     *     diretórios do sistema.
-     *
-     * $params['hash']
-     *     Valor de Hash do arquivo que já está armazenado dentro da estrutura
-     *     de árvore do sistema. Este será marcado como não temporário pois já
-     *     pertence ao sistema.
-     *
-     * $params['container']
-     * $params['category']
-     * $params['reference']
-     *     Valores para consulta em manipulador de arquivos, com os valores
-     *     básicos para mapeamento de arquivo em ambiente externos, como banco
-     *     de dados. Este arquivo será marcado como não temporário pois já deve
-     *     pertencer à estrutura de diretórios do sistema.
-     *
-     * $params['id']
-     *     Identificador do arquivo que deve ser apresentado ao manipulador de
-     *     informações em ambientes externos. Carrega os conteúdos necessários
-     *     para construção de objetos. Arquivo será marcado como não temporário
-     *     pois já deve estar salvo no sistema.
-     *
-     * Sempre será apresentado um conjunto de arquivos encontrados, mesmo se
-     * este conjunto possuir somente um elemento.
-     *
-     * @param  array $params Parâmetros para Construção
-     * @return array Conjunto de Arquivos Construídos
+     * @param string $tempPath Valor para Configuração
      */
-    public static function factory(array $params) {}
+    public static function setTempPath($tempPath) {
+        // Configuração
+        self::$_tempPath = (string) $tempPath;
+    }
 
-    public static function findFromReference($container, $category, $reference) {}
-    public static function findFromHashes(array $hashes) {}
+    /**
+     * Apresenta o Caminho Temporário para Arquivos
+     *
+     * @param string Valor Configurado
+     */
+    public static function getTempPath() {
+        // Apresentação
+        return self::$_tempPath;
+    }
 
     /**
      * Sincronização de Elementos
@@ -284,10 +321,11 @@ class WSL_Model_File_File {
      * arquivos já salvos no sistema e o outro os arquivos considerados como
      * novos na estrutura. Todos os arquivos do segundo elemento serão
      * considerados, ao final da execução, os novos arquivos com o devido
-     * posicionamento necessário e valores atualizados.
+     * posicionamento necessário e valores atualizados serão retornados.
      *
      * @param  array $oldfiles Conjunto de Arquivos Antigos
      * @param  array $newfiles Conjunto de Arquivos Novos
+     * @return array Conjunto de Arquivos Sincronizados
      */
     public static function synchronize(array $oldfiles, array $newfiles) {
         // Salvar Posicionamentos
@@ -300,9 +338,9 @@ class WSL_Model_File_File {
         // Remoção de Elementos
         foreach ($oldfiles as $oldfile) {
             $search = null;
-            foreach ($newfiles as $newfile) {
+            foreach ($newfiles as $index => $newfile) {
                 if ($oldfile->equals($newfile)) {
-                    $search = $oldfile;
+                    $search = $newfiles[$index] = $oldfile->setOrder($newfile->getOrder());
                 }
             }
             // Elemento Encontrado?
@@ -315,6 +353,8 @@ class WSL_Model_File_File {
         foreach ($newfiles as $newfile) {
             $newfile->save();
         }
+        // Apresentação
+        return $newfiles;
     }
 
     /**
@@ -342,6 +382,30 @@ class WSL_Model_File_File {
     public static function getDefaultHandler() {
         // Apresentação
         return self::$_handler;
+    }
+
+    /**
+     * Construção de Nome de Arquivo na Árvore de Diretórios
+     *
+     * Apresenta o caminho completo do arquivo será armazenado na árvore de
+     * diretórios conforme o Hash apresentado. O nome completo do arquivo será o
+     * caminho base concatenado com divisor de diretórios, primeiros 3
+     * caracteres do Hash, divisor de diretórios, próximos 3 caracteres do Hash,
+     * divisor de diretórios e os outros 36 caracteres. Logo, temos o seguinte
+     * exemplo:
+     *
+     * $hash = ec7117851c0e5dbaad4effdb7cd17c050cea88cb
+     * $path = [BASEPATH]/ec7/117/851c0e5dbaad4effdb7cd17c050cea88cb
+     *
+     * @param  string $hash Valor Base para Construção
+     * @return string Caminho do Arquivo na Estrutura de Diretórios
+     */
+    protected static function _buildHashPath($hash) {
+        // Construção
+        return self::getBasePath()
+            . DIRECTORY_SEPARATOR . substr($hash, 0, 3)
+            . DIRECTORY_SEPARATOR . substr($hash, 3, 3)
+            . DIRECTORY_SEPARATOR . substr($hash, 6);
     }
 
 }
