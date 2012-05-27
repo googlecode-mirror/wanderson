@@ -358,6 +358,25 @@ class WSL_Model_File_File {
     }
 
     /**
+     * Captura do Conteúdo do Arquivo
+     *
+     * Verifica se o arquivo existe em disco e apresenta o seu conteúdo; caso
+     * contrário, será apresentado um conteúdo vazio.
+     *
+     * @return string Conteúdo do Arquivo Solicitado
+     */
+    public function getContent() {
+        // Inicialização
+        $result = '';
+        // Existe Arquivo?
+        if ($this->exists()) {
+            $result = file_get_contents($this->getRealPath());
+        }
+        // Apresentação
+        return $result;
+    }
+
+    /**
      * Configura o Caminho Base para Arquivos
      *
      * @param string $basePath Valor para Configuração

@@ -35,6 +35,13 @@ $adapter = new WSL_Db_Adapter_MySQL(array(
 ));
 // Registrar Adaptador
 $front->getConfig()->setParam('Db.adapter', $adapter);
+// Camada de Arquivos
+$handler = new WSL_Model_File_DbInfoHandler($adapter);
+WSL_Model_File_File::setDefaultHandler($handler);
+WSL_Model_File_File::setBasePath(realpath(APPLICATION_PATH . '/../data/files'));
+WSL_Model_File_File::setTempPath(realpath(APPLICATION_PATH . '/../temp'));
+// Compilador
+WSL_Compiler_Context::setWorkspacePath(realpath(APPLICATION_PATH . '/../temp'));
 // Execução
 try {
     $front->dispatch($request, $response);
