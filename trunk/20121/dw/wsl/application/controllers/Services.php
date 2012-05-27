@@ -46,5 +46,14 @@ class Controller_Services extends WSL_Controller_ActionAbstract {
         $this->_execute('Users');
     }
 
+    /**
+     * Serviço de Compilador
+     * @return null
+     */
+    public function compilerAction() {
+        // Acesso ao Serviço
+        $this->_execute('Compiler');
+    }
+
 }
 
