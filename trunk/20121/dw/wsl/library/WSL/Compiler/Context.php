@@ -31,6 +31,12 @@ class WSL_Compiler_Context {
     protected $_elements = array();
 
     /**
+     * Nome do Elemento de Saída
+     * @var string
+     */
+    protected $_output = '';
+
+    /**
      * Construtor Padrão
      *
      * Inicializa o contexto para execução do processamento, incluindo um novo
@@ -39,6 +45,49 @@ class WSL_Compiler_Context {
     public function __construct() {
         // Inicialização
         $this->_initPath();
+    }
+
+    /**
+     * Configura o Nome do Elemento de Saída
+     *
+     * Durante a compilação, o elemento resultado da compilação deve ser marcado
+     * como de saída pelos Plugins neste método, que verifica se o mesmo já está
+     * dentro do conjunto de elementos criados.
+     *
+     * @param  string $output Nome do Elemento
+     * @return WSL_Compiler_Context Próprio Objeto para Encadeamento
+     */
+    public function setOutput($output) {
+        // Existe no Contexto?
+        if ($this->has($output)) {
+            // Configuração
+            $this->_output = (string) $output;
+        }
+        // Encadeamento
+        return $this;
+    }
+
+    /**
+     * Apresenta o Nome do Elemento de Saída
+     *
+     * Durante a compilação um elemento deve ser marcado como de saída pelos
+     * Plugins para que seja capturado em ambiente externo. Será apresentado o
+     * endereço completo do arquivo no sistema operacional se a saída foi
+     * configurada corretamente.
+     *
+     * @param  bool   $basepath Caminho Base Concatenado
+     * @return string Elemento Solicitado
+     */
+    public function getOutput($basepath = false) {
+        // Captura
+        $output = $this->_output;
+        // Apresentar Caminho Base?
+        if ($basepath) {
+            $output = (string) realpath(self::getWorkspacePath()
+                . DIRECTORY_SEPARATOR . $output);
+        }
+        // Apresentação
+        return $output;
     }
 
     /**
