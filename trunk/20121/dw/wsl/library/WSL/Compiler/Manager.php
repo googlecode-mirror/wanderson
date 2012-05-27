@@ -261,6 +261,7 @@ class WSL_Compiler_Manager {
             $this->_state = 'DISABLED';
             // Diretório Anterior
             chdir($current);
+            file_put_contents('/tmp/wanderson.log', var_export($e->__toString(), true));
             // Apresentar Erro
             throw new WSL_Compiler_ManagerException('Internal Error', 500, $e);
 
