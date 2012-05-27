@@ -6,5 +6,6 @@ class WSL_Compiler_Plugin_Tex implements WSL_Compiler_PluginBeforeInterface {
 		if (!$context->has('document.tex')) {
 			throw new WSL_Compiler_PluginException("Where's 'document.tex'?");
 		}
+		$context->touch('document.dvi');
 	}
 }

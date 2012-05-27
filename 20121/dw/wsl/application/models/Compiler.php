@@ -53,7 +53,7 @@ class Model_Compiler {
             // Apresentado Conteúdo?
             if (!empty($document['content'])) {
                 // Criar Novo Documento
-                $element = WSL_Model_File_File::buildFromContent($document['filename'], $document['content']);
+                $element = WSL_Model_File_File::buildFromContent($document['filename'], base64_decode($document['content']));
             } else {
                 // Criação por Hash
                 $search = WSL_Model_File_File::findFromHashes(array($document['hash']));
@@ -76,8 +76,8 @@ class Model_Compiler {
         // Inicialização de Compilador
         $compiler = new WSL_Compiler_Manager($context);
         $compiler // Configuração
-            ->setAfterPlugin($input)
-            ->setBeforePlugin($output);
+            ->setBeforePlugin($input)
+            ->setAfterPlugin($output);
         // Execução
         $compiler->compile();
         // Capturar Documento Resultante

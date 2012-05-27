@@ -597,7 +597,7 @@ class WSL_Model_File_File {
         // Construção do Objeto Relacionado
         $element = new self($realPath);
         // Configurações Básicas
-        $element->setHash(sha1_file($realPath));
+        $element->_setHash(sha1_file($realPath));
         // Apresentação
         return $element;
     }
