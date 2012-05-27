@@ -83,8 +83,7 @@ class WSL_Compiler_Context {
         $output = $this->_output;
         // Apresentar Caminho Base?
         if ($basepath) {
-            $output = (string) realpath(self::getWorkspacePath()
-                . DIRECTORY_SEPARATOR . $output);
+            $output = (string) realpath($this->getPath($output));
         }
         // Apresentação
         return $output;
