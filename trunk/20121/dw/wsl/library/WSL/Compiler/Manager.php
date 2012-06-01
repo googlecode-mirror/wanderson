@@ -261,7 +261,6 @@ class WSL_Compiler_Manager {
             $this->_state = 'DISABLED';
             // Diretório Anterior
             chdir($current);
-            file_put_contents('/tmp/wanderson.log', var_export($e->__toString(), true));
             // Apresentar Erro
             throw new WSL_Compiler_ManagerException('Internal Error', 500, $e);
 
@@ -286,12 +285,11 @@ class WSL_Compiler_Manager {
     protected function _compile() {
         // Criação de Descritores
         $descriptors = array(
-            0 => array('file', 'document.tex', 'r'), // Entrada Padrão
-            1 => array('pipe', 'w'),                 // Saída Padrão
-            2 => array('pipe', 'w'),                 // Saída de Erro
+            1 => array('pipe', 'w'), // Saída Padrão
+            2 => array('pipe', 'w'), // Saída de Erro
         );
         // Chamada LaTeX
-        $process = proc_open('latex', $descriptors, $pipes);
+        $process = proc_open('latex document.tex', $descriptors, $pipes);
         // Recurso Inicializado?
         if (is_resource($process)) {
             // Execução do Processo

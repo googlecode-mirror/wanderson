@@ -178,14 +178,18 @@ class WSL_Model_File_File {
         if (self::getDefaultHandler()->save($this)) {
             // Arquivo Existe?
             if ($this->exists()) {
+                // Nome de Arquivo Alvo
+                $hashPath = self::_buildHashPath($this->getHash());
                 // Adicionar Diretórios Necessários
-                $dirname = dirname(self::_buildHashPath($this->getHash()));
+                $dirname = dirname($hashPath);
                 // Existe Diretório?
                 if (!is_dir($dirname)) {
                     mkdir($dirname, 0777, true);
                 }
                 // Adicionar uma Cópia do Arquivo na Estrutura de Diretórios
-                copy($this->getRealPath(), self::_buildHashPath($this->getHash()));
+                copy($this->getRealPath(), $hashPath);
+                // Configurar Novo Caminho de Arquivo
+                $this->_setRealPath($hashPath);
             }
         }
         // Encadeamento

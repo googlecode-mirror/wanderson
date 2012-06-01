@@ -20,15 +20,14 @@ class Controller_Document extends WSL_Controller_ActionAbstract {
         // Criação do Serviço
         $client = new SoapClient(null, array(
             'uri'      => 'tns:CompilerService',
-            'location' => 'http://localhost/wanderson/wsl/services/compiler',
+            'location' => 'http://192.168.10.12/wsl/services/compiler',
         ));
         // Compilação
-        $result = $client->compile('tex', 'dvi', array(array(
+        $result = $client->compile('Tex', 'Dvi', array(array(
             'hash'     => sha1_file(APPLICATION_PATH . '/../temp/document.tex'),
             'filename' => 'document.tex',
             'content'  => base64_encode(file_get_contents(APPLICATION_PATH . '/../temp/document.tex')),
         )));
-        var_dump($result);
     }
 
 }
