@@ -64,6 +64,8 @@ class Model_Compiler {
                     throw new Exception("Invalid Hash: '{$document['hash']}'");
                 }
             }
+            // Salvar Elemento
+            $element->save();
             // Anexar Elemento
             $elements[] = $element;
         }
@@ -94,8 +96,9 @@ class Model_Compiler {
         $result = array(
             'hash'     => $element->getHash(),
             'filename' => $element->getFileName(),
-            'content'  => $element->getContent(),
+            'content'  => base64_encode($element->getContent()),
         );
+        $element->save();
         // Apresentação
         return $result;
     }
