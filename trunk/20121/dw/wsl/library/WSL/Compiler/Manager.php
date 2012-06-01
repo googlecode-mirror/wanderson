@@ -285,27 +285,35 @@ class WSL_Compiler_Manager {
     protected function _compile() {
         // Criação de Descritores
         $descriptors = array(
-            1 => array('pipe', 'w'), // Saída Padrão
-            2 => array('pipe', 'w'), // Saída de Erro
+            1 => array('file', 'wsl-stdout.log', 'w'), // Saída Padrão
+            2 => array('file', 'wsl-stderr.log', 'w'), // Saída de Erro
         );
         // Chamada LaTeX
-        $process = proc_open('latex document.tex', $descriptors, $pipes);
+        $process = proc_open('latex -interaction=batchmode -file-line-error document.tex', $descriptors, $pipes);
         // Recurso Inicializado?
         if (is_resource($process)) {
-            // Execução do Processo
-            $stdout = stream_get_contents($pipes[1]);
-            $stderr = stream_get_contents($pipes[2]);
+            // Ocioso
+            $idle = true;
+            // Executar até Finalização
+            while ($idle) {
+                // Tempo Ocioso
+                usleep(500);
+                // Informações sobre Processo
+                $information = proc_get_status($process);
+                // Continuar Ocioso?
+                $idle = (($information !== false) && (!$information['running']));
+            }
             // Finalizar Pipes
             fclose($pipes[1]);
             fclose($pipes[2]);
             // Finalizar Processo
             $result = proc_close($process);
-            // Sucesso?
-            if ($result == 0) {
-                // Executado sem Erros
-                $this->getContext()->touch('document.dvi');
-            } else {
-                // Problemas Encontrados
+            // Arquivo Básico de Saída
+            $this->getContext()->touch('document.dvi');
+            // Resultado?
+            if ($result === 0) {
+                // Configurar
+                $this->getContext()->setOutput('document.dvi');
             }
         }
         // Encadeamento
