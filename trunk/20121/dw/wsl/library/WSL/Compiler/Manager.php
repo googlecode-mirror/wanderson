@@ -300,6 +300,13 @@ class WSL_Compiler_Manager {
             fclose($pipes[2]);
             // Finalizar Processo
             $result = proc_close($process);
+            // Sucesso?
+            if ($result == 0) {
+                // Executado sem Erros
+                $this->getContext()->touch('document.dvi');
+            } else {
+                // Problemas Encontrados
+            }
         }
         // Encadeamento
         return $this;
