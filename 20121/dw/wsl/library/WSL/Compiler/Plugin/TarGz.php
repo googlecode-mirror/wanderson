@@ -51,7 +51,7 @@ class WSL_Compiler_Plugin_TarGz implements
             2 => array('pipe', 'w'), // Saída de Erro
         );
         // Processamento
-        $process = proc_open('tar cpzf document.tar.gz *', array(), $pipes);
+        $process = proc_open('tar cpzf document.tar.gz *', $descriptors, $pipes);
         // Recurso Inicializado?
         if (is_resource($process)) {
             // Saídas Padrão e de Erro
