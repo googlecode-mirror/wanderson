@@ -9,6 +9,46 @@
 class Model_Users {
 
     /**
+     * Limite de Autenticação em Segundos
+     * @var int
+     */
+    protected $_limit = 300;
+
+    /**
+     * Configuração de Limite de Autenticação
+     *
+     * Tempo em segundos utilizado na comparação de limite máximo para
+     * autenticação do usuário. Valor utilizado durante a verificação de usuário
+     * habilitado para utilizar o sistema.
+     *
+     * @param  int $limit Valor para Configuração
+     * @return Model_Users Próprio Objeto para Encadeamento
+     */
+    public function setLimit($limit) {
+        // Conversão
+        $limit = abs((int) $limit);
+        // Configuração
+        $this->_limit = $limit;
+        // Encadeamento
+        return $this;
+    }
+
+    /**
+     * Apresentação de Limite de Autenticação
+     *
+     * Utilizado durante a validação de usuário autenticado no sistema. Valor em
+     * segundos que deve ser adicionado ao último horário de autenticação do
+     * usuário no sistema para verificar se este ainda está habilitado para
+     * utilização.
+     *
+     * @return int Valor Configurado
+     */
+    public function getLimit() {
+        // Apresentação
+        return $this->_limit;
+    }
+
+    /**
      * Ofuscar Valor
      *
      * @param  string $value Valor para Processamento
@@ -150,9 +190,13 @@ class Model_Users {
         $admin = (int) $admin;
         // Consultar Usuário
         $sql = <<<SQL
-SELECT UNIX_TIMESTAMP(`u`.`session`) AS `timestamp`
-    FROM `wsl_users` AS `u`
-    WHERE `u`.`token` = '$token' AND `u`.`admin` <= $admin
+SELECT
+    `s`.`id`, UNIX_TIMESTAMP(`s`.`timestamp`) AS `timestamp`
+FROM `wsl_sessions` AS `s`
+    LEFT JOIN `wsl_users` AS `u` ON `u`.`id` = `s`.`user_id`
+WHERE `s`.`token` = '$token' AND `u`.`admin` <= $admin
+ORDER BY `timestamp` DESC
+LIMIT 1
 SQL;
         // Consulta
         $search = $adapter->query($sql);
@@ -161,9 +205,20 @@ SQL;
         // Elemento Encontrado?
         if (!empty($search)) {
             // Construção de Elemento
-            $element = current($search);
+            $element = reset($search);
+            // Horário Atual
+            $current = time();
             // Verificação de Token
-            $result = (time() <= ($element['timestamp'] + 300));
+            $result = ($current <= ($element['timestamp'] + $this->getLimit()));
+            // Sucesso?
+            if ($result) {
+                // Dados para Atualização
+                $data = array('timestamp' => $current);
+                // Atualizar Sessão Atual
+                $adapter->update('wsl_sessions', $data, array(
+                    'id' => $element['id'],
+                ));
+            }
         }
         // Apresentar Resultado
         return $result;
@@ -194,7 +249,7 @@ SQL;
         // Consulta
         $sql = <<<SQL
 SELECT
-    `u`.`id`, `u`.`email`, `u`.`hash`, (`u`.`hash` = '$hash') AS `compare`
+    `u`.`id`, (`u`.`hash` = '$hash') AS `compare`
 FROM `wsl_users` AS `u` WHERE `u`.`email` = '$email'
 SQL;
         // Consulta de Informações
@@ -202,20 +257,25 @@ SQL;
         // Verificação
         if (!empty($result)) {
             // Elemento Encontrado
-            $element = current($result);
+            $element = reset($result);
             // Comparação de Senhas
             if ($element['compare']) {
-                // Credenciais Válidas
-                $seed  = date('Y-m-d H:i:s');
-                $token = self::salt($seed);
+                // Existe Usuário Autenticado?
+                do {
+                    // Credenciais Válidas
+                    $seed  = date('Y-m-d H:i:s.u');
+                    // Criação de Token
+                    $token = self::salt($seed);
+                    // Possível Autenticar?
+                } while ($this->check($token, true /* admin */));
                 // Identificador
                 $id = $element['id'];
                 // Sessão Utilizada
-                $sql = <<<SQL
-UPDATE `wsl_users` SET `session` = '$seed', `token` = '$token' WHERE `id` = $id
-SQL;
-                // Salvar Informações
-                $adapter->query($sql);
+                $adapter->insert('wsl_sessions', array(
+                    'user_id'   => $id,
+                    'timestamp' => $seed,
+                    'token'     => $token,
+                ));
             } else {
                 // Hash não Encontrado
                 $token = null;
