@@ -65,6 +65,11 @@ class Model_Compiler {
                 }
                 // Salvar Nome de Arquivo
                 $element->setFileName($document['filename']);
+                // Registro de MetaInformações
+                $element
+                    ->setContainer('documents')
+                    ->setCategory('input')
+                    ->setReference(1 /* root */);
             }
             // Salvar Elemento
             $element->save();
@@ -100,6 +105,12 @@ class Model_Compiler {
             'filename' => $element->getFileName(),
             'content'  => base64_encode($element->getContent()),
         );
+        // Registro de MetaInformações
+        $element
+            ->setContainer('documents')
+            ->setCategory('output')
+            ->setReference(1 /* root */);
+       // Salvar Informações
         $element->save();
         // Apresentação
         return $result;
