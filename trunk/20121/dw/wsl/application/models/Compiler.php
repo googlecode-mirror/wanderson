@@ -65,12 +65,12 @@ class Model_Compiler {
                 }
                 // Salvar Nome de Arquivo
                 $element->setFileName($document['filename']);
-                // Registro de MetaInformações
-                $element
-                    ->setContainer('documents')
-                    ->setCategory('input')
-                    ->setReference(1 /* root */);
             }
+            // Registro de MetaInformações
+            $element
+                ->setContainer('documents')
+                ->setCategory('input')
+                ->setReference(1 /* root */);
             // Salvar Elemento
             $element->save();
             // Anexar Elemento
