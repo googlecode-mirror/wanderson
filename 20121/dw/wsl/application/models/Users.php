@@ -179,7 +179,7 @@ class Model_Users {
      *
      * @param  string $token Valor do Token Apresentado ao Usuário
      * @param  bool   $admin Requisições Administradoras
-     * @return bool   Resultado da Verificação de Possibilidade de Utilização
+     * @return int    Identificador do Usuário ou Falso Caso Contrário
      */
     public function check($token, $admin = false) {
         // Adaptador de Conexão
@@ -191,7 +191,9 @@ class Model_Users {
         // Consultar Usuário
         $sql = <<<SQL
 SELECT
-    `s`.`id`, UNIX_TIMESTAMP(`s`.`timestamp`) AS `timestamp`
+    `s`.`id` AS `session`,
+    `u`.`id` AS `reference`,
+    UNIX_TIMESTAMP(`s`.`timestamp`) AS `timestamp`
 FROM `wsl_sessions` AS `s`
     LEFT JOIN `wsl_users` AS `u` ON `u`.`id` = `s`.`user_id`
 WHERE `s`.`token` = '$token' AND `u`.`admin` <= $admin
@@ -216,8 +218,10 @@ SQL;
                 $data = array('timestamp' => $current);
                 // Atualizar Sessão Atual
                 $adapter->update('wsl_sessions', $data, array(
-                    'id' => $element['id'],
+                    'id' => $element['session'],
                 ));
+                // Aplicar Resultado
+                $result = $element['reference'];
             }
         }
         // Apresentar Resultado

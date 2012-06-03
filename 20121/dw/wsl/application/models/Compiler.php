@@ -22,6 +22,7 @@ class Model_Compiler {
      * conjunto de documentos que devem ser compilados para saída do documento
      * no formato desejado.
      *
+     * @param  int    $user      Referência ao Usuário Utilizado
      * @param  string $input     Nome do Plugin de Entrada
      * @param  string $output    Nome do Plugin de Saída
      * @param  array  $documents Conjunto de Documentos para Compilação
@@ -30,7 +31,7 @@ class Model_Compiler {
      * @throws Exception Nome de Arquivo não Apresentado
      * @throws Exception Hash Inválido
      */
-    public function compile($input, $output, array $documents) {
+    public function compile($user, $input, $output, array $documents) {
         // Documentos Apresentados?
         if (empty($documents)) {
             // Sem Compilação
@@ -41,7 +42,7 @@ class Model_Compiler {
             ->getConfig()->getParam('Db.adapter');
         // Adicionar Novo Documento
         $reference = $adapter->insert('wsl_documents', array(
-            'user_id' => 1 /* root */,
+            'user_id' => $user,
         ));
         // Inicialização
         $elements = array();
