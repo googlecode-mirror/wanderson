@@ -210,7 +210,7 @@ SQL;
             // Construção de Elemento
             $element = reset($search);
             // Verificar Usuário Administrativo?
-            if ((!admin) || ($admin && $element['admin'])) {
+            if ((!$admin) || ($admin && $element['admin'])) {
                 // Horário Atual
                 $current = time();
                 // Verificação de Token
