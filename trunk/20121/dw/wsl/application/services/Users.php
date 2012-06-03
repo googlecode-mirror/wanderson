@@ -106,11 +106,9 @@ class Service_Users {
      * @return string Conteúdo do Novo Hash Gerado
      */
     public function hash() {
-        // Filtro de Parâmetros
-        $args = func_get_args();
-        foreach (array('token', 'id') as $identifier) {
-            $$identifier = array_shift($args);
-        }
+        // Captura de Parâmetros
+        $token = (string) func_get_arg(0);
+        $id    = (int) func_get_arg(1);
         // Camada de Modelo
         $model = new Model_Users();
         // Resultado Inicial
