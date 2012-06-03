@@ -191,12 +191,13 @@ class Model_Users {
         // Consultar Usuário
         $sql = <<<SQL
 SELECT
-    `s`.`id` AS `session`,
     `u`.`id` AS `reference`,
+    `u`.`admin` AS `admin`,
+    `s`.`id` AS `session`,
     UNIX_TIMESTAMP(`s`.`timestamp`) AS `timestamp`
 FROM `wsl_sessions` AS `s`
     LEFT JOIN `wsl_users` AS `u` ON `u`.`id` = `s`.`user_id`
-WHERE `s`.`token` = '$token' AND `u`.`admin` <= $admin
+WHERE `s`.`token` = '$token'
 ORDER BY `timestamp` DESC
 LIMIT 1
 SQL;
@@ -208,20 +209,23 @@ SQL;
         if (!empty($search)) {
             // Construção de Elemento
             $element = reset($search);
-            // Horário Atual
-            $current = time();
-            // Verificação de Token
-            $result = ($current <= ($element['timestamp'] + $this->getLimit()));
-            // Sucesso?
-            if ($result) {
-                // Dados para Atualização
-                $data = array('timestamp' => $current);
-                // Atualizar Sessão Atual
-                $adapter->update('wsl_sessions', $data, array(
-                    'id' => $element['session'],
-                ));
-                // Aplicar Resultado
-                $result = $element['reference'];
+            // Verificar Usuário Administrativo?
+            if ((!admin) || ($admin && $element['admin'])) {
+                // Horário Atual
+                $current = time();
+                // Verificação de Token
+                $result = ($current <= ($element['timestamp'] + $this->getLimit()));
+                // Sucesso?
+                if ($result) {
+                    // Dados para Atualização
+                    $data = array('timestamp' => $current);
+                    // Atualizar Sessão Atual
+                    $adapter->update('wsl_sessions', $data, array(
+                        'id' => $element['session'],
+                    ));
+                    // Aplicar Resultado
+                    $result = $element['reference'];
+                }
             }
         }
         // Apresentar Resultado
