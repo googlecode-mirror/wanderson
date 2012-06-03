@@ -36,6 +36,13 @@ class Model_Compiler {
             // Sem Compilação
             return array();
         }
+        // Adaptador de Conexão
+        $adapter = WSL_Controller_Front::getInstance()
+            ->getConfig()->getParam('Db.adapter');
+        // Adicionar Novo Documento
+        $reference = $adapter->insert('wsl_documents', array(
+            'user_id' => 1 /* root */,
+        ));
         // Inicialização
         $elements = array();
         // Capturar Documentos
@@ -70,7 +77,7 @@ class Model_Compiler {
             $element
                 ->setContainer('documents')
                 ->setCategory('input')
-                ->setReference(1 /* root */);
+                ->setReference($reference);
             // Salvar Elemento
             $element->save();
             // Anexar Elemento
@@ -109,8 +116,8 @@ class Model_Compiler {
         $element
             ->setContainer('documents')
             ->setCategory('output')
-            ->setReference(1 /* root */);
-       // Salvar Informações
+            ->setReference($reference);
+        // Salvar Informações
         $element->save();
         // Apresentação
         return $result;
