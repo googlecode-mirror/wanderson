@@ -134,10 +134,12 @@ class Model_Users {
         $id = (int) $id;
         // Gerar Hash para Usuário
         $hash = self::salt(time());
-        // Cadastrar no Banco de Dados
-        $adapter->update(array(
+        // Dados para Atualização
+        $data = array(
             'hash' => $hash
-        ), 'wsl_users', array('id' => $id));
+        );
+        // Cadastrar no Banco de Dados
+        $adapter->update('wsl_users', $data, array('id' => $id));
         // Apresentar Novo Hash
         return $hash;
     }
