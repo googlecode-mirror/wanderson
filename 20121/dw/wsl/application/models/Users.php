@@ -280,9 +280,8 @@ SQL;
                 $id = $element['id'];
                 // Sessão Utilizada
                 $adapter->insert('wsl_sessions', array(
-                    'user_id'   => $id,
-                    'timestamp' => $seed,
-                    'token'     => $token,
+                    'user_id' => $id,
+                    'token'   => $token,
                 ));
             } else {
                 // Hash não Encontrado
