@@ -303,9 +303,6 @@ class WSL_Compiler_Manager {
                 // Continuar Ocioso?
                 $idle = (($information !== false) && (!$information['running']));
             }
-            // Finalizar Pipes
-            fclose($pipes[1]);
-            fclose($pipes[2]);
             // Finalizar Processo
             $result = proc_close($process);
             // Arquivo Básico de Saída
