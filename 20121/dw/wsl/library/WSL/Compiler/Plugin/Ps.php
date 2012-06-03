@@ -44,7 +44,7 @@ class WSL_Compiler_Plugin_Ps implements WSL_Compiler_PluginAfterInterface {
                 // Informações sobre Processo
                 $information = proc_get_status($process);
                 // Continuar Ocioso?
-                $idle = (($information !== false) && (!$information['running']));
+                $idle = (($information !== false) && ($information['running']));
             }
             // Finalizar Pipes
             fclose($pipes[1]);

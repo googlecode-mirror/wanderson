@@ -301,7 +301,7 @@ class WSL_Compiler_Manager {
                 // Informações sobre Processo
                 $information = proc_get_status($process);
                 // Continuar Ocioso?
-                $idle = (($information !== false) && (!$information['running']));
+                $idle = (($information !== false) && ($information['running']));
             }
             // Finalizar Processo
             $result = proc_close($process);
