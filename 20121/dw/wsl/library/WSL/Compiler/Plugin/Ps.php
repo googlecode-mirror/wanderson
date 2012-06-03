@@ -50,7 +50,7 @@ class WSL_Compiler_Plugin_Ps implements WSL_Compiler_PluginAfterInterface {
             fclose($pipes[1]);
             fclose($pipes[2]);
             // Finalizar Processo
-            $result = proc_close($process);
+            proc_close($process);
         }
         // Informar Arquivo de Saída
         $manager->getContext()->setOutput('document.ps');
