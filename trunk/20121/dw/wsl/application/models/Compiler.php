@@ -63,6 +63,8 @@ class Model_Compiler {
                 if (!$element->exists()) {
                     throw new Exception("Invalid Hash: '{$document['hash']}'");
                 }
+                // Salvar Nome de Arquivo
+                $element->setFileName($document['filename']);
             }
             // Salvar Elemento
             $element->save();
