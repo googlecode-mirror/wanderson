@@ -41,7 +41,7 @@ class Service_Compiler {
         // Verificar Token de Autenticação
         $user = $model->check($token);
         // Existe Referência?
-        if (!empty($user)) {
+        if (empty($user)) {
             // Apresentar Erro de Autenticação
             throw new Exception('Authentication Error', 403);
         }
