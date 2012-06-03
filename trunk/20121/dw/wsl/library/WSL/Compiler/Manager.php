@@ -297,18 +297,18 @@ class WSL_Compiler_Manager {
             // Executar até Finalização
             while ($idle) {
                 // Tempo Ocioso
-                usleep(500);
+                usleep(500); // 0.5 Segundos
                 // Informações sobre Processo
                 $information = proc_get_status($process);
                 // Continuar Ocioso?
                 $idle = (($information !== false) && ($information['running']));
             }
             // Finalizar Processo
-            $result = proc_close($process);
+            proc_close($process);
             // Arquivo Básico de Saída
             $this->getContext()->touch('document.dvi');
             // Resultado?
-            if ($result === 0) {
+            if ($information['exitcode'] === 0) {
                 // Configurar
                 $this->getContext()->setOutput('document.dvi');
             }
