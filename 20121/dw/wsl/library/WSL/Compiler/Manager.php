@@ -245,7 +245,8 @@ class WSL_Compiler_Manager {
             $this // Execução Interna
                 ->_compile()   // Execução Inicial
                 ->_citations() // Processamento de Citações
-                ->_compile();  // Atualização de Referência Cruzada
+                ->_compile()   // Atualização de Referência Cruzada
+                ->_compile();  // Atualização de Etiquetas
 
             // Chamada de Plugins
             $name = $this->getAfterPlugin();
@@ -336,7 +337,7 @@ class WSL_Compiler_Manager {
             2 => array('pipe', 'w'), // Saída de Erro
         );
         // Chamada BibTeX
-        $process = proc_open('bibtex -terse document', $descriptors, $pipes);
+        $process = proc_open('bibtex -terse document.aux', $descriptors, $pipes);
         // Recurso Inicializado?
         if (is_resource($process)) {
             // Saídas Padrão e de Erro
