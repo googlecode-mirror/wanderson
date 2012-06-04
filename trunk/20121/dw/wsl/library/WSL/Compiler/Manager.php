@@ -339,6 +339,9 @@ class WSL_Compiler_Manager {
         $process = proc_open('bibtex -terse document', $descriptors, $pipes);
         // Recurso Inicializado?
         if (is_resource($process)) {
+            // Saídas Padrão e de Erro
+            $stdout = '';
+            $stderr = '';
             // Ocioso
             $idle = true;
             // Executar até Finalização
