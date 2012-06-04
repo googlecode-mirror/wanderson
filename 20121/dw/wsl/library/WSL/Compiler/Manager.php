@@ -242,8 +242,10 @@ class WSL_Compiler_Manager {
             // Executar Elemento
             $this->execute($name);
 
-            // Execução Interna
-            $this->_compile();
+            $this // Execução Interna
+                ->_compile()   // Execução Inicial
+                ->_citations() // Processamento de Citações
+                ->_compile();  // Atualização de Referência Cruzada
 
             // Chamada de Plugins
             $name = $this->getAfterPlugin();
@@ -312,6 +314,50 @@ class WSL_Compiler_Manager {
                 // Configurar
                 $this->getContext()->setOutput('document.dvi');
             }
+        }
+        // Encadeamento
+        return $this;
+    }
+
+    /**
+     * Execução de Citações na Compilação
+     *
+     * Utilização de arquivos gerados durante a execução de compilador, buscando
+     * informações sobre citações geradas dentro do documento. Devemos gerar os
+     * códigos auxiliares na compilação, buscar as citações nos documentos e
+     * executar novamente a compilação para atualizar as referências cruzadas.
+     *
+     * @return WSL_Compiler_Manager Próprio Objeto para Encadeamento
+     */
+    protected function _citations() {
+        // Criação de Descritores
+        $descriptors = array(
+            1 => array('pipe', 'w'), // Saída Padrão
+            2 => array('pipe', 'w'), // Saída de Erro
+        );
+        // Chamada BibTeX
+        $process = proc_open('bibtex -terse document', $descriptors, $pipes);
+        // Recurso Inicializado?
+        if (is_resource($process)) {
+            // Ocioso
+            $idle = true;
+            // Executar até Finalização
+            while ($idle) {
+                // Tempo Ocioso
+                usleep(500); // 0.5 Segundos
+                // Capturar Saídas
+                $stdout = $stdout . stream_get_contents($pipes[1]);
+                $stderr = $stderr . stream_get_contents($pipes[2]);
+                // Informações sobre Processo
+                $information = proc_get_status($process);
+                // Continuar Ocioso?
+                $idle = (($information !== false) && ($information['running']));
+            }
+            // Finalizar Pipes
+            fclose($pipes[1]);
+            fclose($pipes[2]);
+            // Finalizar Processo
+            proc_close($process);
         }
         // Encadeamento
         return $this;
