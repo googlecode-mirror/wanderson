@@ -6,10 +6,22 @@
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
 \usepackage{sbc-template}
+\usepackage[colorlinks]{hyperref}
 
 % Informações Pessoais ---------------------------------------------------------
+\title{Relatório sobre Implementação de Calculadora Didática}
+\author{Wanderson Henrique Camargo Rosa\inst{1} \and{} Emanuel Zabka\inst{1}}
+\address{
+Eletrônica Digital I --- 2012/1\\
+Centro de Ciências Exatas e Tecnológicas\\
+Universidade do Vale do Rio dos Sinos --- UNISINOS
+\email{\{wandersonwhcr,emanuelzabka\}@gmail.com}
+}
 
+% Documento --------------------------------------------------------------------
 \begin{document}
+
+\maketitle{}
 
 O presente documento apresenta o Relatório sobre desenvolvimento de calculadora
 didática, solicitada como Projeto Prático GB1 desta disciplina. Utilizando um
@@ -129,6 +141,63 @@ os multiplexadores e os demais as funções da ULA. Os \emph{dip switches} D1 e 
 são responsáveis pelas entradas A e B, respectivamente. Porém, o pino 1 de D0 é
 responsável pelo \emph{carry} que deve ser informado quando uma subtração está
 selecionada.
+
+% Implementação ----------------------------------------------------------------
+\section{Implementação}
+
+Seguindo o circuito elétrico apresentado, a estrutura criada foi implementando
+uma matriz de contatos, apresentado conforme Figura \ref{fig:protoboard-1}.
+Buscando aproveitamento de espaço, o segundo trabalho da disciplina foi
+desenvolvido na região central da matriz de contatos, não possuindo nenhum
+recurso funcional para este trabalho.
+
+\begin{figure}
+    \centering{}
+    \includegraphics[width=\textwidth]{protoboard-1.ps}
+    \caption{Matriz de Contatos com o Circuito Eletrônico}
+    \label{fig:protoboard-1}
+\end{figure}
+
+Como podemos ver, os 3 módulos criados estão em regiões distintas e comunicam-se
+através de contatos devidamente posicionados, facilitando a conexão. Para a
+implementação, foram utilizados os seguintes componentes.
+
+\begin{itemize}
+    \item 03 \emph{dip switches} de 5 entradas;
+    \item 14 resistores de 1Kohm;
+    \item 12 resistores de 470ohms;
+    \item 01 SN74LS381AN circuito integrado para ULA;
+    \item 03 GD74LS157 circuito integrado para multiplexadores;
+    \item 01 DM74LS47N circuito integrado para conversor BCD para 7 segmentos;
+    \item 01 \emph{led} verde; e
+    \item 01 FYS-5611BS-21 \emph{display} de 7 segmentos; e
+    \item fios condutores diversos para matriz de contatos.
+\end{itemize}
+
+% Conclusão --------------------------------------------------------------------
+\section{Conclusão}
+
+A construção de um circuito eletrônico complexo pode ter sua dificuldade
+reduzida se desenvolvido em módulos. Alguns problemas foram encontrados,
+principalmente nos valores de entrada no módulo para o \emph{display} de 7
+segmentos, onde foram encontrados pequenos ruídos que faziam a exibição errada
+dos valores. Buscando diminui o valor na entrada, foram adicionados resistores
+de 470ohms em suas entradas, conectados ao nível baixo.
+
+Muitas ferramentas utilizadas na área da eletrônica deixaram de ser utilizadas
+por desconhecimento funcional por parte dos autores. Estamos cursando esta
+disciplina sem possuir uma devida introdução à eletrônica, possível quando
+solicitada como displina optativa de fins gerais nesta Universidade.
+
+Estudos um pouco mais aprofundados na ferramenta de construção de esquemas
+eletrônico gEDA, porém não visando a simulação de circuitos, somente ainda com o
+desenvolvimento da estrutura. Temos como resultados melhores diagramas elétricos
+neste trabalho, se comparado com o primeiro trabalho da disciplina.
+
+Com um melhor aprendizado sobre ferramentas, principalmente sobre multímetros, e
+outros componentes, como capacitores, podemos buscar maiores conhecimentos com
+Arduino, utilizando projetos com programação Bluetooth, foco aplicado durante
+outras disciplinas do curso.
 
 \end{document}
 
