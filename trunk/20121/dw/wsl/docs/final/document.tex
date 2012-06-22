@@ -1,0 +1,342 @@
+\documentclass{article}
+
+% Pacotes ----------------------------------------------------------------------
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{sbc-template}
+\usepackage{listings}
+
+% Configurações ----------------------------------------------------------------
+\lstset{
+    basicstyle=\ttfamily \small,
+    language=PHP
+}
+
+% Informações Pessoais ---------------------------------------------------------
+\title{Desenvolvimento de \emph{Webservice} para Compilação de Documentos em
+Formato \LaTeX{}}
+\author{Wanderson Henrique Camargo Rosa\inst{1}}
+\address{
+Desenvolvimento para Web --- 2012/1\\
+Centro de Ciências Exatas e Tecnológicas\\
+Universidade do Vale do Rio dos Sinos --- UNISINOS
+\email{wandersonwhcr@gmail.com}
+}
+
+% Documento --------------------------------------------------------------------
+\begin{document}
+
+% Título -----------------------------------------------------------------------
+\maketitle{}
+
+% Introdução -------------------------------------------------------------------
+\section{Introdução}
+
+Este documento visa apresentar a formalização de trabalho final desta
+disciplina, bem como o relatório de desenvolvimento em questão. O objetivo deste
+era criar uma ferramenta utilizando uma estrutura de \emph{webservices} para
+compilação de documentos no formato \LaTeX{}.
+
+% Motivação --------------------------------------------------------------------
+\section{Motivação}
+
+O \LaTeX{} é um formatador de documentos, principalmente técnicos, como artigos
+científicos e monografias. Sempre que existe a necessidade de instalação da
+ferramenta, o computador que será utilizado precisa receber todo o ambiente para
+produção de documentos com base em arquivos com marcações de texto específicas.
+Este ambiente, em alguns casos, chega a ocupar cerca de 1GB em disco, além de
+necessitar algumas configurações básicas, como hifenização.
+
+Como somente precisamos deste ambiente para a geração do documento final,
+podemos criar um \emph{webservice} capaz de receber estes arquivos, gerando como
+saída o documento necessário, descartando a necessidade de instalações na
+máquina local.
+
+% Implementação ----------------------------------------------------------------
+\section{Implementação}
+
+Com base nestas necessidades, criou-se uma ferramenta utilizando a linguagem de
+programação PHP que recebe requisições através do protocolo SOAP. Trabalhando
+com uma pequena estrutura de autenticação e gerenciamento de arquivos,
+armazenados em diretórios locais e banco de dados MySQL, podemos enviar os
+conteúdos fonte com base em estrutura especificada, informando o tipo de entrada
+e saída requerida, recebendo assim como resultado o documento criado a partir
+destas entradas.
+
+% Estrutura Básica -------------------------------------------------------------
+\subsection{Estrutura Básica}
+
+Para desenvolvimento do aplicativo, a estrutura de desenvolvimento foi baseada
+conforme padrões definidos pela biblioteca Zend Framework, incluindo diretórios
+e formato de arquivos. Porém, todos os recursos do sistema foram desenvolvidos,
+não envolvendo nenhum componente da biblioteca em questão.
+
+Basicamente, o sistema possui uma arquitetura de \emph{software} MVC facilitada
+pelos componentes da biblioteca interna desenvolvida, chamada WSL. Podemos
+identificar cinco elementos básicos dentro do sistema: camada de controle,
+modelo, visualização, serviço e outros componentes da biblioteca.
+
+Para a instalação do sistema, somente existe a necessidade de copiar todos os
+arquivos do projeto para diretório privado do servidor, onde somente será
+acessível o diretório \texttt{/public/} que trabalha como uma centralizadora de
+requisições. Todas as configurações necessárias são encontradas no arquivo
+\texttt{/public/index.php}, incluindo configurações de banco de dados e
+mapeamento de diretórios.  Para gerenciamento de usuários e arquivos armazenados
+em disco, devemos executar os conteúdos SQL armazenados no diretório
+\texttt{/scripts/database/}.
+
+% Programas Terceiros ----------------------------------------------------------
+\subsection{Programas Terceiros}
+
+O sistema utiliza a ferramenta \LaTeX{} instalada no servidor para gerar os
+arquivos com base nos conteúdos enviados ao \emph{webservice}. Utilizando em
+Linux, as execuções externas são solicitadas ao sistema operacional, compilando
+o documento.
+
+% Gerenciamento de Arquivos ----------------------------------------------------
+\subsection{Gerenciamento de Arquivos}
+
+Todos os arquivos enviados ao sistema e gerados por ele são armazenados em
+estrutura interna que evita duplicação. Sempre que um arquivo é recebido, um
+valor \emph{hash} no formato SHA1 é gerado para seu conteúdo e com base neste o
+arquivo é salvo. Por exemplo, se um arquivo \texttt{exemplo.tex} com o valor de
+\emph{hash} \texttt{39d4c5c05...daf}, este será armazenado na estrutura do
+sistema como \texttt{/data/files/39d/4c5/c05...daf}. Se o mesmo arquivo é
+enviado, ele não será armazenado novamente na estrutura.
+
+Portanto, se o arquivo acima foi enviado para o sistema, não existe mais a
+necessidade de novo envio, somente sendo necessário a apresentação do
+\emph{hash} que deve ser utilizado. Isto evita que arquivos que não modificam
+com frequência durante a geração de documentos, como imagens ou referências
+bibliográficas, sejam enviados de forma desnecessária a cada requisição,
+otimizando assim o processamento da transferência de informações.
+
+O gerenciamento de arquivos é feito utilizando como auxiliar o banco de dados,
+que informa se este deve ser adicionado ou excluído da estrutura, além de
+armazenar o nome do arquivo original. Estas regras são executadas utilizando os
+seguintes tipos de dados.
+
+\begin{itemize}
+    \item \texttt{WSL\_Model\_File\_File}
+    \item \texttt{WSL\_Model\_File\_InfoHandlerInterface}
+    \item \texttt{WSL\_Model\_File\_DbInfoHandler}
+\end{itemize}
+
+Todo o gerenciamento de arquivos armazenados na estrutura de diretórios é
+executada pela classe \texttt{File}, que utiliza uma \emph{interface}
+\texttt{InfoHandlerInterface} para consultar um objeto interno que informa se o
+arquivo deve ser adicionado ou removido da estrutura, caracterizando o padrão de
+projeto Strategy. O objeto de estratégia utilizado é uma instância da classe
+\texttt{DbInfoHandler} e que consulta o banco de dados, informando o objeto
+dependente qual ação deve ser tomada para o arquivo.
+
+% Compilação -------------------------------------------------------------------
+\subsection{Compilação}
+
+Para execução da compilação dos arquivos apresentados ao \emph{webservice}
+utilizando recursos do sistema operacional, criou-se um conjunto de classes que
+trabalham para gerar os arquivos solicitados.
+
+Existe um gerenciador que cria uma área de trabalho para cada requisição, onde
+os arquivos serão copiados e manipulados por \emph{plugins} de entrada e saída.
+Estes \emph{plugins} são responsáveis pela interpretação dos conteúdos; o
+\emph{plugin} de entrada é responsável pela transformação do conjunto de
+arquivos apresentados para o formato TEX, processado pela ferramenta \LaTeX{}
+através do gerenciador, criando assim um arquivo DVI como saída, que será
+processado pelo \emph{plugin} de saída para o formato solicitado na requisição.
+As estruturas utilizadas são as definidas a seguir.
+
+\begin{itemize}
+    \item \texttt{WSL\_Compiler\_Manager}
+    \item \texttt{WSL\_Compiler\_Context}
+    \item \texttt{WSL\_Compiler\_PluginBeforeInterface}
+    \item \texttt{WSL\_Compiler\_PluginAfterInterface}
+\end{itemize}
+
+A classe \texttt{Context} é responsável pela criação do diretório e cópia dos
+arquivos necessários para execução. Cria-se um objeto do tipo \texttt{Manager}
+que recebe como parâmetro a instância de contexto criada. No gerenciador são
+apresentados o tipo de entrada e saída da requisição, internamente conhecidos
+como \emph{plugins} de execução anterior à compilação, instâncias de
+\texttt{PluginBeforeInterface}; e o tipo de saída, neste caso com o tipo
+\texttt{PluginAfterInterface}, com execução posterior.
+
+% Plugins ----------------------------------------------------------------------
+\subsubsection{\emph{Plugins}}
+
+Os \emph{plugins} de gerenciamento são responsáveis por trabalhar com objetos de
+contexto do gerenciamento de compilação de arquivos \LaTeX{}. Eles manipulam a
+entrada e a saída do compilador, fazendo com que a requisição seja processada
+adequadamente. Os \emph{plugins} disponíveis estão relacionados abaixo.
+
+\begin{itemize}
+    \item Execuções Anteriores
+    \begin{itemize}
+        \item \texttt{WSL\_Compiler\_Plugin\_Tex}
+        \item \texttt{WSL\_Compiler\_Plugin\_TarGz}
+    \end{itemize}
+    \item Execuções Posteriores
+    \begin{itemize}
+        \item \texttt{WSL\_Compiler\_Plugin\_Dvi}
+        \item \texttt{WSL\_Compiler\_Plugin\_Ps}
+        \item \texttt{WSL\_Compiler\_Plugin\_Pdf}
+        \item \texttt{WSL\_Compiler\_Plugin\_TarGz}
+    \end{itemize}
+\end{itemize}
+
+Podemos efetuar uma requisição ao sistema, informando como entrada o tipo
+\texttt{Tex} e saída \texttt{Pdf}. O \emph{plugin} de entrada \texttt{Tex}
+verifica se um arquivo chamado \texttt{document.tex} foi enviado durante a
+requisição e efetua sua cópia através do contexto. O gerenciador executa o
+compilador \LaTeX{} e cria um arquivo DVI utilizando o conteúdo enviado. Este
+arquivo é verificado pelo \emph{plugin} de saída \texttt{Pdf}, convertendo-o
+para \texttt{document.pdf}.
+
+% Processamento de Requisição --------------------------------------------------
+\subsection{Processamento de Requisição}
+
+Durante o processamento de uma requisição, a controladora de serviço cria um
+objeto do tipo \texttt{SoapServer} disponível no PHP, utilizando características
+RMI e sem especificações WSDL. Conforme ação solicitada da controladora, um
+objeto de serviço para compilação é criado pelo servidor SOAP, que inicializa a
+camada de modelo responsável pela compilação.
+
+Nesta camada, são recebidos os arquivos necessários para compilação do documento
+enviado, juntamente com os tipos de entrada e saída que serão solicitados para o
+gerenciamento. Cria-se um objeto de contexto, copiando os arquivos para o
+diretório gerado. Após, apresentamos o objeto para o gerenciador, juntamente com
+os nomes de \emph{plugins}. Solicita-se a compilação e o conteúdo gerado é
+capturado do contexto e apresentado para o servidor SOAP pela camada de modelo.
+
+% Usuários ---------------------------------------------------------------------
+\subsection{Usuários}
+
+Evitando que a sua utilização seja pública, adicionou-se uma camada de
+autenticação, necessária para compilação dos documentos. Usufruindo de um passe
+temporário, um usuário pode apresentar seu nome e credenciais, recebendo um
+\emph{token}. Este valor deve ser apresentado em todas as requisições, até que o
+tempo limite de 5 minutos válidos seja atingido, necessitando assim a criação de
+um novo \emph{token}.
+
+Existe uma controladora de usuários que utiliza uma camada de modelo para
+gerenciamento destes no sistema. Efetuando-se requisições semelhantes à
+compilação, podemos adicionar, listar e remover usuários do \emph{webservice} de
+forma simples.
+
+% Utilização -------------------------------------------------------------------
+\section{Utilização}
+
+Para a utilização do \emph{webservice}, precisamos criar um cliente SOAP em PHP,
+buscando o processamento RMI disponível sem WSDL. Um exemplo básico de
+utilização pode ser encontrado no diretório \texttt{/docs/examples/}. Sua
+requisição é feita da seguinte forma.
+
+\begin{figure}
+\begin{lstlisting}
+$client = new SoapClient(null, array(
+    'uri'      => 'tns:CompilerService',
+    'location' => 'http://wsl.example.com/services/compiler',
+));
+$token = $client->login(
+    'root@localhost',
+    '7c4a8d09ca3762af61e59520943dc26494f8941b'
+);
+$result = $client->compile($token, 'Tex', 'Pdf', array(
+    array(
+        'hash'     => sha1_file('document.tex'),
+        'filename' => 'document.tex',
+        'content'  => base64_encode(file_get_contents('document.tex')),
+    ),
+));
+file_put_contents($result['filename'], base64_decode($result['content']));
+\end{lstlisting}
+\caption{Exemplo de Cliente SOAP para Compilação}
+\end{figure}
+
+Como podemos verificar, a criação de um cliente SOAP é feita sem considerar o
+processamento de especificações WSDL, trabalhando com requisições do tipo RMI.
+Após a autenticação e receber o \emph{token} de utilização, podemos apresentar
+um conjunto de arquivos, onde neste caso temos somente um elemento, para
+compilação pelo Webservice. Como resultado será apresentado um conjunto de
+informações e o conteúdo do arquivo resultante.
+
+% Considerações Finais ---------------------------------------------------------
+\section{Considerações Finais}
+
+Com a construção de um \emph{webservice} para manipulação de documentos no
+formato \LaTeX{}, podemos trabalhar com compilação remota de forma
+compartilhada, não havendo necessidade de instalação das ferramentas necessárias
+em todos os computadores que irão utilizar o recurso.
+
+Também podemos criar sistemas mais amigáveis que utilizam o próprio formato
+\LaTeX{} como código de entrada ou, conforme idealizações para Trabalho de
+Conclusão de Curso, a criação de uma linguagem de mais alto nível do que
+\LaTeX{} para criação de artigos científicos. Um sistema seria capaz de
+gerenciar os conteúdos e quando existir a necessidade de compilação, consumir
+recursos através de uma requisição com \emph{plugin} de entrada responsável pela
+tradução desta linguagem para \LaTeX{}, gerando o documento necessário.
+
+Para disponibilizar a outras linguagens os recursos do \emph{webservice},
+precisamos definir o WSDL do serviço SOAP, facilitando assim o desenvolvimento
+em linguagens como Java ou Ruby. Atualmente somente a execução remota através de
+protocolo RMI é executada, utilizando recursos do próprio PHP.
+
+Este documento foi gerado utilizando o próprio \emph{webservice}. Após a
+instalação de pacote para \emph{template} SBC em servidor instalado na máquina
+virtual, a criação do documento é feita em máquina remota, somente exigindo a
+edição do documento e conexão utilizando \emph{script} em PHP executado em
+terminal.
+
+Existiu a necessidade de estudos mais específicos para criação de processos
+utilizando PHP, principalmente com o gerenciamento de finalização. Em primeiro
+momento, a execução do processo era finalizada de forma errada, exigindo uma
+espera por parte do gerenciador para execução completa do \LaTeX{} com o
+documento de entrada. Após a correção, existe um laço de repetição que verifica
+se o processo está finalizado, esperando uma resposta.
+
+Outro ponto a ser discutido é a utilização do binário \texttt{latex} pelo
+gerenciamento para criação dos documentos básicos. Com esta execução, existe uma
+impossibilidade de utilização de arquivos de imagens em formatos mais comuns
+atualmente, como JPG ou PNG. Sempre será necessária a conversão para arquivos em
+formato EPS com informações sobre \emph{bounding box} da imagem. Para corrigir
+este caso, precisamos utilizar o binário \texttt{pdflatex} que converte
+diretamente para arquivos PDF, porém este não aceita como entrada arquivos no
+formato PostScript, bem como pacote PsTricks.
+
+Com base no estudo atual, posso considerar que o desenvolvimento deste trabalho
+foi de muita importância para inicialização do Trabalho de Conclusão, tendo em
+vista que muitos pontos serão facilitados, principalmente com a estrutura de
+\emph{plugins} idealizada. Pretendo continuar o seu desenvolvimento, adicionando
+parâmetros para os \emph{plugins} durante a requisição, bem como a retirada de
+execução fixa do binário \texttt{latex} do gerenciador.
+
+% Instalação -------------------------------------------------------------------
+\section{Instalação}
+
+A instalação do sistema foi efetuada utilizando uma máquina virtual do
+VirtualBox 4.1 com sistema operacional hospedeiro Ubuntu Linux 10.04 Lucid Lynx
+e hóspede Debian Linux 6 Squeeze.
+
+O \emph{webservice} foi instalado utilizando Apache 2.2.16 como servidor
+\emph{web}, utilizando um módulo PHP 5.3.3. Além disso foi habilitado o módulo
+\texttt{Rewrite} e PHP configurado como desenvolvimento. O banco de dados
+escolhido foi o MySQL 5.1.61. A instalação do \LaTeX{} foi feita utilizando os
+seguintes pacotes, acessados nas últimas versões estáveis disponíveis.
+
+\begin{itemize}
+    \item \texttt{apache2}
+    \item \texttt{php5}
+    \item \texttt{php5-mysql}
+    \item \texttt{mysql-server}
+    \item \texttt{mysql-client}
+    \item \texttt{texlive}
+    \item \texttt{texlive-latex-extra}
+    \item \texttt{texlive-lang-portuguese}
+\end{itemize}
+
+O \emph{template} da SBC foi instalado dentro da estrutura de diretórios
+compartilhados do \TeX{}Live para utilização global.
+
+\end{document}
+
